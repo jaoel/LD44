@@ -16,12 +16,13 @@ namespace Assets.Scripts
             _tiles = tiles;
             _root = GenerateDungeon(500, 500);
 
-            UpdateTilemap(_root);   
+            FillTilemap(_root);   
         }
 
         public void DrawDebug()
         {
-            BSPTree.DebugDrawBspNode(_root);
+            if (_root != null)
+                BSPTree.DebugDrawBspNode(_root);
         }
 
         public BSPTree GenerateDungeon(int width, int height)
@@ -81,11 +82,11 @@ namespace Assets.Scripts
 
         private void GenerateRooms(BSPTree node)
         {
-            const int distToGridWall = 2;
+            int minRoomDelta = Random.Range(0, 5);
             if (node.IsLeaf)
             {
-                var randomX = Random.Range(distToGridWall, node.Grid.width / 4);
-                var randomY = Random.Range(distToGridWall, node.Grid.height / 4);
+                var randomX = Random.Range(minRoomDelta, node.Grid.width / 4);
+                var randomY = Random.Range(minRoomDelta, node.Grid.height / 4);
                 int roomX = node.Grid.x + randomX;
                 int roomY = node.Grid.y + randomY;
                 int roomW = node.Grid.width - (int)(randomX * Random.Range(1f, 2f));
@@ -172,28 +173,41 @@ namespace Assets.Scripts
             }    
         }
 
-        private void UpdateTilemap(BSPTree node)
+        private void FillTilemap(BSPTree node)
         {
             if (node.IsLeaf)
             {
                 for (int x = node.Room.x; x < node.Room.xMax; x++)
                 {
                     for (int y = node.Room.y; y < node.Room.yMax; y++)
-                    {
-                        //if (_floor.GetTile(new Vector3Int(x, y, 0)) == null)
-                        {
-                            _floor.SetTile(new Vector3Int(x, y, 0), _tiles[0]);
-                        }
+                    {     
+                        _floor.SetTile(new Vector3Int(x, y, 0), _tiles[0]);  
                     }  
                 }
             }
             else
             {
                 if (node.Left != null)
-                    UpdateTilemap(node.Left);
+                    FillTilemap(node.Left);
                 if (node.Right != null)
-                    UpdateTilemap(node.Right);
+                    FillTilemap(node.Right);
             }
+        }
+
+        private void PaintTilemap()
+        { 
+            for(int x = 0; x < 500; x++)
+            {
+                for(int y = 0; y < 500; y++)
+                {
+
+                }
+            }
+        }
+
+        private Tile GetTileByNeighbours(int x, int y)
+        {
+            return null;
         }
     }
 }

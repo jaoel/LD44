@@ -18,7 +18,8 @@ public class Main : MonoBehaviour
 
     private void OnDrawGizmos()
     {
-        _mapGen.DrawDebug();
+        if (_mapGen != null)
+            _mapGen.DrawDebug();
     }
 
     void Update()
