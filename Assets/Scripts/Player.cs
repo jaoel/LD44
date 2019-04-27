@@ -11,10 +11,12 @@ public class Player : MonoBehaviour
     public float shootCooldown = 0.1f;
     public float bulletSpeed = 15f;
     public Weapon CurrentWeapon;
+    public Animator animator;
 
     private new Rigidbody2D rigidbody;
     private Vector3 velocity = Vector3.zero;
     private Vector3 inputVector = Vector3.zero;
+    private Vector2 aimVector = Vector2.zero;
 
     private float cooldownEndTime = 0f;
 
@@ -29,12 +31,14 @@ public class Player : MonoBehaviour
 
         Vector3 mousePositionInWorldSpace = CameraManager.Instance.MainCamera.ScreenToWorldPoint(Keybindings.MousePosition);
         mousePositionInWorldSpace.z = 0f;
-        Vector2 aimVector = (mousePositionInWorldSpace - transform.position).normalized;
+        aimVector = (mousePositionInWorldSpace - transform.position).normalized;
         if (Keybindings.Attack && Time.time >= cooldownEndTime)
         {
             cooldownEndTime = Time.time + CurrentWeapon.Description.Cooldown;
             CurrentWeapon.Shoot(aimVector, transform.position);
         }
+
+        CalculateAnimation();
     }
 
     void FixedUpdate()
@@ -43,19 +47,26 @@ public class Player : MonoBehaviour
         CalculateVelocity();
     }
 
-    private void CalculateInputVector()
-    {
-        inputVector = Vector2.zero;
+    private void CalculateInputVector() {
+        inputVector = Vector3.zero;
         inputVector.x -= Keybindings.MoveLeft;
         inputVector.x += Keybindings.MoveRight;
         inputVector.y += Keybindings.MoveUp;
         inputVector.y -= Keybindings.MoveDown;
     }
 
-    private void CalculateDeceleration()
-    {
-        if (inputVector.x <= 0f && velocity.x > 0f)
-        {
+    private void CalculateAnimation() {
+        if (velocity.magnitude < 0.1f) {
+            animator.SetInteger("direction", 0);
+        } else {
+            Vector2 direction = Keybindings.Attack ? aimVector : (Vector2)velocity;
+            int animationIndex = Mathf.RoundToInt((135f + Vector2.SignedAngle(new Vector2(1f, 1f).normalized, direction)) / 90f);
+            animator.SetInteger("direction", animationIndex + 1);
+        }
+    }
+
+    private void CalculateDeceleration() {
+        if (inputVector.x <=  0f && velocity.x > 0f) {
             velocity.x -= deceleration * Time.deltaTime;
             if (velocity.x < 0f) velocity.x = 0f;
         }
