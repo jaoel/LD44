@@ -7,6 +7,7 @@ using UnityEngine.Tilemaps;
 public class Main : MonoBehaviour
 {
     public TileContainer TileContainer;
+    public InteractiveDungeonObject InteractiveDungeonObjectContainer;
 
     MapGenerator _mapGen;
     BSPTree _bspTree;
@@ -14,7 +15,8 @@ public class Main : MonoBehaviour
     
     void Start()
     {
-        _mapGen = new MapGenerator(TileContainer);
+        _mapGen = new MapGenerator(TileContainer, InteractiveDungeonObjectContainer,
+            Random.Range(100, 500), Random.Range(100, 500));
         _renderBSPGrid = false;
     }
 
