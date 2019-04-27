@@ -11,17 +11,21 @@ namespace Assets.Scripts
         private Tilemap _walls;
         private readonly TileContainer _tileContainer;
         private readonly InteractiveDungeonObject _interactiveObjectsContainer;
+        private readonly ItemContainer _itemContainer;
+
         private int _width;
         private int _height;
         List<GameObject> _interactiveObjects;
 
-        public MapGenerator(TileContainer tileContainer, InteractiveDungeonObject interactiveObjects)
+        public MapGenerator(TileContainer tileContainer, InteractiveDungeonObject interactiveObjects, 
+            ItemContainer itemContainer)
         {
             _interactiveObjects = new List<GameObject>();
             _floor = GameObject.Find("Floor").GetComponent<Tilemap>();
             _walls = GameObject.Find("Walls").GetComponent<Tilemap>();
             _tileContainer = tileContainer;
             _interactiveObjectsContainer = interactiveObjects;
+            _itemContainer = itemContainer;
         }
 
         public void DrawDebug()
@@ -66,7 +70,11 @@ namespace Assets.Scripts
             //Stairs to next level
             Vector3Int stairsPosition = map.GetOpenPositionInMap();
             _interactiveObjects.Add(GameObject.Instantiate(_interactiveObjectsContainer.Stairs, 
-                new Vector3(stairsPosition.x - 0.5f, stairsPosition.y - 0.5f, -1.0f), Quaternion.identity)); 
+                new Vector3(stairsPosition.x - 0.5f, stairsPosition.y - 0.5f, -1.0f), Quaternion.identity));
+
+            Vector3Int test = map.GetOpenPositionInMap();
+            _interactiveObjects.Add(GameObject.Instantiate(_itemContainer.Shotgun,
+                new Vector3(test.x - 0.5f, test.y - 0.5f, -1.0f), Quaternion.identity));
         }
              
         void GenerateFloor(int width, int height)

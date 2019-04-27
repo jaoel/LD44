@@ -7,11 +7,11 @@ public class Player : MonoBehaviour
     public float maxSpeed = 8f;
     public float acceleration = 25f;
     public float deceleration = 15f;
-    public BulletDescription bulletDescription;
-    public float shootCooldown = 0.1f;
-    public float bulletSpeed = 15f;
+
     public Weapon CurrentWeapon;
     public Animator animator;
+
+    public int CurrentHealth;
 
     private new Rigidbody2D rigidbody;
     private Vector3 velocity = Vector3.zero;
