@@ -6,4 +6,5 @@ class Keybindings {
     public static float MoveUp => (Input.GetKey(KeyCode.W) || Input.GetKey(KeyCode.UpArrow)) ? 1f : 0f;
     public static float MoveDown => (Input.GetKey(KeyCode.S) || Input.GetKey(KeyCode.DownArrow)) ? 1f : 0f;
     public static bool Attack => Input.GetMouseButton(0);
+    public static Vector3 MousePosition => Input.mousePosition;
 }

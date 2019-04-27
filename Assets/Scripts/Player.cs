@@ -6,17 +6,30 @@ public class Player : MonoBehaviour {
     public float maxSpeed = 8f;
     public float acceleration = 25f;
     public float deceleration = 15f;
+    public BulletDescription bulletDescription;
+    public float shootCooldown = 0.1f;
+    public float bulletSpeed = 15f;
 
     private new Rigidbody2D rigidbody;
     private Vector3 velocity = Vector3.zero;
     private Vector3 inputVector = Vector3.zero;
+
+    private float cooldownEndTime = 0f;
 
     void Start() {
         rigidbody = GetComponent<Rigidbody2D>();
     }
 
     private void Update() {
-        CalculateInput();
+        CalculateInputVector();
+
+        Vector3 mousePositionInWorldSpace = CameraManager.Instance.MainCamera.ScreenToWorldPoint(Keybindings.MousePosition);
+        mousePositionInWorldSpace.z = 0f;
+        Vector2 aimVector = (mousePositionInWorldSpace - transform.position).normalized;
+        if (Keybindings.Attack && Time.time >= cooldownEndTime) {
+            cooldownEndTime = Time.time + shootCooldown;
+            BulletManager.Instance.SpawnBullet(bulletDescription, transform.position, aimVector * bulletSpeed);
+        }
     }
 
     void FixedUpdate() {
@@ -24,7 +37,7 @@ public class Player : MonoBehaviour {
         CalculateVelocity();
     }
 
-    private void CalculateInput() {
+    private void CalculateInputVector() {
         inputVector = Vector2.zero;
         inputVector.x -= Keybindings.MoveLeft;
         inputVector.x += Keybindings.MoveRight;
