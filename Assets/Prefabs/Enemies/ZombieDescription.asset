@@ -12,9 +12,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: fdfacec8ad3d4d140b70fc0a11d56fcf, type: 3}
   m_Name: ZombieDescription
   m_EditorClassIdentifier: 
-  currentHealth: 10
   maxHealth: 10
   maxSpeed: 3
   acceleration: 15
-  deceleration: 0
   aggroDistance: 20
+  damage: 10

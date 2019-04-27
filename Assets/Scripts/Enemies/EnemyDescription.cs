@@ -7,4 +7,5 @@ public class EnemyDescription : ScriptableObject
     public float maxSpeed;
     public float acceleration;
     public float aggroDistance;
+    public int damage;
 } 

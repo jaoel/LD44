@@ -11,7 +11,8 @@ public class Player : MonoBehaviour
     public Weapon CurrentWeapon;
     public Animator animator;
 
-    public int CurrentHealth;
+    public int currentHealth;
+    public int maxHealth;
 
     private new Rigidbody2D rigidbody;
     private Vector3 velocity = Vector3.zero;
@@ -23,6 +24,7 @@ public class Player : MonoBehaviour
     void Start()
     {
         rigidbody = GetComponent<Rigidbody2D>();
+        currentHealth = maxHealth;
     }
 
     private void Update()
@@ -40,10 +42,7 @@ public class Player : MonoBehaviour
 
         CalculateAnimation();
 
-        if (Input.GetKeyDown(KeyCode.X)) {
-            int randHP = Random.Range(0, 101);
-            UIManager.Instance.playerUI.SetHealthbar(Random.Range(0, randHP + 1), randHP);
-        }
+        UIManager.Instance.playerUI.SetHealthbar(currentHealth, maxHealth);
     }
 
     void FixedUpdate()
@@ -103,5 +102,10 @@ public class Player : MonoBehaviour
         }
 
         rigidbody.velocity = velocity;
+    }
+
+    public void ReceiveDamage(int damage)
+    {
+        currentHealth -= damage;
     }
 }

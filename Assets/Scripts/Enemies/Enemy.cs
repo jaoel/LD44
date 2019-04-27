@@ -152,4 +152,13 @@ public class Enemy : MonoBehaviour
 
         return false;
     }
+
+    private void OnCollisionEnter2D(Collision2D collision)
+    {
+        if (collision.gameObject.layer == LayerContainer.Instance.Layers["Player"])
+        {
+            _player.ReceiveDamage(description.damage);
+        }
+    }
+        
 }
