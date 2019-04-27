@@ -17,3 +17,8 @@ MonoBehaviour:
   TopRight: {fileID: 11400000, guid: b1205a4a62473ac4fa9d63cde1567431, type: 2}
   TopMiddle: {fileID: 11400000, guid: b1205a4a62473ac4fa9d63cde1567431, type: 2}
   TopLeft: {fileID: 11400000, guid: b1205a4a62473ac4fa9d63cde1567431, type: 2}
+  MiddleLeft: {fileID: 11400000, guid: b1205a4a62473ac4fa9d63cde1567431, type: 2}
+  MiddleRight: {fileID: 11400000, guid: b1205a4a62473ac4fa9d63cde1567431, type: 2}
+  BottomRight: {fileID: 11400000, guid: b1205a4a62473ac4fa9d63cde1567431, type: 2}
+  BottomMiddle: {fileID: 11400000, guid: b1205a4a62473ac4fa9d63cde1567431, type: 2}
+  BottomLeft: {fileID: 11400000, guid: b1205a4a62473ac4fa9d63cde1567431, type: 2}

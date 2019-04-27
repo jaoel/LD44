@@ -7,12 +7,15 @@ namespace Assets.Scripts
     public class MapGenerator
     {
         private Tilemap _floor;
+        private Tilemap _walls;
         private BSPTree _root;
         private readonly TileContainer _tileContainer;
 
         public MapGenerator(TileContainer tileContainer)
         {
             _floor = GameObject.Find("Floor").GetComponent<Tilemap>();
+            _walls = GameObject.Find("Walls").GetComponent<Tilemap>();
+
             _tileContainer = tileContainer;
             _root = GenerateDungeon(500, 500);
 
@@ -203,7 +206,7 @@ namespace Assets.Scripts
                 {
                     Tile tile = GetTileByNeighbours(x, y);
                     if (tile != null)
-                        _floor.SetTile(new Vector3Int(x, y, 0), tile);
+                        _walls.SetTile(new Vector3Int(x, y, 0), tile);
                 }
             }
         }
