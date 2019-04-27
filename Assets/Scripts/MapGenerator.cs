@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic; 
+﻿using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 using UnityEngine.Tilemaps;           
 
@@ -12,9 +13,11 @@ namespace Assets.Scripts
         private readonly InteractiveDungeonObject _interactiveObjectsContainer;
         private int _width;
         private int _height;
+        List<GameObject> _interactiveObjects;
 
         public MapGenerator(TileContainer tileContainer, InteractiveDungeonObject interactiveObjects)
         {
+            _interactiveObjects = new List<GameObject>();
             _floor = GameObject.Find("Floor").GetComponent<Tilemap>();
             _walls = GameObject.Find("Walls").GetComponent<Tilemap>();
             _tileContainer = tileContainer;
@@ -50,15 +53,20 @@ namespace Assets.Scripts
 
         public void DestroyAllInteractiveObjects()
         {
+            _interactiveObjects.ForEach(x =>
+            {
+                GameObject.Destroy(x);
+            });
 
+            _interactiveObjects.Clear();
         }
 
         void PopulateMap(Map map)
         {
             //Stairs to next level
             Vector3Int stairsPosition = map.GetOpenPositionInMap();
-            GameObject.Instantiate(_interactiveObjectsContainer.Stairs, 
-                new Vector3(stairsPosition.x - 0.5f, stairsPosition.y - 0.5f, -1.0f), Quaternion.identity); 
+            _interactiveObjects.Add(GameObject.Instantiate(_interactiveObjectsContainer.Stairs, 
+                new Vector3(stairsPosition.x - 0.5f, stairsPosition.y - 0.5f, -1.0f), Quaternion.identity)); 
         }
              
         void GenerateFloor(int width, int height)
@@ -140,36 +148,19 @@ namespace Assets.Scripts
             if (node.IsInternal)
             {
                 BSPTree left = node.Left;
-                if (left == null)
-                {
-                    BSPTree parent = node.Parent;
-
-                    while (parent.Left == null)
-                    {
-                        parent = parent.Parent;
-                    }
-                    left = parent.Left;
-                }
-
                 BSPTree right = node.Right;
-                if (right == null)
-                {
-                    BSPTree parent = node.Parent;
 
-                    while (parent.Right == null)
-                    {
-                        parent = parent.Parent;
-                    }
-
-                    right = parent.Right;
-                }
+                if (node.Left == null)
+                    left = node.GetSibling();
+                else if (node.Right == null)
+                    right = node.GetSibling();
 
                 RectInt leftContainer = left.Grid;
                 RectInt rightContainer = right.Grid;
                 Vector2 leftCenter = leftContainer.center;
                 Vector2 rightCenter = rightContainer.center;
                 Vector2 direction = (rightCenter - leftCenter).normalized;
-                int corridorWidth = Random.Range(3, 5);
+                int corridorWidth = Random.Range(4, 6);
                 while (Vector2.Distance(leftCenter, rightCenter) > 1)
                 {
                     if (direction.Equals(Vector2.right))
@@ -209,7 +200,7 @@ namespace Assets.Scripts
                 {
                     for (int y = node.Room.y; y < node.Room.yMax; y++)
                     {     
-                        _floor.SetTile(new Vector3Int(x, y, 0), _tileContainer.FloorTiles[0]);  
+                        _floor.SetTile(new Vector3Int(x, y, 0), _tileContainer.FloorTiles[1]);  
                     }  
                 }
             }

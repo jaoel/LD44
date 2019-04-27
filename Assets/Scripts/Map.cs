@@ -33,15 +33,15 @@ namespace Assets.Scripts
 
         public Vector3Int GetOpenPositionInMap()
         {
-            int x = UnityEngine.Random.Range(0, _width);
-            int y = UnityEngine.Random.Range(0, _height);
+            int x = 0;
+            int y = 0;
             while (true)
             {
                 x = UnityEngine.Random.Range(0, _width);
                 y = UnityEngine.Random.Range(0, _height);
 
                 Tile floor = _floor.GetTile<Tile>(new Vector3Int(x, y, 0));
-                Tile wall = _walls.GetTile<Tile>(new Vector3Int(x, y, -1));
+                Tile wall = _walls.GetTile<Tile>(new Vector3Int(x, y, 0));
 
                 if (floor != null && wall == null)
                 {

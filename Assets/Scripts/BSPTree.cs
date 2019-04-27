@@ -26,6 +26,21 @@ namespace Assets.Scripts
             Grid = grid;    
         }
 
+        public BSPTree GetSibling()
+        {
+            BSPTree parent = Parent;
+
+            while(true)
+            {
+                if (parent.Left != null && parent.Left != this)
+                    return parent.Left;
+                else if (parent.Right != null && parent.Right != this)
+                    return parent.Right;
+
+                parent = parent.Parent;
+            } 
+        }
+
         public static void DebugDrawBspNode(BSPTree node)
         {
             // Container

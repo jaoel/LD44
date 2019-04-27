@@ -14,6 +14,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   FloorTiles:
   - {fileID: 11400000, guid: a0bfda126705e784fa5bb9d2cd6856c2, type: 2}
+  - {fileID: 11400000, guid: 17f058a27d367f349a3fab521a8694ea, type: 2}
   TopRight: {fileID: 11400000, guid: b1205a4a62473ac4fa9d63cde1567431, type: 2}
   TopMiddle: {fileID: 11400000, guid: b1205a4a62473ac4fa9d63cde1567431, type: 2}
   TopLeft: {fileID: 11400000, guid: b1205a4a62473ac4fa9d63cde1567431, type: 2}
