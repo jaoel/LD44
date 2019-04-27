@@ -54,7 +54,7 @@ Rigidbody2D:
   m_Interpolate: 1
   m_SleepingMode: 1
   m_CollisionDetection: 1
-  m_Constraints: 0
+  m_Constraints: 4
 --- !u!114 &3597447601227234659
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -70,10 +70,10 @@ MonoBehaviour:
   maxSpeed: 8
   acceleration: 25
   deceleration: 15
-  bulletDescription: {fileID: 11400000, guid: b85b6f222e986484bb7ce58010cb1724, type: 2}
-  shootCooldown: 0.1
-  bulletSpeed: 15
+  CurrentWeapon: {fileID: 7056305335599049566, guid: 72e43969419f0a54ab8ddd08f4280796,
+    type: 3}
   animator: {fileID: 6780983900129160725}
+  CurrentHealth: 0
 --- !u!61 &901794245638907986
 BoxCollider2D:
   m_ObjectHideFlags: 0

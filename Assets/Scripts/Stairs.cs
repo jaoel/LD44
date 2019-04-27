@@ -10,17 +10,15 @@ namespace Assets.Scripts
     public class Stairs : MonoBehaviour
     {
         public Main _main;
-        int _playerLayerMask;
 
         public void Awake()
         {
-            _playerLayerMask = LayerMask.NameToLayer("Player");
             _main = GameObject.Find("Main Camera").GetComponent<Main>();
         }
 
         public void OnTriggerEnter2D(Collider2D collision)
         {
-            if (collision.gameObject.layer == _playerLayerMask)
+            if (collision.gameObject.layer == LayerContainer.Instance.Layers["Player"])
             {
                 _main.GenerateMap();
                 Destroy(gameObject);

@@ -16,13 +16,17 @@ namespace Assets.Scripts
         int _height;
 
         BSPTree _bspTree;
-        public Map(BSPTree bspTree, Tilemap walls, Tilemap floor, int width, int height)
+        int[,] _collisionMap;
+
+        public Map(BSPTree bspTree, Tilemap walls, Tilemap floor, int width, int height, int[,] collisionMap)
         {
             _bspTree = bspTree;
             _walls = walls;
             _floor = floor;
             _width = width;
             _height = height;
+
+            _collisionMap = collisionMap;
         }
 
         public void MovePlayerToSpawn(Player player)
