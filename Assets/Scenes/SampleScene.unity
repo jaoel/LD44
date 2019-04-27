@@ -1721,6 +1721,36 @@ TilemapCollider2D:
   m_UsedByComposite: 0
   m_Offset: {x: 0, y: 0}
   m_MaximumTileChangeCount: 1000
+--- !u!1 &1558292209 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 891346738302845104, guid: fb3c90fd7da4a7e42b329cb2e0d69797,
+    type: 3}
+  m_PrefabInstance: {fileID: 1620533918}
+  m_PrefabAsset: {fileID: 0}
+--- !u!114 &1558292210
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1558292209}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 0b0bbf313942f284fa79026b571a2736, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!114 &1558292211
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1558292209}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 80c65b2615b036b4c85102c9bc852562, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1001 &1620533918
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -1736,17 +1766,17 @@ PrefabInstance:
     - target: {fileID: 3161281336758808735, guid: fb3c90fd7da4a7e42b329cb2e0d69797,
         type: 3}
       propertyPath: m_LocalPosition.x
-      value: 0.09222761
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 3161281336758808735, guid: fb3c90fd7da4a7e42b329cb2e0d69797,
         type: 3}
       propertyPath: m_LocalPosition.y
-      value: 1.2251468
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 3161281336758808735, guid: fb3c90fd7da4a7e42b329cb2e0d69797,
         type: 3}
       propertyPath: m_LocalPosition.z
-      value: -403.4707
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 3161281336758808735, guid: fb3c90fd7da4a7e42b329cb2e0d69797,
         type: 3}

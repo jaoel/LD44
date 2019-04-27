@@ -27,4 +27,12 @@ public class Bullet : MonoBehaviour {
     public void SetSize(Vector2 size) {
         spriteRenderer.transform.localScale = new Vector3(size.x, size.y, 1f);
     }
+
+    public void OnTriggerEnter2D(Collider2D collision)
+    {
+        if (collision.gameObject.layer == LayerContainer.Instance.Layers["Map"])
+        {
+            gameObject.SetActive(false);
+        }
+    } 
 }

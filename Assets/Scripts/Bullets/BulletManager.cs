@@ -41,6 +41,10 @@ public class BulletManager : MonoBehaviour {
                     } else {
                         bullet.instance.transform.position += (Vector3)bullet.velocity * Time.deltaTime;
                     }
+                } 
+                else if (!bullet.instance.gameObject.activeInHierarchy)
+                {
+                    bullet.active = false;
                 }
             }
         }

@@ -1,7 +1,9 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
-using UnityEngine.Tilemaps;           
+using UnityEngine.Tilemaps;
+using Random = UnityEngine.Random;
 
 namespace Assets.Scripts
 {
@@ -17,7 +19,7 @@ namespace Assets.Scripts
         private int _height;
         List<GameObject> _interactiveObjects;
 
-        public MapGenerator(TileContainer tileContainer, InteractiveDungeonObject interactiveObjects, 
+        public MapGenerator(TileContainer tileContainer, InteractiveDungeonObject interactiveObjects,
             ItemContainer itemContainer)
         {
             _interactiveObjects = new List<GameObject>();
@@ -43,13 +45,23 @@ namespace Assets.Scripts
             _walls.ClearAllTiles();
             DestroyAllInteractiveObjects();
 
+            int[,] collisionMap = new int[_width, _height];
+
+            for (int x = 0; x < _width; x++)
+            {
+                for (int y = 0; y < _height; y++)
+                {
+                    collisionMap[x, y] = -1;
+                }
+            }
+
             BSPTree root = Split(null, subdivisions, new RectInt(0, 0, width, height));
             GenerateRooms(root);
-            GenerateCorridors(root); 
-            FillTilemap(root);
-            PaintTilemap();
+            GenerateCorridors(root, collisionMap);
+            FillTilemap(root, collisionMap);
+            PaintTilemap(collisionMap);
 
-            Map map = new Map(root, _walls, _floor, _width, _height);
+            Map map = new Map(root, _walls, _floor, _width, _height, collisionMap);
             PopulateMap(map);
 
             return map;
@@ -69,19 +81,19 @@ namespace Assets.Scripts
         {
             //Stairs to next level
             Vector3Int stairsPosition = map.GetOpenPositionInMap();
-            _interactiveObjects.Add(GameObject.Instantiate(_interactiveObjectsContainer.Stairs, 
+            _interactiveObjects.Add(GameObject.Instantiate(_interactiveObjectsContainer.Stairs,
                 new Vector3(stairsPosition.x - 0.5f, stairsPosition.y - 0.5f, -1.0f), Quaternion.identity));
 
             Vector3Int test = map.GetOpenPositionInMap();
             _interactiveObjects.Add(GameObject.Instantiate(_itemContainer.Shotgun,
                 new Vector3(test.x - 0.5f, test.y - 0.5f, -1.0f), Quaternion.identity));
         }
-             
+
         void GenerateFloor(int width, int height)
         {
             for (int x = 0; x < width; x++)
             {
-                for(int y = 0; y < height; y++)
+                for (int y = 0; y < height; y++)
                 {
                     _floor.SetTile(new Vector3Int(x, y, 0), _tileContainer.FloorTiles[0]);
                 }
@@ -108,7 +120,7 @@ namespace Assets.Scripts
 
         private RectInt[] SplitContainer(RectInt grid)
         {
-            RectInt[] result = new RectInt[2];      
+            RectInt[] result = new RectInt[2];
 
             if (UnityEngine.Random.Range(0.0f, 1.0f) > 0.5f)
             {
@@ -151,7 +163,7 @@ namespace Assets.Scripts
             }
         }
 
-        private void GenerateCorridors(BSPTree node)
+        private void GenerateCorridors(BSPTree node, int[,] collisionMap)
         {
             if (node.IsInternal)
             {
@@ -175,14 +187,18 @@ namespace Assets.Scripts
                     {
                         for (int i = 0; i < corridorWidth; i++)
                         {
-                            _floor.SetTile(new Vector3Int((int)leftCenter.x, (int)leftCenter.y + i, 0), _tileContainer.FloorTiles[0]);
+                            Vector3Int coords = new Vector3Int((int)leftCenter.x, (int)leftCenter.y + i, 0);
+                            _floor.SetTile(coords, _tileContainer.FloorTiles[0]);
+                            collisionMap[coords.x, coords.y] = 0;
                         }
                     }
                     else if (direction.Equals(Vector2.up))
                     {
                         for (int i = 0; i < corridorWidth; i++)
                         {
-                            _floor.SetTile(new Vector3Int((int)leftCenter.x + i, (int)leftCenter.y, 0), _tileContainer.FloorTiles[0]);
+                            Vector3Int coords = new Vector3Int((int)leftCenter.x + i, (int)leftCenter.y, 0);
+                            _floor.SetTile(coords, _tileContainer.FloorTiles[0]);
+                            collisionMap[coords.x, coords.y] = 0;
                         }
                     }
                     leftCenter.x += direction.x;
@@ -191,37 +207,38 @@ namespace Assets.Scripts
 
                 if (node.Left != null)
                 {
-                    GenerateCorridors(node.Left);
+                    GenerateCorridors(node.Left, collisionMap);
                 }
                 if (node.Right != null)
                 {
-                    GenerateCorridors(node.Right);
+                    GenerateCorridors(node.Right.Left, collisionMap);
                 }
-            }    
+            }
         }
 
-        private void FillTilemap(BSPTree node)
+        private void FillTilemap(BSPTree node, int[,] collisionMap)
         {
             if (node.IsLeaf)
             {
                 for (int x = node.Room.x; x < node.Room.xMax; x++)
                 {
                     for (int y = node.Room.y; y < node.Room.yMax; y++)
-                    {     
-                        _floor.SetTile(new Vector3Int(x, y, 0), _tileContainer.FloorTiles[1]);  
-                    }  
+                    {
+                        _floor.SetTile(new Vector3Int(x, y, 0), _tileContainer.FloorTiles[1]);
+                        collisionMap[x, y] = 0;
+                    }
                 }
             }
             else
             {
                 if (node.Left != null)
-                    FillTilemap(node.Left);
+                    FillTilemap(node.Left, collisionMap);
                 if (node.Right != null)
-                    FillTilemap(node.Right);
+                    FillTilemap(node.Right, collisionMap);
             }
         }
 
-        private void PaintTilemap()
+        private void PaintTilemap(int[,] collisionMap)
         { 
             for(int x = 0; x < 500; x++)
             {
@@ -229,7 +246,10 @@ namespace Assets.Scripts
                 {
                     Tile tile = GetTileByNeighbours(x, y);
                     if (tile != null)
+                    {
                         _walls.SetTile(new Vector3Int(x, y, 0), tile);
+                        collisionMap[x, y] = 1;
+                    }
                 }
             }
         }
