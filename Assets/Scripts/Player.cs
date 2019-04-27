@@ -39,6 +39,11 @@ public class Player : MonoBehaviour
         }
 
         CalculateAnimation();
+
+        if (Input.GetKeyDown(KeyCode.X)) {
+            int randHP = Random.Range(0, 101);
+            UIManager.Instance.playerUI.SetHealthbar(Random.Range(0, randHP + 1), randHP);
+        }
     }
 
     void FixedUpdate()
