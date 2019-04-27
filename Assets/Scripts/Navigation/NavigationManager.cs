@@ -7,6 +7,8 @@ using UnityEngine;
 
 public class NavigationManager : MonoBehaviour
 {
+    public static int[,] collisionMap;
+
     private static NavigationManager instance;
     public static NavigationManager Instance
     {
@@ -25,7 +27,7 @@ public class NavigationManager : MonoBehaviour
         }
     }
 
-    public List<Vector2Int> AStar(Vector2Int start, Vector2Int target, int[,] collisionMap)
+    public List<Vector2Int> AStar(Vector2Int start, Vector2Int target)
     {
         if (start == target)
             return new List<Vector2Int>();
@@ -41,6 +43,7 @@ public class NavigationManager : MonoBehaviour
             if (current.Position == target)
             {
                 result = UnwrapPath(current);
+                result.Reverse();
                 break;
             }
 

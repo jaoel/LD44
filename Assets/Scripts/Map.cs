@@ -35,6 +35,7 @@ namespace Assets.Scripts
             _height = height;
 
             _collisionMap = collisionMap;
+            NavigationManager.collisionMap = _collisionMap;
         }
 
         public void MovePlayerToSpawn(Player player)

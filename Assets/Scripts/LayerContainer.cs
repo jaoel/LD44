@@ -35,4 +35,17 @@ public class LayerContainer : MonoBehaviour
         Layers.Add("FriendlyBullet", LayerMask.NameToLayer("FriendlyBullet"));
         Layers.Add("Enemy", LayerMask.NameToLayer("Enemy")); 
     }
+
+    public static int CombinedLayerMask(params string[] layerNames)
+    {
+        int result = 0;
+
+
+        for (int i = 0; i < layerNames.Length; i++)
+        {
+            result |= 1 << Instance.Layers[layerNames[i]];
+        }
+
+        return result;
+    }
 }
