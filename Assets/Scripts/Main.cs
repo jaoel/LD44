@@ -8,15 +8,16 @@ public class Main : MonoBehaviour
 {
     public TileContainer TileContainer;
     public InteractiveDungeonObject InteractiveDungeonObjectContainer;
+    public Player Player;
 
     MapGenerator _mapGen;
-    BSPTree _bspTree;
+    Map _currentMap;
     bool _renderBSPGrid; 
     
     void Start()
     {
-        _mapGen = new MapGenerator(TileContainer, InteractiveDungeonObjectContainer,
-            Random.Range(100, 500), Random.Range(100, 500));
+        _mapGen = new MapGenerator(TileContainer, InteractiveDungeonObjectContainer);
+        _currentMap = _mapGen.GenerateDungeon(Random.Range(100, 500), Random.Range(100, 500));
         _renderBSPGrid = false;
     }
 

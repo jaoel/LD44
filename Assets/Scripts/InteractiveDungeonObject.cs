@@ -10,6 +10,6 @@ namespace Assets.Scripts
     [CreateAssetMenu]
     public class InteractiveDungeonObject : ScriptableObject
     {
-        public GameObject Stairs;
+        public GameObject Stairs;   
     }
 }

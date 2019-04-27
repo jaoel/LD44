@@ -8,39 +8,49 @@ namespace Assets.Scripts
     {
         private Tilemap _floor;
         private Tilemap _walls;
-        private BSPTree _root;
         private readonly TileContainer _tileContainer;
         private readonly InteractiveDungeonObject _interactiveObjectsContainer;
         private int _width;
         private int _height;
 
-        public MapGenerator(TileContainer tileContainer, InteractiveDungeonObject interactiveObjects, int width, int height)
+        public MapGenerator(TileContainer tileContainer, InteractiveDungeonObject interactiveObjects)
         {
             _floor = GameObject.Find("Floor").GetComponent<Tilemap>();
             _walls = GameObject.Find("Walls").GetComponent<Tilemap>();
-            _width = width;
-            _height = height;
             _tileContainer = tileContainer;
             _interactiveObjectsContainer = interactiveObjects;
-            _root = GenerateDungeon(_width, _height);
-
-            FillTilemap(_root);
-            PaintTilemap();
         }
 
         public void DrawDebug()
         {
-            if (_root != null)
-                BSPTree.DebugDrawBspNode(_root);
+            //if (_root != null)
+            //    BSPTree.DebugDrawBspNode(_root);
         }
 
-        public BSPTree GenerateDungeon(int width, int height)
+        public Map GenerateDungeon(int width, int height)
         {
+            _width = width;
+            _height = height;
+
+            _floor.ClearAllTiles();
+            _walls.ClearAllTiles();
+            DestroyAllInteractiveObjects();
+
             BSPTree root = Split(null, 10, new RectInt(0, 0, width, height));
             GenerateRooms(root);
-            GenerateCorridors(root);
+            GenerateCorridors(root); 
+            FillTilemap(root);
+            PaintTilemap();
+
             PopulateMap();
-            return root;
+            Map map = new Map(root);
+
+            return map;
+        }
+
+        public void DestroyAllInteractiveObjects()
+        {
+
         }
 
         void PopulateMap()
