@@ -1,14 +1,12 @@
 ﻿using UnityEngine;
-using System.Collections;
 
 [RequireComponent(typeof(Camera))]
 public class FollowCamera : MonoBehaviour {
-
     public Transform target;
-    public float deadZoneRadius = 10f;
-    public Vector3 velocity = Vector3.zero;
+    public float spring = 5f;
 
     private new Camera camera;
+    private float deadZoneRadius = 10f;
 
     private void Start() {
         camera = GetComponent<Camera>();
@@ -19,15 +17,16 @@ public class FollowCamera : MonoBehaviour {
 
     void Update() {
         float screenWidthInWorldUnits = Vector3.Distance(camera.ScreenToWorldPoint(new Vector3(0f, 0f, 0f)), camera.ScreenToWorldPoint(new Vector3(Screen.width, 0f, 0f)));
-        deadZoneRadius = screenWidthInWorldUnits / 4f;
+        deadZoneRadius = screenWidthInWorldUnits / 10f;
         //DebugDrawRadius();
-
+        
         Vector3 toTarget = target.position - transform.position;
-        //if (toTarget.magnitude > centerRadius) {
-            Vector3 newPosition = transform.position + 0.05f * toTarget;
+        toTarget.z = 0f;
+        if (toTarget.magnitude > deadZoneRadius) {
+            Vector3 newPosition = transform.position + spring * (toTarget - toTarget.normalized * deadZoneRadius) * Time.deltaTime;
             newPosition.z = transform.position.z;
             transform.position = newPosition;
-        //}
+        }
     }
 
     void DebugDrawRadius() {

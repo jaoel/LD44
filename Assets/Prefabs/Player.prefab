@@ -70,7 +70,6 @@ MonoBehaviour:
   maxSpeed: 8
   acceleration: 25
   deceleration: 15
-  drag: 0.5
 --- !u!61 &901794245638907986
 BoxCollider2D:
   m_ObjectHideFlags: 0
