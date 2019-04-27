@@ -10,6 +10,14 @@ namespace Assets.Scripts
 {
     public class Map
     {
+        public int[,] CollisionMap
+        {
+            get
+            {
+                return _collisionMap;
+            }
+        }
+
         Tilemap _walls;
         Tilemap _floor;
         int _width;
@@ -54,6 +62,16 @@ namespace Assets.Scripts
             }
 
             return new Vector3Int(x, y, 0);
+        }
+
+        public void DrawPath(List<Vector2Int> path)
+        {
+            path.ForEach(pos =>
+            {
+                Vector3Int position = new Vector3Int(pos.x, pos.y, 0);
+                _floor.SetTileFlags(position, TileFlags.None);
+                _floor.SetColor(position, new Color(100 / 255.0f, 149 / 255.0f, 237 / 255.0f));
+            });
         }
     }
 }

@@ -34,5 +34,10 @@ public class Bullet : MonoBehaviour {
         {
             gameObject.SetActive(false);
         }
+        else if (collision.gameObject.layer == LayerContainer.Instance.Layers["Enemy"])
+        {
+            collision.gameObject.GetComponent<Enemy>().ApplyDamage(description.damage);
+            gameObject.SetActive(false);
+        }
     } 
 }

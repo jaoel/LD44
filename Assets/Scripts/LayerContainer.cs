@@ -32,6 +32,7 @@ public class LayerContainer : MonoBehaviour
         Layers = new Dictionary<string, int>();
         Layers.Add("Map", LayerMask.NameToLayer("Map"));
         Layers.Add("Player", LayerMask.NameToLayer("Player"));
-        Layers.Add("FriendlyBullet", LayerMask.NameToLayer("FriendlyBullet")); 
+        Layers.Add("FriendlyBullet", LayerMask.NameToLayer("FriendlyBullet"));
+        Layers.Add("Enemy", LayerMask.NameToLayer("Enemy")); 
     }
 }

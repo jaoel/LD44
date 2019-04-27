@@ -190,11 +190,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7751212de6c89dd47bcef8b860031f73, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  TileContainer: {fileID: 11400000, guid: 122c88a6521bfa344ae44316c6d6a813, type: 2}
-  InteractiveDungeonObjectContainer: {fileID: 11400000, guid: 19d0704cc28aabb4c9d5c482d9c8b89d,
+  tileContainer: {fileID: 11400000, guid: 122c88a6521bfa344ae44316c6d6a813, type: 2}
+  interactiveDungeonObjectContainer: {fileID: 11400000, guid: 19d0704cc28aabb4c9d5c482d9c8b89d,
     type: 2}
-  ItemContainer: {fileID: 11400000, guid: 74287dc484f187343ab501050ebd52a6, type: 2}
-  Player: {fileID: 529374700}
+  itemContainer: {fileID: 11400000, guid: 74287dc484f187343ab501050ebd52a6, type: 2}
+  enemyContainer: {fileID: 11400000, guid: ae8c7aeb04ccf9340a11daa8a4a5ae53, type: 2}
+  player: {fileID: 529374700}
 --- !u!20 &519420031
 Camera:
   m_ObjectHideFlags: 0
@@ -1683,6 +1684,8 @@ Tilemap:
   m_TileColorArray:
   - m_RefCount: 9
     m_Data: {r: 1, g: 1, b: 1, a: 1}
+  - m_RefCount: 0
+    m_Data: {r: 1.7729e-41, g: 1.7729e-41, b: 1.7729e-41, a: 1.7729e-41}
   m_AnimationFrameRate: 1
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_Origin: {x: -1, y: -1, z: 0}
