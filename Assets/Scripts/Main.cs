@@ -8,6 +8,7 @@ public class Main : MonoBehaviour
 {
     public TileContainer TileContainer;
     public InteractiveDungeonObject InteractiveDungeonObjectContainer;
+    public ItemContainer ItemContainer;
     public Player Player;
 
     MapGenerator _mapGen;
@@ -16,7 +17,7 @@ public class Main : MonoBehaviour
     
     void Start()
     {
-        _mapGen = new MapGenerator(TileContainer, InteractiveDungeonObjectContainer);
+        _mapGen = new MapGenerator(TileContainer, InteractiveDungeonObjectContainer, ItemContainer);
         _renderBSPGrid = false;
 
         GenerateMap();
