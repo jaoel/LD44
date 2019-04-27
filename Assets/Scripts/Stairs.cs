@@ -9,12 +9,21 @@ namespace Assets.Scripts
 {
     public class Stairs : MonoBehaviour
     {
-        int _playerLayerMask = LayerMask.NameToLayer("Player");
-        public void OnTriggerEnter(Collider other)
+        public Main _main;
+        int _playerLayerMask;
+
+        public void Awake()
         {
-            if (other.gameObject.layer == _playerLayerMask)
+            _playerLayerMask = LayerMask.NameToLayer("Player");
+            _main = GameObject.Find("Main Camera").GetComponent<Main>();
+        }
+
+        public void OnTriggerEnter2D(Collider2D collision)
+        {
+            if (collision.gameObject.layer == _playerLayerMask)
             {
-                Debug.Log("ayy lmao");
+                _main.GenerateMap();
+                Destroy(gameObject);
             }
         }
     }

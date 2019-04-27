@@ -333,7 +333,6 @@ GameObject:
   - component: {fileID: 641841355}
   - component: {fileID: 641841357}
   - component: {fileID: 641841356}
-  - component: {fileID: 641841358}
   m_Layer: 0
   m_Name: Floor
   m_TagString: Untagged
@@ -1481,21 +1480,6 @@ Tilemap:
     e31: 0
     e32: 0
     e33: 1
---- !u!19719996 &641841358
-TilemapCollider2D:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 641841354}
-  m_Enabled: 1
-  m_Density: 1
-  m_Material: {fileID: 0}
-  m_IsTrigger: 0
-  m_UsedByEffector: 0
-  m_UsedByComposite: 0
-  m_Offset: {x: 0, y: 0}
-  m_MaximumTileChangeCount: 1000
 --- !u!1 &1114403940
 GameObject:
   m_ObjectHideFlags: 0
@@ -1507,7 +1491,8 @@ GameObject:
   - component: {fileID: 1114403941}
   - component: {fileID: 1114403943}
   - component: {fileID: 1114403942}
-  m_Layer: 0
+  - component: {fileID: 1114403944}
+  m_Layer: 8
   m_Name: Walls
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -1720,6 +1705,21 @@ Tilemap:
     e31: 0
     e32: 0
     e33: 1
+--- !u!19719996 &1114403944
+TilemapCollider2D:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1114403940}
+  m_Enabled: 1
+  m_Density: 1
+  m_Material: {fileID: 0}
+  m_IsTrigger: 0
+  m_UsedByEffector: 0
+  m_UsedByComposite: 0
+  m_Offset: {x: 0, y: 0}
+  m_MaximumTileChangeCount: 1000
 --- !u!1001 &1173505193133995514
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -1731,6 +1731,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Name
       value: Player
+      objectReference: {fileID: 0}
+    - target: {fileID: 1173505191400535230, guid: e6ff596c348b15841b93cc6f5790e643,
+        type: 3}
+      propertyPath: m_Layer
+      value: 9
       objectReference: {fileID: 0}
     - target: {fileID: 1173505191400535231, guid: e6ff596c348b15841b93cc6f5790e643,
         type: 3}
@@ -1801,6 +1806,31 @@ PrefabInstance:
         type: 3}
       propertyPath: m_BodyType
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 901794245638907986, guid: e6ff596c348b15841b93cc6f5790e643,
+        type: 3}
+      propertyPath: m_Offset.x
+      value: 0.000000029802322
+      objectReference: {fileID: 0}
+    - target: {fileID: 901794245638907986, guid: e6ff596c348b15841b93cc6f5790e643,
+        type: 3}
+      propertyPath: m_Size.x
+      value: 0.63224703
+      objectReference: {fileID: 0}
+    - target: {fileID: 901794245638907986, guid: e6ff596c348b15841b93cc6f5790e643,
+        type: 3}
+      propertyPath: m_Offset.y
+      value: -0.00000023841858
+      objectReference: {fileID: 0}
+    - target: {fileID: 901794245638907986, guid: e6ff596c348b15841b93cc6f5790e643,
+        type: 3}
+      propertyPath: m_Size.y
+      value: 0.8889804
+      objectReference: {fileID: 0}
+    - target: {fileID: 6820148234107622664, guid: e6ff596c348b15841b93cc6f5790e643,
+        type: 3}
+      propertyPath: m_Layer
+      value: 9
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: e6ff596c348b15841b93cc6f5790e643, type: 3}

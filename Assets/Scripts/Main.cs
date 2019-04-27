@@ -17,8 +17,15 @@ public class Main : MonoBehaviour
     void Start()
     {
         _mapGen = new MapGenerator(TileContainer, InteractiveDungeonObjectContainer);
-        _currentMap = _mapGen.GenerateDungeon(Random.Range(100, 500), Random.Range(100, 500));
         _renderBSPGrid = false;
+
+        GenerateMap();
+    }
+
+    public void GenerateMap()
+    {
+        _currentMap = _mapGen.GenerateDungeon(Random.Range(1, 10), Random.Range(100, 500), Random.Range(100, 500));
+        _currentMap.MovePlayerToSpawn(Player);
     }
 
     private void OnDrawGizmos()

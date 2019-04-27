@@ -27,7 +27,7 @@ namespace Assets.Scripts
             //    BSPTree.DebugDrawBspNode(_root);
         }
 
-        public Map GenerateDungeon(int width, int height)
+        public Map GenerateDungeon(int subdivisions, int width, int height)
         {
             _width = width;
             _height = height;
@@ -36,14 +36,14 @@ namespace Assets.Scripts
             _walls.ClearAllTiles();
             DestroyAllInteractiveObjects();
 
-            BSPTree root = Split(null, 10, new RectInt(0, 0, width, height));
+            BSPTree root = Split(null, subdivisions, new RectInt(0, 0, width, height));
             GenerateRooms(root);
             GenerateCorridors(root); 
             FillTilemap(root);
             PaintTilemap();
 
-            PopulateMap();
-            Map map = new Map(root);
+            Map map = new Map(root, _walls, _floor, _width, _height);
+            PopulateMap(map);
 
             return map;
         }
@@ -53,35 +53,14 @@ namespace Assets.Scripts
 
         }
 
-        void PopulateMap()
+        void PopulateMap(Map map)
         {
             //Stairs to next level
-            Vector3Int stairsPosition = GetOpenPositionInMap();
+            Vector3Int stairsPosition = map.GetOpenPositionInMap();
             GameObject.Instantiate(_interactiveObjectsContainer.Stairs, 
                 new Vector3(stairsPosition.x - 0.5f, stairsPosition.y - 0.5f, -1.0f), Quaternion.identity); 
         }
-
-        public Vector3Int GetOpenPositionInMap()
-        {
-            int x = Random.Range(0, _width);
-            int y = Random.Range(0, _height);
-            while (true)
-            {
-                x = Random.Range(0, _width);
-                y = Random.Range(0, _height);
-
-                Tile floor = _floor.GetTile<Tile>(new Vector3Int(x, y, 0));
-                Tile wall = _walls.GetTile<Tile>(new Vector3Int(x, y, 0));
-
-                if (floor != null && wall == null)
-                {
-                    break;
-                }
-            }
-
-            return new Vector3Int(x, y, 0);
-        }
-
+             
         void GenerateFloor(int width, int height)
         {
             for (int x = 0; x < width; x++)
