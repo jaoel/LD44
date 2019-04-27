@@ -4,6 +4,7 @@ namespace Assets.Scripts
 {
     public class BSPTree
     {
+        public BSPTree Parent { get; set; }
         public BSPTree Left { get; set; }
         public BSPTree Right { get; set; }
         public RectInt Grid { get; set; }  
@@ -19,8 +20,9 @@ namespace Assets.Scripts
             get { return Left != null || Right != null; }
         }
 
-        public BSPTree(RectInt grid)
+        public BSPTree(BSPTree parent, RectInt grid)
         {
+            Parent = parent;
             Grid = grid;    
         }
 
@@ -36,9 +38,6 @@ namespace Assets.Scripts
             Gizmos.DrawLine(new Vector3(node.Grid.x, node.Grid.yMax, 0), new Vector3Int(node.Grid.xMax, node.Grid.yMax, 0));
             // left
             Gizmos.DrawLine(new Vector3(node.Grid.x, node.Grid.y, 0), new Vector3Int(node.Grid.x, node.Grid.yMax, 0));
-
-            Gizmos.color = Color.blue;
-
 
             // children
             if (node.Left != null)

@@ -14,7 +14,7 @@ namespace Assets.Scripts
         {
             _floor = GameObject.Find("Floor").GetComponent<Tilemap>();
             _tiles = tiles;
-            _root = GenerateDungeon(100, 100);
+            _root = GenerateDungeon(500, 500);
 
             UpdateTilemap(_root);   
         }
@@ -26,7 +26,7 @@ namespace Assets.Scripts
 
         public BSPTree GenerateDungeon(int width, int height)
         {
-            BSPTree root = Split(5, new RectInt(0, 0, width, height));
+            BSPTree root = Split(null, 10, new RectInt(0, 0, width, height));
             GenerateRooms(root);
             GenerateCorridors(root);
             return root;
@@ -43,16 +43,19 @@ namespace Assets.Scripts
             }
         }
 
-        public BSPTree Split(int level, RectInt grid)
+        public BSPTree Split(BSPTree parent, int level, RectInt grid)
         {
-            BSPTree node = new BSPTree(grid);
+            BSPTree node = new BSPTree(parent, grid);
 
             if (level > 0)
             {
                 RectInt[] newContainers = SplitContainer(grid);
 
-                node.Left = Split(level - 1, newContainers[0]);
-                node.Right = Split(level - 1, newContainers[1]);
+                if (newContainers[0].width * 0.5f > 5.0f && newContainers[0].height * 0.5f > 5.0f)
+                    node.Left = Split(node, level - 1, newContainers[0]);
+
+                if (newContainers[1].width * 0.5f > 5.0f && newContainers[1].height * 0.5f > 5.0f)
+                    node.Right = Split(node, level - 1, newContainers[1]);
             }
 
             return node;
@@ -60,7 +63,7 @@ namespace Assets.Scripts
 
         private RectInt[] SplitContainer(RectInt grid)
         {
-            RectInt[] result = new RectInt[2];
+            RectInt[] result = new RectInt[2];      
 
             if (UnityEngine.Random.Range(0.0f, 1.0f) > 0.5f)
             {
@@ -78,10 +81,11 @@ namespace Assets.Scripts
 
         private void GenerateRooms(BSPTree node)
         {
+            const int distToGridWall = 2;
             if (node.IsLeaf)
             {
-                var randomX = Random.Range(5, node.Grid.width / 4);
-                var randomY = Random.Range(5, node.Grid.height / 4);
+                var randomX = Random.Range(distToGridWall, node.Grid.width / 4);
+                var randomY = Random.Range(distToGridWall, node.Grid.height / 4);
                 int roomX = node.Grid.x + randomX;
                 int roomY = node.Grid.y + randomY;
                 int roomW = node.Grid.width - (int)(randomX * Random.Range(1f, 2f));
@@ -106,23 +110,49 @@ namespace Assets.Scripts
         {
             if (node.IsInternal)
             {
-                RectInt leftContainer = node.Left.Grid;
-                RectInt rightContainer = node.Right.Grid;
+                BSPTree left = node.Left;
+                if (left == null)
+                {
+                    BSPTree parent = node.Parent;
+
+                    while (parent.Left == null)
+                    {
+                        parent = parent.Parent;
+                    }
+                    left = parent.Left;
+                }
+
+                BSPTree right = node.Right;
+                if (right == null)
+                {
+                    BSPTree parent = node.Parent;
+
+                    while (parent.Right == null)
+                    {
+                        parent = parent.Parent;
+                    }
+
+                    right = parent.Right;
+                }
+
+                RectInt leftContainer = left.Grid;
+                RectInt rightContainer = right.Grid;
                 Vector2 leftCenter = leftContainer.center;
                 Vector2 rightCenter = rightContainer.center;
                 Vector2 direction = (rightCenter - leftCenter).normalized;
+                int corridorWidth = Random.Range(1, 4);
                 while (Vector2.Distance(leftCenter, rightCenter) > 1)
                 {
                     if (direction.Equals(Vector2.right))
                     {
-                        for (int i = 0; i < 2; i++)
+                        for (int i = 0; i < corridorWidth; i++)
                         {
                             _floor.SetTile(new Vector3Int((int)leftCenter.x, (int)leftCenter.y + i, 0), _tiles[1]);
                         }
                     }
                     else if (direction.Equals(Vector2.up))
                     {
-                        for (int i = 0; i < 2; i++)
+                        for (int i = 0; i < corridorWidth; i++)
                         {
                             _floor.SetTile(new Vector3Int((int)leftCenter.x + i, (int)leftCenter.y, 0), _tiles[1]);
                         }
@@ -150,7 +180,10 @@ namespace Assets.Scripts
                 {
                     for (int y = node.Room.y; y < node.Room.yMax; y++)
                     {
-                        _floor.SetTile(new Vector3Int(x, y, 0), _tiles[0]);
+                        //if (_floor.GetTile(new Vector3Int(x, y, 0)) == null)
+                        {
+                            _floor.SetTile(new Vector3Int(x, y, 0), _tiles[0]);
+                        }
                     }  
                 }
             }
