@@ -78,6 +78,9 @@ public class Player : MonoBehaviour
 
     private void Update()
     {
+        if (!IsAlive)
+            return;
+
         CalculateInputVector();
 
         Vector3 mousePositionInWorldSpace = CameraManager.Instance.MainCamera.ScreenToWorldPoint(Keybindings.MousePosition);
@@ -100,7 +103,10 @@ public class Player : MonoBehaviour
     void FixedUpdate()
     {
         if (!IsAlive)
+        {
+            rigidbody.velocity = Vector2.zero;
             return;
+        }
 
         CalculateDeceleration();
         CalculateVelocity();

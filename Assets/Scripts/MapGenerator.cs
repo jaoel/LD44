@@ -111,10 +111,6 @@ namespace Assets.Scripts
 
             map.stairs = _interactiveObjects[0];
 
-            Vector3Int powerupPos = map.GetOpenPositionInRoom(2, 2);
-            _interactiveObjects.Add(GameObject.Instantiate(_itemContainer.Shotgun.itemPrefab.gameObject,
-                new Vector3(powerupPos.x, powerupPos.y, -1.0f), Quaternion.identity));
-
             int enemyCount = 0;
             if (currentLevel <= 5)
                 enemyCount = (int)(10 + Math.Pow(1.5, 1.5 * currentLevel));
