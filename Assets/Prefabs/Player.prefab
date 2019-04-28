@@ -71,11 +71,11 @@ MonoBehaviour:
   maxSpeed: 8
   acceleration: 25
   deceleration: 15
-  CurrentWeapon: {fileID: 7056305335599049566, guid: 72e43969419f0a54ab8ddd08f4280796,
+  invulnTime: 1
+  CurrentWeapon: {fileID: 8576656811411399088, guid: 334ef3daf64cda543bd3fd358c1d13a6,
     type: 3}
   animator: {fileID: 6780983900129160725}
-  currentHealth: 100
-  maxHealth: 100
+  startHealth: 100
 --- !u!61 &901794245638907986
 BoxCollider2D:
   m_ObjectHideFlags: 0

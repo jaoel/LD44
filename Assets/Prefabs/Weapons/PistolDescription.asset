@@ -9,9 +9,9 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 0}
-  m_Name: SimpleWeapon
-  m_EditorClassIdentifier: Assembly-CSharp::WeaponDescription
-  Cooldown: 0.1
+  m_Script: {fileID: 11500000, guid: d15f2c94552a8794997ce16bdfc199e7, type: 3}
+  m_Name: PistolDescription
+  m_EditorClassIdentifier: 
+  Cooldown: 0.3
   BulletSpeed: 15
   BulletDescription: {fileID: 11400000, guid: b85b6f222e986484bb7ce58010cb1724, type: 2}

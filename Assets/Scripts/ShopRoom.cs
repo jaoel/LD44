@@ -12,35 +12,25 @@ public class ShopRoom : MonoBehaviour {
     }
 
     public void GenerateRandomItems() {
-        List<ShopItem> shuffledShopItems = GetShuffledShopItems();
-        for (int i = 0; i < shuffledShopItems.Count; i++) {
-            shuffledShopItems[i].description = ItemContainer.GetRandomItem();
-            shuffledShopItems[i].InstantiateItem();
+        List<ItemDescription> shuffledShopItems = GetShuffledShopItems();
+        for (int i = 0; i < shopItems.Length; i++) {
+            shopItems[i].description = shuffledShopItems[i % shuffledShopItems.Count];
+            shopItems[i].InstantiateItem();
         }
     }
 
-    private List<ShopItem> GetShuffledShopItems() {
-        List<ShopItem> shuffled = new List<ShopItem>(shopItems);
+    private List<ItemDescription> GetShuffledShopItems() {
+        List<ItemDescription> shuffled = ItemContainer.GetAllItems();
 
         int n = shuffled.Count;
         while (n > 1) {
             n--;
             int k = Random.Range(0, n + 1);
-            ShopItem value = shuffled[k];
+            ItemDescription value = shuffled[k];
             shuffled[k] = shuffled[n];
             shuffled[n] = value;
         }
 
         return shuffled;
-    }
-
-    // Use this for initialization
-    void Start() {
-
-    }
-
-    // Update is called once per frame
-    void Update() {
-
     }
 }

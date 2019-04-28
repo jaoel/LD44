@@ -13,7 +13,7 @@ GameObject:
   - component: {fileID: 7979725692751591465}
   - component: {fileID: 1652132710952191853}
   m_Layer: 0
-  m_Name: ShotgunPickup
+  m_Name: AK47Pickup
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -45,9 +45,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7959ae297e381864b9726be7771d9827, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  Description: {fileID: 11400000, guid: 7b7b35105a18b0946aad950135169d3a, type: 2}
+  Description: {fileID: 11400000, guid: 33cfe110ba187b54c8f4562be87bee63, type: 2}
   isShopItem: 0
-  Weapon: {fileID: 4021312548771272748, guid: dee946661801f5c47abcb14e57b6d4d3, type: 3}
+  Weapon: {fileID: 8576656811411399088, guid: 5529a8b0a5ecb1a4e9c908dff2bd3502, type: 3}
 --- !u!61 &7979725692751591465
 BoxCollider2D:
   m_ObjectHideFlags: 0
@@ -111,7 +111,7 @@ SpriteRenderer:
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 0
-  m_Sprite: {fileID: -3993855566539492532, guid: 42bd3ffc034dd23409edab32966f490e,
+  m_Sprite: {fileID: -1350236206761516725, guid: 42bd3ffc034dd23409edab32966f490e,
     type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
