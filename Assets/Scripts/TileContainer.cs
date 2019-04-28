@@ -20,5 +20,10 @@ namespace Assets.Scripts
         public Tile BottomRight;
         public Tile BottomMiddle;
         public Tile BottomLeft;
+
+        public Tile TopRightOuter;
+        public Tile TopLeftOuter;
+        public Tile BottomRightOuter;
+        public Tile BottomLeftOuter;
     }
 }

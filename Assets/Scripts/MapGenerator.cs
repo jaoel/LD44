@@ -205,7 +205,7 @@ namespace Assets.Scripts
                         for (int i = 0; i < corridorWidth; i++)
                         {
                             Vector3Int coords = new Vector3Int((int)leftCenter.x, (int)leftCenter.y + i, 0);
-                            _floor.SetTile(coords, _tileContainer.FloorTiles[0]);
+                            _floor.SetTile(coords, _tileContainer.FloorTiles[GetFloorTileIndex()]);
                             collisionMap[coords.x, coords.y] = 0;
                         }
                     }
@@ -214,7 +214,7 @@ namespace Assets.Scripts
                         for (int i = 0; i < corridorWidth; i++)
                         {
                             Vector3Int coords = new Vector3Int((int)leftCenter.x + i, (int)leftCenter.y, 0);
-                            _floor.SetTile(coords, _tileContainer.FloorTiles[0]);
+                            _floor.SetTile(coords, _tileContainer.FloorTiles[GetFloorTileIndex()]);
                             collisionMap[coords.x, coords.y] = 0;
                         }
                     }
@@ -240,8 +240,8 @@ namespace Assets.Scripts
                 for (int x = node.Room.x; x < node.Room.xMax; x++)
                 {
                     for (int y = node.Room.y; y < node.Room.yMax; y++)
-                    {
-                        _floor.SetTile(new Vector3Int(x, y, 0), _tileContainer.FloorTiles[1]);
+                    { 
+                        _floor.SetTile(new Vector3Int(x, y, 0), _tileContainer.FloorTiles[GetFloorTileIndex()]);
                         collisionMap[x, y] = 0;
                     }
                 }
@@ -257,9 +257,9 @@ namespace Assets.Scripts
 
         private void PaintTilemap(int[,] collisionMap)
         { 
-            for(int x = 0; x < 500; x++)
+            for(int x = 0; x < collisionMap.GetLength(0); x++)
             {
-                for(int y = 0; y < 500; y++)
+                for(int y = 0; y < collisionMap.GetLength(1); y++)
                 {
                     Tile tile = GetTileByNeighbours(x, y);
                     if (tile != null)
@@ -271,6 +271,16 @@ namespace Assets.Scripts
             }
         }
 
+        private int GetFloorTileIndex()
+        {
+            bool offTile = Random.Range(0.0f, 1.0f) < 0.01f;
+            int tileIndex = 0;
+            if (offTile)
+                tileIndex = Random.Range(1, 4);
+
+            return tileIndex;
+        }
+
         private Tile GetTileByNeighbours(int x, int y)
         {
             TileBase currentTile = _floor.GetTile(new Vector3Int(x, y, 0));
@@ -278,16 +288,16 @@ namespace Assets.Scripts
             if (currentTile == null)
                 return null;
 
-            TileBase bottomLeft = _floor.GetTile(new Vector3Int(x - 1, y - 1, 0));
-            TileBase bottomMiddle = _floor.GetTile(new Vector3Int(x, y - 1, 0));
-            TileBase bottomRight = _floor.GetTile(new Vector3Int(x + 1, y - 1, 0));
+            Tile bottomLeft = _floor.GetTile<Tile>(new Vector3Int(x - 1, y - 1, 0));
+            Tile bottomMiddle = _floor.GetTile<Tile>(new Vector3Int(x, y - 1, 0));
+            Tile bottomRight = _floor.GetTile<Tile>(new Vector3Int(x + 1, y - 1, 0));
 
-            TileBase middleLeft = _floor.GetTile(new Vector3Int(x - 1, y, 0));
-            TileBase middleRight = _floor.GetTile(new Vector3Int(x + 1, y, 0));
+            Tile middleLeft = _floor.GetTile<Tile>(new Vector3Int(x - 1, y, 0));
+            Tile middleRight = _floor.GetTile<Tile>(new Vector3Int(x + 1, y, 0));
 
-            TileBase topLeft = _floor.GetTile(new Vector3Int(x - 1, y + 1, 0));
-            TileBase topMiddle = _floor.GetTile(new Vector3Int(x, y + 1, 0));
-            TileBase topRight = _floor.GetTile(new Vector3Int(x + 1, y + 1, 0));
+            Tile topLeft = _floor.GetTile<Tile>(new Vector3Int(x - 1, y + 1, 0));
+            Tile topMiddle = _floor.GetTile<Tile>(new Vector3Int(x, y + 1, 0));
+            Tile topRight = _floor.GetTile<Tile>(new Vector3Int(x + 1, y + 1, 0));
 
             //left
             if (middleLeft == null && topMiddle == null)
@@ -312,7 +322,23 @@ namespace Assets.Scripts
             if (topMiddle != null && bottomMiddle == null && middleRight == null)
                 return _tileContainer.BottomRight;
 
+            Tile wallMiddleLeft = _walls.GetTile<Tile>(new Vector3Int(x - 1, y, 0));
+            Tile wallMiddleRight = _walls.GetTile<Tile>(new Vector3Int(x + 1, y, 0));
+            Tile wallTopMiddle = _walls.GetTile<Tile>(new Vector3Int(x, y + 1, 0));
+
+            if (bottomMiddle != null && bottomLeft == null && wallMiddleLeft != null)
+                return _tileContainer.TopRightOuter;
+
+            if (bottomMiddle != null && bottomRight == null && wallMiddleRight == null)
+                return _tileContainer.TopLeftOuter;
+
+            if (topRight == null && wallMiddleLeft == null)
+                return _tileContainer.BottomRightOuter;
+
+            if (topLeft == null && topMiddle != null && wallMiddleLeft != null)
+                return _tileContainer.BottomLeftOuter;
+
             return null;
-        }
+        }  
     }
 }

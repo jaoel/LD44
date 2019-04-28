@@ -13,13 +13,19 @@ MonoBehaviour:
   m_Name: TileContainer
   m_EditorClassIdentifier: 
   FloorTiles:
-  - {fileID: 11400000, guid: a0bfda126705e784fa5bb9d2cd6856c2, type: 2}
-  - {fileID: 11400000, guid: 17f058a27d367f349a3fab521a8694ea, type: 2}
-  TopRight: {fileID: 11400000, guid: b1205a4a62473ac4fa9d63cde1567431, type: 2}
-  TopMiddle: {fileID: 11400000, guid: b1205a4a62473ac4fa9d63cde1567431, type: 2}
-  TopLeft: {fileID: 11400000, guid: b1205a4a62473ac4fa9d63cde1567431, type: 2}
-  MiddleLeft: {fileID: 11400000, guid: b1205a4a62473ac4fa9d63cde1567431, type: 2}
-  MiddleRight: {fileID: 11400000, guid: b1205a4a62473ac4fa9d63cde1567431, type: 2}
-  BottomRight: {fileID: 11400000, guid: b1205a4a62473ac4fa9d63cde1567431, type: 2}
-  BottomMiddle: {fileID: 11400000, guid: b1205a4a62473ac4fa9d63cde1567431, type: 2}
-  BottomLeft: {fileID: 11400000, guid: b1205a4a62473ac4fa9d63cde1567431, type: 2}
+  - {fileID: 11400000, guid: b1205a4a62473ac4fa9d63cde1567431, type: 2}
+  - {fileID: 11400000, guid: 06dcd229334209f46a5864b94a319005, type: 2}
+  - {fileID: 11400000, guid: 7a6824c5a36476140bf742c882e10359, type: 2}
+  - {fileID: 11400000, guid: a0d1f0065f4948844bc77dbc64b72e84, type: 2}
+  TopRight: {fileID: 11400000, guid: c9b9a7bcd405a9f4ba1d6329811c1e11, type: 2}
+  TopMiddle: {fileID: 11400000, guid: 7944de8530514ce43bdcbbc6e9fdd7c9, type: 2}
+  TopLeft: {fileID: 11400000, guid: 2e88f5bc7b6b8ca468f8949e369de6c5, type: 2}
+  MiddleLeft: {fileID: 11400000, guid: 30a8cffc17dc1e34ca8ce1573aa01889, type: 2}
+  MiddleRight: {fileID: 11400000, guid: eab1d7db5c834e54c9f08ac54baed179, type: 2}
+  BottomRight: {fileID: 11400000, guid: 17a28b4d43045d74b82bf243f458bb6d, type: 2}
+  BottomMiddle: {fileID: 11400000, guid: 940200cb1275eb24cad55e965dbd27dc, type: 2}
+  BottomLeft: {fileID: 11400000, guid: df1d8bebf10a09f4da9165ba62f25fc7, type: 2}
+  TopRightOuter: {fileID: 11400000, guid: 2cf183c8524810c4c8c2b05acff625f7, type: 2}
+  TopLeftOuter: {fileID: 11400000, guid: 1968a4487ee0ee5438ead0590cfdf09e, type: 2}
+  BottomRightOuter: {fileID: 11400000, guid: c9cb908e5918a6e448b08da29531ca53, type: 2}
+  BottomLeftOuter: {fileID: 11400000, guid: 33ef207de0c13ad4080682de23a08f4b, type: 2}
