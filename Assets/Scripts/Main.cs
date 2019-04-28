@@ -42,6 +42,7 @@ public class Main : MonoBehaviour
     {
         _currentMap = _mapGen.GenerateDungeon(Random.Range(5, 10), 100, 100);
         _currentMap.MovePlayerToSpawn(player);
+        NavigationManager.map = _currentMap;
     }
 
     private void OnDrawGizmos()

@@ -8,6 +8,7 @@ using UnityEngine;
 public class NavigationManager : MonoBehaviour
 {
     public static int[,] collisionMap;
+    public static Map map;
 
     private static NavigationManager instance;
     public static NavigationManager Instance
@@ -32,6 +33,10 @@ public class NavigationManager : MonoBehaviour
         if (start == target)
             return new List<Vector2Int>();
 
+        int collisionIndex = collisionMap[target.x, target.y];
+        if (collisionIndex != 0)
+            return new List<Vector2Int>();
+
         List<Vector2Int> result = new List<Vector2Int>();
         List<NavigationNode> closedSet = new List<NavigationNode>();
         List<NavigationNode> openSet = new List<NavigationNode>() { new NavigationNode((target - start).sqrMagnitude, 1, start) };
@@ -49,7 +54,7 @@ public class NavigationManager : MonoBehaviour
 
             openSet.Remove(current);
             closedSet.Add(current);
-            List<NavigationNode> neighbours = GetNeighbours(current, collisionMap);
+            List<NavigationNode> neighbours = GetNeighbours(current, collisionMap, false);
             
             for(int i = 0; i < neighbours.Count; i++)
             {
@@ -66,6 +71,8 @@ public class NavigationManager : MonoBehaviour
             }
         }
 
+        map.DrawPath(result);
+
         return result;
     }
 
@@ -81,23 +88,45 @@ public class NavigationManager : MonoBehaviour
         return result;
     }
 
-    public List<NavigationNode> GetNeighbours(NavigationNode node, int[,] collisionMap)
+    public List<NavigationNode> GetNeighbours(NavigationNode node, int[,] collisionMap, bool allowDiagonal)
     {
         List<NavigationNode> result = new List<NavigationNode>();
 
-        for (int x = node.Position.x - 1; x <= node.Position.x + 1; x++)
+
+        if (allowDiagonal)
         {
-            for (int y = node.Position.y - 1; y <= node.Position.y + 1; y++)
+            for (int x = node.Position.x - 1; x <= node.Position.x + 1; x++)
             {
-                if (x < 0 || x >= collisionMap.GetLength(0) || y < 0 || y >= collisionMap.GetLength(1))
-                    continue;
+                for (int y = node.Position.y - 1; y <= node.Position.y + 1; y++)
+                {
+                    if (x < 0 || x >= collisionMap.GetLength(0) || y < 0 || y >= collisionMap.GetLength(1))
+                        continue;
 
-                if (new Vector2Int(x, y) == node.Position || collisionMap[x, y] != 0)
-                    continue;
+                    if (new Vector2Int(x, y) == node.Position || collisionMap[x, y] != 0)
+                        continue;
 
-                result.Add(new NavigationNode(x, y));
+                    result.Add(new NavigationNode(x, y));
+                }
             }
         }
+        else
+        {
+            List<Vector2Int> potentials = new List<Vector2Int>();
+
+            potentials.Add(new Vector2Int(node.Position.x, node.Position.y + 1));
+            potentials.Add(new Vector2Int(node.Position.x, node.Position.y - 1));
+            potentials.Add(new Vector2Int(node.Position.x + 1, node.Position.y));
+            potentials.Add(new Vector2Int(node.Position.x - 1, node.Position.y - 1));
+
+            potentials.ForEach(x =>
+            {
+                if (collisionMap[x.x, x.y] == 0)
+                    result.Add(new NavigationNode(x.x, x.y));
+
+            });
+        }
+
+      
 
         return result;
     }
