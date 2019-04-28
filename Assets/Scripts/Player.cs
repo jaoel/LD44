@@ -79,7 +79,10 @@ public class Player : MonoBehaviour
 
         Vector3 mousePositionInWorldSpace = CameraManager.Instance.MainCamera.ScreenToWorldPoint(Keybindings.MousePosition);
         mousePositionInWorldSpace.z = 0f;
-        aimVector = (mousePositionInWorldSpace - transform.position).normalized;
+        Vector3 aimVector3 = mousePositionInWorldSpace - transform.position;
+        aimVector3.z = 0f;
+        aimVector = aimVector3.normalized;
+
         if (Keybindings.Attack && Time.time >= cooldownEndTime)
         {
             cooldownEndTime = Time.time + CurrentWeapon.Description.Cooldown;
