@@ -13,7 +13,7 @@ GameObject:
   - component: {fileID: -5089695432794804344}
   - component: {fileID: 1022070507353309843}
   m_Layer: 10
-  m_Name: Simple Bullet
+  m_Name: Grenade Bullet
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -152,7 +152,8 @@ SpriteRenderer:
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 0
-  m_Sprite: {fileID: 201767957516689898, guid: c8938335947156648b32e22257ccda21, type: 3}
+  m_Sprite: {fileID: -702417484383542198, guid: c8938335947156648b32e22257ccda21,
+    type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
   m_FlipY: 0
