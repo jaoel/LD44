@@ -10,8 +10,8 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: a9dd8d3929df91d4b832784abf7a5fef, type: 3}
-  m_Name: PistolPickupDescription
+  m_Name: WeakHealthGlobePickupDescription
   m_EditorClassIdentifier: 
-  itemPrefab: {fileID: 8826916283942404865, guid: f3b8abdaad3273c469f00934c829ec75,
+  itemPrefab: {fileID: -1033136326330471242, guid: 2726af8d63d29044480a80225c75c7c1,
     type: 3}
   HealthCost: 10

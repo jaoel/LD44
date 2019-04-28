@@ -10,8 +10,16 @@ public class ItemContainer : ScriptableObject {
     public ItemDescription Grenade;
     public ItemDescription HealthGlobe;
     public ItemDescription MaxHealth;
+    public ItemDescription WeakHealthGlobe;
 
     int numItems = 6; // INCREMENT THIS WHEN ADDING ITEMS
+
+    public ItemDescription GetEnemyDrop()
+    {
+        List<ItemDescription> drops = new List<ItemDescription>() { MaxHealth, WeakHealthGlobe };
+
+        return drops[Random.Range(0, drops.Count)];
+    }
 
     public ItemDescription GetRandomItem() {
         return GetItemByIndex(Random.Range(0, numItems));

@@ -14,4 +14,4 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   itemPrefab: {fileID: -1033136326330471242, guid: 5890c44a3eb2d4f479965d00060d414e,
     type: 3}
-  HealthCost: 10
+  HealthCost: 5
