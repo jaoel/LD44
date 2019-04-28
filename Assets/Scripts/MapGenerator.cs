@@ -14,20 +14,25 @@ namespace Assets.Scripts
         private readonly TileContainer _tileContainer;
         private readonly InteractiveDungeonObject _interactiveObjectsContainer;
         private readonly ItemContainer _itemContainer;
+        private readonly EnemyContainer _enemyContainer;
 
         private int _width;
         private int _height;
         List<GameObject> _interactiveObjects;
+        List<GameObject> _enemies;
 
         public MapGenerator(TileContainer tileContainer, InteractiveDungeonObject interactiveObjects,
-            ItemContainer itemContainer)
+            ItemContainer itemContainer, EnemyContainer enemyContainer)
         {
             _interactiveObjects = new List<GameObject>();
+            _enemies = new List<GameObject>();
+
             _floor = GameObject.Find("Floor").GetComponent<Tilemap>();
             _walls = GameObject.Find("Walls").GetComponent<Tilemap>();
             _tileContainer = tileContainer;
             _interactiveObjectsContainer = interactiveObjects;
             _itemContainer = itemContainer;
+            _enemyContainer = enemyContainer;
         }
 
         public void DrawDebug()
@@ -73,8 +78,13 @@ namespace Assets.Scripts
             {
                 GameObject.Destroy(x);
             });
-
             _interactiveObjects.Clear();
+
+            _enemies.ForEach(x =>
+            {
+                GameObject.Destroy(x);
+            });
+            _enemies.Clear();
         }
 
         void PopulateMap(Map map)
@@ -84,9 +94,16 @@ namespace Assets.Scripts
             _interactiveObjects.Add(GameObject.Instantiate(_interactiveObjectsContainer.Stairs,
                 new Vector3(stairsPosition.x - 0.5f, stairsPosition.y - 0.5f, -1.0f), Quaternion.identity));
 
-            Vector3Int test = map.GetOpenPositionInMap();
+            Vector3Int powerupPos = map.GetOpenPositionInMap();
             _interactiveObjects.Add(GameObject.Instantiate(_itemContainer.Shotgun,
-                new Vector3(test.x - 0.5f, test.y - 0.5f, -1.0f), Quaternion.identity));
+                new Vector3(powerupPos.x - 0.5f, powerupPos.y - 0.5f, -1.0f), Quaternion.identity)); 
+
+            for (int i = 0; i < 20; i++)
+            {
+                Vector3Int spawnPos = map.GetOpenPositionInMap();
+                _enemies.Add(GameObject.Instantiate(_enemyContainer.basicZombie, 
+                    new Vector3(spawnPos.x + 0.5f, spawnPos.y + 0.5f, -1), Quaternion.identity));
+            }
         }
 
         void GenerateFloor(int width, int height)
@@ -211,7 +228,7 @@ namespace Assets.Scripts
                 }
                 if (node.Right != null)
                 {
-                    GenerateCorridors(node.Right.Left, collisionMap);
+                    GenerateCorridors(node.Right, collisionMap);
                 }
             }
         }

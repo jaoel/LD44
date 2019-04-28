@@ -1,5 +1,9 @@
 fileFormatVersion: 2
+<<<<<<< HEAD
 guid: 42bd3ffc034dd23409edab32966f490e
+=======
+guid: 309e796f64835634383c1e38b587e297
+>>>>>>> AStar navigation
 TextureImporter:
   internalIDToNameTable: []
   externalObjects: {}
@@ -75,7 +79,11 @@ TextureImporter:
     outline: []
     physicsShape: []
     bones: []
+<<<<<<< HEAD
     spriteID: 62002a7828743eb49a50c218fb51eafc
+=======
+    spriteID: 31b765548bc37514680b025ece639646
+>>>>>>> AStar navigation
     internalID: 0
     vertices: []
     indices: 

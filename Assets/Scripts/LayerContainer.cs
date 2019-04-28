@@ -32,6 +32,20 @@ public class LayerContainer : MonoBehaviour
         Layers = new Dictionary<string, int>();
         Layers.Add("Map", LayerMask.NameToLayer("Map"));
         Layers.Add("Player", LayerMask.NameToLayer("Player"));
-        Layers.Add("FriendlyBullet", LayerMask.NameToLayer("FriendlyBullet")); 
+        Layers.Add("FriendlyBullet", LayerMask.NameToLayer("FriendlyBullet"));
+        Layers.Add("Enemy", LayerMask.NameToLayer("Enemy")); 
+    }
+
+    public static int CombinedLayerMask(params string[] layerNames)
+    {
+        int result = 0;
+
+
+        for (int i = 0; i < layerNames.Length; i++)
+        {
+            result |= 1 << Instance.Layers[layerNames[i]];
+        }
+
+        return result;
     }
 }
