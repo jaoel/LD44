@@ -1,4 +1,5 @@
 ﻿using Assets.Scripts;
+using DG.Tweening;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -39,6 +40,8 @@ public class Main : MonoBehaviour
 
     void Start()
     {
+        DOTween.Init();
+
         shopInstance = Instantiate(shopRoomPrefab);
         Time.timeScale = 1.0f;
         _gamePaused = false;

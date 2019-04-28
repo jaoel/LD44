@@ -1,6 +1,6 @@
 ﻿using UnityEngine;
 
-[RequireComponent(typeof(Camera))]
+//[RequireComponent(typeof(Camera))]
 public class FollowCamera : MonoBehaviour {
     public Transform target;
 
@@ -13,7 +13,7 @@ public class FollowCamera : MonoBehaviour {
     private Rect deadzoneRect;
 
     private void Start() {
-        camera = GetComponent<Camera>();
+        camera = GetComponentInChildren<Camera>();// GetComponent<Camera>();
         if(target == null || target.Equals(null)) {
             target = FindObjectOfType<Player>()?.transform;
         }

@@ -36,7 +36,7 @@ public class Bullet : MonoBehaviour {
 
     public void OnTriggerEnter2D(Collider2D collision)
     {
-        if (collision.gameObject == _owner)
+        if(collision.gameObject == _owner)
             return;
 
         if (collision.gameObject.layer == LayerContainer.Instance.Layers["Map"])
@@ -45,6 +45,7 @@ public class Bullet : MonoBehaviour {
         else if (collision.gameObject.layer == LayerContainer.Instance.Layers["Enemy"])
         {
             collision.gameObject.GetComponent<Enemy>().ApplyDamage(description.damage);
+            CameraManager.Instance.ShakeCamera(1.0f, 0.2f, 0.3f);
         }
         else if (collision.gameObject.layer == LayerContainer.Instance.Layers["Player"])
         {

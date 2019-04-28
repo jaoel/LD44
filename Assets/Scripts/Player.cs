@@ -1,6 +1,5 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
+﻿using UnityEngine;
+using DG.Tweening;
 
 public class Player : MonoBehaviour
 {
@@ -18,6 +17,7 @@ public class Player : MonoBehaviour
     private int maxHealth;
 
     private new Rigidbody2D rigidbody;
+    private new SpriteRenderer renderer;
     private Vector3 velocity = Vector3.zero;
     private Vector3 inputVector = Vector3.zero;
     private Vector2 aimVector = Vector2.zero;
@@ -59,7 +59,8 @@ public class Player : MonoBehaviour
     void Start()
     {
         rigidbody = GetComponent<Rigidbody2D>();
-      
+        renderer = GetComponentInChildren<SpriteRenderer>();
+
         ResetPlayer();
     }
 
@@ -160,6 +161,16 @@ public class Player : MonoBehaviour
     {
         if (_invulnTimer >= invulnTime)
         {
+            CameraManager.Instance.ShakeCamera(1.0f, 0.4f, 0.3f);
+
+            int loopCount = 10;
+            Sequence colorFlashSequence = DOTween.Sequence();
+            colorFlashSequence.Append(renderer.material.DOColor(Color.red, invulnTime / loopCount)
+                .SetLoops(loopCount, LoopType.Yoyo));
+            colorFlashSequence.Append(renderer.material.DOColor(Color.white, 0.0f));
+
+            colorFlashSequence.Play();
+
             _invulnTimer = 0;
             Health -= damage;
         }

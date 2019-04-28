@@ -1,9 +1,12 @@
 ﻿using UnityEngine;
 using System.Collections;
+using DG.Tweening;
 
 public class CameraManager : MonoBehaviour {
     [SerializeField] private Camera mainCamera;
     public Camera MainCamera => mainCamera;
+
+    private GameObject cameraContainer;
 
     private static CameraManager instance = null;
     public static CameraManager Instance {
@@ -20,11 +23,25 @@ public class CameraManager : MonoBehaviour {
     }
 
     public void SetCameraPosition(Vector2 position) {
-        Vector3 oldPos = mainCamera.transform.position;
-        mainCamera.transform.position = new Vector3(position.x, position.y, oldPos.z);
+        if (cameraContainer != null)
+        {
+            Vector3 oldPos = cameraContainer.transform.position;
+            cameraContainer.transform.position = new Vector3(position.x, position.y, oldPos.z);
+        }
+    }
+
+    public void ShakeCamera(float duration, float positionStrength, float rotationStrength)
+    {
+        mainCamera.transform.DOShakePosition(duration, positionStrength, 10, 90, false, true);
+        mainCamera.transform.DOShakeRotation(duration, new Vector3(0.0f, 0.0f, rotationStrength), 10, 90, true);
     }
 
     void Start() {
+        if (cameraContainer == null)
+        {
+            cameraContainer = GameObject.Find("CameraContainer");
+        }
+
         if(mainCamera == null) {
             mainCamera = FindObjectOfType<Camera>();
         }
