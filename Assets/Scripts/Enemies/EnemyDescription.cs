@@ -9,4 +9,6 @@ public class EnemyDescription : ScriptableObject
     public float aggroDistance;
     public int damage;
     public float shotCooldown;
+    public int magazineSize;
+    public float reloadTime;
 } 

@@ -53,7 +53,7 @@ public class Map
                 new Vector2Int(playerSpawnPos.x, playerSpawnPos.y));
         }  
 
-        player.transform.position = playerSpawnPos + new Vector3(0.5f, 0.5f, -1.0f);
+        player.transform.position = playerSpawnPos + new Vector3(0.5f, 0.5f, -2.0f);
         CameraManager.Instance.SetCameraPosition(player.transform.position);
     }
 

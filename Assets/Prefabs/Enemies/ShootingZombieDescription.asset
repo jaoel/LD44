@@ -18,3 +18,5 @@ MonoBehaviour:
   aggroDistance: 20
   damage: 3
   shotCooldown: 0.2
+  magazineSize: 6
+  reloadTime: 2

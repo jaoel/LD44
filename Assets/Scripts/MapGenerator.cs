@@ -121,7 +121,7 @@ namespace Assets.Scripts
             if (currentLevel <= 5)
                 enemyCount = (int)(5 + Math.Pow(1.5, 1.5 * currentLevel));
             else
-                enemyCount = (int)(25 + 10 * Math.Log(currentLevel));
+                enemyCount = (int)(15 + 10 * Math.Log(currentLevel));
 
             for (int i = 0; i < enemyCount; i++)
             {
