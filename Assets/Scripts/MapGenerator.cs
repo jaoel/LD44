@@ -58,7 +58,7 @@ namespace Assets.Scripts
             DestroyAllInteractiveObjects();
         }
                                     
-        public Map GenerateDungeon(int subdivisions, int width, int height, int currentLevel)
+        public Map GenerateDungeon(int subdivisions, int width, int height, int currentLevel, Player player)
         {
             _width = width;
             _height = height;
@@ -82,7 +82,10 @@ namespace Assets.Scripts
             PaintTilemap(collisionMap);
 
             Map map = new Map(root, _walls, _floor, _width, _height, collisionMap);
-            PopulateMap(map, currentLevel);
+            AddStairs(map);
+            map.MovePlayerToSpawn(player);
+
+            PopulateMap(map, player, currentLevel);
 
             return map;
         }
@@ -102,7 +105,7 @@ namespace Assets.Scripts
             _enemies.Clear();
         }
 
-        void PopulateMap(Map map, int currentLevel)
+        private void AddStairs(Map map)
         {
             //Stairs to next level
             Vector3Int stairsPosition = map.GetOpenPositionInRoom(2, 2);
@@ -110,7 +113,10 @@ namespace Assets.Scripts
                 new Vector3(stairsPosition.x, stairsPosition.y, -1.0f), Quaternion.identity));
 
             map.stairs = _interactiveObjects[0];
+        }
 
+        void PopulateMap(Map map, Player player, int currentLevel)
+        { 
             int enemyCount = 0;
             if (currentLevel <= 5)
                 enemyCount = (int)(10 + Math.Pow(1.5, 1.5 * currentLevel));
@@ -120,6 +126,10 @@ namespace Assets.Scripts
             for (int i = 0; i < enemyCount; i++)
             {
                 Vector3Int spawnPos = map.GetOpenPositionInRoom(2, 2);
+                while (Vector3.Distance(spawnPos, player.transform.position) < 10)
+                {
+                    spawnPos = map.GetOpenPositionInRoom(2, 2);
+                }
                 _enemies.Add(GameObject.Instantiate(_enemyContainer.basicZombie, 
                     new Vector3(spawnPos.x, spawnPos.y, -1), Quaternion.identity));
             }
@@ -129,6 +139,10 @@ namespace Assets.Scripts
                 for (int i = 0; i < enemyCount; i++)
                 {
                     Vector3Int spawnPos = map.GetOpenPositionInRoom(2, 2);
+                    while (Vector3.Distance(spawnPos, player.transform.position) < 10)
+                    {
+                        spawnPos = map.GetOpenPositionInRoom(2, 2);
+                    }
                     _enemies.Add(GameObject.Instantiate(_enemyContainer.shootingZombie,
                         new Vector3(spawnPos.x, spawnPos.y, -1), Quaternion.identity));
                 }

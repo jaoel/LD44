@@ -38,7 +38,7 @@ public class CameraManager : MonoBehaviour {
         shake.Play();
     }
 
-    void Start() {
+    void Awake() {
         if (cameraContainer == null)
         {
             cameraContainer = GameObject.Find("CameraContainer");

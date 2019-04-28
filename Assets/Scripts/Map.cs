@@ -22,7 +22,7 @@ public class Map
 
     BSPTree _bspTree;
     List<BSPTree> _leafNodes;
-    int[,] _collisionMap;
+    private readonly int[,] _collisionMap;
 
     public GameObject stairs;
 

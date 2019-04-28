@@ -178,7 +178,7 @@ public class Player : MonoBehaviour
     {
         if (_invulnTimer >= invulnTime)
         {
-            CameraManager.Instance.ShakeCamera(1.0f, .8f, 0.3f);
+            CameraManager.Instance.ShakeCamera(1.0f, 0.3f, 0.3f);
 
             int loopCount = 10;
             Sequence colorFlashSequence = DOTween.Sequence();

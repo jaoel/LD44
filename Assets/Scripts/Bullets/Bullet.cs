@@ -66,7 +66,7 @@ public class Bullet : MonoBehaviour {
         else if (collision.gameObject.layer == LayerContainer.Instance.Layers["Enemy"])
         {
             collision.gameObject.GetComponent<Enemy>().ApplyDamage(description.damage, _velocity);
-            CameraManager.Instance.ShakeCamera(1.0f, .5f, 0.3f);
+            CameraManager.Instance.ShakeCamera(1.0f, 0.3f, 0.3f);
             bulletBehaviour.BeforeDestroyed(collision.gameObject);
         }
         else if (collision.gameObject.layer == LayerContainer.Instance.Layers["Player"])

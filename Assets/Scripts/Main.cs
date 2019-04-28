@@ -69,7 +69,7 @@ public class Main : MonoBehaviour
         shopInstance.ClearItems();
         shopInstance.gameObject.SetActive(false);
 
-        _currentMap = _mapGen.GenerateDungeon(Random.Range(5, 10), 100, 100, _currentLevel);
+        _currentMap = _mapGen.GenerateDungeon(Random.Range(5, 10), 100, 100, _currentLevel, player);
         _currentMap.MovePlayerToSpawn(player);
         NavigationManager.map = _currentMap;
     }
