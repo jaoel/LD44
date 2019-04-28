@@ -92,7 +92,6 @@ public class Main : MonoBehaviour
         if (!player.IsAlive)
         {
             gameOverUI.SetActive(true);
-            Time.timeScale = 0.0f;
         }
     }
 

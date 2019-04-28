@@ -97,6 +97,9 @@ public class Player : MonoBehaviour
 
     void FixedUpdate()
     {
+        if (!IsAlive)
+            return;
+
         CalculateDeceleration();
         CalculateVelocity();
 

@@ -16,6 +16,9 @@ public class ShootingEnemy : Enemy
 
     protected override void FixedUpdate()
     {
+        if (!_player.IsAlive)
+            return;
+
         shotTimer += Time.deltaTime;
         if (PlayerIsVisible() && shotTimer > description.shotCooldown)
             Shoot();

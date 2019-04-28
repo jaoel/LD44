@@ -39,6 +39,9 @@ public class Enemy : MonoBehaviour
 
     protected virtual void FixedUpdate()
     {
+        if (!_player.IsAlive)
+            return;
+
         aStarCooldown--;
         if (KillMe())
             return;
