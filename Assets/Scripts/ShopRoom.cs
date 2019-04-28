@@ -1,11 +1,13 @@
 ﻿using UnityEngine;
 using System.Collections.Generic;
+using TMPro;
 
 public class ShopRoom : MonoBehaviour {
     public Transform spawnPoint;
     public ShopItem[] shopItems;
     public ItemContainer ItemContainer;
 
+    public GameObject shopUI;
     public GameObject itemsParent;
     public float healthGlobeDroprate;
 
@@ -35,6 +37,8 @@ public class ShopRoom : MonoBehaviour {
                 shuffledShopItems.Remove(ItemContainer.HealthGlobe);
                 healthGlobeAdded = true;
             }
+
+            GameObject.Find("Item" + i).GetComponent<TextMeshProUGUI>().text = shopItems[i].description.HealthCost.ToString();
         }
     }
 
