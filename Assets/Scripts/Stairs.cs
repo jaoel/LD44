@@ -20,7 +20,6 @@ namespace Assets.Scripts
                 } else {
                     Main.Instance.GenerateMap();
                 }
-                Destroy(gameObject);
             }
         }
     }

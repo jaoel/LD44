@@ -5,10 +5,11 @@ public class ShopItem : MonoBehaviour {
 
     public ItemDescription description;
 
-    public void InstantiateItem() {
+    public Item InstantiateItem(Transform parent) {
         Vector3 pos = transform.position;
         pos.z = -1f;
-        Item item = Instantiate(description.itemPrefab, pos, Quaternion.identity);
+        Item item = Instantiate(description.itemPrefab, pos, Quaternion.identity, parent);
         item.isShopItem = true;
+        return item;
     }
 }

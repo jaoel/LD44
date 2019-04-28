@@ -57,6 +57,7 @@ public class Main : MonoBehaviour
 
     public void GenerateMap()
     {
+        shopInstance.ClearItems();
         shopInstance.gameObject.SetActive(false);
 
         _currentMap = _mapGen.GenerateDungeon(Random.Range(5, 10), 100, 100);
