@@ -35,23 +35,42 @@ public class Player : MonoBehaviour
         }
     }
 
-    public int MaxHealth {
-        get {
+    public int MaxHealth
+    {
+        get
+        {
             return maxHealth;
         }
-        set {
+        set
+        {
             maxHealth = Mathf.Max(0, value);
-            if(maxHealth < currentHealth) {
+            if (maxHealth < currentHealth)
+            {
                 Health = maxHealth;
             }
         }
     }
 
+    public bool IsAlive
+    {
+        get { return currentHealth > 0; }
+    }
+
     void Start()
     {
         rigidbody = GetComponent<Rigidbody2D>();
+      
+        ResetPlayer();
+    }
+
+    public void ResetPlayer()
+    {
         MaxHealth = startHealth;
         Health = startHealth;
+        _invulnTimer = float.MaxValue;
+        velocity = Vector3.zero;
+        cooldownEndTime = 0f;
+        inputVector = Vector3.zero;
     }
 
     private void Update()
@@ -139,7 +158,7 @@ public class Player : MonoBehaviour
         if (_invulnTimer >= invulnTime)
         {
             _invulnTimer = 0;
-            currentHealth -= damage;
+            Health -= damage;
         }
     }
 }
