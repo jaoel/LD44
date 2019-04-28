@@ -25,6 +25,7 @@ public class GrenadeBulletBehaviour : BulletBehaviour {
     }
 
     public override void BeforeDestroyed(GameObject hitTarget) {
+        CameraManager.Instance.ShakeCamera(1.0f, 0.4f, 0.3f);
         Main.Instance.DamageAllEnemiesInCircle(lastPosition, damageRadius, damage);
         Instantiate(explosionPrefab, lastPosition, Quaternion.Euler(0f, 0f, Random.Range(0f, 360f)));
     }
