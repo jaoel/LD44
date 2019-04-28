@@ -24,6 +24,8 @@ public class Map
     List<BSPTree> _leafNodes;
     int[,] _collisionMap;
 
+    public GameObject stairs;
+
     public Map(BSPTree bspTree, Tilemap walls, Tilemap floor, int width, int height, int[,] collisionMap)
     {
         _bspTree = bspTree;
@@ -41,7 +43,16 @@ public class Map
 
     public void MovePlayerToSpawn(Player player)
     {
-        Vector3Int playerSpawnPos = GetOpenPositionInRoom(2, 2);
+        List<Vector2Int> path = new List<Vector2Int>();
+        Vector3Int playerSpawnPos = Vector3Int.zero;
+        while (path.Count == 0)
+        {
+            playerSpawnPos = GetOpenPositionInRoom(2, 2);
+            path = NavigationManager.Instance.AStar(
+                new Vector2Int((int)stairs.transform.position.x, (int)stairs.transform.position.y),
+                new Vector2Int(playerSpawnPos.x, playerSpawnPos.y));
+        }  
+
         player.transform.position = playerSpawnPos + new Vector3(0.5f, 0.5f, -1.0f);
         CameraManager.Instance.SetCameraPosition(player.transform.position);
     }

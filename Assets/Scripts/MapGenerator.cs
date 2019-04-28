@@ -98,6 +98,8 @@ namespace Assets.Scripts
             _interactiveObjects.Add(GameObject.Instantiate(_interactiveObjectsContainer.Stairs,
                 new Vector3(stairsPosition.x - 0.5f, stairsPosition.y - 0.5f, -1.0f), Quaternion.identity));
 
+            map.stairs = _interactiveObjects[0];
+
             Vector3Int powerupPos = map.GetOpenPositionInRoom(2, 2);
             _interactiveObjects.Add(GameObject.Instantiate(_itemContainer.Shotgun.itemPrefab.gameObject,
                 new Vector3(powerupPos.x - 0.5f, powerupPos.y - 0.5f, -1.0f), Quaternion.identity)); 
