@@ -70,9 +70,6 @@ public class NavigationManager : MonoBehaviour
                 }
             }
         }
-
-        map.DrawPath(result);
-
         return result;
     }
 
