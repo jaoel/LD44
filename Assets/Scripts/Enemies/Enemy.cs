@@ -6,6 +6,7 @@ public class Enemy : MonoBehaviour
     public EnemyDescription description;
 
     private int _currentHealth;
+    private int aStarCooldown = 0;
     protected Vector3 _target;
     protected List<Vector2Int> _path;
     protected bool _followPath = false;
@@ -25,6 +26,7 @@ public class Enemy : MonoBehaviour
 
     private void Start()
     {
+        aStarCooldown = Random.Range(0, 200);
     }
 
     public virtual void SetTarget(Vector3 target)
@@ -35,6 +37,7 @@ public class Enemy : MonoBehaviour
 
     protected virtual void FixedUpdate()
     {
+        aStarCooldown--;
         if (KillMe())
             return;
 
@@ -48,8 +51,9 @@ public class Enemy : MonoBehaviour
                 _followPath = false;
                 _path = new List<Vector2Int>();
             }
-            else
+            else if(aStarCooldown <= 0)
             {
+                aStarCooldown = 200;
                 Vector2Int start = new Vector2Int((int)transform.position.x, (int)transform.position.y);
                 Vector2Int target = new Vector2Int((int)_player.transform.position.x, (int)_player.transform.position.y);
                 _path = NavigationManager.Instance.AStar(start, target);
