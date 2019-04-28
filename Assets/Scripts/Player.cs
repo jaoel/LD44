@@ -7,6 +7,7 @@ public class Player : MonoBehaviour
     public float maxSpeed = 8f;
     public float acceleration = 25f;
     public float deceleration = 15f;
+    public float invulnTime = 1.0f;
 
     public Weapon CurrentWeapon;
     public Animator animator;
@@ -18,6 +19,8 @@ public class Player : MonoBehaviour
     private Vector3 velocity = Vector3.zero;
     private Vector3 inputVector = Vector3.zero;
     private Vector2 aimVector = Vector2.zero;
+
+    private float _invulnTimer = float.MaxValue; 
 
     private float cooldownEndTime = 0f;
 
@@ -49,6 +52,9 @@ public class Player : MonoBehaviour
     {
         CalculateDeceleration();
         CalculateVelocity();
+
+        if (_invulnTimer < invulnTime)
+            _invulnTimer += Time.deltaTime;
     }
 
     private void CalculateInputVector() {
@@ -106,6 +112,10 @@ public class Player : MonoBehaviour
 
     public void ReceiveDamage(int damage)
     {
-        currentHealth -= damage;
+        if (_invulnTimer >= invulnTime)
+        {
+            _invulnTimer = 0;
+            currentHealth -= damage;
+        }
     }
 }

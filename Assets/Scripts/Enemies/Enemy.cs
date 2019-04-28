@@ -53,9 +53,13 @@ public class Enemy : MonoBehaviour
                 Vector2Int start = new Vector2Int((int)transform.position.x, (int)transform.position.y);
                 Vector2Int target = new Vector2Int((int)_player.transform.position.x, (int)_player.transform.position.y);
                 _path = NavigationManager.Instance.AStar(start, target);
-                _followPath = true;
-                SetTarget(new Vector3(_path[0].x, _path[0].y));
-                _path.RemoveAt(0);
+
+                if (_path != null && _path.Count > 0)
+                {
+                    _followPath = true;
+                    SetTarget(new Vector3(_path[0].x, _path[0].y));
+                    _path.RemoveAt(0);
+                }  
             }
         }
 
@@ -87,7 +91,7 @@ public class Enemy : MonoBehaviour
         int layerMask = LayerContainer.CombinedLayerMask("Map", "Player");
         RaycastHit2D hit = Physics2D.Raycast(origin, (target - origin).normalized, description.aggroDistance, layerMask);
 
-        if (hit.collider.gameObject.layer == LayerContainer.Instance.Layers["Player"])
+        if (hit.collider?.gameObject.layer == LayerContainer.Instance.Layers["Player"])
         {
             return true;
         }
@@ -153,12 +157,16 @@ public class Enemy : MonoBehaviour
         return false;
     }
 
-    private void OnCollisionEnter2D(Collision2D collision)
+    private void OnCollisionStay2D(Collision2D collision)
     {
         if (collision.gameObject.layer == LayerContainer.Instance.Layers["Player"])
         {
             _player.ReceiveDamage(description.damage);
         }
+    }
+
+    private void OnCollisionEnter2D(Collision2D collision)
+    {     
     }
         
 }
