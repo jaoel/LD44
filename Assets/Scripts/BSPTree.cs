@@ -8,6 +8,7 @@ public class BSPTree
     public BSPTree Right { get; set; }
     public RectInt Grid { get; set; }  
     public RectInt Room { get; set; }
+    public bool IsConnected { get; set; }
 
     public bool IsLeaf
     {

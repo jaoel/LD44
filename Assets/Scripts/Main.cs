@@ -52,7 +52,7 @@ public class Main : MonoBehaviour
         _gamePaused = false;
         _mapGen = new MapGenerator(tileContainer, interactiveDungeonObjectContainer, itemContainer,
             enemyContainer);
-        _renderBSP = false;
+        _renderBSP = true;
 
         LoadLevel();
     }
@@ -71,7 +71,6 @@ public class Main : MonoBehaviour
         shopInstance.gameObject.SetActive(false);
 
         _currentMap = _mapGen.GenerateDungeon(Random.Range(5, 10), Random.Range(30,60), Random.Range(30, 60), _currentLevel, player);
-
         NavigationManager.map = _currentMap;
     }
 

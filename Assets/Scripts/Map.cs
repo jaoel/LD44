@@ -73,7 +73,7 @@ public class Map
         int x = UnityEngine.Random.Range(room.Room.x + halfWidth, room.Room.xMax - halfWidth);
         int y = UnityEngine.Random.Range(room.Room.y + halfHeight, room.Room.yMax - halfHeight);
 
-        return new Vector3Int(x, y, -1);
+        return new Vector3Int(x, y, -2);
     } 
 
     public void DrawPath(List<Vector2Int> path)

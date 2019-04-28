@@ -15,7 +15,7 @@ MonoBehaviour:
   maxHealth: 3
   maxSpeed: 3
   acceleration: 15
-  aggroDistance: 20
+  aggroDistance: 10
   damage: 3
   shotCooldown: 0.2
   magazineSize: 6

@@ -86,6 +86,7 @@ namespace Assets.Scripts
             map.MovePlayerToSpawn(player);
 
             PopulateMap(map, player, currentLevel);
+            _enemies.ForEach(x => x.SetActive(true));
 
             return map;
         }
@@ -125,26 +126,30 @@ namespace Assets.Scripts
 
             for (int i = 0; i < enemyCount; i++)
             {
-                Vector3Int spawnPos = map.GetOpenPositionInRoom(2, 2);
-                while (Vector3.Distance(spawnPos, player.transform.position) < 10)
+                Vector3 spawnPos = map.GetOpenPositionInRoom(1, 1);
+
+                while(Vector3.Distance(player.transform.position, spawnPos) < 10)
                 {
-                    spawnPos = map.GetOpenPositionInRoom(2, 2);
+                    spawnPos = map.GetOpenPositionInRoom(1, 1);
                 }
+
                 _enemies.Add(GameObject.Instantiate(_enemyContainer.basicZombie, 
-                    new Vector3(spawnPos.x, spawnPos.y, -1), Quaternion.identity));
+                    new Vector3(spawnPos.x, spawnPos.y, -2), Quaternion.identity));
+                _enemies[_enemies.Count - 1].SetActive(false);
             }
 
             if (currentLevel > 2)
             {
                 for (int i = 0; i < enemyCount; i++)
                 {
-                    Vector3Int spawnPos = map.GetOpenPositionInRoom(2, 2);
+                    Vector3Int spawnPos = map.GetOpenPositionInRoom(1, 1);
                     while (Vector3.Distance(spawnPos, player.transform.position) < 10)
                     {
                         spawnPos = map.GetOpenPositionInRoom(2, 2);
                     }
                     _enemies.Add(GameObject.Instantiate(_enemyContainer.shootingZombie,
-                        new Vector3(spawnPos.x, spawnPos.y, -1), Quaternion.identity));
+                        new Vector3(spawnPos.x, spawnPos.y, -2), Quaternion.identity));
+                    _enemies[_enemies.Count - 1].SetActive(false);
                 }
             } 
         }
@@ -168,11 +173,13 @@ namespace Assets.Scripts
             {
                 RectInt[] newContainers = SplitContainer(grid);
 
-                if (newContainers[0].width * 0.5f > 5.0f && newContainers[0].height * 0.5f > 5.0f)
-                    node.Left = Split(node, level - 1, newContainers[0]);
+                if (newContainers[0].width * 0.3f <= 2.0f || newContainers[0].height * 0.3f <= 2.0f)
+                    return node;
+                if (newContainers[1].width * 0.3f <= 2.0f || newContainers[1].height * 0.3f <= 2.0f)
+                    return node;
 
-                if (newContainers[1].width * 0.5f > 5.0f && newContainers[1].height * 0.5f > 5.0f)
-                    node.Right = Split(node, level - 1, newContainers[1]);
+                node.Left = Split(node, level - 1, newContainers[0]);
+                node.Right = Split(node, level - 1, newContainers[1]);
             }
 
             return node;
@@ -201,8 +208,8 @@ namespace Assets.Scripts
             int minRoomDelta = Random.Range(0, 5);
             if (node.IsLeaf)
             {
-                var randomX = Random.Range(minRoomDelta, node.Grid.width / 4);
-                var randomY = Random.Range(minRoomDelta, node.Grid.height / 4);
+                var randomX = Random.Range(0, node.Grid.width / 4);
+                var randomY = Random.Range(0, node.Grid.height / 4);
                 int roomX = node.Grid.x + randomX;
                 int roomY = node.Grid.y + randomY;
                 int roomW = node.Grid.width - (int)(randomX * Random.Range(1f, 2f));
@@ -229,12 +236,7 @@ namespace Assets.Scripts
             {
                 BSPTree left = node.Left;
                 BSPTree right = node.Right;
-
-                if (node.Left == null)
-                    left = node.GetSibling(true);
-                else if (node.Right == null)
-                    right = node.GetSibling(true);
-
+                                                  
                 RectInt leftContainer = left.Grid;
                 RectInt rightContainer = right.Grid;
 
@@ -244,69 +246,31 @@ namespace Assets.Scripts
                 int corridorWidth = Random.Range(4, 6);
                 Vector2 direction = (rightCenter - leftCenter).normalized;
 
-                if (direction.x != 1.0f && direction.y != 1.0f)
-                {                            
-                    float signedDist = Math.Abs(rightCenter.x - leftCenter.x);
-                    if (direction.x != 0.0f)
-                    {
-                        while (signedDist > 1)
-                        {
-                            for (int i = 0; i < corridorWidth; i++)
-                            {
-                                Vector3Int coords = new Vector3Int((int)leftCenter.x, (int)leftCenter.y + i, 0);
-                                _floor.SetTile(coords, _tileContainer.FloorTiles[GetFloorTileIndex()]);
-
-                                collisionMap[coords.x, coords.y] = 0;
-                            }
-
-                            leftCenter.x += 1 * Math.Sign(direction.x);
-                            signedDist = Math.Abs(rightCenter.x - leftCenter.x);
-                        }
-                    }   
-
-                    if (direction.y != 0.0f)
-                    {
-                        signedDist = Math.Abs(rightCenter.y - leftCenter.y);
-                        while (signedDist > 1)
-                        {
-                            for (int i = 0; i < corridorWidth; i++)
-                            {
-                                Vector3Int coords = new Vector3Int((int)leftCenter.x + i, (int)leftCenter.y, 0);
-                                _floor.SetTile(coords, _tileContainer.FloorTiles[GetFloorTileIndex()]);
-                                collisionMap[coords.x, coords.y] = 0;
-                            }
-
-                            leftCenter.y += 1 * Math.Sign(direction.y);
-                            signedDist = Math.Abs(rightCenter.y - leftCenter.y);
-                        }
-                    } 
-                }
-                else
+                while (Vector2.Distance(leftCenter, rightCenter) > 1)
                 {
-                    while (Vector2.Distance(leftCenter, rightCenter) > 1)
+                    if (direction.Equals(Vector2.right))
                     {
-                        if (direction.Equals(Vector2.right))
+                        for (int i = 0; i < corridorWidth; i++)
                         {
-                            for (int i = 0; i < corridorWidth; i++)
-                            {
-                                Vector3Int coords = new Vector3Int((int)leftCenter.x, (int)leftCenter.y + i, 0);
-                                _floor.SetTile(coords, _tileContainer.FloorTiles[GetFloorTileIndex()]);
+                            Vector3Int coords = new Vector3Int((int)leftCenter.x, (int)leftCenter.y + i, 0);
+                            _floor.SetTile(coords, _tileContainer.FloorTiles[GetFloorTileIndex()]);
+                            if (coords.y < collisionMap.GetLength(1))
                                 collisionMap[coords.x, coords.y] = 0;
-                            }
                         }
-                        else if (direction.Equals(Vector2.up))
-                        {
-                            for (int i = 0; i < corridorWidth; i++)
-                            {
-                                Vector3Int coords = new Vector3Int((int)leftCenter.x + i, (int)leftCenter.y, 0);
-                                _floor.SetTile(coords, _tileContainer.FloorTiles[GetFloorTileIndex()]);
-                                collisionMap[coords.x, coords.y] = 0;
-                            }
-                        }
-                        leftCenter.x += direction.x;
-                        leftCenter.y += direction.y;
                     }
-                }   
+                    else if (direction.Equals(Vector2.up))
+                    {
+                        for (int i = 0; i < corridorWidth; i++)
+                        {
+                            Vector3Int coords = new Vector3Int((int)leftCenter.x + i, (int)leftCenter.y, 0);
+                            _floor.SetTile(coords, _tileContainer.FloorTiles[GetFloorTileIndex()]);
+                            if (coords.x < collisionMap.GetLength(0))
+                                collisionMap[coords.x, coords.y] = 0;
+                        }
+                    }
+                    leftCenter.x += direction.x;
+                    leftCenter.y += direction.y;
+                }
 
                 if (node.Left != null)
                 {
