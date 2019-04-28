@@ -1091,6 +1091,7 @@ MonoBehaviour:
   - {fileID: 8132124545701279346}
   ItemContainer: {fileID: 11400000, guid: 74287dc484f187343ab501050ebd52a6, type: 2}
   itemsParent: {fileID: 8830088508525117770}
+  healthGlobeDroprate: 1
 --- !u!1 &8917462698849252028
 GameObject:
   m_ObjectHideFlags: 0

@@ -8,8 +8,9 @@ public class ItemContainer : ScriptableObject {
     public ItemDescription AK47;
     public ItemDescription Slingshot;
     public ItemDescription Grenade;
+    public ItemDescription HealthGlobe;
 
-    int numItems = 5; // INCREMENT THIS WHEN ADDING ITEMS
+    int numItems = 6; // INCREMENT THIS WHEN ADDING ITEMS
 
     public ItemDescription GetRandomItem() {
         return GetItemByIndex(Random.Range(0, numItems));
@@ -35,6 +36,8 @@ public class ItemContainer : ScriptableObject {
                 return Slingshot;
             case 4:
                 return Grenade;
+            case 5:
+                return HealthGlobe;
             default:
                 return Pistol;
         }

@@ -17,3 +17,4 @@ MonoBehaviour:
   AK47: {fileID: 11400000, guid: 33cfe110ba187b54c8f4562be87bee63, type: 2}
   Slingshot: {fileID: 11400000, guid: 2b18e66dc2627664c856cbad75a7e8c1, type: 2}
   Grenade: {fileID: 11400000, guid: 6e4f009bf25fe6844b18fd0f13946c79, type: 2}
+  HealthGlobe: {fileID: 11400000, guid: 8e3b8384140229f40a2ae0b895e25ec4, type: 2}

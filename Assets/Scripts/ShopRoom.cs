@@ -7,6 +7,7 @@ public class ShopRoom : MonoBehaviour {
     public ItemContainer ItemContainer;
 
     public GameObject itemsParent;
+    public float healthGlobeDroprate;
 
     public void MovePlayerToSpawn(Player player) {
         player.transform.position = spawnPoint.position + new Vector3(0.5f, 0.5f, 0.0f);
@@ -14,10 +15,26 @@ public class ShopRoom : MonoBehaviour {
     }
 
     public void GenerateRandomItems() {
+        bool healthGlobeAdded = false;
         List<ItemDescription> shuffledShopItems = GetShuffledShopItems();
         for (int i = 0; i < shopItems.Length; i++) {
-            shopItems[i].description = shuffledShopItems[i % shuffledShopItems.Count];
-            shopItems[i].InstantiateItem(itemsParent.transform);
+
+            if (Random.Range(0.0f, 1.0f) < healthGlobeDroprate && !healthGlobeAdded)
+            {
+                shopItems[i].description = ItemContainer.HealthGlobe;
+                shopItems[i].InstantiateItem(itemsParent.transform);
+            }
+            else
+            {
+                shopItems[i].description = shuffledShopItems[i % shuffledShopItems.Count];
+                shopItems[i].InstantiateItem(itemsParent.transform);
+            }
+
+            if (shopItems[i].description == ItemContainer.HealthGlobe)
+            {
+                shuffledShopItems.Remove(ItemContainer.HealthGlobe);
+                healthGlobeAdded = true;
+            }
         }
     }
 
