@@ -3,10 +3,14 @@
 [RequireComponent(typeof(Camera))]
 public class FollowCamera : MonoBehaviour {
     public Transform target;
-    public float spring = 5f;
+
+    public bool showDeadzoneDebugRect = false;
+
+    private float spring = 10f;
+    private Vector2 deadZoneRectSize = new Vector2(0.3f, 0.15f);
 
     private new Camera camera;
-    private float deadZoneRadius = 10f;
+    private Rect deadzoneRect;
 
     private void Start() {
         camera = GetComponent<Camera>();
@@ -16,26 +20,49 @@ public class FollowCamera : MonoBehaviour {
     }
 
     void Update() {
-        float screenWidthInWorldUnits = Vector3.Distance(camera.ScreenToWorldPoint(new Vector3(0f, 0f, 0f)), camera.ScreenToWorldPoint(new Vector3(Screen.width, 0f, 0f)));
-        deadZoneRadius = screenWidthInWorldUnits / 10f;
-        //DebugDrawRadius();
-        
-        Vector3 toTarget = target.position - transform.position;
-        toTarget.z = 0f;
-        if (toTarget.magnitude > deadZoneRadius) {
-            Vector3 newPosition = transform.position + spring * (toTarget - toTarget.normalized * deadZoneRadius) * Time.deltaTime;
-            newPosition.z = transform.position.z;
-            transform.position = newPosition;
+        deadzoneRect.width = Vector3.Distance(camera.ScreenToWorldPoint(new Vector3(0f, 0f, 0f)), camera.ScreenToWorldPoint(new Vector3(Screen.width, 0f, 0f)));
+        deadzoneRect.height = Vector3.Distance(camera.ScreenToWorldPoint(new Vector3(0f, 0f, 0f)), camera.ScreenToWorldPoint(new Vector3(Screen.height, 0f, 0f)));
+        deadzoneRect.size *= deadZoneRectSize;
+        deadzoneRect.center = transform.position;
+
+        if (showDeadzoneDebugRect) {
+            DebugDraw();
         }
+
+        Vector3 newPosition = transform.position;
+
+        if (!TargetInDeadzoneX()) {
+            float xDistance = target.position.x > deadzoneRect.x ? Mathf.Abs(target.position.x - deadzoneRect.max.x) : -Mathf.Abs(target.position.x - deadzoneRect.min.x);
+            newPosition.x += spring * xDistance * Time.deltaTime;
+        }
+
+        if (!TargetInDeadzoneY()) {
+            float yDistance = target.position.y > deadzoneRect.y ? Mathf.Abs(target.position.y - deadzoneRect.max.y) : -Mathf.Abs(target.position.y - deadzoneRect.min.y);
+            newPosition.y += spring * yDistance * Time.deltaTime;
+        }
+
+        newPosition.z = transform.position.z;
+        transform.position = newPosition;
     }
 
-    void DebugDrawRadius() {
-        Vector3 center = transform.position;
-        center.z = -2f;
-        for (int i = 0; i < 36; i++) {
-            Vector3 start = center + Quaternion.Euler(0f, 0f, i * 10f) * Vector3.up * deadZoneRadius;
-            Vector3 end = center + Quaternion.Euler(0f, 0f, (i + 1) * 10f) * Vector3.up * deadZoneRadius;
-            Debug.DrawLine(start, end, Color.green);
-        }
+    bool TargetInDeadzoneX() {
+        return target.position.x >= deadzoneRect.min.x
+            && target.position.x <= deadzoneRect.max.x;
+    }
+
+    bool TargetInDeadzoneY() {
+        return target.position.y >= deadzoneRect.min.y
+            && target.position.y <= deadzoneRect.max.y;
+    }
+
+    void DebugDraw() {
+        Vector3 tr = new Vector3(deadzoneRect.max.x, deadzoneRect.max.y, 0f);
+        Vector3 tl = new Vector3(deadzoneRect.min.x, deadzoneRect.max.y, 0f);
+        Vector3 br = new Vector3(deadzoneRect.max.x, deadzoneRect.min.y, 0f);
+        Vector3 bl = new Vector3(deadzoneRect.min.x, deadzoneRect.min.y, 0f);
+        Debug.DrawLine(tl, tr, Color.green);
+        Debug.DrawLine(tr, br, Color.green);
+        Debug.DrawLine(br, bl, Color.green);
+        Debug.DrawLine(bl, tl, Color.green);
     }
 }

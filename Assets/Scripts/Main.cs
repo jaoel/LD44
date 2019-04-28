@@ -23,6 +23,20 @@ public class Main : MonoBehaviour
     private bool _gamePaused;
     private ShopRoom shopInstance;
 
+    private static Main instance = null;
+    public static Main Instance {
+        get {
+            if (instance != null) {
+                return instance;
+            }
+            instance = FindObjectOfType<Main>();
+            if (instance == null || instance.Equals(null)) {
+                Debug.LogError("The scene needs a Main");
+            }
+            return instance;
+        }
+    }
+
     void Start()
     {
         shopInstance = Instantiate(shopRoomPrefab);
