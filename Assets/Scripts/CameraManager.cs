@@ -36,7 +36,6 @@ public class CameraManager : MonoBehaviour {
         shake.Append(mainCamera.DOShakePosition(duration, positionStrength, 10, 90, true));
         shake.Append(mainCamera.transform.DOLocalMove(Vector3.zero, 0.1f, true));
         shake.Play();
-       // mainCamera.transform.DOShakeRotation(duration, new Vector3(0.0f, 0.0f, rotationStrength), 10, 90, true);
     }
 
     void Start() {
