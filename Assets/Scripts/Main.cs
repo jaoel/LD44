@@ -59,8 +59,7 @@ public class Main : MonoBehaviour
     public void LoadLevel()
     {
         player.ResetPlayer();
-        //GenerateMap();
-        GenerateShop();
+        GenerateMap();
     }
 
     public void GenerateMap()
