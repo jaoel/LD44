@@ -81,4 +81,11 @@ public class Map
             index++;
         });
     }
+
+
+    public void DrawDebug()
+    {
+        if (_bspTree != null)
+            BSPTree.DebugDrawBspNode(_bspTree);
+    }
 }

@@ -16,7 +16,7 @@ public class Main : MonoBehaviour
 
     MapGenerator _mapGen;
     Map _currentMap;
-    bool _renderBSPGrid;
+    bool _renderBSP;
 
     public GameObject gameOverUI;
     public GameObject pauseUI;
@@ -44,7 +44,7 @@ public class Main : MonoBehaviour
         _gamePaused = false;
         _mapGen = new MapGenerator(tileContainer, interactiveDungeonObjectContainer, itemContainer,
             enemyContainer);
-        _renderBSPGrid = false;
+        _renderBSP = false;
 
         LoadLevel();
     }
@@ -74,8 +74,8 @@ public class Main : MonoBehaviour
 
     private void OnDrawGizmos()
     {
-        if (_mapGen != null && _renderBSPGrid)
-            _mapGen.DrawDebug();
+        if (_currentMap != null && _renderBSP)
+            _currentMap.DrawDebug();
     }
 
     void Update()

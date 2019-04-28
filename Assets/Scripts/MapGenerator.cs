@@ -46,7 +46,7 @@ namespace Assets.Scripts
             _walls.ClearAllTiles();
             DestroyAllInteractiveObjects();
         }
-
+                                    
         public Map GenerateDungeon(int subdivisions, int width, int height)
         {
             _width = width;
@@ -192,39 +192,82 @@ namespace Assets.Scripts
                 BSPTree right = node.Right;
 
                 if (node.Left == null)
-                    left = node.GetSibling();
+                    left = node.GetSibling(true);
                 else if (node.Right == null)
-                    right = node.GetSibling();
+                    right = node.GetSibling(true);
 
                 RectInt leftContainer = left.Grid;
                 RectInt rightContainer = right.Grid;
+
                 Vector2 leftCenter = leftContainer.center;
                 Vector2 rightCenter = rightContainer.center;
-                Vector2 direction = (rightCenter - leftCenter).normalized;
+
                 int corridorWidth = Random.Range(4, 6);
-                while (Vector2.Distance(leftCenter, rightCenter) > 1)
-                {
-                    if (direction.Equals(Vector2.right))
+                Vector2 direction = (rightCenter - leftCenter).normalized;
+
+                if (direction.x != 1.0f && direction.y != 1.0f)
+                {                            
+                    float signedDist = Math.Abs(rightCenter.x - leftCenter.x);
+                    if (direction.x != 0.0f)
                     {
-                        for (int i = 0; i < corridorWidth; i++)
+                        while (signedDist > 1)
                         {
-                            Vector3Int coords = new Vector3Int((int)leftCenter.x, (int)leftCenter.y + i, 0);
-                            _floor.SetTile(coords, _tileContainer.FloorTiles[GetFloorTileIndex()]);
-                            collisionMap[coords.x, coords.y] = 0;
+                            for (int i = 0; i < corridorWidth; i++)
+                            {
+                                Vector3Int coords = new Vector3Int((int)leftCenter.x, (int)leftCenter.y + i, 0);
+                                _floor.SetTile(coords, _tileContainer.FloorTiles[GetFloorTileIndex()]);
+
+                                collisionMap[coords.x, coords.y] = 0;
+                            }
+
+                            leftCenter.x += 1 * Math.Sign(direction.x);
+                            signedDist = Math.Abs(rightCenter.x - leftCenter.x);
                         }
-                    }
-                    else if (direction.Equals(Vector2.up))
+                    }   
+
+                    if (direction.y != 0.0f)
                     {
-                        for (int i = 0; i < corridorWidth; i++)
+                        signedDist = Math.Abs(rightCenter.y - leftCenter.y);
+                        while (signedDist > 1)
                         {
-                            Vector3Int coords = new Vector3Int((int)leftCenter.x + i, (int)leftCenter.y, 0);
-                            _floor.SetTile(coords, _tileContainer.FloorTiles[GetFloorTileIndex()]);
-                            collisionMap[coords.x, coords.y] = 0;
+                            for (int i = 0; i < corridorWidth; i++)
+                            {
+                                Vector3Int coords = new Vector3Int((int)leftCenter.x + i, (int)leftCenter.y, 0);
+                                _floor.SetTile(coords, _tileContainer.FloorTiles[GetFloorTileIndex()]);
+                                collisionMap[coords.x, coords.y] = 0;
+                            }
+
+                            leftCenter.y += 1 * Math.Sign(direction.y);
+                            signedDist = Math.Abs(rightCenter.y - leftCenter.y);
                         }
-                    }
-                    leftCenter.x += direction.x;
-                    leftCenter.y += direction.y;
+                    } 
                 }
+                else
+                {
+                    while (Vector2.Distance(leftCenter, rightCenter) > 1)
+                    {
+                        if (direction.Equals(Vector2.right))
+                        {
+                            for (int i = 0; i < corridorWidth; i++)
+                            {
+                                Vector3Int coords = new Vector3Int((int)leftCenter.x, (int)leftCenter.y + i, 0);
+                                _floor.SetTile(coords, _tileContainer.FloorTiles[GetFloorTileIndex()]);
+                                collisionMap[coords.x, coords.y] = 0;
+                            }
+                        }
+                        else if (direction.Equals(Vector2.up))
+                        {
+                            for (int i = 0; i < corridorWidth; i++)
+                            {
+                                Vector3Int coords = new Vector3Int((int)leftCenter.x + i, (int)leftCenter.y, 0);
+                                _floor.SetTile(coords, _tileContainer.FloorTiles[GetFloorTileIndex()]);
+                                collisionMap[coords.x, coords.y] = 0;
+                            }
+                        }
+                        leftCenter.x += direction.x;
+                        leftCenter.y += direction.y;
+                    }
+                }   
 
                 if (node.Left != null)
                 {
