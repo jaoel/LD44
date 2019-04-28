@@ -119,7 +119,13 @@ public class Player : MonoBehaviour
 
     private void CalculateAnimation() {
         if (velocity.magnitude < 0.1f) {
-            animator.SetInteger("direction", 0);
+            if (Keybindings.Attack) {
+                Vector2 direction = aimVector;
+                int animationIndex = Mathf.RoundToInt((135f + Vector2.SignedAngle(new Vector2(1f, 1f).normalized, direction)) / 90f);
+                animator.SetInteger("direction", animationIndex + 5);
+            } else {
+                animator.SetInteger("direction", 0);
+            }
         } else {
             Vector2 direction = Keybindings.Attack ? aimVector : (Vector2)velocity;
             int animationIndex = Mathf.RoundToInt((135f + Vector2.SignedAngle(new Vector2(1f, 1f).normalized, direction)) / 90f);
