@@ -43,6 +43,7 @@ public class Map
     {
         Vector3Int playerSpawnPos = GetOpenPositionInRoom(2, 2);
         player.transform.position = playerSpawnPos + new Vector3(0.5f, 0.5f, -1.0f);
+        CameraManager.Instance.SetCameraPosition(player.transform.position);
     }
 
     public Vector3Int GetOpenPositionInRoom(int widthInTiles, int heightInTiles)

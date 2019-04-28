@@ -19,7 +19,6 @@ namespace Assets.Scripts
 
         public void OnTriggerEnter2D(Collider2D collision)
         {
-            Debug.Log(collision);
             if (collision.gameObject.layer == LayerContainer.Instance.Layers["Player"])
             {
                 if (isShop) {

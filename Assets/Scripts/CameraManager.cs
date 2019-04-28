@@ -19,6 +19,11 @@ public class CameraManager : MonoBehaviour {
         }
     }
 
+    public void SetCameraPosition(Vector2 position) {
+        Vector3 oldPos = mainCamera.transform.position;
+        mainCamera.transform.position = new Vector3(position.x, position.y, oldPos.z);
+    }
+
     void Start() {
         if(mainCamera == null) {
             mainCamera = FindObjectOfType<Camera>();

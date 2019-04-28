@@ -8,6 +8,7 @@ public class ShopRoom : MonoBehaviour {
 
     public void MovePlayerToSpawn(Player player) {
         player.transform.position = spawnPoint.position + new Vector3(0.5f, 0.5f, 0.0f);
+        CameraManager.Instance.SetCameraPosition(player.transform.position);
     }
 
     public void GenerateRandomItems() {
