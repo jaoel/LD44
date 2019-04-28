@@ -83,7 +83,7 @@ public class Player : MonoBehaviour
         if (Keybindings.Attack && Time.time >= cooldownEndTime)
         {
             cooldownEndTime = Time.time + CurrentWeapon.Description.Cooldown;
-            CurrentWeapon.Shoot(aimVector, transform.position);
+            CurrentWeapon.Shoot(aimVector, transform.position, gameObject);
         }
 
         CalculateAnimation();

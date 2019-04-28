@@ -9,10 +9,12 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: d0109157f016ac3409af638aab5ca258, type: 3}
-  m_Name: EnemyContainer
+  m_Script: {fileID: 11500000, guid: 4dc7c6dbe1557df42a233300cc4c0797, type: 3}
+  m_Name: SimpleEnemyBullet
   m_EditorClassIdentifier: 
-  basicZombie: {fileID: 7125115978298190037, guid: cc3e59661492ce04fbcd15c36679a329,
+  bulletPrefab: {fileID: 218029869677474905, guid: ec04619b4154c1f43b9d8ed7e1796bc9,
     type: 3}
-  shootingZombie: {fileID: 7125115978298190037, guid: 6845328107654aa4698bb1993c252619,
-    type: 3}
+  lifetime: 5
+  size: {x: 1, y: 1}
+  damage: 5
+  tint: {r: 0.9528302, g: 0, b: 0, a: 1}

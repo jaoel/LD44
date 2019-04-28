@@ -9,6 +9,7 @@ public class Bullet : MonoBehaviour {
     private Vector3 originalSize;
 
     public BulletDescription description { get; set; }
+    private GameObject _owner;
 
     private void Start() {
         originalColor = spriteRenderer.color;
@@ -28,16 +29,28 @@ public class Bullet : MonoBehaviour {
         spriteRenderer.transform.localScale = new Vector3(size.x, size.y, 1f);
     }
 
+    public void SetOwner(GameObject owner)
+    {
+        _owner = owner;
+    }
+
     public void OnTriggerEnter2D(Collider2D collision)
     {
+        if (collision.gameObject == _owner)
+            return;
+
         if (collision.gameObject.layer == LayerContainer.Instance.Layers["Map"])
         {
-            gameObject.SetActive(false);
         }
         else if (collision.gameObject.layer == LayerContainer.Instance.Layers["Enemy"])
         {
             collision.gameObject.GetComponent<Enemy>().ApplyDamage(description.damage);
-            gameObject.SetActive(false);
         }
-    } 
+        else if (collision.gameObject.layer == LayerContainer.Instance.Layers["Player"])
+        {
+            collision.gameObject.GetComponent<Player>().ReceiveDamage(description.damage);
+        }
+
+        gameObject.SetActive(false);
+    }
 }

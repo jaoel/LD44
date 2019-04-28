@@ -12,25 +12,22 @@ public class Enemy : MonoBehaviour
     protected bool _followPath = false;
     protected bool _moveToTarget = false;
     protected Vector3 _velocity = Vector3.zero;
-    protected float _stoppingDistance = 2.0f;
+    protected float _stoppingDistance = 0.0f;
     protected Player _player;
     protected new Rigidbody2D rigidbody;
-    protected new BoxCollider2D collider; 
 
     protected bool _hasAggro;
 
-    private void Awake()
+    protected virtual void Awake()
     {
         _path = new List<Vector2Int>();
         _player = GameObject.Find("Player").GetComponent<Player>();
         _currentHealth = description.maxHealth;
     }
 
-    private void Start()
+    protected virtual void Start()
     {
-        rigidbody = GetComponent<Rigidbody2D>();
-        collider = GetComponent<BoxCollider2D>();
-
+        rigidbody = GetComponent<Rigidbody2D>(); 
         aStarCooldown = Random.Range(0, 200);
     }
 
@@ -124,7 +121,7 @@ public class Enemy : MonoBehaviour
 
                 _target = Vector3.zero;
                 _moveToTarget = false;
-
+                rigidbody.velocity = Vector2.zero;
                 return true;
             }
         }
@@ -172,10 +169,5 @@ public class Enemy : MonoBehaviour
         {
             _player.ReceiveDamage(description.damage);
         }
-    }
-
-    private void OnCollisionEnter2D(Collision2D collision)
-    {     
-    }
-        
+    }  
 }

@@ -56,7 +56,7 @@ public class BulletManager : MonoBehaviour {
         instance = null;
     }
 
-    public void SpawnBullet(BulletDescription description, Vector2 position, Vector2 velocity) {
+    public void SpawnBullet(BulletDescription description, Vector2 position, Vector2 velocity, GameObject owner) {
         PreAllocateBullets(description);
         BulletInstance availableBullet = FindAvailableBulletInstance(description);
 
@@ -65,6 +65,7 @@ public class BulletManager : MonoBehaviour {
         bullet.transform.position = new Vector3(position.x, position.y, bulletZIndex);
         bullet.SetSize(description.size);
         bullet.SetTint(description.tint);
+        bullet.SetOwner(owner);
         bullet.description = description;
 
         availableBullet.velocity = velocity;

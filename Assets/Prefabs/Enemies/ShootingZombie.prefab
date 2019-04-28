@@ -11,10 +11,10 @@ GameObject:
   - component: {fileID: 7125115978298190027}
   - component: {fileID: 7125115978298190026}
   - component: {fileID: 7125115978298190024}
-  - component: {fileID: 7125115978298190030}
   - component: {fileID: 7825749921649606545}
+  - component: {fileID: -9151048666015389989}
   m_Layer: 11
-  m_Name: BasicZombie
+  m_Name: ShootingZombie
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -73,7 +73,7 @@ SpriteRenderer:
   m_SortingOrder: 0
   m_Sprite: {fileID: 4334783836991956000, guid: 433ff036a6512e949a9388382064bf10,
     type: 3}
-  m_Color: {r: 0, g: 1, b: 0.07855153, a: 1}
+  m_Color: {r: 1, g: 0.12319464, b: 0, a: 1}
   m_FlipX: 0
   m_FlipY: 0
   m_DrawMode: 0
@@ -104,19 +104,6 @@ Rigidbody2D:
   m_SleepingMode: 1
   m_CollisionDetection: 1
   m_Constraints: 4
---- !u!114 &7125115978298190030
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 7125115978298190037}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 2b93318ac224793439849f1944fe9475, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  description: {fileID: 11400000, guid: 23e2b00ce636ba64b83de7f44ced1a17, type: 2}
 --- !u!58 &7825749921649606545
 CircleCollider2D:
   m_ObjectHideFlags: 0
@@ -133,3 +120,19 @@ CircleCollider2D:
   m_Offset: {x: 0, y: 0}
   serializedVersion: 2
   m_Radius: 0.4
+--- !u!114 &-9151048666015389989
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7125115978298190037}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: bf368670c0da985458da34f37ae83eb8, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  description: {fileID: 11400000, guid: 58d1bc938638e104a9d1dfd4a9c5f39d, type: 2}
+  bulletDescription: {fileID: 11400000, guid: 953cdf6ae09340c44915bc70bf6d95e3, type: 2}
+  shotTimer: 0
+  bulletSpeed: 10

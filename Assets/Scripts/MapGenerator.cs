@@ -96,19 +96,26 @@ namespace Assets.Scripts
             //Stairs to next level
             Vector3Int stairsPosition = map.GetOpenPositionInRoom(2, 2);
             _interactiveObjects.Add(GameObject.Instantiate(_interactiveObjectsContainer.Stairs,
-                new Vector3(stairsPosition.x - 0.5f, stairsPosition.y - 0.5f, -1.0f), Quaternion.identity));
+                new Vector3(stairsPosition.x, stairsPosition.y, -1.0f), Quaternion.identity));
 
             map.stairs = _interactiveObjects[0];
 
             Vector3Int powerupPos = map.GetOpenPositionInRoom(2, 2);
             _interactiveObjects.Add(GameObject.Instantiate(_itemContainer.Shotgun.itemPrefab.gameObject,
-                new Vector3(powerupPos.x - 0.5f, powerupPos.y - 0.5f, -1.0f), Quaternion.identity)); 
+                new Vector3(powerupPos.x, powerupPos.y, -1.0f), Quaternion.identity)); 
 
             for (int i = 0; i < 20; i++)
             {
                 Vector3Int spawnPos = map.GetOpenPositionInRoom(2, 2);
                 _enemies.Add(GameObject.Instantiate(_enemyContainer.basicZombie, 
-                    new Vector3(spawnPos.x + 0.5f, spawnPos.y + 0.5f, -1), Quaternion.identity));
+                    new Vector3(spawnPos.x, spawnPos.y, -1), Quaternion.identity));
+            }
+
+            for (int i = 0; i < 20; i++)
+            {
+                Vector3Int spawnPos = map.GetOpenPositionInRoom(2, 2);
+                _enemies.Add(GameObject.Instantiate(_enemyContainer.shootingZombie,
+                    new Vector3(spawnPos.x, spawnPos.y, -1), Quaternion.identity));
             }
         }
 

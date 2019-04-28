@@ -9,5 +9,5 @@ public abstract class Weapon : MonoBehaviour
 {
     public WeaponDescription Description;
 
-    public abstract void Shoot(Vector2 aimVector, Vector2 position);
+    public abstract void Shoot(Vector2 aimVector, Vector2 position, GameObject owner);
 }  
