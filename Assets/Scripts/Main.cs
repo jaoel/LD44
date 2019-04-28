@@ -27,7 +27,7 @@ public class Main : MonoBehaviour
 
     public void GenerateMap()
     {
-        _currentMap = _mapGen.GenerateDungeon(Random.Range(1, 10), Random.Range(100, 500), Random.Range(100, 500));
+        _currentMap = _mapGen.GenerateDungeon(Random.Range(5, 10), 100, 100);
         _currentMap.MovePlayerToSpawn(player);
     }
 
