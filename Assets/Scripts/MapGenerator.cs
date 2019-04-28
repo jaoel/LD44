@@ -90,17 +90,17 @@ namespace Assets.Scripts
         void PopulateMap(Map map)
         {
             //Stairs to next level
-            Vector3Int stairsPosition = map.GetOpenPositionInMap();
+            Vector3Int stairsPosition = map.GetOpenPositionInRoom(2, 2);
             _interactiveObjects.Add(GameObject.Instantiate(_interactiveObjectsContainer.Stairs,
                 new Vector3(stairsPosition.x - 0.5f, stairsPosition.y - 0.5f, -1.0f), Quaternion.identity));
 
-            Vector3Int powerupPos = map.GetOpenPositionInMap();
+            Vector3Int powerupPos = map.GetOpenPositionInRoom(2, 2);
             _interactiveObjects.Add(GameObject.Instantiate(_itemContainer.Shotgun,
                 new Vector3(powerupPos.x - 0.5f, powerupPos.y - 0.5f, -1.0f), Quaternion.identity)); 
 
             for (int i = 0; i < 20; i++)
             {
-                Vector3Int spawnPos = map.GetOpenPositionInMap();
+                Vector3Int spawnPos = map.GetOpenPositionInRoom(2, 2);
                 _enemies.Add(GameObject.Instantiate(_enemyContainer.basicZombie, 
                     new Vector3(spawnPos.x + 0.5f, spawnPos.y + 0.5f, -1), Quaternion.identity));
             }

@@ -1,4 +1,5 @@
-﻿using UnityEngine;
+﻿using System.Collections.Generic;
+using UnityEngine;
 
 namespace Assets.Scripts
 {
@@ -24,6 +25,22 @@ namespace Assets.Scripts
         {
             Parent = parent;
             Grid = grid;    
+        }
+
+        public void GetAllLeafNodes(ref List<BSPTree> leaves)
+        {
+            if (IsLeaf)
+            {
+                leaves.Add(this);
+            }
+            else
+            {
+                if (Right != null)
+                    Right.GetAllLeafNodes(ref leaves);
+
+                if (Left != null)
+                    Left.GetAllLeafNodes(ref leaves);
+            }
         }
 
         public BSPTree GetSibling()
