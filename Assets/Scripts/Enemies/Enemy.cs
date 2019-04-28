@@ -14,6 +14,7 @@ public class Enemy : MonoBehaviour
     protected Vector3 _velocity = Vector3.zero;
     protected float _stoppingDistance = 1.0f;
     protected Player _player;
+    protected new Rigidbody2D rigidbody;
 
     protected bool _hasAggro;
 
@@ -26,6 +27,7 @@ public class Enemy : MonoBehaviour
 
     private void Start()
     {
+        rigidbody = GetComponent<Rigidbody2D>();
         aStarCooldown = Random.Range(0, 200);
     }
 
@@ -130,7 +132,7 @@ public class Enemy : MonoBehaviour
     protected virtual void MoveToTarget()
     {
         CalculateVelocity();
-        transform.position += _velocity * Time.deltaTime;
+        rigidbody.velocity = _velocity;
     }
 
     protected virtual void CalculateVelocity()
