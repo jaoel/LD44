@@ -76,6 +76,13 @@ public class Main : MonoBehaviour
         shopInstance.MovePlayerToSpawn(player);
     }
 
+    public void DamageAllEnemiesInCircle(Vector2 position, float radius, int damage) {
+        List<Enemy> enemies = _mapGen.GetEnemiesInCircle(position, radius);
+        foreach(Enemy enemy in enemies) {
+            enemy.ApplyDamage(damage);
+        }
+    }
+
     private void OnDrawGizmos()
     {
         if (_currentMap != null && _renderBSP)

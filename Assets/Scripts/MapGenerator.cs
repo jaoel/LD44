@@ -35,6 +35,17 @@ namespace Assets.Scripts
             _enemyContainer = enemyContainer;
         }
 
+        public List<Enemy> GetEnemiesInCircle(Vector2 position, float radius) {
+            List<Enemy> closeEnemies = new List<Enemy>();
+            foreach (GameObject enemy in _enemies) {
+                if (enemy == null || enemy.Equals(null)) continue;
+                if(Vector2.Distance(enemy.transform.position, position) <= radius) {
+                    closeEnemies.Add(enemy.GetComponent<Enemy>());
+                }
+            }
+            return closeEnemies;
+        }
+
         public void DrawDebug()
         {
             //if (_root != null)

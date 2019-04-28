@@ -12,6 +12,7 @@ GameObject:
   - component: {fileID: 218029869677474905}
   - component: {fileID: -5089695432794804344}
   - component: {fileID: 1022070507353309843}
+  - component: {fileID: 5616725890836328802}
   m_Layer: 10
   m_Name: Grenade Bullet
   m_TagString: Untagged
@@ -84,6 +85,20 @@ Rigidbody2D:
   m_SleepingMode: 1
   m_CollisionDetection: 1
   m_Constraints: 0
+--- !u!114 &5616725890836328802
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7212268974970604102}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a6f355405b476084ab320f6d27160e84, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  explosionPrefab: {fileID: 895976179499023227, guid: 0c721c7fa8181604ba893146488470a2,
+    type: 3}
 --- !u!1 &8677906720541102056
 GameObject:
   m_ObjectHideFlags: 0

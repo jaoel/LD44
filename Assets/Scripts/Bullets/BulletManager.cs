@@ -33,18 +33,19 @@ public class BulletManager : MonoBehaviour {
         foreach(var keyValue in bulletList) {
             List<BulletInstance> bullets = keyValue.Value;
             foreach(BulletInstance bullet in bullets) {
+                if (!bullet.instance.gameObject.activeInHierarchy) {
+                    bullet.active = false;
+                }
+
                 if (bullet.active) {
                     bullet.lifetime -= Time.deltaTime;
                     if (bullet.lifetime <= 0f) {
+                        bullet.instance.BeforeDestroyed();
                         bullet.instance.gameObject.SetActive(false);
                         bullet.active = false;
                     } else {
-                        bullet.instance.transform.position += (Vector3)bullet.velocity * Time.deltaTime;
+                        bullet.instance.UpdateBullet(bullet);
                     }
-                } 
-                else if (!bullet.instance.gameObject.activeInHierarchy)
-                {
-                    bullet.active = false;
                 }
             }
         }

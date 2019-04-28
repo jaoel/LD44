@@ -11,9 +11,15 @@ public class Bullet : MonoBehaviour {
     public BulletDescription description { get; set; }
     private GameObject _owner;
 
+    private BulletBehaviour bulletBehaviour = null;
+
     private void Start() {
         originalColor = spriteRenderer.color;
         originalSize = spriteRenderer.transform.localScale;
+        bulletBehaviour = GetComponent<BulletBehaviour>();
+        if (bulletBehaviour == null) {
+            bulletBehaviour = gameObject.AddComponent<BulletBehaviour>();
+        }
     }
 
     public void Reset() {
@@ -34,6 +40,14 @@ public class Bullet : MonoBehaviour {
         _owner = owner;
     }
 
+    public void UpdateBullet(BulletInstance bullet) {
+        bulletBehaviour.UpdateBullet(bullet);
+    }
+
+    public void BeforeDestroyed() {
+        bulletBehaviour.BeforeDestroyed(null);
+    }
+
     public void OnTriggerEnter2D(Collider2D collision)
     {
         if(collision.gameObject == _owner)
@@ -41,15 +55,18 @@ public class Bullet : MonoBehaviour {
 
         if (collision.gameObject.layer == LayerContainer.Instance.Layers["Map"])
         {
+            bulletBehaviour.BeforeDestroyed(null);
         }
         else if (collision.gameObject.layer == LayerContainer.Instance.Layers["Enemy"])
         {
             collision.gameObject.GetComponent<Enemy>().ApplyDamage(description.damage);
             CameraManager.Instance.ShakeCamera(1.0f, 0.2f, 0.3f);
+            bulletBehaviour.BeforeDestroyed(collision.gameObject);
         }
         else if (collision.gameObject.layer == LayerContainer.Instance.Layers["Player"])
         {
             collision.gameObject.GetComponent<Player>().ReceiveDamage(description.damage);
+            bulletBehaviour.BeforeDestroyed(collision.gameObject);
         }
 
         gameObject.SetActive(false);

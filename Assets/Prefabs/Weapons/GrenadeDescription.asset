@@ -13,5 +13,5 @@ MonoBehaviour:
   m_Name: GrenadeDescription
   m_EditorClassIdentifier: 
   Cooldown: 2
-  BulletSpeed: 2
+  BulletSpeed: 10
   BulletDescription: {fileID: 11400000, guid: 2bfab50801d162b4e95fb6690f75a61e, type: 2}

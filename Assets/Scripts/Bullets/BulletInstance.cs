@@ -6,4 +6,6 @@ public class BulletInstance {
     public Bullet instance = null;
     public bool active = false;
     public float lifetime = 0f;
+
+    public Transform transform => instance?.transform;
 }
