@@ -41,14 +41,18 @@ namespace Assets.Scripts
             //    BSPTree.DebugDrawBspNode(_root);
         }
 
+        public void Clear() {
+            _floor.ClearAllTiles();
+            _walls.ClearAllTiles();
+            DestroyAllInteractiveObjects();
+        }
+
         public Map GenerateDungeon(int subdivisions, int width, int height)
         {
             _width = width;
             _height = height;
 
-            _floor.ClearAllTiles();
-            _walls.ClearAllTiles();
-            DestroyAllInteractiveObjects();
+            Clear();
 
             int[,] collisionMap = new int[_width, _height];
 

@@ -5,7 +5,7 @@ public class ShopItem : MonoBehaviour {
 
     public ItemDescription description;
 
-    void Start() {
+    public void InstantiateItem() {
         Vector3 pos = transform.position;
         pos.z = -1f;
         Item item = Instantiate(description.itemPrefab, pos, Quaternion.identity);

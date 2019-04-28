@@ -7,6 +7,7 @@ using UnityEngine.Tilemaps;
 
 public class Main : MonoBehaviour
 {
+    public ShopRoom shopRoomPrefab;
     public TileContainer tileContainer;
     public InteractiveDungeonObject interactiveDungeonObjectContainer;
     public ItemContainer itemContainer;
@@ -20,9 +21,11 @@ public class Main : MonoBehaviour
     public GameObject gameOverUI;
     public GameObject pauseUI;
     private bool _gamePaused;
+    private ShopRoom shopInstance;
 
     void Start()
     {
+        shopInstance = Instantiate(shopRoomPrefab);
         Time.timeScale = 1.0f;
         _gamePaused = false;
         _mapGen = new MapGenerator(tileContainer, interactiveDungeonObjectContainer, itemContainer,
@@ -40,9 +43,19 @@ public class Main : MonoBehaviour
 
     public void GenerateMap()
     {
+        shopInstance.gameObject.SetActive(false);
+
         _currentMap = _mapGen.GenerateDungeon(Random.Range(5, 10), 100, 100);
         _currentMap.MovePlayerToSpawn(player);
         NavigationManager.map = _currentMap;
+    }
+
+    public void GenerateShop() {
+        _mapGen.Clear();
+
+        shopInstance.gameObject.SetActive(true);
+        shopInstance.GenerateRandomItems();
+        shopInstance.MovePlayerToSpawn(player);
     }
 
     private void OnDrawGizmos()

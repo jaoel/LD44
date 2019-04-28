@@ -10,6 +10,7 @@ namespace Assets.Scripts
     public class Stairs : MonoBehaviour
     {
         public Main _main;
+        public bool isShop = true;
 
         public void Awake()
         {
@@ -18,9 +19,14 @@ namespace Assets.Scripts
 
         public void OnTriggerEnter2D(Collider2D collision)
         {
+            Debug.Log(collision);
             if (collision.gameObject.layer == LayerContainer.Instance.Layers["Player"])
             {
-                _main.GenerateMap();
+                if (isShop) {
+                    _main.GenerateShop();
+                } else {
+                    _main.GenerateMap();
+                }
                 Destroy(gameObject);
             }
         }

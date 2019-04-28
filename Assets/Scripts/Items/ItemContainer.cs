@@ -9,4 +9,8 @@ using UnityEngine;
 public class ItemContainer : ScriptableObject
 {
     public ItemDescription Shotgun;
+
+    public ItemDescription GetRandomItem() {
+        return Shotgun;
+    }
 }
