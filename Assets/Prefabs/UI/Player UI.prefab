@@ -312,6 +312,7 @@ MonoBehaviour:
   maxHealthBackgroundImage: {fileID: 50169524288041261}
   currentHealthImage: {fileID: 2419400307675704030}
   healthMarkersObject: {fileID: 8612098270799262934}
+  healthBarObject: {fileID: 2467114384827784172}
   healthPerPixel: 2
 --- !u!1 &1287451212412779531
 GameObject:

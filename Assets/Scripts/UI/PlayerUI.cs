@@ -9,6 +9,7 @@ public class PlayerUI : MonoBehaviour {
     public Image maxHealthBackgroundImage;
     public Image currentHealthImage;
     public RectTransform healthMarkersObject;
+    public RectTransform healthBarObject;
 
     public int healthPerPixel = 2;
 
@@ -18,16 +19,24 @@ public class PlayerUI : MonoBehaviour {
     private int currentHealth = 0;
     private int currentMaxHealth = 0;
 
+    private Vector3 originalPosition;
+
+    private void Start() {
+        originalPosition = healthBarObject.position;
+    }
+
     private void FixedUpdate() {
+        bool shake = false;
         if(currentHealth != targetHealth) {
-            if(currentHealth < targetHealth) {
-                currentHealth += 5;
+            if (currentHealth < targetHealth) {
+                currentHealth += 1;
                 if (currentHealth > targetHealth) {
                     currentHealth = targetHealth;
                 }
             }
             if (currentHealth > targetHealth) {
-                currentHealth -= 5;
+                shake = true;
+                currentHealth -= 1;
                 if (currentHealth < targetHealth) {
                     currentHealth = targetHealth;
                 }
@@ -37,18 +46,26 @@ public class PlayerUI : MonoBehaviour {
 
         if (currentMaxHealth != targetMaxHealth) {
             if (currentMaxHealth < targetMaxHealth) {
-                currentMaxHealth += 5;
+                currentMaxHealth += 1;
                 if (currentMaxHealth > targetMaxHealth) {
                     currentMaxHealth = targetMaxHealth;
                 }
             }
             if (currentMaxHealth > targetMaxHealth) {
-                currentMaxHealth -= 5;
+                shake = true;
+                currentMaxHealth -= 1;
                 if (currentMaxHealth < targetMaxHealth) {
                     currentMaxHealth = targetMaxHealth;
                 }
             }
             SetMaxHealth(currentMaxHealth);
+        }
+                
+        if (shake) {
+            float s = 8f;
+            healthBarObject.position = originalPosition + new Vector3((int)Random.Range(-s, s), (int)Random.Range(-s, s), 0f);
+        } else {
+            healthBarObject.position = originalPosition;
         }
     }
 
