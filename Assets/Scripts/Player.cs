@@ -12,8 +12,10 @@ public class Player : MonoBehaviour
     public Weapon CurrentWeapon;
     public Animator animator;
 
-    public int currentHealth;
-    public int maxHealth;
+    public int startHealth = 100;
+
+    private int currentHealth;
+    private int maxHealth;
 
     private new Rigidbody2D rigidbody;
     private Vector3 velocity = Vector3.zero;
@@ -24,10 +26,32 @@ public class Player : MonoBehaviour
 
     private float cooldownEndTime = 0f;
 
+    public int Health {
+        get {
+            return currentHealth;
+        }
+        set {
+            currentHealth = Mathf.Clamp(value, 0, maxHealth);
+        }
+    }
+
+    public int MaxHealth {
+        get {
+            return maxHealth;
+        }
+        set {
+            maxHealth = Mathf.Max(0, value);
+            if(maxHealth < currentHealth) {
+                Health = maxHealth;
+            }
+        }
+    }
+
     void Start()
     {
         rigidbody = GetComponent<Rigidbody2D>();
-        currentHealth = maxHealth;
+        MaxHealth = startHealth;
+        Health = startHealth;
     }
 
     private void Update()

@@ -12,4 +12,4 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 053b670930677464eae966da2ef435a1, type: 3}
   m_Name: ItemContainer
   m_EditorClassIdentifier: 
-  Shotgun: {fileID: 8826916283942404870, guid: 6003c38564cfa9f4a9637d13b9130919, type: 3}
+  Shotgun: {fileID: 11400000, guid: 7b7b35105a18b0946aad950135169d3a, type: 2}

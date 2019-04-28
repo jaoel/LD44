@@ -12,4 +12,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a9dd8d3929df91d4b832784abf7a5fef, type: 3}
   m_Name: ShotgunPickupDescription
   m_EditorClassIdentifier: 
-  HealthCost: 100
+  itemPrefab: {fileID: 8826916283942404865, guid: 6003c38564cfa9f4a9637d13b9130919,
+    type: 3}
+  HealthCost: 50

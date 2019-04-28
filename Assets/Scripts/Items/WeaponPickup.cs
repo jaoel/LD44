@@ -11,9 +11,6 @@ public class WeaponPickup : Item
 
     public override void ApplyEffect(GameObject owner)
     {
-        Player player = owner.GetComponent<Player>();
-        player.currentHealth -= Description.HealthCost;
-
         owner.GetComponent<Player>().CurrentWeapon = Weapon;
     }
 }

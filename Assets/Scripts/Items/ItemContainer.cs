@@ -8,5 +8,5 @@ using UnityEngine;
 [CreateAssetMenu]
 public class ItemContainer : ScriptableObject
 {
-    public GameObject Shotgun;
+    public ItemDescription Shotgun;
 }

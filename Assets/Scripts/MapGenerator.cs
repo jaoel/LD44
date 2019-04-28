@@ -95,7 +95,7 @@ namespace Assets.Scripts
                 new Vector3(stairsPosition.x - 0.5f, stairsPosition.y - 0.5f, -1.0f), Quaternion.identity));
 
             Vector3Int powerupPos = map.GetOpenPositionInRoom(2, 2);
-            _interactiveObjects.Add(GameObject.Instantiate(_itemContainer.Shotgun,
+            _interactiveObjects.Add(GameObject.Instantiate(_itemContainer.Shotgun.itemPrefab.gameObject,
                 new Vector3(powerupPos.x - 0.5f, powerupPos.y - 0.5f, -1.0f), Quaternion.identity)); 
 
             for (int i = 0; i < 20; i++)

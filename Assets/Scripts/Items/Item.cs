@@ -8,6 +8,18 @@ using UnityEngine;
 public abstract class Item : MonoBehaviour
 {
     public ItemDescription Description;
+    public bool isShopItem = false;
+
+    public void Apply(GameObject owner) {
+        Player player = owner.GetComponent<Player>();
+        if (isShopItem) {
+            player.MaxHealth -= Description.HealthCost;
+        }
+        if (player.Health > 0) {
+            ApplyEffect(owner);
+        }
+        Destroy(gameObject);
+    }
 
     public abstract void ApplyEffect(GameObject owner);
 
@@ -15,7 +27,7 @@ public abstract class Item : MonoBehaviour
     {
         if (collision.gameObject)
         {
-            ApplyEffect(collision.gameObject);
+            Apply(collision.gameObject);
         }
     }
 }
