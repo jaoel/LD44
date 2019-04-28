@@ -58,7 +58,7 @@ namespace Assets.Scripts
             DestroyAllInteractiveObjects();
         }
                                     
-        public Map GenerateDungeon(int subdivisions, int width, int height)
+        public Map GenerateDungeon(int subdivisions, int width, int height, int currentLevel)
         {
             _width = width;
             _height = height;
@@ -82,7 +82,7 @@ namespace Assets.Scripts
             PaintTilemap(collisionMap);
 
             Map map = new Map(root, _walls, _floor, _width, _height, collisionMap);
-            PopulateMap(map);
+            PopulateMap(map, currentLevel);
 
             return map;
         }
@@ -102,7 +102,7 @@ namespace Assets.Scripts
             _enemies.Clear();
         }
 
-        void PopulateMap(Map map)
+        void PopulateMap(Map map, int currentLevel)
         {
             //Stairs to next level
             Vector3Int stairsPosition = map.GetOpenPositionInRoom(2, 2);
@@ -113,21 +113,30 @@ namespace Assets.Scripts
 
             Vector3Int powerupPos = map.GetOpenPositionInRoom(2, 2);
             _interactiveObjects.Add(GameObject.Instantiate(_itemContainer.Shotgun.itemPrefab.gameObject,
-                new Vector3(powerupPos.x, powerupPos.y, -1.0f), Quaternion.identity)); 
+                new Vector3(powerupPos.x, powerupPos.y, -1.0f), Quaternion.identity));
 
-            for (int i = 0; i < 20; i++)
+            int enemyCount = 0;
+            if (currentLevel <= 5)
+                enemyCount = (int)(10 + Math.Pow(1.5, 1.5 * currentLevel));
+            else
+                enemyCount = (int)(35 + 10 * Math.Log(currentLevel));
+
+            for (int i = 0; i < enemyCount; i++)
             {
                 Vector3Int spawnPos = map.GetOpenPositionInRoom(2, 2);
                 _enemies.Add(GameObject.Instantiate(_enemyContainer.basicZombie, 
                     new Vector3(spawnPos.x, spawnPos.y, -1), Quaternion.identity));
             }
 
-            for (int i = 0; i < 20; i++)
+            if (currentLevel > 2)
             {
-                Vector3Int spawnPos = map.GetOpenPositionInRoom(2, 2);
-                _enemies.Add(GameObject.Instantiate(_enemyContainer.shootingZombie,
-                    new Vector3(spawnPos.x, spawnPos.y, -1), Quaternion.identity));
-            }
+                for (int i = 0; i < enemyCount; i++)
+                {
+                    Vector3Int spawnPos = map.GetOpenPositionInRoom(2, 2);
+                    _enemies.Add(GameObject.Instantiate(_enemyContainer.shootingZombie,
+                        new Vector3(spawnPos.x, spawnPos.y, -1), Quaternion.identity));
+                }
+            } 
         }
 
         void GenerateFloor(int width, int height)

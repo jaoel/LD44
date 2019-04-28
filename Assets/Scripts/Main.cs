@@ -2,6 +2,7 @@
 using DG.Tweening;
 using System.Collections;
 using System.Collections.Generic;
+using TMPro;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.Tilemaps;
@@ -23,6 +24,9 @@ public class Main : MonoBehaviour
     public GameObject pauseUI;
     private bool _gamePaused;
     private ShopRoom shopInstance;
+    public TextMeshProUGUI currentLevelText;
+
+    private int _currentLevel;
 
     private static Main instance = null;
     public static Main Instance {
@@ -60,10 +64,12 @@ public class Main : MonoBehaviour
 
     public void GenerateMap()
     {
+        _currentLevel++;
+        currentLevelText.text = "#" + _currentLevel;
         shopInstance.ClearItems();
         shopInstance.gameObject.SetActive(false);
 
-        _currentMap = _mapGen.GenerateDungeon(Random.Range(5, 10), 100, 100);
+        _currentMap = _mapGen.GenerateDungeon(Random.Range(5, 10), 100, 100, _currentLevel);
         _currentMap.MovePlayerToSpawn(player);
         NavigationManager.map = _currentMap;
     }
@@ -106,6 +112,8 @@ public class Main : MonoBehaviour
         if (!player.IsAlive)
         {
             gameOverUI.SetActive(true);
+            currentLevelText.gameObject.SetActive(false);
+            GameObject.Find("GameOverLevel").GetComponent<TextMeshProUGUI>().text = "You reached level #" + _currentLevel; 
         }
     }
 
