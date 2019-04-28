@@ -9,7 +9,9 @@ public class Bullet : MonoBehaviour {
     private Vector3 originalSize;
 
     public BulletDescription description { get; set; }
+    public ParticleSystemContainer particleSystemContainer;
     private GameObject _owner;
+    private Vector2 _velocity;
 
     private BulletBehaviour bulletBehaviour = null;
 
@@ -40,6 +42,11 @@ public class Bullet : MonoBehaviour {
         _owner = owner;
     }
 
+    public void SetVelocity(Vector2 velocity)
+    {
+        _velocity = velocity;
+    }
+
     public void UpdateBullet(BulletInstance bullet) {
         bulletBehaviour.UpdateBullet(bullet);
     }
@@ -47,7 +54,7 @@ public class Bullet : MonoBehaviour {
     public void BeforeDestroyed() {
         bulletBehaviour.BeforeDestroyed(null);
     }
-
+   
     public void OnTriggerEnter2D(Collider2D collision)
     {
         if(collision.gameObject == _owner)
@@ -59,7 +66,7 @@ public class Bullet : MonoBehaviour {
         }
         else if (collision.gameObject.layer == LayerContainer.Instance.Layers["Enemy"])
         {
-            collision.gameObject.GetComponent<Enemy>().ApplyDamage(description.damage);
+            collision.gameObject.GetComponent<Enemy>().ApplyDamage(description.damage, _velocity);
             CameraManager.Instance.ShakeCamera(1.0f, 0.2f, 0.3f);
             bulletBehaviour.BeforeDestroyed(collision.gameObject);
         }

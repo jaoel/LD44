@@ -1,8 +1,10 @@
 ﻿using System.Collections.Generic;
 using UnityEngine;
+using DG.Tweening;
 
 public class Enemy : MonoBehaviour
 {
+    public ParticleSystemContainer particleSystemContainer;
     public EnemyDescription description;
 
     private int _currentHealth;
@@ -150,8 +152,15 @@ public class Enemy : MonoBehaviour
         _velocity.z = 0.0f;
     } 
 
-    public virtual void ApplyDamage(int damage)
+    public virtual void ApplyDamage(int damage, Vector2 velocity)
     {
+        ParticleSystem bloodSpray = Instantiate(particleSystemContainer.bloodSpray, transform.position, Quaternion.identity);
+
+        Vector3 dir = new Vector3(velocity.normalized.x, velocity.normalized.y, 0);
+        bloodSpray.transform.DOLookAt(transform.position + dir, 0.0f);
+        bloodSpray.gameObject.SetActive(true);
+        bloodSpray.Play();
+
         _currentHealth -= damage;
     }
 

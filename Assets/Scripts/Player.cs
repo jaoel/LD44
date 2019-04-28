@@ -3,6 +3,8 @@ using DG.Tweening;
 
 public class Player : MonoBehaviour
 {
+    public ParticleSystemContainer particleSystemContainer;
+
     public float maxSpeed = 8f;
     public float acceleration = 25f;
     public float deceleration = 15f;
@@ -173,7 +175,7 @@ public class Player : MonoBehaviour
             colorFlashSequence.Append(renderer.material.DOColor(Color.white, 0.0f));
 
             colorFlashSequence.Play();
-
+                                         
             _invulnTimer = 0;
             Health -= damage;
         }

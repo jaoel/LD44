@@ -68,6 +68,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f8542d10302a1454ca9dc0057cd9bc12, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  ParticleSystemContainer: {fileID: 11400000, guid: 16ab9ed0ce6842c4b9a9e52558b0b55d,
+    type: 2}
   maxSpeed: 8
   acceleration: 25
   deceleration: 15

@@ -67,6 +67,7 @@ public class BulletManager : MonoBehaviour {
         bullet.SetSize(description.size);
         bullet.SetTint(description.tint);
         bullet.SetOwner(owner);
+        bullet.SetVelocity(velocity);
         bullet.description = description;
 
         availableBullet.velocity = velocity;
