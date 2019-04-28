@@ -5,6 +5,7 @@ using DG.Tweening;
 public class Enemy : MonoBehaviour
 {
     public ParticleSystemContainer particleSystemContainer;
+    public ItemContainer itemContainer;
     public EnemyDescription description;
 
     private int _currentHealth;
@@ -168,6 +169,13 @@ public class Enemy : MonoBehaviour
     {
         if (_currentHealth <= 0)
         {
+            if(Random.Range(0.0f, 1.0f) < 0.1f)
+            {
+                Item drop = Instantiate(itemContainer.MaxHealth.itemPrefab, transform.position, Quaternion.identity);
+                drop.transform.localScale = new Vector3(0.5f, 0.5f, 0.5f);
+                drop.gameObject.SetActive(true);
+            }
+
             Destroy(gameObject);
             return true;
         }

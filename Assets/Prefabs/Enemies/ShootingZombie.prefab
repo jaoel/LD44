@@ -134,6 +134,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   particleSystemContainer: {fileID: 11400000, guid: 16ab9ed0ce6842c4b9a9e52558b0b55d,
     type: 2}
+  itemContainer: {fileID: 11400000, guid: 74287dc484f187343ab501050ebd52a6, type: 2}
   description: {fileID: 11400000, guid: 58d1bc938638e104a9d1dfd4a9c5f39d, type: 2}
   bulletDescription: {fileID: 11400000, guid: 953cdf6ae09340c44915bc70bf6d95e3, type: 2}
   shotTimer: 0

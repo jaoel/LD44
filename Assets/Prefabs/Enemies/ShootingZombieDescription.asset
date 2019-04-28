@@ -12,9 +12,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: fdfacec8ad3d4d140b70fc0a11d56fcf, type: 3}
   m_Name: ShootingZombieDescription
   m_EditorClassIdentifier: 
-  maxHealth: 10
+  maxHealth: 3
   maxSpeed: 3
   acceleration: 15
   aggroDistance: 20
-  damage: 5
+  damage: 3
   shotCooldown: 0.2

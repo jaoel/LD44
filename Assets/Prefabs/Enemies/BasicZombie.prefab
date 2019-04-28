@@ -118,6 +118,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   particleSystemContainer: {fileID: 11400000, guid: 16ab9ed0ce6842c4b9a9e52558b0b55d,
     type: 2}
+  itemContainer: {fileID: 11400000, guid: 74287dc484f187343ab501050ebd52a6, type: 2}
   description: {fileID: 11400000, guid: 23e2b00ce636ba64b83de7f44ced1a17, type: 2}
 --- !u!58 &7825749921649606545
 CircleCollider2D:

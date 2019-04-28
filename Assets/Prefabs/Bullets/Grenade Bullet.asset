@@ -16,5 +16,5 @@ MonoBehaviour:
     type: 3}
   lifetime: 2
   size: {x: 1, y: 1}
-  damage: 50
+  damage: 10
   tint: {r: 0.19531797, g: 0.24528301, b: 0, a: 1}

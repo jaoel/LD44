@@ -33,7 +33,7 @@ public class CameraManager : MonoBehaviour {
     public void ShakeCamera(float duration, float positionStrength, float rotationStrength)
     {
         mainCamera.transform.DOShakePosition(duration, positionStrength, 10, 90, false, true);
-        mainCamera.transform.DOShakeRotation(duration, new Vector3(0.0f, 0.0f, rotationStrength), 10, 90, true);
+       // mainCamera.transform.DOShakeRotation(duration, new Vector3(0.0f, 0.0f, rotationStrength), 10, 90, true);
     }
 
     void Start() {

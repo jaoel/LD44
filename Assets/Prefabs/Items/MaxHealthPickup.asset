@@ -9,12 +9,9 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 4dc7c6dbe1557df42a233300cc4c0797, type: 3}
-  m_Name: SimpleEnemyBullet
+  m_Script: {fileID: 11500000, guid: a9dd8d3929df91d4b832784abf7a5fef, type: 3}
+  m_Name: MaxHealthPickup
   m_EditorClassIdentifier: 
-  bulletPrefab: {fileID: 218029869677474905, guid: ec04619b4154c1f43b9d8ed7e1796bc9,
+  itemPrefab: {fileID: -7318547953542084501, guid: c642fc709c9199141b5eedb0612a10c6,
     type: 3}
-  lifetime: 5
-  size: {x: 1, y: 1}
-  damage: 3
-  tint: {r: 0.9528302, g: 0, b: 0, a: 1}
+  HealthCost: -20

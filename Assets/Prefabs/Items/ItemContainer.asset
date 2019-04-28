@@ -18,3 +18,4 @@ MonoBehaviour:
   Slingshot: {fileID: 11400000, guid: 2b18e66dc2627664c856cbad75a7e8c1, type: 2}
   Grenade: {fileID: 11400000, guid: 6e4f009bf25fe6844b18fd0f13946c79, type: 2}
   HealthGlobe: {fileID: 11400000, guid: 8e3b8384140229f40a2ae0b895e25ec4, type: 2}
+  MaxHealth: {fileID: 11400000, guid: 9dff1c61f0a906b499275c70aadfdc72, type: 2}

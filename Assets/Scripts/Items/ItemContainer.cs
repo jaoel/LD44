@@ -9,6 +9,7 @@ public class ItemContainer : ScriptableObject {
     public ItemDescription Slingshot;
     public ItemDescription Grenade;
     public ItemDescription HealthGlobe;
+    public ItemDescription MaxHealth;
 
     int numItems = 6; // INCREMENT THIS WHEN ADDING ITEMS
 

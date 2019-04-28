@@ -77,7 +77,7 @@ MonoBehaviour:
   CurrentWeapon: {fileID: 8576656811411399088, guid: 334ef3daf64cda543bd3fd358c1d13a6,
     type: 3}
   animator: {fileID: 6780983900129160725}
-  startHealth: 100
+  startHealth: 20
 --- !u!61 &901794245638907986
 BoxCollider2D:
   m_ObjectHideFlags: 0
