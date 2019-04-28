@@ -9,7 +9,6 @@ public class Bullet : MonoBehaviour {
     private Vector3 originalSize;
 
     public BulletDescription description { get; set; }
-    public ParticleSystemContainer particleSystemContainer;
     private GameObject _owner;
     private Vector2 _velocity;
 
@@ -72,7 +71,7 @@ public class Bullet : MonoBehaviour {
         }
         else if (collision.gameObject.layer == LayerContainer.Instance.Layers["Player"])
         {
-            collision.gameObject.GetComponent<Player>().ReceiveDamage(description.damage);
+            collision.gameObject.GetComponent<Player>().ReceiveDamage(description.damage, _velocity);
             bulletBehaviour.BeforeDestroyed(collision.gameObject);
         }
 

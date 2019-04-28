@@ -162,7 +162,7 @@ public class Player : MonoBehaviour
         rigidbody.velocity = velocity;
     }
 
-    public void ReceiveDamage(int damage)
+    public void ReceiveDamage(int damage, Vector2 direction)
     {
         if (_invulnTimer >= invulnTime)
         {
@@ -175,7 +175,14 @@ public class Player : MonoBehaviour
             colorFlashSequence.Append(renderer.material.DOColor(Color.white, 0.0f));
 
             colorFlashSequence.Play();
-                                         
+
+            ParticleSystem bloodSpray = Instantiate(particleSystemContainer.bloodSpray, transform.position, Quaternion.identity);
+
+            Vector3 dir = new Vector3(direction.normalized.x, direction.normalized.y, 0);
+            bloodSpray.transform.DOLookAt(transform.position + dir, 0.0f);
+            bloodSpray.gameObject.SetActive(true);
+            bloodSpray.Play();
+
             _invulnTimer = 0;
             Health -= damage;
         }

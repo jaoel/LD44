@@ -14,7 +14,7 @@ public class Enemy : MonoBehaviour
     protected bool _followPath = false;
     protected bool _moveToTarget = false;
     protected Vector3 _velocity = Vector3.zero;
-    protected float _stoppingDistance = 0.0f;
+    protected float _stoppingDistance = 0.5f;
     protected Player _player;
     protected new Rigidbody2D rigidbody;
 
@@ -179,7 +179,7 @@ public class Enemy : MonoBehaviour
     {
         if (collision.gameObject.layer == LayerContainer.Instance.Layers["Player"])
         {
-            _player.ReceiveDamage(description.damage);
+            _player.ReceiveDamage(description.damage, -collision.contacts[0].normal);
         }
     }  
 }

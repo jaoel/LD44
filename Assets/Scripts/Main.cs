@@ -76,10 +76,17 @@ public class Main : MonoBehaviour
         shopInstance.MovePlayerToSpawn(player);
     }
 
-    public void DamageAllEnemiesInCircle(Vector2 position, float radius, int damage) {
+    public void DamageAllEnemiesInCircle(Vector2 position, float radius, int damage, bool damagePlayer) {
         List<Enemy> enemies = _mapGen.GetEnemiesInCircle(position, radius);
         foreach(Enemy enemy in enemies) {
-            enemy.ApplyDamage(damage);
+            Vector2 dir = new Vector2(enemy.transform.position.x, enemy.transform.position.y) - position;
+            enemy.ApplyDamage(damage, dir);
+        }
+
+        if (damagePlayer && Vector2.Distance(new Vector2(player.transform.position.x, player.transform.position.y), position) <= radius)
+        {
+            Vector2 dir = new Vector2(player.transform.position.x, player.transform.position.y) - position;
+            player.ReceiveDamage(damage, dir);                                                              
         }
     }
 
