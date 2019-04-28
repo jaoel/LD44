@@ -28,10 +28,10 @@ TextureImporter:
     second: pickupmap_7
   - first:
       213: 123059612226172620
-    second: pickupmap_8
+    second: pickupmap_blood
   - first:
       213: 4824475760950297279
-    second: pickupmap_9
+    second: pickupmap_skull
   - first:
       213: -1318383466778419210
     second: pickupmap_10
@@ -455,7 +455,7 @@ TextureImporter:
       edges: []
       weights: []
     - serializedVersion: 2
-      name: pickupmap_8
+      name: pickupmap_blood
       rect:
         serializedVersion: 2
         x: 0
@@ -476,7 +476,7 @@ TextureImporter:
       edges: []
       weights: []
     - serializedVersion: 2
-      name: pickupmap_9
+      name: pickupmap_skull
       rect:
         serializedVersion: 2
         x: 32
