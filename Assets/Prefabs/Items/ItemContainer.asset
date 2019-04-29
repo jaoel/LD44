@@ -21,3 +21,4 @@ MonoBehaviour:
   MaxHealth: {fileID: 11400000, guid: 9dff1c61f0a906b499275c70aadfdc72, type: 2}
   WeakHealthGlobe: {fileID: 11400000, guid: 07e877227b6619240a2cccb59f4a5df7, type: 2}
   FiringRateUpgrade: {fileID: 11400000, guid: df96087daafff4040b8ddf44eacbf055, type: 2}
+  SlowTrap: {fileID: 11400000, guid: 5ced745bcaf1a0745a468694b43eb9a4, type: 2}

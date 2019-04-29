@@ -31,6 +31,8 @@ public class Player : MonoBehaviour
     private GameObject _shotSound = null;
     
     public float firingRateModifier = 1.0f;
+    private float _slowTimer = 0.0f;
+    private float _slowFactor = 0.0f;
 
     public int Health {
         get {
@@ -200,7 +202,19 @@ public class Player : MonoBehaviour
             velocity = velocity.normalized * maxSpeed;
         }
 
+        if (_slowTimer > 0)
+        {
+            _slowTimer -= Time.deltaTime;
+            velocity *= _slowFactor;
+        }
+
         rigidbody.velocity = velocity;
+    }
+
+    public void SetSlow(float slowFactor, float slowTimer)
+    {
+        _slowFactor = slowFactor;
+        _slowTimer = slowTimer;
     }
 
     public void ReceiveDamage(int damage, Vector2 direction)

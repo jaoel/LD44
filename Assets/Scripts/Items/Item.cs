@@ -9,8 +9,9 @@ public abstract class Item : MonoBehaviour
 {
     public ItemDescription Description;
     public bool isShopItem = false;
+    protected bool _triggered = false;
 
-    public void Apply(GameObject owner) {
+    public virtual void Apply(GameObject owner) {
         Player player = owner.GetComponent<Player>();
         if (isShopItem) {
             player.MaxHealth -= Description.HealthCost;

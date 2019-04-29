@@ -13,6 +13,9 @@ public class ItemContainer : ScriptableObject {
     public ItemDescription WeakHealthGlobe;
     public ItemDescription FiringRateUpgrade;
 
+    //Traps
+    public ItemDescription SlowTrap;
+
     [System.NonSerialized]
     int numItems = 7; // INCREMENT THIS WHEN ADDING ITEMS
 

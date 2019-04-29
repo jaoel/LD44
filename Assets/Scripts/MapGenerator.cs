@@ -116,7 +116,15 @@ namespace Assets.Scripts
         }
 
         void PopulateMap(Map map, Player player, int currentLevel)
-        { 
+        {
+            int trapCount = Random.Range(0, 10);
+            for(int i = 0; i < trapCount; i++)
+            {
+                Vector3Int pos = map.GetOpenPositionInRoom(2, 2);
+                _interactiveObjects.Add(GameObject.Instantiate(_itemContainer.SlowTrap.itemPrefab,
+                    new Vector3(pos.x, pos.y, -1.0f), Quaternion.identity).gameObject);
+            }
+
             int enemyCount = 0;
             int shootingZombieCount = 0;
             if (currentLevel <= 5)
