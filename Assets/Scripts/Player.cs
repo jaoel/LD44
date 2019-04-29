@@ -82,7 +82,7 @@ public class Player : MonoBehaviour
     {
         CalculateAnimation();
 
-        if (!IsAlive)
+        if (!IsAlive || Main.Instance._gamePaused)
             return;
 
         CalculateInputVector();
@@ -108,6 +108,9 @@ public class Player : MonoBehaviour
 
     void FixedUpdate()
     {
+        if (Main.Instance._gamePaused)
+            return;
+
         if (!IsAlive) {
             if (velocity.magnitude > 0.001f) {
                 velocity -= velocity * 2.0f * Time.deltaTime;

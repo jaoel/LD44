@@ -45,7 +45,7 @@ public class Map
     {
         List<Vector2Int> path = new List<Vector2Int>();
         Vector3Int playerSpawnPos = Vector3Int.zero;
-        while (path.Count == 0)
+        while (path.Count == 0 || Vector3.Distance(playerSpawnPos, stairs.transform.position) < 10)
         {
             playerSpawnPos = GetOpenPositionInRoom(2, 2);
             path = NavigationManager.Instance.AStar(

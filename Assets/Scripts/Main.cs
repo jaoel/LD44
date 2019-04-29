@@ -22,7 +22,7 @@ public class Main : MonoBehaviour
 
     public GameObject gameOverUI;
     public GameObject pauseUI;
-    private bool _gamePaused;
+    public bool _gamePaused;
     private ShopRoom shopInstance;
     public TextMeshProUGUI currentLevelText;
 
