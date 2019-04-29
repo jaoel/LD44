@@ -72,8 +72,8 @@ MonoBehaviour:
   particleSystemContainer: {fileID: 11400000, guid: 16ab9ed0ce6842c4b9a9e52558b0b55d,
     type: 2}
   maxSpeed: 8
-  acceleration: 25
-  deceleration: 15
+  acceleration: 35
+  deceleration: 25
   invulnTime: 1
   characterAnimation: {fileID: 6271302632493112618}
   CurrentWeapon: {fileID: 8576656811411399088, guid: 334ef3daf64cda543bd3fd358c1d13a6,

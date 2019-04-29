@@ -27,6 +27,7 @@ public class Main : MonoBehaviour
     public TextMeshProUGUI currentLevelText;
 
     private int _currentLevel;
+    public int CurrentLevel => _currentLevel;
 
     private static Main instance = null;
     public static Main Instance {
@@ -69,7 +70,7 @@ public class Main : MonoBehaviour
         shopInstance.ClearItems();
         shopInstance.gameObject.SetActive(false);
 
-        _currentMap = _mapGen.GenerateDungeon(Random.Range(5, 10), 100, 100, _currentLevel, player);
+        _currentMap = _mapGen.GenerateDungeon(Random.Range(7, 10), 60, 60, _currentLevel, player);
         _currentMap.MovePlayerToSpawn(player);
         NavigationManager.map = _currentMap;
     }

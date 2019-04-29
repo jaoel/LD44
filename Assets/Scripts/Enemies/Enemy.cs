@@ -25,6 +25,8 @@ public class Enemy : MonoBehaviour
     private Vector2 dieDirection = Vector2.down;
     private bool isDead = false;
 
+    private static int killsSinceLastDrop = 0;
+
     public bool IsAlive => !isDead;
 
     protected virtual void Awake()
@@ -221,11 +223,19 @@ public class Enemy : MonoBehaviour
     {
         if (_currentHealth <= 0)
         {
-            if(isDead == false && Random.Range(0.0f, 1.0f) < 0.25f)
-            {
-                Item drop = Instantiate(itemContainer.GetEnemyDrop().itemPrefab, transform.position, Quaternion.identity);
-                drop.transform.localScale = new Vector3(0.5f, 0.5f, 0.5f);
-                drop.gameObject.SetActive(true);
+            if (isDead == false) {
+                float killsForGuaranteedDrop = 5f + Main.Instance.CurrentLevel;
+                float prob = Mathf.Lerp(0.1f, 1f, killsSinceLastDrop / killsForGuaranteedDrop);
+                float rnd = Random.Range(0.0f, 1.0f);
+
+                if (rnd < prob) {
+                    killsSinceLastDrop = 0;
+                    Item drop = Instantiate(itemContainer.GetEnemyDrop().itemPrefab, transform.position, Quaternion.identity);
+                    drop.transform.localScale = new Vector3(0.5f, 0.5f, 0.5f);
+                    drop.gameObject.SetActive(true);
+                } else {
+                    killsSinceLastDrop++;
+                }
             }
             isDead = true;
             return true;

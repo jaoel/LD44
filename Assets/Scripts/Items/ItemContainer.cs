@@ -16,7 +16,7 @@ public class ItemContainer : ScriptableObject {
 
     public ItemDescription GetEnemyDrop()
     {
-        List<ItemDescription> drops = new List<ItemDescription>() { MaxHealth, WeakHealthGlobe };
+        List<ItemDescription> drops = new List<ItemDescription>() { MaxHealth, WeakHealthGlobe, WeakHealthGlobe };
 
         return drops[Random.Range(0, drops.Count)];
     }
