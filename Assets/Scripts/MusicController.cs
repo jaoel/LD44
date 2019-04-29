@@ -64,10 +64,10 @@ public class MusicController : MonoBehaviour
                 while (_queuedCoroutines.Count > 0)
                 {
                     yield return StartCoroutine(_queuedCoroutines.Dequeue());
+                    yield return new WaitForSeconds(0.5f);
                 }
 
             }
-
             yield return null;
         }
     }
@@ -128,7 +128,7 @@ public class MusicController : MonoBehaviour
 
         source.clip = clip;
         source.loop = loop;
-        source.volume = 0.1f;
+        source.volume = 0.2f;
         source.time = time;
         source.Play();
 
@@ -154,7 +154,7 @@ public class MusicController : MonoBehaviour
 
     private IEnumerator FadeIn(AudioSource audioSource, float fadeTime)
     {
-        float startVolume = Math.Min(0.1f, SettingsManager.Instance.MusicVolume);
+        float startVolume = Math.Min(0.2f, SettingsManager.Instance.MusicVolume);
 
         audioSource.volume = 0;
         audioSource.Play();

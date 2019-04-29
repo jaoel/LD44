@@ -1,4 +1,5 @@
-﻿using UnityEngine;
+﻿/*
+using UnityEngine;
 using UnityEditor;
 using System.Collections.Generic;
 
@@ -67,3 +68,4 @@ public class SpriteCopy : EditorWindow {
 
     }
 }
+*/

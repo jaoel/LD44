@@ -149,7 +149,7 @@ public class Main : MonoBehaviour
 
     private void TogglePause(bool pause)
     {
-        Cursor.visible = _gamePaused;
+        Cursor.visible = pause;
 
         _gamePaused = pause;
         Time.timeScale = _gamePaused ? 0.0f : 1.0f;
