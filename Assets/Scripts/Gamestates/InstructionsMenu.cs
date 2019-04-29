@@ -16,6 +16,8 @@ public class InstructionsMenu : MonoBehaviour
     private void OnEnable()
     {
         previousButton.SetActive(false);
+        _currentPage = 0;
+        OnPageChanged();
     }
 
     public void OnMainMenuClick()
@@ -43,7 +45,9 @@ public class InstructionsMenu : MonoBehaviour
         {
             pageOne.SetActive(true);
             pageTwo.SetActive(false);
+            pageThree.SetActive(false);
             previousButton.SetActive(false);
+            nextButton.SetActive(true); 
         }
         else if (_currentPage == 1)
         {
