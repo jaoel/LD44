@@ -76,6 +76,12 @@ public class Map
         return new Vector3Int(x, y, -2);
     } 
 
+    public void SetTileColor(int x, int y)
+    {
+        _floor.SetTileFlags(new Vector3Int(x, y, 0), TileFlags.None);
+        _floor.SetColor(new Vector3Int(x, y, 0), Color.red);
+    }
+
     public void DrawPath(List<Vector2Int> path)
     {
         int index = 0;

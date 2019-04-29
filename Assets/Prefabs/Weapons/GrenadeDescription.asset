@@ -15,3 +15,6 @@ MonoBehaviour:
   Cooldown: 2
   BulletSpeed: 10
   BulletDescription: {fileID: 11400000, guid: 2bfab50801d162b4e95fb6690f75a61e, type: 2}
+  soundPrefab: {fileID: 6183662766363230291, guid: 8eec8414621577c4ba320ac50a5a5175,
+    type: 3}
+  loopSound: 0

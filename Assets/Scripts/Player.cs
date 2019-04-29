@@ -28,6 +28,7 @@ public class Player : MonoBehaviour
     private float _invulnTimer = float.MaxValue; 
 
     private float cooldownEndTime = 0f;
+    private GameObject _shotSound = null;
 
     public int Health {
         get {
@@ -97,6 +98,10 @@ public class Player : MonoBehaviour
             cooldownEndTime = Time.time + CurrentWeapon.Description.Cooldown;
             CurrentWeapon.Shoot(aimVector, transform.position, gameObject);
         }
+        else if (!Keybindings.Attack)
+        {
+            CurrentWeapon.StoppedShooting();
+        }
 
         UIManager.Instance.playerUI.SetHealthbar(currentHealth, maxHealth);
     }
@@ -118,7 +123,7 @@ public class Player : MonoBehaviour
         CalculateVelocity();
 
         if (_invulnTimer < invulnTime)
-            _invulnTimer += Time.deltaTime;
+            _invulnTimer += Time.deltaTime; 
     }
 
     private void CalculateInputVector() {
@@ -197,7 +202,7 @@ public class Player : MonoBehaviour
     {
         if (_invulnTimer >= invulnTime)
         {
-            CameraManager.Instance.ShakeCamera(1.0f, 0.3f, 0.3f);
+            CameraManager.Instance.ShakeCamera(1.0f, 0.3f, 1.0f);
 
             int loopCount = 10;
             Sequence colorFlashSequence = DOTween.Sequence();
@@ -216,6 +221,7 @@ public class Player : MonoBehaviour
 
             _invulnTimer = 0;
             Health -= damage;
+            SoundManager.Instance.PlayPainSound();
         }
     }
 }

@@ -205,6 +205,8 @@ public class Enemy : MonoBehaviour
 
     public virtual void ApplyDamage(int damage, Vector2 velocity)
     {
+        SoundManager.Instance.PlayPainSound();
+
         ParticleSystem bloodSpray = Instantiate(particleSystemContainer.bloodSpray, transform.position, Quaternion.identity);
 
         Vector3 dir = new Vector3(velocity.normalized.x, velocity.normalized.y, 0);

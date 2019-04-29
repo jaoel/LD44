@@ -33,8 +33,10 @@ public class CameraManager : MonoBehaviour {
     public void ShakeCamera(float duration, float positionStrength, float rotationStrength)
     {
         Sequence shake = DOTween.Sequence();
-        shake.Append(mainCamera.DOShakePosition(duration, positionStrength, 10, 90, true));
-        shake.Append(mainCamera.transform.DOLocalMove(Vector3.zero, 0.1f, true));
+        shake.Append(mainCamera.DOShakePosition(duration, positionStrength, 10, 90, false));
+        shake.Join(mainCamera.DOShakeRotation(duration, rotationStrength, 10, 90, false));
+        shake.Append(mainCamera.transform.DOLocalMove(Vector3.zero, 0.5f, true));
+        shake.Append(mainCamera.transform.DORotate(Vector3.zero, 0.5f));
         shake.Play();
     }
 

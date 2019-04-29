@@ -87,7 +87,6 @@ namespace Assets.Scripts
 
             PopulateMap(map, player, currentLevel);
             _enemies.ForEach(x => x.SetActive(true));
-
             return map;
         }
 

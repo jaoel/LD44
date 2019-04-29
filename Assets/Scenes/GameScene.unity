@@ -20,7 +20,7 @@ RenderSettings:
   m_FogDensity: 0.01
   m_LinearFogStart: 0
   m_LinearFogEnd: 300
-  m_AmbientSkyColor: {r: 0.212, g: 0.227, b: 0.259, a: 1}
+  m_AmbientSkyColor: {r: 0.00020680147, g: 0.0002221201, b: 0.00025275737, a: 1}
   m_AmbientEquatorColor: {r: 0.114, g: 0.125, b: 0.133, a: 1}
   m_AmbientGroundColor: {r: 0.047, g: 0.043, b: 0.035, a: 1}
   m_AmbientIntensity: 1
@@ -1184,6 +1184,126 @@ MonoBehaviour:
   gameOverUI: {fileID: 48898442}
   pauseUI: {fileID: 1241296000}
   currentLevelText: {fileID: 169685614}
+--- !u!82 &997353020
+AudioSource:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 997353018}
+  m_Enabled: 1
+  serializedVersion: 4
+  OutputAudioMixerGroup: {fileID: 0}
+  m_audioClip: {fileID: 0}
+  m_PlayOnAwake: 0
+  m_Volume: 0.2
+  m_Pitch: 1
+  Loop: 0
+  Mute: 0
+  Spatialize: 0
+  SpatializePostEffects: 0
+  Priority: 128
+  DopplerLevel: 1
+  MinDistance: 1
+  MaxDistance: 500
+  Pan2D: 0
+  rolloffMode: 0
+  BypassEffects: 0
+  BypassListenerEffects: 0
+  BypassReverbZones: 0
+  rolloffCustomCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 1
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    - serializedVersion: 3
+      time: 1
+      value: 0
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+  panLevelCustomCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 0
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+  spreadCustomCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 0
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+  reverbZoneMixCustomCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 1
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+--- !u!114 &997353021
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 997353018}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: bf0d1bb7fa8e172479c633c6d45e88ac, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  simpleShotSound: {fileID: 6183662766363230291, guid: 27bff07e65979fc4ead79e9f0bd94665,
+    type: 3}
+  machineGunSound: {fileID: 6183662766363230291, guid: d43c8df233e07374091e45c93a08ff52,
+    type: 3}
+  explosionSound: {fileID: 6183662766363230291, guid: 74fa3a0d1f0ca474cabec96b294d064b,
+    type: 3}
+  painSounds:
+  - {fileID: 8300000, guid: e20468a58edd39c4d8c36ba3f99233c0, type: 3}
+  - {fileID: 8300000, guid: 59aa4987c671b4b4ab68f37ab13da535, type: 3}
+  - {fileID: 8300000, guid: 309ed60defb64cc43a4551ba325d9fc0, type: 3}
+  - {fileID: 8300000, guid: 2aa6ac15ecbd532488ac5c524cba5d63, type: 3}
+  - {fileID: 8300000, guid: 5cd35c403a212d64bb87c9634535c62f, type: 3}
 --- !u!1 &1025264668
 GameObject:
   m_ObjectHideFlags: 0
@@ -2934,6 +3054,22 @@ PrefabInstance:
       propertyPath: m_Name
       value: Player UI
       objectReference: {fileID: 0}
+    - target: {fileID: 169685614, guid: 9614d92947da49d49986e225c3cbba6d, type: 3}
+      propertyPath: m_fontColor.r
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 169685614, guid: 9614d92947da49d49986e225c3cbba6d, type: 3}
+      propertyPath: m_fontColor.g
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 169685614, guid: 9614d92947da49d49986e225c3cbba6d, type: 3}
+      propertyPath: m_fontColor.b
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 169685614, guid: 9614d92947da49d49986e225c3cbba6d, type: 3}
+      propertyPath: m_fontColor32.rgba
+      value: 4294967295
+      objectReference: {fileID: 0}
     - target: {fileID: 672874102054855934, guid: 9614d92947da49d49986e225c3cbba6d,
         type: 3}
       propertyPath: m_LocalPosition.x
@@ -3118,22 +3254,6 @@ PrefabInstance:
         type: 3}
       propertyPath: m_AnchoredPosition.x
       value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 169685614, guid: 9614d92947da49d49986e225c3cbba6d, type: 3}
-      propertyPath: m_fontColor.r
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 169685614, guid: 9614d92947da49d49986e225c3cbba6d, type: 3}
-      propertyPath: m_fontColor.g
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 169685614, guid: 9614d92947da49d49986e225c3cbba6d, type: 3}
-      propertyPath: m_fontColor.b
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 169685614, guid: 9614d92947da49d49986e225c3cbba6d, type: 3}
-      propertyPath: m_fontColor32.rgba
-      value: 4294967295
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 9614d92947da49d49986e225c3cbba6d, type: 3}
@@ -4633,6 +4753,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3597447601227234659, guid: e6ff596c348b15841b93cc6f5790e643,
+        type: 3}
+      propertyPath: startHealth
+      value: 100
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: e6ff596c348b15841b93cc6f5790e643, type: 3}

@@ -43,6 +43,8 @@ public class ShootingEnemy : Enemy
 
     private void Shoot()
     {
+        SoundManager.Instance.PlayShotSound(false);
+
         Vector3 dirToPlayer = (_player.transform.position - transform.position);
         dirToPlayer.z = 0.0f;
         BulletManager.Instance.SpawnBullet(bulletDescription, transform.position, dirToPlayer.normalized * bulletSpeed, 
