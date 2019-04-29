@@ -151,7 +151,7 @@ SpriteRenderer:
   m_SortingOrder: 0
   m_Sprite: {fileID: 4334783836991956000, guid: 433ff036a6512e949a9388382064bf10,
     type: 3}
-  m_Color: {r: 1, g: 0.12319464, b: 0, a: 1}
+  m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
   m_FlipY: 0
   m_DrawMode: 0
@@ -171,7 +171,7 @@ Animator:
   m_GameObject: {fileID: 2542483224136131310}
   m_Enabled: 1
   m_Avatar: {fileID: 0}
-  m_Controller: {fileID: 9100000, guid: 3e57434743bf24c4f9b8b9681923095d, type: 2}
+  m_Controller: {fileID: 9100000, guid: 0fccffafc43e3b74ebbaf3c865694a8e, type: 2}
   m_CullingMode: 0
   m_UpdateMode: 0
   m_ApplyRootMotion: 0
@@ -283,4 +283,6 @@ MonoBehaviour:
   characterAnimation: {fileID: 1912241600459982146}
   bulletDescription: {fileID: 11400000, guid: 953cdf6ae09340c44915bc70bf6d95e3, type: 2}
   shotTimer: 0
+  reloadTimer: 3.4028235e+38
+  shotsFired: 0
   bulletSpeed: 10
