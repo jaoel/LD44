@@ -147,18 +147,18 @@ public class MusicController : MonoBehaviour
 
     private IEnumerator FadeIn(AudioSource audioSource, float fadeTime)
     {
-        float startVolume = Math.Min(0.1f, 0.2f);
+        float startVolume = Math.Min(0.1f, SettingsManager.Instance.MusicVolume);
 
         audioSource.volume = 0;
         audioSource.Play();
 
-        while (audioSource.volume < 0.2f)
+        while (audioSource.volume < SettingsManager.Instance.MusicVolume)
         {
             audioSource.volume += startVolume * Time.deltaTime / fadeTime;
 
             yield return null;
         }
 
-        audioSource.volume = 0.2f;
+        audioSource.volume = SettingsManager.Instance.MusicVolume;
     }
 }

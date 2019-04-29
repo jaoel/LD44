@@ -54,7 +54,7 @@ public class SoundManager : MonoBehaviour
 
     public void PlayItemPickup()
     {
-        _audioSource.PlayOneShot(itemPickup);
+        _audioSource.PlayOneShot(itemPickup, SettingsManager.Instance.SFXVolume);
     }
 
     public GameObject PlayShotSound(bool loop)
@@ -63,7 +63,10 @@ public class SoundManager : MonoBehaviour
             return null;
 
         GameObject go = GameObject.Instantiate(simpleShotSound);
-        Destroy(go, go.GetComponent<AudioSource>().clip.length);
+        AudioSource audioSource = go.GetComponent<AudioSource>();
+        audioSource.volume = SettingsManager.Instance.SFXVolume;
+
+        Destroy(go, audioSource.clip.length);
 
         shotSoundInstances.Add(go);
 
@@ -72,42 +75,47 @@ public class SoundManager : MonoBehaviour
 
     public void PlayMonsterAggro()
     {
-        _audioSource.PlayOneShot(monsterAggroSound);
+        _audioSource.PlayOneShot(monsterAggroSound, SettingsManager.Instance.SFXVolume);
     }
 
     public GameObject PlayExplosionSound()
     {
         GameObject go = GameObject.Instantiate(explosionSound);
-        Destroy(go, go.GetComponent<AudioSource>().clip.length);
+        AudioSource audioSource = go.GetComponent<AudioSource>();
+        audioSource.volume = SettingsManager.Instance.SFXVolume;
+
+        Destroy(go, audioSource.clip.length);
         return go;
     }
 
     public GameObject PlayMachinegun()
     {
         GameObject go = GameObject.Instantiate(machineGunSound);
-        Destroy(go, go.GetComponent<AudioSource>().clip.length);
+        AudioSource audioSource = go.GetComponent<AudioSource>();
+        audioSource.volume = SettingsManager.Instance.SFXVolume;
 
+        Destroy(go, audioSource.clip.length);
         return go;
     }
 
     public void PlayPainSound()
     {
         AudioClip temp = painSounds[UnityEngine.Random.Range(0, painSounds.Count)];
-        _audioSource.PlayOneShot(temp);
+        _audioSource.PlayOneShot(temp, SettingsManager.Instance.SFXVolume);
     }
 
     public void PlayMonsterPainSound()
     {
         AudioClip temp = monsterPainSounds[UnityEngine.Random.Range(0, monsterPainSounds.Count)];
-        _audioSource.PlayOneShot(temp);
+        _audioSource.PlayOneShot(temp, SettingsManager.Instance.SFXVolume);
     }
 
     public void PlayPlayerDeath(bool memes)
     {
         if (memes)
-            _audioSource.PlayOneShot(playerScream);
+            _audioSource.PlayOneShot(playerScream, SettingsManager.Instance.SFXVolume);
         else
-            _audioSource.PlayOneShot(playerDeath);
+            _audioSource.PlayOneShot(playerDeath, SettingsManager.Instance.SFXVolume);
     }
 
     public AudioSource PlaySound(GameObject prefab, bool loop)
@@ -117,12 +125,13 @@ public class SoundManager : MonoBehaviour
         {
             GameObject go = GameObject.Instantiate(prefab);
             AudioSource audioSource = go.GetComponent<AudioSource>();
+            audioSource.volume = SettingsManager.Instance.SFXVolume;
             audioSource.loop = true;
             return audioSource;
         }
         else
         {
-            _audioSource.PlayOneShot(prefab.GetComponent<AudioSource>().clip);
+            _audioSource.PlayOneShot(prefab.GetComponent<AudioSource>().clip, SettingsManager.Instance.SFXVolume);
             return null;
         }  
     }   

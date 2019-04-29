@@ -18,9 +18,6 @@ public class SlowTrap : Item
 
         Player player = owner.GetComponent<Player>();
 
-        if (player.IsInvulnerable)
-            return;
-
         if (player.Health > 0)
         {
             ApplyEffect(owner);
@@ -33,6 +30,7 @@ public class SlowTrap : Item
         Player player = owner.GetComponent<Player>();
         player.SetSlow(slowFactor, duration);
         GetComponent<SpriteRenderer>().sprite = triggeredSprite;
+        triggerSound.volume = SettingsManager.Instance.SFXVolume;
         triggerSound.Play();
     }
 }

@@ -3,16 +3,34 @@ using UnityEngine.SceneManagement;
 
 public class MainMenuController : MonoBehaviour
 {
+    public GameObject optionsMenu;
+
     public void Awake()
     {
         Cursor.visible = true;
         MusicController.Instance.PlayMusic("MainMenu");
     }
 
+    public void OnOptionsSaveClick()
+    {
+
+    }
+
+    public void OnCancelClick()
+    {
+
+    }   
+
+    public void OnOptionsClick()
+    {
+
+    }
+
     public void OnStartClick()
     {
         SceneManager.LoadScene("GameScene", LoadSceneMode.Single);
     }
+
 
     public void OnQuitClick()
     {
