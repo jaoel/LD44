@@ -21,6 +21,7 @@ public class MusicController : MonoBehaviour
     AudioClip _lastClip;
     float _lastTime;
 
+    private Queue<float> _fadeTimers;
     private Queue<IEnumerator> _queuedCoroutines;
 
     private static MusicController instance = null;
@@ -40,6 +41,7 @@ public class MusicController : MonoBehaviour
             }
 
             instance._queuedCoroutines = new Queue<IEnumerator>();
+            instance._fadeTimers = new Queue<float>();
             DontDestroyOnLoad(instance.gameObject);
             return instance;
         }
@@ -68,7 +70,7 @@ public class MusicController : MonoBehaviour
                 while (_queuedCoroutines.Count > 0)
                 {
                     yield return StartCoroutine(_queuedCoroutines.Dequeue());
-                    yield return new WaitForSeconds(0.5f);
+                    yield return new WaitForSeconds(_fadeTimers.Dequeue());
                 }
 
             }
@@ -87,6 +89,7 @@ public class MusicController : MonoBehaviour
 
     public void PlayMusic(string key, bool loop = true, float fadeTime = 0.2f)
     {
+        _fadeTimers.Enqueue(fadeTime);
         if (key == "MainMenu")
         {
             _queuedCoroutines.Enqueue(PlayMusicFade(_audioSource, menuMusic, loop, fadeTime));
