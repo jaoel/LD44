@@ -17,6 +17,10 @@ public class SlowTrap : Item
             return;
 
         Player player = owner.GetComponent<Player>();
+
+        if (player.IsInvulnerable)
+            return;
+
         if (player.Health > 0)
         {
             ApplyEffect(owner);

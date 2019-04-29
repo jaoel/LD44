@@ -156,6 +156,7 @@ namespace Assets.Scripts
                 _enemies.Add(GameObject.Instantiate(_enemyContainer.basicZombie, 
                     new Vector3(spawnPos.x, spawnPos.y, -2), Quaternion.identity));
                 _enemies[_enemies.Count - 1].SetActive(false);
+                _enemies[_enemies.Count - 1].GetComponent<Enemy>().maxSpeedMultiplier = Random.Range(0.9f, 1.2f);
             }
 
             for (int i = 0; i < shootingZombieCount; i++)

@@ -28,6 +28,7 @@ public class Enemy : MonoBehaviour
     private static int killsSinceLastDrop = 0;
 
     public bool IsAlive => !isDead;
+    public float maxSpeedMultiplier = 1.0f;
 
     protected virtual void Awake()
     {
@@ -176,9 +177,9 @@ public class Enemy : MonoBehaviour
     {
         _velocity += (_target - transform.position).normalized * description.acceleration * Time.deltaTime;
 
-        if (_velocity.magnitude > description.maxSpeed)
+        if (_velocity.magnitude > description.maxSpeed * maxSpeedMultiplier)
         {
-            _velocity = _velocity.normalized * description.maxSpeed;
+            _velocity = _velocity.normalized * description.maxSpeed * maxSpeedMultiplier;
         }
 
         _velocity.z = 0.0f;

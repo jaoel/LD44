@@ -33,6 +33,11 @@ public class Player : MonoBehaviour
     private float _slowTimer = float.MinValue;
     private float _slowFactor = float.MaxValue;
 
+    public bool IsInvulnerable
+    {
+        get { return _invulnTimer < invulnTime; }
+    }
+
     public int Health {
         get {
             return currentHealth;
