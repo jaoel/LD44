@@ -5,6 +5,7 @@ public class MainMenuController : MonoBehaviour
 {
     public void Awake()
     {
+        Cursor.visible = true;
         StartCoroutine(MusicController.Instance.PlayMusic("MainMenu"));
     }
 

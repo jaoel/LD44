@@ -14,6 +14,7 @@ public class SoundManager : MonoBehaviour
     public AudioClip monsterAggroSound;
     public AudioClip playerDeath;
     public AudioClip playerScream;
+    public AudioClip itemPickup;
 
     public List<AudioClip> painSounds;
     public List<AudioClip> monsterPainSounds;
@@ -49,6 +50,11 @@ public class SoundManager : MonoBehaviour
             if (shotSoundInstances[i] == null)
                 shotSoundInstances.RemoveAt(i);
         }
+    }
+
+    public void PlayItemPickup()
+    {
+        _audioSource.PlayOneShot(itemPickup);
     }
 
     public GameObject PlayShotSound(bool loop)

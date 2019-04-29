@@ -7,7 +7,7 @@ using UnityEngine;
 
 public class Reticle : MonoBehaviour
 {
-    private void FixedUpdate()
+    private void Update()
     {
         Vector3 position = Camera.main.ScreenToWorldPoint(Input.mousePosition);
         position.z = -5;

@@ -120,6 +120,7 @@ public class Main : MonoBehaviour
 
         if (!player.IsAlive && !_gameOver)
         {
+            Cursor.visible = true;
             _gameOver = true;
             if (MusicController.Instance != null)
                 StartCoroutine(MusicController.Instance.PlayMusic("Defeat", false));
