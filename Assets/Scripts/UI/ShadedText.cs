@@ -4,6 +4,7 @@ using System.Collections;
 [RequireComponent(typeof(TMPro.TextMeshProUGUI))]
 public class ShadedText : MonoBehaviour {
 
+    public float offset = 1;
     public Color colorLeft = Color.black;
     public Color colorRight = Color.black;
     public Color colorUp = Color.black;
@@ -25,22 +26,22 @@ public class ShadedText : MonoBehaviour {
         shadowLeft = Instantiate(textMesh, transform.parent);
         Destroy(shadowLeft.GetComponent<ShadedText>());
         shadowLeft.color = colorLeft;
-        shadowLeft.rectTransform.position = shadowLeft.rectTransform.position + Vector3.left;
+        shadowLeft.rectTransform.position = shadowLeft.rectTransform.position + Vector3.left * offset;
 
         shadowRight = Instantiate(textMesh, transform.parent);
         Destroy(shadowRight.GetComponent<ShadedText>());
         shadowRight.color = colorRight;
-        shadowRight.rectTransform.position = shadowRight.rectTransform.position + Vector3.right;
+        shadowRight.rectTransform.position = shadowRight.rectTransform.position + Vector3.right * offset;
 
         shadowUp = Instantiate(textMesh, transform.parent);
         Destroy(shadowUp.GetComponent<ShadedText>());
         shadowUp.color = colorUp;
-        shadowUp.rectTransform.position = shadowUp.rectTransform.position + Vector3.up;
+        shadowUp.rectTransform.position = shadowUp.rectTransform.position + Vector3.up * offset;
 
         shadowDown = Instantiate(textMesh, transform.parent);
         Destroy(shadowDown.GetComponent<ShadedText>());
         shadowDown.color = colorDown;
-        shadowDown.rectTransform.position = shadowDown.rectTransform.position + Vector3.down;
+        shadowDown.rectTransform.position = shadowDown.rectTransform.position + Vector3.down * offset;
 
         transform.SetAsLastSibling();
     }
