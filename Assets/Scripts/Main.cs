@@ -22,6 +22,7 @@ public class Main : MonoBehaviour
 
     public GameObject gameOverUI;
     public GameObject pauseUI;
+    public GameObject optionsMenu;
     public bool _gamePaused;
     public bool _gameOver;
     private ShopRoom shopInstance;
@@ -175,5 +176,12 @@ public class Main : MonoBehaviour
         TogglePause(false);
         gameOverUI.SetActive(false);
         SceneManager.LoadScene("MainMenuScene", LoadSceneMode.Single);
+    }
+
+    public void OnOptionsClick()
+    {
+        Cursor.visible = true;
+        optionsMenu.SetActive(true);
+        pauseUI.SetActive(false);
     }
 }

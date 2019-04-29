@@ -13,16 +13,6 @@ public class MainMenuController : MonoBehaviour
         MusicController.Instance.PlayMusic("MainMenu");
     }
 
-    public void OnOptionsSaveClick()
-    {
-
-    }
-
-    public void OnCancelClick()
-    {
-
-    }   
-
     public void OnCreditsClick()
     {
         creditsMenu.SetActive(!creditsMenu.activeInHierarchy);

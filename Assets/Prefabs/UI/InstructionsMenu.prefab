@@ -231,7 +231,7 @@ RectTransform:
   m_Father: {fileID: 750801220098647740}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0, y: 0.5}
+  m_AnchorMin: {x: 0, y: 0.7}
   m_AnchorMax: {x: 1, y: 1}
   m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: 0, y: 0}
@@ -264,7 +264,8 @@ MonoBehaviour:
       m_Calls: []
     m_TypeName: UnityEngine.UI.MaskableGraphic+CullStateChangedEvent, UnityEngine.UI,
       Version=1.0.0.0, Culture=neutral, PublicKeyToken=null
-  m_text: You can move around with WASD. Aim and shoot with you mouse.
+  m_text: You can move around with WASD. Aim and shoot with you mouse. Press Escape
+    to pause the game.
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 98b233c08f68c0549bdff35ba2286508, type: 2}
   m_sharedMaterial: {fileID: 3893677287675215031, guid: 98b233c08f68c0549bdff35ba2286508,
@@ -334,12 +335,12 @@ MonoBehaviour:
   m_margin: {x: 0, y: 0, z: 0, w: 0}
   m_textInfo:
     textComponent: {fileID: 6798424346275428502}
-    characterCount: 60
+    characterCount: 92
     spriteCount: 0
-    spaceCount: 11
-    wordCount: 12
+    spaceCount: 17
+    wordCount: 18
     linkCount: 0
-    lineCount: 3
+    lineCount: 4
     pageCount: 1
     materialCount: 1
   m_isUsingLegacyAnimationComponent: 0
@@ -1915,8 +1916,8 @@ RectTransform:
   m_Father: {fileID: 750801220098647740}
   m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0, y: 0}
-  m_AnchorMax: {x: 1, y: 0.5}
+  m_AnchorMin: {x: 0, y: 0.15}
+  m_AnchorMax: {x: 1, y: 0.65}
   m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: 0, y: 0}
   m_Pivot: {x: 0.5, y: 0.5}
@@ -1948,7 +1949,7 @@ MonoBehaviour:
       m_Calls: []
     m_TypeName: UnityEngine.UI.MaskableGraphic+CullStateChangedEvent, UnityEngine.UI,
       Version=1.0.0.0, Culture=neutral, PublicKeyToken=null
-  m_Sprite: {fileID: 0}
+  m_Sprite: {fileID: 21300000, guid: c67464ba76b1ba94882d65e5d7f106af, type: 3}
   m_Type: 0
   m_PreserveAspect: 0
   m_FillCenter: 1

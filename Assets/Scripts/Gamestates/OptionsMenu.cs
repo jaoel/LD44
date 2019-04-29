@@ -18,7 +18,8 @@ public class OptionsMenu : MonoBehaviour
         SettingsManager.Instance.SFXVolume = sfxVolumeSlider.value;
         SettingsManager.Instance.MusicVolume = musicVolumeSlider.value;
 
-        MusicController.Instance.SetVolume();
+        if (MusicController.Instance != null)
+            MusicController.Instance.SetVolume();
 
         previousMenu.SetActive(true);
         gameObject.SetActive(false);
