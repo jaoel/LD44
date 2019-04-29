@@ -10,8 +10,8 @@ public class Player : MonoBehaviour
     public float deceleration = 15f;
     public float invulnTime = 1.0f;
 
+    public CharacterAnimation characterAnimation;
     public Weapon CurrentWeapon;
-    public Animator animator;
 
     public int startHealth = 100;
 
@@ -103,9 +103,13 @@ public class Player : MonoBehaviour
 
     void FixedUpdate()
     {
-        if (!IsAlive)
-        {
-            rigidbody.velocity *= 0.95f * Time.deltaTime;
+        if (!IsAlive) {
+            if (velocity.magnitude > 0.001f) {
+                velocity -= velocity * 2.0f * Time.deltaTime;
+            } else {
+                velocity = Vector2.zero;
+            }
+            rigidbody.velocity = velocity;
             return;
         }
         dieDirection = rigidbody.velocity;
@@ -126,24 +130,32 @@ public class Player : MonoBehaviour
     }
 
     private void CalculateAnimation() {
+        CharacterAnimation.AnimationType type;
+        Vector2 direction;
+
         if (!IsAlive) {
-            int animationIndex = Mathf.RoundToInt((135f + Vector2.SignedAngle(new Vector2(1f, 1f).normalized, dieDirection)) / 90f);
-            animator.SetInteger("direction", animationIndex + 9);
+            type = CharacterAnimation.AnimationType.Die;
+            direction = dieDirection;
         } else {
             if (velocity.magnitude < 0.1f) {
                 if (Keybindings.Attack) {
-                    Vector2 direction = aimVector;
-                    int animationIndex = Mathf.RoundToInt((135f + Vector2.SignedAngle(new Vector2(1f, 1f).normalized, direction)) / 90f);
-                    animator.SetInteger("direction", animationIndex + 5);
+                    type = CharacterAnimation.AnimationType.Attack;
+                    direction = aimVector;
                 } else {
-                    animator.SetInteger("direction", 0);
+                    type = CharacterAnimation.AnimationType.Idle;
+                    direction = Vector2.down;
                 }
             } else {
-                Vector2 direction = Keybindings.Attack ? aimVector : (Vector2)velocity;
-                int animationIndex = Mathf.RoundToInt((135f + Vector2.SignedAngle(new Vector2(1f, 1f).normalized, direction)) / 90f);
-                animator.SetInteger("direction", animationIndex + 1);
+                type = CharacterAnimation.AnimationType.Run;
+                if (Keybindings.Attack) {
+                    direction = aimVector;
+                } else {
+                    direction = velocity;
+                }
             }
         }
+
+        characterAnimation.UpdateAnimation(type, direction);
     }
 
     private void CalculateDeceleration() {

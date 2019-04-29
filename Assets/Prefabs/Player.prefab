@@ -75,9 +75,9 @@ MonoBehaviour:
   acceleration: 25
   deceleration: 15
   invulnTime: 1
+  characterAnimation: {fileID: 6271302632493112618}
   CurrentWeapon: {fileID: 8576656811411399088, guid: 334ef3daf64cda543bd3fd358c1d13a6,
     type: 3}
-  animator: {fileID: 6780983900129160725}
   startHealth: 20
 --- !u!61 &901794245638907986
 BoxCollider2D:
@@ -132,6 +132,7 @@ GameObject:
   - component: {fileID: 4043862318088808966}
   - component: {fileID: 3515325667913201493}
   - component: {fileID: 6780983900129160725}
+  - component: {fileID: 6271302632493112618}
   m_Layer: 9
   m_Name: Visual
   m_TagString: Untagged
@@ -221,6 +222,18 @@ Animator:
   m_HasTransformHierarchy: 1
   m_AllowConstantClipSamplingOptimization: 1
   m_KeepAnimatorControllerStateOnDisable: 0
+--- !u!114 &6271302632493112618
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6820148234107622664}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ac3905d1abf196d44ac926ca3b3e9272, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &7286499555738583623
 GameObject:
   m_ObjectHideFlags: 0

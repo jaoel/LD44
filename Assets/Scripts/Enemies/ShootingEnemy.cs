@@ -20,7 +20,7 @@ public class ShootingEnemy : Enemy
             return;
 
         shotTimer += Time.deltaTime;
-        if (PlayerIsVisible() && shotTimer > description.shotCooldown)
+        if (IsAlive && PlayerIsVisible() && shotTimer > description.shotCooldown)
             Shoot();
 
         base.FixedUpdate();
@@ -33,5 +33,9 @@ public class ShootingEnemy : Enemy
         BulletManager.Instance.SpawnBullet(bulletDescription, transform.position, dirToPlayer.normalized * bulletSpeed, 
             gameObject);
         shotTimer = 0.0f;
+    }
+
+    protected override bool PlayAttackAnimation() {
+        return Vector2.Distance(_target, transform.position) < _stoppingDistance;
     }
 } 

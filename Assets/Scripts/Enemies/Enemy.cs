@@ -7,6 +7,7 @@ public class Enemy : MonoBehaviour
     public ParticleSystemContainer particleSystemContainer;
     public ItemContainer itemContainer;
     public EnemyDescription description;
+    public CharacterAnimation characterAnimation;
 
     private int _currentHealth;
     private int aStarCooldown = 0;
@@ -20,6 +21,11 @@ public class Enemy : MonoBehaviour
     protected new Rigidbody2D rigidbody;
 
     protected bool _hasAggro;
+
+    private Vector2 dieDirection = Vector2.down;
+    private bool isDead = false;
+
+    public bool IsAlive => !isDead;
 
     protected virtual void Awake()
     {
@@ -40,14 +46,29 @@ public class Enemy : MonoBehaviour
         _moveToTarget = true;
     }
 
+    private void SmoothStopVelocity() {
+        if (_velocity.magnitude > 0.001f) {
+            _velocity -= _velocity * 2.0f * Time.deltaTime;
+        } else {
+            _velocity = Vector2.zero;
+        }
+        rigidbody.velocity = _velocity;
+    }
+
     protected virtual void FixedUpdate()
     {
-        if (!_player.IsAlive)
+        CalculateAnimation();
+
+        if (!_player.IsAlive) {
+            SmoothStopVelocity();
             return;
+        }
 
         aStarCooldown--;
-        if (KillMe())
+        if (KillMe()) {
+            SmoothStopVelocity();
             return;
+        }
 
         CheckAggro();
 
@@ -151,7 +172,34 @@ public class Enemy : MonoBehaviour
         }
 
         _velocity.z = 0.0f;
-    } 
+    }
+
+    protected virtual bool PlayAttackAnimation() {
+        return Vector2.Distance(_target, transform.position) < 1f;
+    }
+
+    private void CalculateAnimation() {
+        CharacterAnimation.AnimationType type;
+        Vector2 direction;
+
+        if (!IsAlive) {
+            type = CharacterAnimation.AnimationType.Die;
+            direction = dieDirection;
+        } else {
+            if(PlayAttackAnimation()) {
+                type = CharacterAnimation.AnimationType.Attack;
+                direction = _target - transform.position;
+            } else if (_velocity.magnitude < 0.1f) {
+                type = CharacterAnimation.AnimationType.Idle;
+                direction = Vector2.down;
+            } else {
+                type = CharacterAnimation.AnimationType.Run;
+                direction = _velocity;
+            }
+        }
+
+        characterAnimation.UpdateAnimation(type, direction);
+    }
 
     public virtual void ApplyDamage(int damage, Vector2 velocity)
     {
@@ -163,20 +211,23 @@ public class Enemy : MonoBehaviour
         bloodSpray.Play();
 
         _currentHealth -= damage;
+        if(_currentHealth <= 0) {
+            dieDirection = velocity;
+            _velocity = dieDirection.normalized * 2.5f;
+        }
     }
 
     public virtual bool KillMe()
     {
         if (_currentHealth <= 0)
         {
-            if(Random.Range(0.0f, 1.0f) < 0.1f)
+            if(isDead == false && Random.Range(0.0f, 1.0f) < 0.25f)
             {
                 Item drop = Instantiate(itemContainer.GetEnemyDrop().itemPrefab, transform.position, Quaternion.identity);
                 drop.transform.localScale = new Vector3(0.5f, 0.5f, 0.5f);
                 drop.gameObject.SetActive(true);
             }
-
-            Destroy(gameObject);
+            isDead = true;
             return true;
         }
 
@@ -185,7 +236,7 @@ public class Enemy : MonoBehaviour
 
     private void OnCollisionStay2D(Collision2D collision)
     {
-        if (collision.gameObject.layer == LayerContainer.Instance.Layers["Player"])
+        if (IsAlive && collision.gameObject.layer == LayerContainer.Instance.Layers["Player"])
         {
             _player.ReceiveDamage(description.damage, -collision.contacts[0].normal);
         }

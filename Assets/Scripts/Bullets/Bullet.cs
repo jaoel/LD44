@@ -59,15 +59,22 @@ public class Bullet : MonoBehaviour {
         if(collision.gameObject == _owner)
             return;
 
+        bool active = false;
+
         if (collision.gameObject.layer == LayerContainer.Instance.Layers["Map"])
         {
             bulletBehaviour.BeforeDestroyed(null);
         }
         else if (collision.gameObject.layer == LayerContainer.Instance.Layers["Enemy"])
         {
-            collision.gameObject.GetComponent<Enemy>().ApplyDamage(description.damage, _velocity);
-            CameraManager.Instance.ShakeCamera(1.0f, 0.3f, 0.3f);
-            bulletBehaviour.BeforeDestroyed(collision.gameObject);
+            Enemy enemy = collision.gameObject.GetComponent<Enemy>();
+            if (enemy.IsAlive) {
+                collision.gameObject.GetComponent<Enemy>().ApplyDamage(description.damage, _velocity);
+                CameraManager.Instance.ShakeCamera(1.0f, 0.1f, 0.1f);
+                bulletBehaviour.BeforeDestroyed(collision.gameObject);
+            } else {
+                active = true;
+            }
         }
         else if (collision.gameObject.layer == LayerContainer.Instance.Layers["Player"])
         {
@@ -75,6 +82,6 @@ public class Bullet : MonoBehaviour {
             bulletBehaviour.BeforeDestroyed(collision.gameObject);
         }
 
-        gameObject.SetActive(false);
+        gameObject.SetActive(active);
     }
 }
