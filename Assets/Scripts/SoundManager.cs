@@ -11,8 +11,10 @@ public class SoundManager : MonoBehaviour
     public GameObject simpleShotSound;
     public GameObject machineGunSound;
     public GameObject explosionSound;
+    public AudioClip monsterAggroSound;
 
     public List<AudioClip> painSounds;
+    public List<AudioClip> monsterPainSounds;
 
     List<GameObject> shotSoundInstances = new List<GameObject>();
 
@@ -60,6 +62,11 @@ public class SoundManager : MonoBehaviour
         return go;
     }
 
+    public void PlayMonsterAggro()
+    {
+        _audioSource.PlayOneShot(monsterAggroSound);
+    }
+
     public GameObject PlayExplosionSound()
     {
         GameObject go = GameObject.Instantiate(explosionSound);
@@ -78,6 +85,12 @@ public class SoundManager : MonoBehaviour
     public void PlayPainSound()
     {
         AudioClip temp = painSounds[UnityEngine.Random.Range(0, painSounds.Count)];
+        _audioSource.PlayOneShot(temp);
+    }
+
+    public void PlayMonsterPainSound()
+    {
+        AudioClip temp = monsterPainSounds[UnityEngine.Random.Range(0, monsterPainSounds.Count)];
         _audioSource.PlayOneShot(temp);
     }
 

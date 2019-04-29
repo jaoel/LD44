@@ -115,6 +115,7 @@ public class Enemy : MonoBehaviour
         if (distance < description.aggroDistance && PlayerIsVisible())
         {
             _hasAggro = true;
+            SoundManager.Instance.PlayMonsterAggro();
         }                                                     
     }
 
@@ -205,7 +206,7 @@ public class Enemy : MonoBehaviour
 
     public virtual void ApplyDamage(int damage, Vector2 velocity)
     {
-        SoundManager.Instance.PlayPainSound();
+        SoundManager.Instance.PlayMonsterPainSound();
 
         ParticleSystem bloodSpray = Instantiate(particleSystemContainer.bloodSpray, transform.position, Quaternion.identity);
 

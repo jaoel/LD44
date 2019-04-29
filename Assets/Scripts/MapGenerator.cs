@@ -118,10 +118,17 @@ namespace Assets.Scripts
         void PopulateMap(Map map, Player player, int currentLevel)
         { 
             int enemyCount = 0;
+            int shootingZombieCount = 0;
             if (currentLevel <= 5)
+            {
                 enemyCount = (int)(5 + Math.Pow(1.5, 1.5 * currentLevel));
+                shootingZombieCount = (currentLevel - 1) * 2;
+            }
             else
+            {
                 enemyCount = (int)(15 + 10 * Math.Log(currentLevel));
+                shootingZombieCount = enemyCount;
+            }
 
             for (int i = 0; i < enemyCount; i++)
             {
@@ -137,20 +144,17 @@ namespace Assets.Scripts
                 _enemies[_enemies.Count - 1].SetActive(false);
             }
 
-            if (currentLevel > 2)
+            for (int i = 0; i < shootingZombieCount; i++)
             {
-                for (int i = 0; i < enemyCount; i++)
+                Vector3Int spawnPos = map.GetOpenPositionInRoom(1, 1);
+                while (Vector3.Distance(spawnPos, player.transform.position) < 10)
                 {
-                    Vector3Int spawnPos = map.GetOpenPositionInRoom(1, 1);
-                    while (Vector3.Distance(spawnPos, player.transform.position) < 10)
-                    {
-                        spawnPos = map.GetOpenPositionInRoom(2, 2);
-                    }
-                    _enemies.Add(GameObject.Instantiate(_enemyContainer.shootingZombie,
-                        new Vector3(spawnPos.x, spawnPos.y, -2), Quaternion.identity));
-                    _enemies[_enemies.Count - 1].SetActive(false);
+                    spawnPos = map.GetOpenPositionInRoom(2, 2);
                 }
-            } 
+                _enemies.Add(GameObject.Instantiate(_enemyContainer.shootingZombie,
+                    new Vector3(spawnPos.x, spawnPos.y, -2), Quaternion.identity));
+                _enemies[_enemies.Count - 1].SetActive(false);
+            }
         }
 
         void GenerateFloor(int width, int height)
