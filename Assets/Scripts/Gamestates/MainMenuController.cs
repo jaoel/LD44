@@ -5,12 +5,12 @@ public class MainMenuController : MonoBehaviour
 {
     public void Awake()
     {
-        MusicController.Instance.PlayMusic("MainMenu");
+        StartCoroutine(MusicController.Instance.PlayMusic("MainMenu"));
     }
 
     public void OnStartClick()
     {
-        MusicController.Instance.PlayMusic("RandomGameplay", false);
+        StartCoroutine(MusicController.Instance.PlayMusic("RandomGameplay", false));
         SceneManager.LoadScene("GameScene", LoadSceneMode.Single);
     }
 

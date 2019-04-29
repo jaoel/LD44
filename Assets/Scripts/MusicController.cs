@@ -9,12 +9,20 @@ using UnityEngine;
 public class MusicController : MonoBehaviour
 {
     public AudioClip menuMusic;
+    public AudioClip shopMusic;
     public AudioClip deathJingle;
     public List<AudioClip> gameMusic;
 
-    private AudioSource _audioSource;
+    public AudioSource _audioSource;
+    public AudioSource shopMusicSource;
+
     bool _fadingOutMusic = false;
     bool _playingGameplayMusic;
+
+    AudioClip _lastClip;
+    float _lastTime;
+
+    Coroutine _running = null;
 
     private static MusicController instance = null;
     public static MusicController Instance
@@ -30,71 +38,82 @@ public class MusicController : MonoBehaviour
             {
                 Debug.LogError("The scene needs a MusicController");
                 return null;
-            }    
+            }
 
             DontDestroyOnLoad(instance.gameObject);
-            instance._audioSource = instance.gameObject.GetComponent<AudioSource>();
             return instance;
         }
     }
 
-    public void PlayMenuMusic()
-    {
-        _audioSource.clip = menuMusic;
-        _audioSource.Play();
-    }
-
     private void FixedUpdate()
     {
-        if (_playingGameplayMusic && _audioSource.clip.length - _audioSource.time < 1.0f && !_fadingOutMusic)
+        if (_playingGameplayMusic && _audioSource.clip?.length - _audioSource?.time < 1.0f && !_fadingOutMusic)
         {
-            PlayMusic("RandomGameplay", false, 1.0f);
+            StartCoroutine(PlayMusic("RandomGameplay", false, 1.0f));
         }
     }
 
-    public void PlayMusic(string key, bool loop = true, float fadeTime = 0.2f)
+    public IEnumerator PlayMusic(string key, bool loop = true, float fadeTime = 0.2f)
     {
-        _playingGameplayMusic = false;
+        while (_running != null)
+            yield return new WaitForSeconds(0.01f);   
 
+        _playingGameplayMusic = false;      
         if (key == "MainMenu")
         {
-            StartCoroutine(PlayMusicFade(menuMusic, loop, fadeTime));
+            _running = StartCoroutine(PlayMusicFade(_audioSource, menuMusic, loop, fadeTime));
         }
         else if (key == "RandomGameplay")
         {
-            StartCoroutine(PlayMusicFade(gameMusic[UnityEngine.Random.Range(0, gameMusic.Count)], loop, fadeTime));
+            _running = StartCoroutine(PlayMusicFade(_audioSource, gameMusic[UnityEngine.Random.Range(0, gameMusic.Count)], 
+                loop, fadeTime));
             _playingGameplayMusic = true;
         }
         else if (key == "Defeat")
         {
-            StartCoroutine(PlayMusicFade(deathJingle, loop, fadeTime));
+            _running = StartCoroutine(PlayMusicFade(_audioSource, deathJingle, loop, fadeTime));
+        }
+        else if (key == "Shop")
+        {                                                                                        
+            _lastClip = _audioSource.clip;
+            _lastTime = _audioSource.time;
+
+            _running = StartCoroutine(PlayMusicFade(_audioSource, shopMusic, loop, fadeTime));
+        }
+        else if (key == "ResumeGameplay")
+        {
+            _playingGameplayMusic = true;
+            _running = StartCoroutine(PlayMusicFade(_audioSource, _lastClip, loop, fadeTime, _lastTime));
         }
     }
 
-    private IEnumerator PlayMusicFade(AudioClip clip, bool loop, float fadeTime)
+    private IEnumerator PlayMusicFade(AudioSource source, AudioClip clip, bool loop, float fadeTime, float time = 0.0f)
     {
         while (_fadingOutMusic)
+        {
             yield return new WaitForSeconds(0.01f);
+        }
 
         float fadeHalfTime = fadeTime / 2.0f;
 
-        if (_audioSource.isPlaying)
+        if (source.isPlaying)
         {
-            StartCoroutine(FadeOut(_audioSource, fadeHalfTime));
+            StartCoroutine(FadeOut(source, fadeHalfTime));
 
             yield return new WaitForSeconds(fadeHalfTime);
         }
 
-        _audioSource.clip = clip;
-        _audioSource.loop = loop;
-        _audioSource.volume = 0.1f;
-        _audioSource.Play();
+        source.clip = clip;
+        source.loop = loop;
+        source.volume = 0.1f;
+        source.time = time;
+        source.Play();
 
-        StartCoroutine(FadeIn(_audioSource, fadeHalfTime));
+        StartCoroutine(FadeIn(source, fadeHalfTime));
         yield break;
     }
 
-    private IEnumerator FadeOut(AudioSource audioSource, float fadeTime)
+    private IEnumerator FadeOut(AudioSource audioSource,float fadeTime)
     {
         _fadingOutMusic = true;
         float startVolume = audioSource.volume;
@@ -108,6 +127,7 @@ public class MusicController : MonoBehaviour
         audioSource.Stop();
         audioSource.volume = startVolume;
         _fadingOutMusic = false;
+        _running = null;
     }
 
     private IEnumerator FadeIn(AudioSource audioSource, float fadeTime)
