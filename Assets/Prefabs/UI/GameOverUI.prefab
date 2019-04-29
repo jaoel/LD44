@@ -36,7 +36,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 1}
   m_AnchorMax: {x: 0, y: 1}
-  m_AnchoredPosition: {x: 211.20001, y: -347.3}
+  m_AnchoredPosition: {x: 267.465, y: -380.09998}
   m_SizeDelta: {x: 200, y: 50}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &2183789774801504709
@@ -209,8 +209,8 @@ MonoBehaviour:
   m_fontMaterials: []
   m_fontColor32:
     serializedVersion: 2
-    rgba: 4293760356
-  m_fontColor: {r: 0.39215687, g: 0.58431375, b: 0.92941177, a: 1}
+    rgba: 4291740354
+  m_fontColor: {r: 0.76157, g: 0.76157, b: 0.8113208, a: 1}
   m_enableVertexGradient: 0
   m_colorMode: 3
   m_fontColorGradient:
@@ -269,13 +269,13 @@ MonoBehaviour:
   m_margin: {x: 0, y: 0, z: 0, w: 0}
   m_textInfo:
     textComponent: {fileID: 6697936483437002022}
-    characterCount: 0
+    characterCount: 9
     spriteCount: 0
-    spaceCount: 0
-    wordCount: 0
+    spaceCount: 1
+    wordCount: 2
     linkCount: 0
-    lineCount: 0
-    pageCount: 0
+    lineCount: 2
+    pageCount: 1
     materialCount: 1
   m_isUsingLegacyAnimationComponent: 0
   m_isVolumetricText: 0
@@ -385,8 +385,8 @@ MonoBehaviour:
   m_fontMaterials: []
   m_fontColor32:
     serializedVersion: 2
-    rgba: 4293760356
-  m_fontColor: {r: 0.39215687, g: 0.58431375, b: 0.92941177, a: 1}
+    rgba: 4291740354
+  m_fontColor: {r: 0.76157, g: 0.76157, b: 0.8113208, a: 1}
   m_enableVertexGradient: 0
   m_colorMode: 3
   m_fontColorGradient:
@@ -445,13 +445,13 @@ MonoBehaviour:
   m_margin: {x: 0, y: 0, z: 0, w: 0}
   m_textInfo:
     textComponent: {fileID: 7137932460511831012}
-    characterCount: 0
+    characterCount: 29
     spriteCount: 0
-    spaceCount: 0
-    wordCount: 0
+    spaceCount: 3
+    wordCount: 4
     linkCount: 0
-    lineCount: 0
-    pageCount: 0
+    lineCount: 1
+    pageCount: 1
     materialCount: 1
   m_isUsingLegacyAnimationComponent: 0
   m_isVolumetricText: 0
@@ -519,7 +519,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 1}
   m_AnchorMax: {x: 0, y: 1}
-  m_AnchoredPosition: {x: 211.20001, y: -197.7}
+  m_AnchoredPosition: {x: 267.465, y: -230.49998}
   m_SizeDelta: {x: 364.25, y: 42.300003}
   m_Pivot: {x: 0.5, y: 1}
 --- !u!222 &3160731554111107529
@@ -566,7 +566,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 1}
   m_AnchorMax: {x: 0, y: 1}
-  m_AnchoredPosition: {x: 211.20001, y: -417.3}
+  m_AnchoredPosition: {x: 267.465, y: -450.09998}
   m_SizeDelta: {x: 200, y: 50}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &3160731554476525507
@@ -773,6 +773,7 @@ GameObject:
   - component: {fileID: 3160731555055413849}
   - component: {fileID: 3160731555055413847}
   - component: {fileID: 3160731555055413846}
+  - component: {fileID: 2757073491482574193}
   m_Layer: 5
   m_Name: Text
   m_TagString: Untagged
@@ -897,13 +898,13 @@ MonoBehaviour:
   m_margin: {x: 0, y: 0, z: 0, w: 0}
   m_textInfo:
     textComponent: {fileID: 3160731555055413846}
-    characterCount: 0
+    characterCount: 9
     spriteCount: 0
-    spaceCount: 0
-    wordCount: 0
+    spaceCount: 1
+    wordCount: 2
     linkCount: 0
-    lineCount: 0
-    pageCount: 0
+    lineCount: 1
+    pageCount: 1
     materialCount: 1
   m_isUsingLegacyAnimationComponent: 0
   m_isVolumetricText: 0
@@ -920,6 +921,23 @@ MonoBehaviour:
   - {fileID: 0}
   m_baseMaterial: {fileID: 0}
   m_maskOffset: {x: 0, y: 0, z: 0, w: 0}
+--- !u!114 &2757073491482574193
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3160731555055413848}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8eaa686a7f346c84fa59d1c1c7997d57, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  offset: 2
+  colorLeft: {r: 0, g: 0, b: 0, a: 1}
+  colorRight: {r: 0, g: 0, b: 0, a: 1}
+  colorUp: {r: 0, g: 0, b: 0, a: 1}
+  colorDown: {r: 0, g: 0, b: 0, a: 1}
 --- !u!1 &3160731555286187913
 GameObject:
   m_ObjectHideFlags: 0
@@ -1058,7 +1076,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 1}
   m_AnchorMax: {x: 0, y: 1}
-  m_AnchoredPosition: {x: 211.20001, y: -260}
+  m_AnchoredPosition: {x: 267.465, y: -292.8}
   m_SizeDelta: {x: 364.25, y: 42.300003}
   m_Pivot: {x: 0.5, y: 1}
 --- !u!222 &2088578663101396655
@@ -1080,6 +1098,7 @@ GameObject:
   - component: {fileID: 4946875116434786233}
   - component: {fileID: 3945021604032361121}
   - component: {fileID: 4172096986794713552}
+  - component: {fileID: 5093634715155127272}
   m_Layer: 5
   m_Name: Text
   m_TagString: Untagged
@@ -1204,13 +1223,13 @@ MonoBehaviour:
   m_margin: {x: 0, y: 0, z: 0, w: 0}
   m_textInfo:
     textComponent: {fileID: 4172096986794713552}
-    characterCount: 0
+    characterCount: 7
     spriteCount: 0
     spaceCount: 0
-    wordCount: 0
+    wordCount: 1
     linkCount: 0
-    lineCount: 0
-    pageCount: 0
+    lineCount: 1
+    pageCount: 1
     materialCount: 1
   m_isUsingLegacyAnimationComponent: 0
   m_isVolumetricText: 0
@@ -1227,3 +1246,20 @@ MonoBehaviour:
   - {fileID: 0}
   m_baseMaterial: {fileID: 0}
   m_maskOffset: {x: 0, y: 0, z: 0, w: 0}
+--- !u!114 &5093634715155127272
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 9121183804564502832}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8eaa686a7f346c84fa59d1c1c7997d57, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  offset: 2
+  colorLeft: {r: 0, g: 0, b: 0, a: 1}
+  colorRight: {r: 0, g: 0, b: 0, a: 1}
+  colorUp: {r: 0, g: 0, b: 0, a: 1}
+  colorDown: {r: 0, g: 0, b: 0, a: 1}
