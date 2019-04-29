@@ -5,6 +5,7 @@ public class MainMenuController : MonoBehaviour
 {
     public GameObject optionsMenu;
     public GameObject instructionsMenu;
+    public GameObject creditsMenu;
 
     public void Awake()
     {
@@ -21,6 +22,12 @@ public class MainMenuController : MonoBehaviour
     {
 
     }   
+
+    public void OnCreditsClick()
+    {
+        creditsMenu.SetActive(!creditsMenu.activeInHierarchy);
+        gameObject.SetActive(!gameObject.activeInHierarchy);
+    }
 
     public void OnInstructionsClick()
     {
