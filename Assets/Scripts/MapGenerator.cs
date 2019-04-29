@@ -151,8 +151,9 @@ namespace Assets.Scripts
                 {
                     spawnPos = map.GetOpenPositionInRoom(2, 2);
                 }
-                _enemies.Add(GameObject.Instantiate(_enemyContainer.shootingZombie,
-                    new Vector3(spawnPos.x, spawnPos.y, -2), Quaternion.identity));
+
+                GameObject type = Random.Range(0.0f, 1.0f) < 0.5f ? _enemyContainer.shootingZombie : _enemyContainer.shotgunZombie;
+                _enemies.Add(GameObject.Instantiate(type, new Vector3(spawnPos.x, spawnPos.y, -2), Quaternion.identity));
                 _enemies[_enemies.Count - 1].SetActive(false);
             }
         }

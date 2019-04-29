@@ -16,3 +16,5 @@ MonoBehaviour:
     type: 3}
   shootingZombie: {fileID: 7125115978298190037, guid: 6845328107654aa4698bb1993c252619,
     type: 3}
+  shotgunZombie: {fileID: 7125115978298190037, guid: 159dec3a033257a499f02b1c9177cfdf,
+    type: 3}

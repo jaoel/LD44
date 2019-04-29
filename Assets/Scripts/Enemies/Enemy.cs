@@ -16,7 +16,7 @@ public class Enemy : MonoBehaviour
     protected bool _followPath = false;
     protected bool _moveToTarget = false;
     protected Vector3 _velocity = Vector3.zero;
-    protected float _stoppingDistance = 0.5f;
+    protected float _stoppingDistance = 1.0f;
     protected Player _player;
     protected new Rigidbody2D rigidbody;
 
@@ -140,6 +140,10 @@ public class Enemy : MonoBehaviour
         if (_target != Vector3.zero && _moveToTarget)
         {
             float sqrDistToTarget = (_target - transform.position).magnitude;
+            float stoppingDistance = _stoppingDistance;
+            if (!_followPath)
+                stoppingDistance = 0;
+
             if (sqrDistToTarget <= _stoppingDistance)
             {
                 if (_followPath && _path.Count > 0)

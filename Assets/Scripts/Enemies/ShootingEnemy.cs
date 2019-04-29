@@ -41,7 +41,7 @@ public class ShootingEnemy : Enemy
         base.FixedUpdate();
     }
 
-    private void Shoot()
+    protected virtual void Shoot()
     {
         SoundManager.Instance.PlayShotSound(false);
 

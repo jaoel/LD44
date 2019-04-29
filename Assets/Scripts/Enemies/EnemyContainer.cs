@@ -5,4 +5,5 @@ public class EnemyContainer : ScriptableObject
 {
     public GameObject basicZombie;
     public GameObject shootingZombie;
-} 
+    public GameObject shotgunZombie;
+}
