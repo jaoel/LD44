@@ -74,7 +74,16 @@ public class Main : MonoBehaviour
         Cursor.visible = false;
 
         if (MusicController.Instance != null)
-            StartCoroutine(MusicController.Instance.PlayMusic("ResumeGameplay", false, 1.0f));
+        {
+            if (_currentLevel == 0)
+            {
+                MusicController.Instance.PlayMusic("RandomGameplay", false);
+            }
+            else
+            {
+                MusicController.Instance.PlayMusic("ResumeGameplay", false, 1.0f);
+            }
+        }  
 
         _currentLevel++;
         currentLevelText.text = "#" + _currentLevel;
@@ -89,7 +98,7 @@ public class Main : MonoBehaviour
         _mapGen.Clear();
 
         if (MusicController.Instance != null)
-            StartCoroutine(MusicController.Instance.PlayMusic("Shop"));
+            MusicController.Instance.PlayMusic("Shop");
 
         shopInstance.gameObject.SetActive(true);
         shopInstance.GenerateRandomItems(_currentLevel);
@@ -127,8 +136,10 @@ public class Main : MonoBehaviour
         {
             Cursor.visible = true;
             _gameOver = true;
+
             if (MusicController.Instance != null)
-                StartCoroutine(MusicController.Instance.PlayMusic("Defeat", false));
+                MusicController.Instance.PlayMusic("Defeat", false);
+
             gameOverUI.SetActive(true);
             currentLevelText.gameObject.SetActive(false);
             GameObject.Find("GameOverLevel").GetComponent<TextMeshProUGUI>().text = "You reached level #" + _currentLevel; 
@@ -154,8 +165,7 @@ public class Main : MonoBehaviour
         Cursor.visible = true;
         TogglePause(false);
         gameOverUI.SetActive(false);
-        if (MusicController.Instance != null)
-            StartCoroutine(MusicController.Instance.PlayMusic("RandomGameplay"));
+                                                                       
         SceneManager.LoadScene("GameScene", LoadSceneMode.Single);
     }
 

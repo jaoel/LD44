@@ -23,6 +23,7 @@ public class MusicController : MonoBehaviour
     float _lastTime;
 
     Coroutine _running = null;
+    private Queue<IEnumerator> _queuedCoroutines;
 
     private static MusicController instance = null;
     public static MusicController Instance
@@ -45,45 +46,60 @@ public class MusicController : MonoBehaviour
         }
     }
 
-    private void FixedUpdate()
+    private void Awake()
     {
-        if (_playingGameplayMusic && _audioSource.clip?.length - _audioSource?.time < 1.0f && !_fadingOutMusic)
+        _queuedCoroutines = new Queue<IEnumerator>();
+        StartCoroutine(ProcessCoroutines());
+    }
+
+    private IEnumerator ProcessCoroutines()
+    {
+        while(true)
         {
-            StartCoroutine(PlayMusic("RandomGameplay", false, 1.0f));
+            while(_queuedCoroutines.Count > 0)
+            {
+                yield return StartCoroutine(_queuedCoroutines.Dequeue());
+            }
+
+            yield return null;
         }
     }
 
-    public IEnumerator PlayMusic(string key, bool loop = true, float fadeTime = 0.2f)
+    private void FixedUpdate()
     {
-        while (_running != null)
-            yield return new WaitForSeconds(0.01f);   
+        if (_playingGameplayMusic && _audioSource.clip?.length - _audioSource?.time < 1.0f)
+        {
+            PlayMusic("RandomGameplay", false, 1.0f);
+            _playingGameplayMusic = false;
+        }
+    }
 
-        _playingGameplayMusic = false;      
+    public void PlayMusic(string key, bool loop = true, float fadeTime = 0.2f)
+    {
         if (key == "MainMenu")
         {
-            _running = StartCoroutine(PlayMusicFade(_audioSource, menuMusic, loop, fadeTime));
+            _queuedCoroutines.Enqueue(PlayMusicFade(_audioSource, menuMusic, loop, fadeTime));
         }
         else if (key == "RandomGameplay")
         {
-            _running = StartCoroutine(PlayMusicFade(_audioSource, gameMusic[UnityEngine.Random.Range(0, gameMusic.Count)], 
+            _queuedCoroutines.Enqueue(PlayMusicFade(_audioSource, gameMusic[UnityEngine.Random.Range(0, gameMusic.Count)],
                 loop, fadeTime));
-            _playingGameplayMusic = true;
         }
         else if (key == "Defeat")
         {
-            _running = StartCoroutine(PlayMusicFade(_audioSource, deathJingle, loop, fadeTime));
+            _queuedCoroutines.Enqueue(PlayMusicFade(_audioSource, deathJingle, loop, fadeTime));
         }
         else if (key == "Shop")
         {                                                                                        
             _lastClip = _audioSource.clip;
             _lastTime = _audioSource.time;
 
-            _running = StartCoroutine(PlayMusicFade(_audioSource, shopMusic, loop, fadeTime));
+            _queuedCoroutines.Enqueue(PlayMusicFade(_audioSource, shopMusic, loop, fadeTime));
         }
         else if (key == "ResumeGameplay")
         {
             _playingGameplayMusic = true;
-            _running = StartCoroutine(PlayMusicFade(_audioSource, _lastClip, loop, fadeTime, _lastTime));
+            _queuedCoroutines.Enqueue(PlayMusicFade(_audioSource, _lastClip, loop, fadeTime, _lastTime));
         }
     }
 
@@ -127,7 +143,6 @@ public class MusicController : MonoBehaviour
         audioSource.Stop();
         audioSource.volume = startVolume;
         _fadingOutMusic = false;
-        _running = null;
     }
 
     private IEnumerator FadeIn(AudioSource audioSource, float fadeTime)

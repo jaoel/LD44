@@ -124,7 +124,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   Description: {fileID: 11400000, guid: 7d6cc3c05224ff84ebb0c98c63265917, type: 2}
   isShopItem: 0
-  triggeredSprite: {fileID: 0}
+  triggeredSprite: {fileID: -7856929743142508662, guid: cf18b569056ed814e86e3ead606781d7,
+    type: 3}
   damage: 10
 --- !u!114 &-2143149718446498013
 MonoBehaviour:
