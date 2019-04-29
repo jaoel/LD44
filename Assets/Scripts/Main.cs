@@ -23,6 +23,7 @@ public class Main : MonoBehaviour
     public GameObject gameOverUI;
     public GameObject pauseUI;
     public bool _gamePaused;
+    public bool _gameOver;
     private ShopRoom shopInstance;
     public TextMeshProUGUI currentLevelText;
 
@@ -43,7 +44,7 @@ public class Main : MonoBehaviour
         }
     }
 
-    void Start()
+    void Awake()
     {
         DOTween.Init();
 
@@ -109,8 +110,10 @@ public class Main : MonoBehaviour
             TogglePause(!_gamePaused);
         }
 
-        if (!player.IsAlive)
+        if (!player.IsAlive && !_gameOver)
         {
+            _gameOver = true;
+            MusicController.Instance.PlayMusic("Defeat", false);
             gameOverUI.SetActive(true);
             currentLevelText.gameObject.SetActive(false);
             GameObject.Find("GameOverLevel").GetComponent<TextMeshProUGUI>().text = "You reached level #" + _currentLevel; 
@@ -133,12 +136,14 @@ public class Main : MonoBehaviour
     {
         TogglePause(false);
         gameOverUI.SetActive(false);
+        MusicController.Instance.PlayMusic("RandomGameplay", false);
         SceneManager.LoadScene("GameScene", LoadSceneMode.Single);
     }
 
     public void OnClickReturnToMainMenu()
     {
         TogglePause(false);
+        gameOverUI.SetActive(false);
         SceneManager.LoadScene("MainMenuScene", LoadSceneMode.Single);
     }
 }

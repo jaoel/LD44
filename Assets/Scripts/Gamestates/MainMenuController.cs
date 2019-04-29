@@ -2,9 +2,15 @@
 using UnityEngine.SceneManagement;
 
 public class MainMenuController : MonoBehaviour
-{               
+{
+    public void Awake()
+    {
+        MusicController.Instance.PlayMusic("MainMenu");
+    }
+
     public void OnStartClick()
     {
+        MusicController.Instance.PlayMusic("RandomGameplay", false);
         SceneManager.LoadScene("GameScene", LoadSceneMode.Single);
     }
 
