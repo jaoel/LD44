@@ -12,7 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4dc7c6dbe1557df42a233300cc4c0797, type: 3}
   m_Name: SimpleEnemyBullet
   m_EditorClassIdentifier: 
-  bulletPrefab: {fileID: 218029869677474905, guid: ec04619b4154c1f43b9d8ed7e1796bc9,
+  bulletPrefab: {fileID: 218029869677474905, guid: f83386662f640f54881845b86cd356ec,
     type: 3}
   lifetime: 5
   size: {x: 1, y: 1}
