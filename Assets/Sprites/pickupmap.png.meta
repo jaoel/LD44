@@ -34,7 +34,7 @@ TextureImporter:
     second: pickupmap_skull
   - first:
       213: -1318383466778419210
-    second: pickupmap_10
+    second: pickupmap_small_health
   - first:
       213: -9188421406288508534
     second: pickupmap_11
@@ -497,7 +497,7 @@ TextureImporter:
       edges: []
       weights: []
     - serializedVersion: 2
-      name: pickupmap_10
+      name: pickupmap_small_health
       rect:
         serializedVersion: 2
         x: 64
