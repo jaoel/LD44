@@ -28,11 +28,10 @@ public class Player : MonoBehaviour
     private float _invulnTimer = float.MaxValue; 
 
     private float cooldownEndTime = 0f;
-    private GameObject _shotSound = null;
     
     public float firingRateModifier = 1.0f;
-    private float _slowTimer = 0.0f;
-    private float _slowFactor = 0.0f;
+    private float _slowTimer = float.MinValue;
+    private float _slowFactor = float.MaxValue;
 
     public int Health {
         get {
@@ -207,12 +206,17 @@ public class Player : MonoBehaviour
             _slowTimer -= Time.deltaTime;
             velocity *= _slowFactor;
         }
+        else
+            _slowFactor = float.MaxValue;
 
         rigidbody.velocity = velocity;
     }
 
     public void SetSlow(float slowFactor, float slowTimer)
     {
+        if (slowFactor > _slowFactor && _slowTimer > 0.0f)
+            return;
+
         _slowFactor = slowFactor;
         _slowTimer = slowTimer;
     }
