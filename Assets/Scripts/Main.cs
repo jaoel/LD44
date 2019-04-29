@@ -66,6 +66,8 @@ public class Main : MonoBehaviour
 
     public void GenerateMap()
     {
+        Cursor.visible = false;
+
         if (MusicController.Instance != null)
             StartCoroutine(MusicController.Instance.PlayMusic("ResumeGameplay", false, 1.0f));
 
@@ -129,6 +131,8 @@ public class Main : MonoBehaviour
 
     private void TogglePause(bool pause)
     {
+        Cursor.visible = _gamePaused;
+
         _gamePaused = pause;
         Time.timeScale = _gamePaused ? 0.0f : 1.0f;
         pauseUI.SetActive(_gamePaused);
@@ -141,14 +145,17 @@ public class Main : MonoBehaviour
 
     public void OnClickRestart()
     {
+        Cursor.visible = true;
         TogglePause(false);
         gameOverUI.SetActive(false);
-        StartCoroutine(MusicController.Instance.PlayMusic("RandomGameplay"));
+        if (MusicController.Instance != null)
+            StartCoroutine(MusicController.Instance.PlayMusic("RandomGameplay"));
         SceneManager.LoadScene("GameScene", LoadSceneMode.Single);
     }
 
     public void OnClickReturnToMainMenu()
     {
+        Cursor.visible = true;
         TogglePause(false);
         gameOverUI.SetActive(false);
         SceneManager.LoadScene("MainMenuScene", LoadSceneMode.Single);
