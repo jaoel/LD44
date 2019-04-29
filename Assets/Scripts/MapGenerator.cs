@@ -121,7 +121,8 @@ namespace Assets.Scripts
             for(int i = 0; i < trapCount; i++)
             {
                 Vector3Int pos = map.GetOpenPositionInRoom(2, 2);
-                while(Vector3.Distance(pos, player.transform.position) < 4)
+                while(Vector3.Distance(pos, player.transform.position) < 4 
+                    || _interactiveObjects.Any(x => Vector3.Distance(x.transform.position, pos) < 4))
                 {
                     pos = map.GetOpenPositionInRoom(2, 2);
                 }
