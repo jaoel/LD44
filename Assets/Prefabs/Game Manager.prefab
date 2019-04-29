@@ -220,6 +220,7 @@ MonoBehaviour:
   gameOverUI: {fileID: 0}
   pauseUI: {fileID: 0}
   _gamePaused: 0
+  _gameOver: 0
   currentLevelText: {fileID: 0}
 --- !u!114 &997353021
 MonoBehaviour:
