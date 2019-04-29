@@ -2,6 +2,7 @@
 
 public class SpikeTrap : Item
 {
+    public Sprite triggeredSprite;
     public int damage;
 
     public override void Apply(GameObject owner)
@@ -21,5 +22,6 @@ public class SpikeTrap : Item
     {
         Player player = owner.GetComponent<Player>();
         player.ReceiveDamage(damage, Vector2.zero);
+        GetComponent<SpriteRenderer>().sprite = triggeredSprite;
     }
 } 

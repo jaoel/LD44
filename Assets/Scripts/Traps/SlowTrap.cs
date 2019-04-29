@@ -7,6 +7,8 @@ using UnityEngine;
 
 public class SlowTrap : Item
 {
+    public AudioSource triggerSound;
+    public Sprite triggeredSprite; 
     public float slowFactor;
     public float duration;
     public override void Apply(GameObject owner)
@@ -26,5 +28,7 @@ public class SlowTrap : Item
     {
         Player player = owner.GetComponent<Player>();
         player.SetSlow(slowFactor, duration);
+        GetComponent<SpriteRenderer>().sprite = triggeredSprite;
+        triggerSound.Play();
     }
 }

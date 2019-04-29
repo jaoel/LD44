@@ -29,7 +29,9 @@ public class MusicController : MonoBehaviour
             if (instance == null || instance.Equals(null))
             {
                 Debug.LogError("The scene needs a MusicController");
-            }
+                return null;
+            }    
+
             DontDestroyOnLoad(instance.gameObject);
             instance._audioSource = instance.gameObject.GetComponent<AudioSource>();
             return instance;

@@ -113,7 +113,8 @@ public class Main : MonoBehaviour
         if (!player.IsAlive && !_gameOver)
         {
             _gameOver = true;
-            MusicController.Instance.PlayMusic("Defeat", false);
+            if (MusicController.Instance != null)
+                MusicController.Instance.PlayMusic("Defeat", false);
             gameOverUI.SetActive(true);
             currentLevelText.gameObject.SetActive(false);
             GameObject.Find("GameOverLevel").GetComponent<TextMeshProUGUI>().text = "You reached level #" + _currentLevel; 
@@ -136,7 +137,8 @@ public class Main : MonoBehaviour
     {
         TogglePause(false);
         gameOverUI.SetActive(false);
-        MusicController.Instance.PlayMusic("RandomGameplay", false);
+        if (MusicController.Instance != null)
+            MusicController.Instance.PlayMusic("RandomGameplay", false);
         SceneManager.LoadScene("GameScene", LoadSceneMode.Single);
     }
 
