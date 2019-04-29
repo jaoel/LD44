@@ -19,6 +19,16 @@ public abstract class Item : MonoBehaviour
         if (player.Health > 0) {
             ApplyEffect(owner);
         }
+
+        if (player.Health <= 0)
+        {
+            SoundManager.Instance.PlayPlayerDeath(UnityEngine.Random.Range(0.0f, 1.0f) < 0.1f);
+        }
+        else
+        {
+            SoundManager.Instance.PlayPainSound();
+        }
+
         Destroy(gameObject);
     }
 

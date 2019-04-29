@@ -12,6 +12,8 @@ public class SoundManager : MonoBehaviour
     public GameObject machineGunSound;
     public GameObject explosionSound;
     public AudioClip monsterAggroSound;
+    public AudioClip playerDeath;
+    public AudioClip playerScream;
 
     public List<AudioClip> painSounds;
     public List<AudioClip> monsterPainSounds;
@@ -92,6 +94,14 @@ public class SoundManager : MonoBehaviour
     {
         AudioClip temp = monsterPainSounds[UnityEngine.Random.Range(0, monsterPainSounds.Count)];
         _audioSource.PlayOneShot(temp);
+    }
+
+    public void PlayPlayerDeath(bool memes)
+    {
+        if (memes)
+            _audioSource.PlayOneShot(playerScream);
+        else
+            _audioSource.PlayOneShot(playerDeath);
     }
 
     public AudioSource PlaySound(GameObject prefab, bool loop)

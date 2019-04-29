@@ -244,7 +244,15 @@ public class Player : MonoBehaviour
 
             _invulnTimer = 0;
             Health -= damage;
-            SoundManager.Instance.PlayPainSound();
+
+            if (Health <= 0)
+            {
+                SoundManager.Instance.PlayPlayerDeath(Random.Range(0.0f, 1.0f) < 0.1f);
+            }
+            else
+            {
+                SoundManager.Instance.PlayPainSound();
+            }
         }
     }
 }

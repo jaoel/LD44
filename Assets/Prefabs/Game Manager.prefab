@@ -241,6 +241,8 @@ MonoBehaviour:
   explosionSound: {fileID: 6183662766363230291, guid: 74fa3a0d1f0ca474cabec96b294d064b,
     type: 3}
   monsterAggroSound: {fileID: 8300000, guid: 0cd28dd2409b213459927f039323c891, type: 3}
+  playerDeath: {fileID: 8300000, guid: 19d1008156ffc2a43a6d2496b573ed55, type: 3}
+  playerScream: {fileID: 8300000, guid: 875bef0ece2d08044817a485a4c957a7, type: 3}
   painSounds:
   - {fileID: 8300000, guid: e20468a58edd39c4d8c36ba3f99233c0, type: 3}
   - {fileID: 8300000, guid: 59aa4987c671b4b4ab68f37ab13da535, type: 3}
