@@ -20,3 +20,4 @@ MonoBehaviour:
   HealthGlobe: {fileID: 11400000, guid: 8e3b8384140229f40a2ae0b895e25ec4, type: 2}
   MaxHealth: {fileID: 11400000, guid: 9dff1c61f0a906b499275c70aadfdc72, type: 2}
   WeakHealthGlobe: {fileID: 11400000, guid: 07e877227b6619240a2cccb59f4a5df7, type: 2}
+  FiringRateUpgrade: {fileID: 11400000, guid: df96087daafff4040b8ddf44eacbf055, type: 2}

@@ -29,6 +29,8 @@ public class Player : MonoBehaviour
 
     private float cooldownEndTime = 0f;
     private GameObject _shotSound = null;
+    
+    public float firingRateModifier = 1.0f;
 
     public int Health {
         get {
@@ -95,7 +97,7 @@ public class Player : MonoBehaviour
 
         if (Keybindings.Attack && Time.time >= cooldownEndTime)
         {
-            cooldownEndTime = Time.time + CurrentWeapon.Description.Cooldown;
+            cooldownEndTime = Time.time + CurrentWeapon.Description.Cooldown / firingRateModifier;
             CurrentWeapon.Shoot(aimVector, transform.position, gameObject);
         }
         else if (!Keybindings.Attack)

@@ -96,17 +96,18 @@ public class SoundManager : MonoBehaviour
 
     public AudioSource PlaySound(GameObject prefab, bool loop)
     {
-        GameObject go = GameObject.Instantiate(prefab);
-        AudioSource audioSource = go.GetComponent<AudioSource>();
+       
         if (loop)
         {
+            GameObject go = GameObject.Instantiate(prefab);
+            AudioSource audioSource = go.GetComponent<AudioSource>();
             audioSource.loop = true;
+            return audioSource;
         }
         else
         {
-            Destroy(go, go.GetComponent<AudioSource>().clip.length);
-        }
-
-        return audioSource;
+            _audioSource.PlayOneShot(prefab.GetComponent<AudioSource>().clip);
+            return null;
+        }  
     }   
 }

@@ -1183,6 +1183,7 @@ MonoBehaviour:
   player: {fileID: 2023222969}
   gameOverUI: {fileID: 48898442}
   pauseUI: {fileID: 1241296000}
+  _gamePaused: 0
   currentLevelText: {fileID: 169685614}
 --- !u!82 &997353020
 AudioSource:
@@ -4761,7 +4762,7 @@ PrefabInstance:
     - target: {fileID: 3597447601227234659, guid: e6ff596c348b15841b93cc6f5790e643,
         type: 3}
       propertyPath: startHealth
-      value: 20
+      value: 1000
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: e6ff596c348b15841b93cc6f5790e643, type: 3}

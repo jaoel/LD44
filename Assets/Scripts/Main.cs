@@ -78,7 +78,7 @@ public class Main : MonoBehaviour
         _mapGen.Clear();
 
         shopInstance.gameObject.SetActive(true);
-        shopInstance.GenerateRandomItems();
+        shopInstance.GenerateRandomItems(_currentLevel);
         shopInstance.MovePlayerToSpawn(player);
     }
 
