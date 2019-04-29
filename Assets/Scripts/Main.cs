@@ -53,7 +53,7 @@ public class Main : MonoBehaviour
         _gamePaused = false;
         _mapGen = new MapGenerator(tileContainer, interactiveDungeonObjectContainer, itemContainer,
             enemyContainer);
-        _renderBSP = true;
+        _renderBSP = false;
 
         LoadLevel();
     }
