@@ -58,6 +58,11 @@ public class Main : MonoBehaviour
         LoadLevel();
     }
 
+    public void DebugDrawPath(List<Vector2Int> path)
+    {
+        _currentMap.DrawPath(path);
+    }
+
     public void LoadLevel()
     {          
         player.ResetPlayer();

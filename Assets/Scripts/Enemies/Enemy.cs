@@ -88,7 +88,7 @@ public class Enemy : MonoBehaviour
                 Vector2Int start = new Vector2Int((int)transform.position.x, (int)transform.position.y);
                 Vector2Int target = new Vector2Int((int)_player.transform.position.x, (int)_player.transform.position.y);
                 _path = NavigationManager.Instance.AStar(start, target);
-
+                
                 if (_path != null && _path.Count > 0)
                 {
                     _followPath = true;
@@ -136,11 +136,14 @@ public class Enemy : MonoBehaviour
     }
 
     public virtual bool TargetReached()
-    {
+    {  
         if (_target != Vector3.zero && _moveToTarget)
         {
-            float sqrDistToTarget = (_target - transform.position).magnitude;
+            Vector3 tempPos = transform.position;
+            tempPos.z = 0.0f;
+            float sqrDistToTarget = (_target - tempPos).magnitude;
             float stoppingDistance = _stoppingDistance;
+
             if (!_followPath)
                 stoppingDistance = 0;
 
