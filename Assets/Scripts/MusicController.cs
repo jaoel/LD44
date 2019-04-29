@@ -59,9 +59,13 @@ public class MusicController : MonoBehaviour
     {
         while(true)
         {
-            while(_queuedCoroutines.Count > 0)
+            if (_queuedCoroutines != null)
             {
-                yield return StartCoroutine(_queuedCoroutines.Dequeue());
+                while (_queuedCoroutines.Count > 0)
+                {
+                    yield return StartCoroutine(_queuedCoroutines.Dequeue());
+                }
+
             }
 
             yield return null;

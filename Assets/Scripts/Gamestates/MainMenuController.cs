@@ -4,6 +4,7 @@ using UnityEngine.SceneManagement;
 public class MainMenuController : MonoBehaviour
 {
     public GameObject optionsMenu;
+    public GameObject instructionsMenu;
 
     public void Awake()
     {
@@ -20,6 +21,12 @@ public class MainMenuController : MonoBehaviour
     {
 
     }   
+
+    public void OnInstructionsClick()
+    {
+        instructionsMenu.SetActive(true);
+        gameObject.SetActive(false);
+    }
 
     public void OnOptionsClick()
     {
