@@ -37,7 +37,7 @@ TextureImporter:
     second: pickupmap_small_health
   - first:
       213: -9188421406288508534
-    second: pickupmap_11
+    second: pickupmap_shoot_speed
   - first:
       213: -6107836182040848969
     second: pickupmap_12
@@ -518,7 +518,7 @@ TextureImporter:
       edges: []
       weights: []
     - serializedVersion: 2
-      name: pickupmap_11
+      name: pickupmap_shoot_speed
       rect:
         serializedVersion: 2
         x: 96
