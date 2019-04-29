@@ -23,7 +23,8 @@ public class MainMenuController : MonoBehaviour
 
     public void OnOptionsClick()
     {
-
+        optionsMenu.SetActive(true);
+        gameObject.SetActive(false);
     }
 
     public void OnStartClick()

@@ -14,7 +14,6 @@ public class MusicController : MonoBehaviour
     public List<AudioClip> gameMusic;
 
     public AudioSource _audioSource;
-    public AudioSource shopMusicSource;
 
     bool _fadingOutMusic = false;
     bool _playingGameplayMusic;
@@ -22,7 +21,6 @@ public class MusicController : MonoBehaviour
     AudioClip _lastClip;
     float _lastTime;
 
-    Coroutine _running = null;
     private Queue<IEnumerator> _queuedCoroutines;
 
     private static MusicController instance = null;
@@ -41,14 +39,19 @@ public class MusicController : MonoBehaviour
                 return null;
             }
 
+            instance._queuedCoroutines = new Queue<IEnumerator>();
             DontDestroyOnLoad(instance.gameObject);
             return instance;
         }
     }
 
+    public void SetVolume()
+    {
+        _audioSource.volume = SettingsManager.Instance.MusicVolume;
+    }
+
     private void Awake()
     {
-        _queuedCoroutines = new Queue<IEnumerator>();
         StartCoroutine(ProcessCoroutines());
     }
 
