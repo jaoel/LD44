@@ -7,21 +7,29 @@ public class OptionsMenu : MonoBehaviour
     public Slider musicVolumeSlider;
     public Slider sfxVolumeSlider;
 
-    private void OnEnable()
-    {
-        sfxVolumeSlider.value = SettingsManager.Instance.SFXVolume;
-        musicVolumeSlider.value = SettingsManager.Instance.MusicVolume;
+    private void OnEnable() {
+        sfxVolumeSlider.value = SettingsManager.Instance.LinearSFXVolume;
+        musicVolumeSlider.value = SettingsManager.Instance.LinearMusicVolume;
     }
 
-    public void OnMainMenuClick()
-    {
-        SettingsManager.Instance.SFXVolume = sfxVolumeSlider.value;
-        SettingsManager.Instance.MusicVolume = musicVolumeSlider.value;
-
-        if (MusicController.Instance != null)
-            MusicController.Instance.SetVolume();
-
+    public void OnMainMenuClick() {
         previousMenu.SetActive(true);
         gameObject.SetActive(false);
+    }
+
+    public void OnMusicSliderValueChange(float value) {
+        SettingsManager.Instance.LinearMusicVolume = value;
+
+        if (MusicController.Instance != null) {
+            MusicController.Instance.SetVolume();
+        }
+    }
+
+    public void OnSfxSliderValueChange(float value) {
+        SettingsManager.Instance.LinearSFXVolume = value;
+
+        if (MusicController.Instance != null) {
+            MusicController.Instance.SetVolume();
+        }
     }
 }

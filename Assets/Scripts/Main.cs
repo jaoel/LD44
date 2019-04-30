@@ -27,8 +27,9 @@ public class Main : MonoBehaviour
     public bool _gameOver;
     private ShopRoom shopInstance;
     public TextMeshProUGUI currentLevelText;
+    public TextMeshProUGUI gameOverLevelText;
 
-    private int _currentLevel;
+    private int _currentLevel = 0;
     public int CurrentLevel => _currentLevel;
 
     private static Main instance = null;
@@ -143,7 +144,7 @@ public class Main : MonoBehaviour
 
             gameOverUI.SetActive(true);
             currentLevelText.gameObject.SetActive(false);
-            GameObject.Find("GameOverLevel").GetComponent<TextMeshProUGUI>().text = "You reached level " + _currentLevel; 
+            gameOverLevelText.text = _currentLevel.ToString(); 
         }
     }
 

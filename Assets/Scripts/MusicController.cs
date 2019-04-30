@@ -55,6 +55,10 @@ public class MusicController : MonoBehaviour
         StartCoroutine(ProcessCoroutines());
     }
 
+    private void Start() {
+        SetVolume();
+    }
+
     private IEnumerator ProcessCoroutines()
     {
         while(true)

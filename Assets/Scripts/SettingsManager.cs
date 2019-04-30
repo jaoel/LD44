@@ -1,14 +1,31 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using UnityEngine;
 
+public class SettingsManager {
+    private float linearMusicVolume = 0f;
+    private float linearSFXVolume = 0f;
 
-public class SettingsManager
-{
-    public float MusicVolume { get; set; }
-    public float SFXVolume { get; set; }
+    public float MusicVolume { get; private set; }
+    public float SFXVolume { get; private set; }
+
+    public float LinearMusicVolume {
+        get {
+            return linearMusicVolume;
+        }
+        set {
+            linearMusicVolume = value;
+            MusicVolume = Mathf.Pow(value, 4f);
+        }
+    }
+
+    public float LinearSFXVolume {
+        get {
+            return linearSFXVolume;
+        }
+        set {
+            linearSFXVolume = value;
+            SFXVolume = Mathf.Pow(value, 4f);
+        }
+    }
 
     private static SettingsManager _instance;
 
@@ -19,6 +36,8 @@ public class SettingsManager
             if (_instance == null)
             {
                 _instance = new SettingsManager();
+                _instance.LinearMusicVolume = 0.5f;
+                _instance.LinearSFXVolume = 0.5f;
             }
 
             return _instance;

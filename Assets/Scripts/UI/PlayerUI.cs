@@ -22,7 +22,7 @@ public class PlayerUI : MonoBehaviour {
     private Vector3 originalPosition;
 
     private void Start() {
-        originalPosition = healthBarObject.position;
+        originalPosition = healthBarObject.anchoredPosition;
     }
 
     private void FixedUpdate() {
@@ -63,9 +63,9 @@ public class PlayerUI : MonoBehaviour {
                 
         if (shake) {
             float s = 8f;
-            healthBarObject.position = originalPosition + new Vector3((int)Random.Range(-s, s), (int)Random.Range(-s, s), 0f);
+            healthBarObject.anchoredPosition = originalPosition + new Vector3((int)Random.Range(-s, s), (int)Random.Range(-s, s), 0f);
         } else {
-            healthBarObject.position = originalPosition;
+            healthBarObject.anchoredPosition = originalPosition;
         }
     }
 

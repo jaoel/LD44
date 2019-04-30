@@ -26,22 +26,22 @@ public class ShadedText : MonoBehaviour {
         shadowLeft = Instantiate(textMesh, transform.parent);
         Destroy(shadowLeft.GetComponent<ShadedText>());
         shadowLeft.color = colorLeft;
-        shadowLeft.rectTransform.position = shadowLeft.rectTransform.position + Vector3.left * offset;
+        shadowLeft.rectTransform.anchoredPosition = shadowLeft.rectTransform.anchoredPosition + Vector2.left * offset;
 
         shadowRight = Instantiate(textMesh, transform.parent);
         Destroy(shadowRight.GetComponent<ShadedText>());
         shadowRight.color = colorRight;
-        shadowRight.rectTransform.position = shadowRight.rectTransform.position + Vector3.right * offset;
+        shadowRight.rectTransform.anchoredPosition = shadowRight.rectTransform.anchoredPosition + Vector2.right * offset;
 
         shadowUp = Instantiate(textMesh, transform.parent);
         Destroy(shadowUp.GetComponent<ShadedText>());
         shadowUp.color = colorUp;
-        shadowUp.rectTransform.position = shadowUp.rectTransform.position + Vector3.up * offset;
+        shadowUp.rectTransform.anchoredPosition = shadowUp.rectTransform.anchoredPosition + Vector2.up * offset;
 
         shadowDown = Instantiate(textMesh, transform.parent);
         Destroy(shadowDown.GetComponent<ShadedText>());
         shadowDown.color = colorDown;
-        shadowDown.rectTransform.position = shadowDown.rectTransform.position + Vector3.down * offset;
+        shadowDown.rectTransform.anchoredPosition = shadowDown.rectTransform.anchoredPosition + Vector2.down * offset;
 
         transform.SetAsLastSibling();
     }
