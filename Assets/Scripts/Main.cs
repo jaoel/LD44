@@ -79,11 +79,11 @@ public class Main : MonoBehaviour
         {
             if (_currentLevel == 0)
             {
-                MusicController.Instance.PlayMusic("RandomGameplay", false);
+                MusicController.Instance.PlayMusic("RandomGameplay", true);
             }
             else
             {
-                MusicController.Instance.PlayMusic("ResumeGameplay", false, 1.0f);
+                MusicController.Instance.PlayMusic("ResumeGameplay", true, 1.0f);
             }
         }  
 

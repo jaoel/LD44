@@ -15,13 +15,11 @@ public class MusicController : MonoBehaviour
 
     public AudioSource _audioSource;
 
-    bool _fadingOutMusic = false;
-    bool _playingGameplayMusic;
+    bool _fadingMusic = false;
 
     AudioClip _lastClip;
     float _lastTime;
 
-    private Queue<float> _fadeTimers;
     private Queue<IEnumerator> _queuedCoroutines;
 
     private static MusicController instance = null;
@@ -41,7 +39,8 @@ public class MusicController : MonoBehaviour
             }
 
             instance._queuedCoroutines = new Queue<IEnumerator>();
-            instance._fadeTimers = new Queue<float>();
+            instance.StartCoroutine(instance.ProcessCoroutines());
+
             DontDestroyOnLoad(instance.gameObject);
             return instance;
         }
@@ -54,7 +53,6 @@ public class MusicController : MonoBehaviour
 
     private void Awake()
     {
-        StartCoroutine(ProcessCoroutines());
     }
 
     private void Start() {
@@ -69,8 +67,10 @@ public class MusicController : MonoBehaviour
             {
                 while (_queuedCoroutines.Count > 0)
                 {
+                    while (_fadingMusic)
+                        yield return new WaitForSeconds(0.01f);
+
                     yield return StartCoroutine(_queuedCoroutines.Dequeue());
-                    yield return new WaitForSeconds(_fadeTimers.Dequeue());
                 }
 
             }
@@ -80,16 +80,10 @@ public class MusicController : MonoBehaviour
 
     private void FixedUpdate()
     {
-        if (_playingGameplayMusic && _audioSource.clip?.length - _audioSource?.time < 1.0f)
-        {
-            PlayMusic("RandomGameplay", false, 1.0f);
-            _playingGameplayMusic = false;
-        }
     }
 
     public void PlayMusic(string key, bool loop = true, float fadeTime = 0.2f)
     {
-        _fadeTimers.Enqueue(fadeTime);
         if (key == "MainMenu")
         {
             _queuedCoroutines.Enqueue(PlayMusicFade(_audioSource, menuMusic, loop, fadeTime));
@@ -112,25 +106,27 @@ public class MusicController : MonoBehaviour
         }
         else if (key == "ResumeGameplay")
         {
-            _playingGameplayMusic = true;
             _queuedCoroutines.Enqueue(PlayMusicFade(_audioSource, _lastClip, loop, fadeTime, _lastTime));
         }
     }
 
     private IEnumerator PlayMusicFade(AudioSource source, AudioClip clip, bool loop, float fadeTime, float time = 0.0f)
     {
-        while (_fadingOutMusic)
-        {
-            yield return new WaitForSeconds(0.01f);
-        }
-
+        _fadingMusic = true;
         float fadeHalfTime = fadeTime / 2.0f;
 
+        IEnumerator fadeOut = null;
         if (source.isPlaying)
         {
-            StartCoroutine(FadeOut(source, fadeHalfTime));
-
+            fadeOut = FadeOut(source, fadeHalfTime);
+            StartCoroutine(fadeOut);
             yield return new WaitForSeconds(fadeHalfTime);
+        }
+
+        if (fadeOut != null)
+        {
+            while (fadeOut.MoveNext())
+                yield return new WaitForSeconds(0.01f);
         }
 
         source.clip = clip;
@@ -145,18 +141,16 @@ public class MusicController : MonoBehaviour
 
     private IEnumerator FadeOut(AudioSource audioSource,float fadeTime)
     {
-        _fadingOutMusic = true;
         float startVolume = audioSource.volume;
-
-        while (audioSource.volume > 0)
+        float timePassed = 0.0f;
+        while (audioSource.volume > 0 || timePassed <= fadeTime)
         {
             audioSource.volume -= startVolume * Time.deltaTime / fadeTime;
-
+            timePassed += Time.deltaTime;
             yield return null;
         }
         audioSource.Stop();
         audioSource.volume = startVolume;
-        _fadingOutMusic = false;
     }
 
     private IEnumerator FadeIn(AudioSource audioSource, float fadeTime)
@@ -166,13 +160,15 @@ public class MusicController : MonoBehaviour
         audioSource.volume = 0;
         audioSource.Play();
 
-        while (audioSource.volume < SettingsManager.Instance.MusicVolume)
+        float timePassed = 0.0f;
+        while (audioSource.volume < SettingsManager.Instance.MusicVolume || timePassed <= fadeTime)
         {
             audioSource.volume += startVolume * Time.deltaTime / fadeTime;
-
+            timePassed += Time.deltaTime;
             yield return null;
         }
 
         audioSource.volume = SettingsManager.Instance.MusicVolume;
+        _fadingMusic = false;
     }
 }
