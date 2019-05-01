@@ -10,6 +10,7 @@ public class InstructionsMenu : MonoBehaviour
     public GameObject previousButton;
 
     public GameObject mainMenu;
+    public GameObject instructionsMenuWrapper;
 
     private int _currentPage = 0;
 
@@ -24,7 +25,7 @@ public class InstructionsMenu : MonoBehaviour
     {
         _currentPage = 0;
         mainMenu.SetActive(true);
-        gameObject.SetActive(false);
+        instructionsMenuWrapper.SetActive(false);
     }
 
     public void OnNextClick()

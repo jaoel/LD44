@@ -1,9 +1,9 @@
 ﻿using UnityEngine;
 using UnityEngine.UI;
 
-public class OptionsMenu : MonoBehaviour
-{
+public class OptionsMenu : MonoBehaviour {
     public GameObject previousMenu;
+    public GameObject optionsMenuWrapper;
     public Slider musicVolumeSlider;
     public Slider sfxVolumeSlider;
 
@@ -14,7 +14,7 @@ public class OptionsMenu : MonoBehaviour
 
     public void OnMainMenuClick() {
         previousMenu.SetActive(true);
-        gameObject.SetActive(false);
+        optionsMenuWrapper.SetActive(false);
     }
 
     public void OnMusicSliderValueChange(float value) {
