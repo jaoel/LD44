@@ -17,28 +17,33 @@ public class MainMenuController : MonoBehaviour
     {
         creditsMenu.SetActive(!creditsMenu.activeInHierarchy);
         gameObject.SetActive(!gameObject.activeInHierarchy);
+        SoundManager.Instance.PlayUIButtonClick();
     }
 
     public void OnInstructionsClick()
     {
         instructionsMenu.SetActive(true);
         gameObject.SetActive(false);
+        SoundManager.Instance.PlayUIButtonClick();
     }
 
     public void OnOptionsClick()
     {
         optionsMenu.SetActive(true);
         gameObject.SetActive(false);
+        SoundManager.Instance.PlayUIButtonClick();
     }
 
     public void OnStartClick()
     {
+        SoundManager.Instance.PlayUIButtonClick();
         SceneManager.LoadScene("GameScene", LoadSceneMode.Single);
     }
 
 
     public void OnQuitClick()
     {
+        SoundManager.Instance.PlayUIButtonClick();
 #if UNITY_EDITOR
         UnityEditor.EditorApplication.isPlaying = false;
 #else

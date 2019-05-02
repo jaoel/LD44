@@ -15,6 +15,7 @@ public class SoundManager : MonoBehaviour
     public AudioClip playerDeath;
     public AudioClip playerScream;
     public AudioClip itemPickup;
+    public AudioClip uiButtonClick;
 
     public List<AudioClip> painSounds;
     public List<AudioClip> monsterPainSounds;
@@ -32,13 +33,14 @@ public class SoundManager : MonoBehaviour
             {
                 return instance;
             }
+           
             instance = FindObjectOfType<SoundManager>();
             if (instance == null || instance.Equals(null))
             {
                 Debug.LogError("The scene needs a SoundManager");
             }
             instance._audioSource = instance.gameObject.GetComponent<AudioSource>();
-
+            DontDestroyOnLoad(instance.gameObject);
             return instance;
         }
     }
@@ -71,6 +73,11 @@ public class SoundManager : MonoBehaviour
         shotSoundInstances.Add(go);
 
         return go;
+    }
+
+    public void PlayUIButtonClick()
+    {
+        _audioSource.PlayOneShot(uiButtonClick, SettingsManager.Instance.SFXVolume);
     }
 
     public void PlayMonsterAggro()

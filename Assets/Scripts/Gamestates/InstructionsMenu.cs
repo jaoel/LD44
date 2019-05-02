@@ -26,18 +26,21 @@ public class InstructionsMenu : MonoBehaviour
         _currentPage = 0;
         mainMenu.SetActive(true);
         instructionsMenuWrapper.SetActive(false);
+        SoundManager.Instance.PlayUIButtonClick();
     }
 
     public void OnNextClick()
     {
         _currentPage++;
         OnPageChanged();
+        SoundManager.Instance.PlayUIButtonClick();
     }
 
     public void OnPreviousClick()
     {
         _currentPage--;
         OnPageChanged();
+        SoundManager.Instance.PlayUIButtonClick();
     }
 
     public void OnPageChanged()

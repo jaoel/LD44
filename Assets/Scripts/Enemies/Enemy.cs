@@ -16,7 +16,7 @@ public class Enemy : MonoBehaviour
     protected bool _followPath = false;
     protected bool _moveToTarget = false;
     protected Vector3 _velocity = Vector3.zero;
-    protected float _stoppingDistance = 1.0f;
+    protected float _stoppingDistance = 0.5f;
     protected Player _player;
     protected new Rigidbody2D rigidbody;
 

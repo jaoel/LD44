@@ -132,8 +132,9 @@ public class Main : MonoBehaviour
 
     void Update()
     {
-        if (Input.GetKeyDown(KeyCode.Escape))
+        if (Input.GetKeyDown(KeyCode.Escape) && (!_gamePaused || pauseUI.activeInHierarchy))
         {
+            SoundManager.Instance.PlayUIButtonClick();
             TogglePause(!_gamePaused);
         }
 
@@ -163,6 +164,7 @@ public class Main : MonoBehaviour
     public void OnClickStartGame()
     {
         TogglePause(false);
+        SoundManager.Instance.PlayUIButtonClick();
     }
 
     public void OnClickRestart()
@@ -170,7 +172,8 @@ public class Main : MonoBehaviour
         Cursor.visible = true;
         TogglePause(false);
         gameOverUI.SetActive(false);
-                                                                       
+        SoundManager.Instance.PlayUIButtonClick();
+
         SceneManager.LoadScene("GameScene", LoadSceneMode.Single);
     }
 
@@ -179,6 +182,8 @@ public class Main : MonoBehaviour
         Cursor.visible = true;
         TogglePause(false);
         gameOverUI.SetActive(false);
+        SoundManager.Instance.PlayUIButtonClick();
+
         SceneManager.LoadScene("MainMenuScene", LoadSceneMode.Single);
     }
 
@@ -187,5 +192,6 @@ public class Main : MonoBehaviour
         Cursor.visible = true;
         optionsMenu.SetActive(true);
         pauseUI.SetActive(false);
+        SoundManager.Instance.PlayUIButtonClick();
     }
 }

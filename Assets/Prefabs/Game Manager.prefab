@@ -14,9 +14,7 @@ GameObject:
   - component: {fileID: 515992213878927342}
   - component: {fileID: 1558292210}
   - component: {fileID: 1558292211}
-  - component: {fileID: 997353020}
   - component: {fileID: 997353019}
-  - component: {fileID: 997353021}
   m_Layer: 0
   m_Name: Game Manager
   m_TagString: Untagged
@@ -50,7 +48,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d9dd4b293029bee40ac832847096c870, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  bulletZIndex: -3
 --- !u!114 &131159647817452541
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -101,102 +98,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 80c65b2615b036b4c85102c9bc852562, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
---- !u!82 &997353020
-AudioSource:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 891346738302845104}
-  m_Enabled: 1
-  serializedVersion: 4
-  OutputAudioMixerGroup: {fileID: 0}
-  m_audioClip: {fileID: 0}
-  m_PlayOnAwake: 0
-  m_Volume: 1
-  m_Pitch: 1
-  Loop: 0
-  Mute: 0
-  Spatialize: 0
-  SpatializePostEffects: 0
-  Priority: 128
-  DopplerLevel: 1
-  MinDistance: 1
-  MaxDistance: 500
-  Pan2D: 0
-  rolloffMode: 0
-  BypassEffects: 0
-  BypassListenerEffects: 0
-  BypassReverbZones: 0
-  rolloffCustomCurve:
-    serializedVersion: 2
-    m_Curve:
-    - serializedVersion: 3
-      time: 0
-      value: 1
-      inSlope: 0
-      outSlope: 0
-      tangentMode: 0
-      weightedMode: 0
-      inWeight: 0.33333334
-      outWeight: 0.33333334
-    - serializedVersion: 3
-      time: 1
-      value: 0
-      inSlope: 0
-      outSlope: 0
-      tangentMode: 0
-      weightedMode: 0
-      inWeight: 0.33333334
-      outWeight: 0.33333334
-    m_PreInfinity: 2
-    m_PostInfinity: 2
-    m_RotationOrder: 4
-  panLevelCustomCurve:
-    serializedVersion: 2
-    m_Curve:
-    - serializedVersion: 3
-      time: 0
-      value: 0
-      inSlope: 0
-      outSlope: 0
-      tangentMode: 0
-      weightedMode: 0
-      inWeight: 0.33333334
-      outWeight: 0.33333334
-    m_PreInfinity: 2
-    m_PostInfinity: 2
-    m_RotationOrder: 4
-  spreadCustomCurve:
-    serializedVersion: 2
-    m_Curve:
-    - serializedVersion: 3
-      time: 0
-      value: 0
-      inSlope: 0
-      outSlope: 0
-      tangentMode: 0
-      weightedMode: 0
-      inWeight: 0.33333334
-      outWeight: 0.33333334
-    m_PreInfinity: 2
-    m_PostInfinity: 2
-    m_RotationOrder: 4
-  reverbZoneMixCustomCurve:
-    serializedVersion: 2
-    m_Curve:
-    - serializedVersion: 3
-      time: 0
-      value: 1
-      inSlope: 0
-      outSlope: 0
-      tangentMode: 0
-      weightedMode: 0
-      inWeight: 0.33333334
-      outWeight: 0.33333334
-    m_PreInfinity: 2
-    m_PostInfinity: 2
-    m_RotationOrder: 4
 --- !u!114 &997353019
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -225,34 +126,3 @@ MonoBehaviour:
   _gameOver: 0
   currentLevelText: {fileID: 0}
   gameOverLevelText: {fileID: 0}
---- !u!114 &997353021
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 891346738302845104}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: bf0d1bb7fa8e172479c633c6d45e88ac, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  simpleShotSound: {fileID: 6183662766363230291, guid: 27bff07e65979fc4ead79e9f0bd94665,
-    type: 3}
-  machineGunSound: {fileID: 6183662766363230291, guid: d43c8df233e07374091e45c93a08ff52,
-    type: 3}
-  explosionSound: {fileID: 6183662766363230291, guid: 74fa3a0d1f0ca474cabec96b294d064b,
-    type: 3}
-  monsterAggroSound: {fileID: 8300000, guid: 0cd28dd2409b213459927f039323c891, type: 3}
-  playerDeath: {fileID: 8300000, guid: 19d1008156ffc2a43a6d2496b573ed55, type: 3}
-  playerScream: {fileID: 8300000, guid: 875bef0ece2d08044817a485a4c957a7, type: 3}
-  itemPickup: {fileID: 8300000, guid: 37f57d47a70dd394e8aa37487c4d0268, type: 3}
-  painSounds:
-  - {fileID: 8300000, guid: e20468a58edd39c4d8c36ba3f99233c0, type: 3}
-  - {fileID: 8300000, guid: 59aa4987c671b4b4ab68f37ab13da535, type: 3}
-  - {fileID: 8300000, guid: 309ed60defb64cc43a4551ba325d9fc0, type: 3}
-  - {fileID: 8300000, guid: 2aa6ac15ecbd532488ac5c524cba5d63, type: 3}
-  - {fileID: 8300000, guid: 5cd35c403a212d64bb87c9634535c62f, type: 3}
-  monsterPainSounds:
-  - {fileID: 8300000, guid: 88d3a5e5172a78b4caf922c5e1f0ea3d, type: 3}
-  - {fileID: 8300000, guid: 36e52d3cddab7d64fa1f7ce95c8cc0e7, type: 3}

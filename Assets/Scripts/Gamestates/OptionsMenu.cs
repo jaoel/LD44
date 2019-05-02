@@ -15,6 +15,7 @@ public class OptionsMenu : MonoBehaviour {
     public void OnMainMenuClick() {
         previousMenu.SetActive(true);
         optionsMenuWrapper.SetActive(false);
+        SoundManager.Instance.PlayUIButtonClick();
     }
 
     public void OnMusicSliderValueChange(float value) {
