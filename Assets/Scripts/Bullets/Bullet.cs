@@ -71,6 +71,7 @@ public class Bullet : MonoBehaviour {
             if (enemy.IsAlive) {
                 collision.gameObject.GetComponent<Enemy>().ApplyDamage(description.damage, _velocity);
                 bulletBehaviour.BeforeDestroyed(collision.gameObject);
+                CameraManager.Instance.ShakeCamera(0.15f, 0.1f, 0.1f, 30);
             } else {
                 active = true;
             }
