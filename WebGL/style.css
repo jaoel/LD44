@@ -1,0 +1,103 @@
+body {
+    position: fixed;
+    padding:0;
+    margin:0;
+    top:0;
+    left:0;
+    width: 100%;
+    height: 100%;
+    background:#222326;
+}
+
+.content-container {
+    position: absolute;
+    width: 440px;
+    height: 440px;
+    top: 50%;
+    left: 50%;
+    margin: -220px 0 0 -220px;
+}
+
+#logo {
+    margin: 0 auto;
+    background-image: url("images/logo.png");
+    background-repeat: no-repeat;
+    width: 420px;
+    height: 116px;
+}
+
+.canvas-image {
+    margin: 16px auto;
+    width: 340px;
+    min-height: 220px;
+    border: 16px solid;
+    -webkit-border-image: url("images/canvas.png") 16 fill / 16px;
+    -moz-border-image: url("images/canvas.png") 16 fill / 16px;
+    border-image: url("images/canvas.png") 16 fill / 16px;
+}
+
+#or {
+    margin: 8px auto 8px auto;
+    background-image: url("images/or.png");
+    background-repeat: no-repeat;
+    width: 42px;
+    height: 26px;
+}
+
+#disclaimer {
+    margin: 8px auto 8px auto;
+    background-image: url("images/disclaimer.png");
+    background-repeat: no-repeat;
+    width: 100%;
+    height: 80px;
+}
+
+.button-container {
+    text-align: center;
+}
+
+.button {
+    padding: 0; 
+    margin: 0 auto;
+    display: inline-block;
+    user-select: none;
+    height: 20px;
+    border: 16px solid;
+    overflow: visible;
+    -webkit-border-image: url("images/button_up.png") 16 fill / 16px;
+    -moz-border-image: url("images/button_up.png") 16 fill / 16px;
+    border-image: url("images/button_up.png") 16 fill / 16px;
+}
+
+.button:hover{
+    cursor: default;
+    border: 16px solid;
+    -webkit-border-image: url("images/button_hover.png") 16 fill / 16px;
+    -moz-border-image: url("images/button_hover.png") 16 fill / 16px;
+    border-image: url("images/button_hover.png") 16 fill / 16px;
+}
+
+.button:active{
+    border: 16px solid;
+    -webkit-border-image: url("images/button_down.png") 16 fill / 16px;
+    -moz-border-image: url("images/button_down.png") 16 fill / 16px;
+    border-image: url("images/button_down.png") 16 fill / 16px;
+}
+
+#play{
+    padding: 0; 
+    margin: -8px auto;
+    background-image: url("images/play.png");
+    background-repeat: no-repeat;
+    width: 152px;
+    height: 36px;
+}
+
+#play-post{
+    padding: 0; 
+    margin: -8px auto;
+    background-image: url("images/play_post.png");
+    background-repeat: no-repeat;
+    width: 310px;
+    height: 36px;
+}
