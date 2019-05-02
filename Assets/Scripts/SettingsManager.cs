@@ -6,6 +6,7 @@ public class SettingsManager {
 
     public float MusicVolume { get; private set; }
     public float SFXVolume { get; private set; }
+    public float ScreenShakeScale { get; set; }
 
     public float LinearMusicVolume {
         get {
@@ -38,6 +39,7 @@ public class SettingsManager {
                 _instance = new SettingsManager();
                 _instance.LinearMusicVolume = 0.5f;
                 _instance.LinearSFXVolume = 0.5f;
+                _instance.ScreenShakeScale = 1.0f;
             }
 
             return _instance;

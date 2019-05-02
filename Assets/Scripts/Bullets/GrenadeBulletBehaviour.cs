@@ -26,7 +26,7 @@ public class GrenadeBulletBehaviour : BulletBehaviour {
 
     public override void BeforeDestroyed(GameObject hitTarget) {
         SoundManager.Instance.PlayExplosionSound();
-        CameraManager.Instance.ShakeCamera(1.5f, 1.0f, 2.0f);
+        CameraManager.Instance.ShakeCamera(0.6f, 0.25f, 1.25f);
         Main.Instance.DamageAllEnemiesInCircle(lastPosition, damageRadius, damage, true);
         Instantiate(explosionPrefab, lastPosition, Quaternion.Euler(0f, 0f, Random.Range(0f, 360f)));
     }
