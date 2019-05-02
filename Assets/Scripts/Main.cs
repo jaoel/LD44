@@ -74,6 +74,7 @@ public class Main : MonoBehaviour
 
     public void GenerateMap()
     {
+        BulletManager.Instance.Clear();
         Cursor.visible = false;
 
         if (MusicController.Instance != null)
@@ -98,6 +99,7 @@ public class Main : MonoBehaviour
     }
 
     public void GenerateShop() {
+        BulletManager.Instance.Clear();
         _mapGen.Clear();
 
         if (MusicController.Instance != null)
