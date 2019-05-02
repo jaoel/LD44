@@ -13,10 +13,6 @@ public class ItemContainer : ScriptableObject {
     public ItemDescription WeakHealthGlobe;
     public ItemDescription FiringRateUpgrade;
 
-    //Traps
-    public ItemDescription SlowTrap;
-    public ItemDescription SpikeTrap;
-
     [System.NonSerialized]
     int numItems = 7; // INCREMENT THIS WHEN ADDING ITEMS
 
@@ -29,12 +25,6 @@ public class ItemContainer : ScriptableObject {
 
     public ItemDescription GetRandomItem() {
         return GetItemByIndex(Random.Range(0, numItems));
-    }
-
-    public ItemDescription GetRandomTrap()
-    {
-        List<ItemDescription> drops = new List<ItemDescription>() { SlowTrap, SpikeTrap };
-        return drops[Random.Range(0, drops.Count)];
     }
 
     public List<ItemDescription> GetRareItems()

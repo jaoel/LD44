@@ -14,6 +14,7 @@ public class Main : MonoBehaviour
     public InteractiveDungeonObject interactiveDungeonObjectContainer;
     public ItemContainer itemContainer;
     public EnemyContainer enemyContainer;
+    public TrapContainer trapContainer;
     public Player player;
 
     MapGenerator _mapGen;
@@ -54,7 +55,7 @@ public class Main : MonoBehaviour
         Time.timeScale = 1.0f;
         _gamePaused = false;
         _mapGen = new MapGenerator(tileContainer, interactiveDungeonObjectContainer, itemContainer,
-            enemyContainer);
+            enemyContainer, trapContainer);
         _renderBSP = false;
 
         LoadLevel();

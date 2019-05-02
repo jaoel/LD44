@@ -1,30 +1,12 @@
 ﻿using UnityEngine;
 
-public class SpikeTrap : Item
+public class SpikeTrap : Trap
 {
-    public Sprite triggeredSprite;
-    public int damage;
-
-    public override void Apply(GameObject owner)
+    public override void ApplyEffect(Player player, GameObject playerGO)
     {
-        if (_triggered)
-            return;
+        player.SetSlow(description.slowFactor, description.slowDuration);
+        player.ReceiveDamage(description.damage, -playerGO.transform.forward);
 
-        Player player = owner.GetComponent<Player>();
-        if (player.IsInvulnerable)
-            return;
-
-        if (player.Health > 0)
-        {
-            ApplyEffect(owner);
-        }
-        _triggered = true;
-    }
-
-    public override void ApplyEffect(GameObject owner)
-    {
-        Player player = owner.GetComponent<Player>();
-        player.ReceiveDamage(damage, Vector2.zero);
-        GetComponent<SpriteRenderer>().sprite = triggeredSprite;
+        base.ApplyEffect(player, playerGO);
     }
 } 

@@ -12,7 +12,6 @@ GameObject:
   - component: {fileID: 7979725692751591465}
   - component: {fileID: 1652132710952191853}
   - component: {fileID: 7524923363691028733}
-  - component: {fileID: -2143149718446498013}
   - component: {fileID: 4128817654602266075}
   m_Layer: 0
   m_Name: SpikeTrap
@@ -122,30 +121,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a13635d22c3a9d54c889ffa66e6fe98b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  Description: {fileID: 11400000, guid: 7d6cc3c05224ff84ebb0c98c63265917, type: 2}
-  isShopItem: 0
-  triggeredSprite: {fileID: -7856929743142508662, guid: cf18b569056ed814e86e3ead606781d7,
-    type: 3}
-  damage: 10
---- !u!114 &-2143149718446498013
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 8826916283942404870}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 32469413a61e1004599e863bf3123de8, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  Description: {fileID: 11400000, guid: 7d6cc3c05224ff84ebb0c98c63265917, type: 2}
-  isShopItem: 0
-  triggerSound: {fileID: 4128817654602266075}
-  triggeredSprite: {fileID: -7856929743142508662, guid: cf18b569056ed814e86e3ead606781d7,
-    type: 3}
-  slowFactor: 0.9
-  duration: 0.5
+  description: {fileID: 11400000, guid: 0fddc5ffcd38fd844b37b3aa14eed43d, type: 2}
+  audioSource: {fileID: 4128817654602266075}
+  spriteRenderer: {fileID: 1652132710952191853}
 --- !u!82 &4128817654602266075
 AudioSource:
   m_ObjectHideFlags: 0

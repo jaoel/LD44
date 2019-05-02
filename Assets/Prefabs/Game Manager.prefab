@@ -113,7 +113,7 @@ AudioSource:
   OutputAudioMixerGroup: {fileID: 0}
   m_audioClip: {fileID: 0}
   m_PlayOnAwake: 0
-  m_Volume: 0.2
+  m_Volume: 1
   m_Pitch: 1
   Loop: 0
   Mute: 0
@@ -216,12 +216,15 @@ MonoBehaviour:
     type: 2}
   itemContainer: {fileID: 11400000, guid: 74287dc484f187343ab501050ebd52a6, type: 2}
   enemyContainer: {fileID: 11400000, guid: ae8c7aeb04ccf9340a11daa8a4a5ae53, type: 2}
+  trapContainer: {fileID: 11400000, guid: 7029a12395ce5594db25f5753c6cb57a, type: 2}
   player: {fileID: 0}
   gameOverUI: {fileID: 0}
   pauseUI: {fileID: 0}
+  optionsMenu: {fileID: 0}
   _gamePaused: 0
   _gameOver: 0
   currentLevelText: {fileID: 0}
+  gameOverLevelText: {fileID: 0}
 --- !u!114 &997353021
 MonoBehaviour:
   m_ObjectHideFlags: 0

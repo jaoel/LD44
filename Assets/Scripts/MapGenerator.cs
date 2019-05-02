@@ -15,6 +15,7 @@ namespace Assets.Scripts
         private readonly InteractiveDungeonObject _interactiveObjectsContainer;
         private readonly ItemContainer _itemContainer;
         private readonly EnemyContainer _enemyContainer;
+        private readonly TrapContainer _trapContainer;
 
         private int _width;
         private int _height;
@@ -22,7 +23,7 @@ namespace Assets.Scripts
         List<GameObject> _enemies;
 
         public MapGenerator(TileContainer tileContainer, InteractiveDungeonObject interactiveObjects,
-            ItemContainer itemContainer, EnemyContainer enemyContainer)
+            ItemContainer itemContainer, EnemyContainer enemyContainer, TrapContainer trapContainer)
         {
             _interactiveObjects = new List<GameObject>();
             _enemies = new List<GameObject>();
@@ -33,6 +34,7 @@ namespace Assets.Scripts
             _interactiveObjectsContainer = interactiveObjects;
             _itemContainer = itemContainer;
             _enemyContainer = enemyContainer;
+            _trapContainer = trapContainer;
         }
 
         public List<Enemy> GetEnemiesInCircle(Vector2 position, float radius) {
@@ -126,8 +128,8 @@ namespace Assets.Scripts
                 {
                     pos = map.GetOpenPositionInRoom(2, 2);
                 }
-
-                _interactiveObjects.Add(GameObject.Instantiate(_itemContainer.GetRandomTrap().itemPrefab,
+            
+                _interactiveObjects.Add(GameObject.Instantiate(_trapContainer.GetRandomTrap(),
                     new Vector3(pos.x, pos.y, -1.0f), Quaternion.identity).gameObject);
             }
 
