@@ -5,32 +5,11 @@ using System.Text;
 using System.Threading.Tasks;
 using UnityEngine;
 
-public class SlowTrap : Item
+public class SlowTrap : Trap
 {
-    public AudioSource triggerSound;
-    public Sprite triggeredSprite; 
-    public float slowFactor;
-    public float duration;
-    public override void Apply(GameObject owner)
+    public override void ApplyEffect(Player player, GameObject playerGO)
     {
-        if (_triggered)
-            return;
-
-        Player player = owner.GetComponent<Player>();
-
-        if (player.Health > 0)
-        {
-            ApplyEffect(owner);
-        }
-        _triggered = true;
-    }
-
-    public override void ApplyEffect(GameObject owner)
-    {
-        Player player = owner.GetComponent<Player>();
-        player.SetSlow(slowFactor, duration);
-        GetComponent<SpriteRenderer>().sprite = triggeredSprite;
-        triggerSound.volume = SettingsManager.Instance.SFXVolume;
-        triggerSound.Play();
+        player.SetSlow(description.slowFactor, description.slowDuration);
+        base.ApplyEffect(player, playerGO);
     }
 }

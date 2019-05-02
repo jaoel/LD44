@@ -58,7 +58,7 @@ BoxCollider2D:
     adaptiveTiling: 0
   m_AutoTiling: 0
   serializedVersion: 2
-  m_Size: {x: 1, y: 1}
+  m_Size: {x: 1.5, y: 1.5}
   m_EdgeRadius: 0
 --- !u!212 &1652132710952191853
 SpriteRenderer:
@@ -94,8 +94,8 @@ SpriteRenderer:
   m_AutoUVMaxDistance: 0.5
   m_AutoUVMaxAngle: 89
   m_LightmapParameters: {fileID: 0}
-  m_SortingLayerID: 0
-  m_SortingLayer: 0
+  m_SortingLayerID: -1470884651
+  m_SortingLayer: 2
   m_SortingOrder: 0
   m_Sprite: {fileID: 3553784779068207146, guid: cf18b569056ed814e86e3ead606781d7,
     type: 3}
@@ -121,13 +121,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 32469413a61e1004599e863bf3123de8, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  Description: {fileID: 11400000, guid: 5ced745bcaf1a0745a468694b43eb9a4, type: 2}
-  isShopItem: 0
-  triggerSound: {fileID: -33544997069253084}
-  triggeredSprite: {fileID: -8008485894323969659, guid: cf18b569056ed814e86e3ead606781d7,
-    type: 3}
-  slowFactor: 0.8
-  duration: 5
+  description: {fileID: 11400000, guid: 173a35778156a5f48a3f033778b39daf, type: 2}
+  audioSource: {fileID: -33544997069253084}
+  spriteRenderer: {fileID: 1652132710952191853}
 --- !u!82 &-33544997069253084
 AudioSource:
   m_ObjectHideFlags: 0

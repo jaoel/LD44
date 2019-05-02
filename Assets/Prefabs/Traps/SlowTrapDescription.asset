@@ -1,0 +1,26 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 33598dd71d7f4644ea1218b8032ce061, type: 3}
+  m_Name: SlowTrapDescription
+  m_EditorClassIdentifier: 
+  nonTriggeredSprite: {fileID: 3553784779068207146, guid: cf18b569056ed814e86e3ead606781d7,
+    type: 3}
+  triggeredSprite: {fileID: -8008485894323969659, guid: cf18b569056ed814e86e3ead606781d7,
+    type: 3}
+  triggerSound: {fileID: 8300000, guid: 4c2c1b4438f673947b880f6bb9795e74, type: 3}
+  resetSound: {fileID: 8300000, guid: 4c2c1b4438f673947b880f6bb9795e74, type: 3}
+  resetOnExit: 1
+  triggerOnInvulnerable: 1
+  resetTime: 2
+  damage: 0
+  slowFactor: 0.8
+  slowDuration: 5

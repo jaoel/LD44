@@ -228,6 +228,8 @@ public class Enemy : MonoBehaviour
             dieDirection = velocity;
             _velocity = dieDirection.normalized * 2.5f;
         }
+
+        _hasAggro = true;
     }
 
     public virtual bool KillMe()

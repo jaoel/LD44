@@ -15,6 +15,7 @@ namespace Assets.Scripts
         private readonly InteractiveDungeonObject _interactiveObjectsContainer;
         private readonly ItemContainer _itemContainer;
         private readonly EnemyContainer _enemyContainer;
+        private readonly TrapContainer _trapContainer;
 
         private int _width;
         private int _height;
@@ -22,7 +23,7 @@ namespace Assets.Scripts
         List<GameObject> _enemies;
 
         public MapGenerator(TileContainer tileContainer, InteractiveDungeonObject interactiveObjects,
-            ItemContainer itemContainer, EnemyContainer enemyContainer)
+            ItemContainer itemContainer, EnemyContainer enemyContainer, TrapContainer trapContainer)
         {
             _interactiveObjects = new List<GameObject>();
             _enemies = new List<GameObject>();
@@ -33,6 +34,7 @@ namespace Assets.Scripts
             _interactiveObjectsContainer = interactiveObjects;
             _itemContainer = itemContainer;
             _enemyContainer = enemyContainer;
+            _trapContainer = trapContainer;
         }
 
         public List<Enemy> GetEnemiesInCircle(Vector2 position, float radius) {
@@ -110,7 +112,7 @@ namespace Assets.Scripts
             //Stairs to next level
             Vector3Int stairsPosition = map.GetOpenPositionInRoom(2, 2);
             _interactiveObjects.Add(GameObject.Instantiate(_interactiveObjectsContainer.Stairs,
-                new Vector3(stairsPosition.x, stairsPosition.y, -1.0f), Quaternion.identity));
+                new Vector3(stairsPosition.x, stairsPosition.y, 0.0f), Quaternion.identity));
 
             map.stairs = _interactiveObjects[0];
         }
@@ -126,9 +128,9 @@ namespace Assets.Scripts
                 {
                     pos = map.GetOpenPositionInRoom(2, 2);
                 }
-
-                _interactiveObjects.Add(GameObject.Instantiate(_itemContainer.GetRandomTrap().itemPrefab,
-                    new Vector3(pos.x, pos.y, -1.0f), Quaternion.identity).gameObject);
+            
+                _interactiveObjects.Add(GameObject.Instantiate(_trapContainer.GetRandomTrap(),
+                    new Vector3(pos.x, pos.y, 0.0f), Quaternion.identity).gameObject);
             }
 
             int enemyCount = 0;
@@ -154,7 +156,7 @@ namespace Assets.Scripts
                 }
 
                 _enemies.Add(GameObject.Instantiate(_enemyContainer.basicZombie, 
-                    new Vector3(spawnPos.x, spawnPos.y, -2), Quaternion.identity));
+                    new Vector3(spawnPos.x, spawnPos.y, 0.0f), Quaternion.identity));
                 _enemies[_enemies.Count - 1].SetActive(false);
                 _enemies[_enemies.Count - 1].GetComponent<Enemy>().maxSpeedMultiplier = Random.Range(0.9f, 1.2f);
             }
@@ -168,7 +170,7 @@ namespace Assets.Scripts
                 }
 
                 GameObject type = Random.Range(0.0f, 1.0f) < 0.5f ? _enemyContainer.shootingZombie : _enemyContainer.shotgunZombie;
-                _enemies.Add(GameObject.Instantiate(type, new Vector3(spawnPos.x, spawnPos.y, -2), Quaternion.identity));
+                _enemies.Add(GameObject.Instantiate(type, new Vector3(spawnPos.x, spawnPos.y, 0.0f), Quaternion.identity));
                 _enemies[_enemies.Count - 1].SetActive(false);
             }
         }

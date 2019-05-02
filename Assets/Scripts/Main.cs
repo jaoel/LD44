@@ -14,6 +14,7 @@ public class Main : MonoBehaviour
     public InteractiveDungeonObject interactiveDungeonObjectContainer;
     public ItemContainer itemContainer;
     public EnemyContainer enemyContainer;
+    public TrapContainer trapContainer;
     public Player player;
 
     MapGenerator _mapGen;
@@ -54,7 +55,7 @@ public class Main : MonoBehaviour
         Time.timeScale = 1.0f;
         _gamePaused = false;
         _mapGen = new MapGenerator(tileContainer, interactiveDungeonObjectContainer, itemContainer,
-            enemyContainer);
+            enemyContainer, trapContainer);
         _renderBSP = false;
 
         LoadLevel();
@@ -73,17 +74,18 @@ public class Main : MonoBehaviour
 
     public void GenerateMap()
     {
+        BulletManager.Instance.Clear();
         Cursor.visible = false;
 
         if (MusicController.Instance != null)
         {
             if (_currentLevel == 0)
             {
-                MusicController.Instance.PlayMusic("RandomGameplay", false);
+                MusicController.Instance.PlayMusic("RandomGameplay", true);
             }
             else
             {
-                MusicController.Instance.PlayMusic("ResumeGameplay", false, 1.0f);
+                MusicController.Instance.PlayMusic("ResumeGameplay", true, 1.0f);
             }
         }  
 
@@ -97,6 +99,7 @@ public class Main : MonoBehaviour
     }
 
     public void GenerateShop() {
+        BulletManager.Instance.Clear();
         _mapGen.Clear();
 
         if (MusicController.Instance != null)

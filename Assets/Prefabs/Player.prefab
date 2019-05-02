@@ -76,9 +76,9 @@ MonoBehaviour:
   deceleration: 25
   invulnTime: 1
   characterAnimation: {fileID: 6271302632493112618}
-  CurrentWeapon: {fileID: 8576656811411399088, guid: 334ef3daf64cda543bd3fd358c1d13a6,
+  CurrentWeapon: {fileID: 8576656811411399088, guid: fe8980b87054e1e4794848ff451c8fc9,
     type: 3}
-  startHealth: 20
+  startHealth: 30
   firingRateModifier: 1
 --- !u!61 &901794245638907986
 BoxCollider2D:
@@ -189,9 +189,9 @@ SpriteRenderer:
   m_AutoUVMaxDistance: 0.5
   m_AutoUVMaxAngle: 89
   m_LightmapParameters: {fileID: 0}
-  m_SortingLayerID: 0
-  m_SortingLayer: 0
-  m_SortingOrder: 0
+  m_SortingLayerID: -507198905
+  m_SortingLayer: 3
+  m_SortingOrder: 1
   m_Sprite: {fileID: 4334783836991956000, guid: 433ff036a6512e949a9388382064bf10,
     type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
@@ -300,8 +300,8 @@ SpriteRenderer:
   m_AutoUVMaxDistance: 0.5
   m_AutoUVMaxAngle: 89
   m_LightmapParameters: {fileID: 0}
-  m_SortingLayerID: 0
-  m_SortingLayer: 0
+  m_SortingLayerID: -507198905
+  m_SortingLayer: 3
   m_SortingOrder: 0
   m_Sprite: {fileID: 21300000, guid: 650ff1a3ad94541429194b847a4ec0c6, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}

@@ -855,8 +855,8 @@ TilemapRenderer:
   m_AutoUVMaxDistance: 0.5
   m_AutoUVMaxAngle: 89
   m_LightmapParameters: {fileID: 0}
-  m_SortingLayerID: 0
-  m_SortingLayer: 0
+  m_SortingLayerID: 1693365561
+  m_SortingLayer: 1
   m_SortingOrder: 0
   m_ChunkSize: {x: 32, y: 32, z: 32}
   m_ChunkCullingBounds: {x: 0, y: 0, z: 0}
@@ -1090,6 +1090,7 @@ MonoBehaviour:
   - {fileID: 8498315502240977441}
   - {fileID: 8132124545701279346}
   ItemContainer: {fileID: 11400000, guid: 74287dc484f187343ab501050ebd52a6, type: 2}
+  shopUI: {fileID: 0}
   itemsParent: {fileID: 8830088508525117770}
   healthGlobeDroprate: 1
 --- !u!1 &8917462698849252028
@@ -1870,9 +1871,9 @@ TilemapRenderer:
   m_AutoUVMaxDistance: 0.5
   m_AutoUVMaxAngle: 89
   m_LightmapParameters: {fileID: 0}
-  m_SortingLayerID: 0
-  m_SortingLayer: 0
-  m_SortingOrder: 0
+  m_SortingLayerID: 1693365561
+  m_SortingLayer: 1
+  m_SortingOrder: 1
   m_ChunkSize: {x: 32, y: 32, z: 32}
   m_ChunkCullingBounds: {x: 0, y: 0, z: 0}
   m_MaxChunkCount: 16
@@ -1967,6 +1968,16 @@ PrefabInstance:
         type: 3}
       propertyPath: isShop
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2227333184742833408, guid: 478254d33b1e24f45bee4d2a2b014ea1,
+        type: 3}
+      propertyPath: m_SortingLayerID
+      value: -1470884651
+      objectReference: {fileID: 0}
+    - target: {fileID: 2227333184742833408, guid: 478254d33b1e24f45bee4d2a2b014ea1,
+        type: 3}
+      propertyPath: m_SortingLayer
+      value: 2
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 478254d33b1e24f45bee4d2a2b014ea1, type: 3}
