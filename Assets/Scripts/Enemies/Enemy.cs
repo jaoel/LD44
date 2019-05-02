@@ -246,6 +246,8 @@ public class Enemy : MonoBehaviour
                     Item drop = Instantiate(itemContainer.GetEnemyDrop().itemPrefab, transform.position, Quaternion.identity);
                     drop.transform.localScale = new Vector3(0.5f, 0.5f, 0.5f);
                     drop.gameObject.SetActive(true);
+
+                    Main.Instance.AddInteractiveObject(drop.gameObject);
                 } else {
                     killsSinceLastDrop++;
                 }

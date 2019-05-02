@@ -100,7 +100,7 @@ public class Main : MonoBehaviour
 
     public void GenerateShop() {
         BulletManager.Instance.Clear();
-        _mapGen.Clear();
+        _currentMap.Clear();
 
         if (MusicController.Instance != null)
             MusicController.Instance.PlayMusic("Shop");
@@ -110,8 +110,13 @@ public class Main : MonoBehaviour
         shopInstance.MovePlayerToSpawn(player);
     }
 
+    public void AddInteractiveObject(GameObject interactiveObject)
+    {
+        _currentMap.AddInteractiveObject(interactiveObject);
+    }
+
     public void DamageAllEnemiesInCircle(Vector2 position, float radius, int damage, bool damagePlayer) {
-        List<Enemy> enemies = _mapGen.GetEnemiesInCircle(position, radius);
+        List<Enemy> enemies = _currentMap.GetEnemiesInCircle(position, radius);
         foreach(Enemy enemy in enemies) {
             Vector2 dir = new Vector2(enemy.transform.position.x, enemy.transform.position.y) - position;
             enemy.ApplyDamage(damage, dir);

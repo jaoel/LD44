@@ -25,6 +25,8 @@ public class Map
     private readonly int[,] _collisionMap;
 
     public GameObject stairs;
+    private List<GameObject> _interactiveObjects;
+    private List<GameObject> _enemies;
 
     public Map(BSPTree bspTree, Tilemap walls, Tilemap floor, int width, int height, int[,] collisionMap)
     {
@@ -38,7 +40,59 @@ public class Map
         NavigationManager.collisionMap = _collisionMap;
 
         _leafNodes = new List<BSPTree>();
-        _bspTree.GetAllLeafNodes(ref _leafNodes);
+        _bspTree.GetAllLeafNodes(ref _leafNodes); 
+    }
+
+    public void SetInteractiveObjects(List<GameObject> interactiveObjects, List<GameObject> enemies)
+    {
+        _interactiveObjects = interactiveObjects;
+        _enemies = enemies;
+    }
+
+    public void DestroyAllInteractiveObjects()
+    {
+        _interactiveObjects.ForEach(x =>
+        {
+            GameObject.Destroy(x);
+        });
+        _interactiveObjects.Clear();
+
+        _enemies.ForEach(x =>
+        {
+            GameObject.Destroy(x);
+        });
+        _enemies.Clear();
+    }
+
+    public void Clear()
+    {
+        _floor.ClearAllTiles();
+        _walls.ClearAllTiles();
+        DestroyAllInteractiveObjects();
+    }
+
+    public void AddInteractiveObject(GameObject interactiveObject)
+    {
+        _interactiveObjects.Add(interactiveObject);
+    }
+
+    public void AddEnemy(GameObject enemy)
+    {
+        _enemies.Add(enemy);
+    }
+
+    public List<Enemy> GetEnemiesInCircle(Vector2 position, float radius)
+    {
+        List<Enemy> closeEnemies = new List<Enemy>();
+        foreach (GameObject enemy in _enemies)
+        {
+            if (enemy == null || enemy.Equals(null)) continue;
+            if (Vector2.Distance(enemy.transform.position, position) <= radius)
+            {
+                closeEnemies.Add(enemy.GetComponent<Enemy>());
+            }
+        }
+        return closeEnemies;
     }
 
     public void MovePlayerToSpawn(Player player)

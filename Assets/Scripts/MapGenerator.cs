@@ -19,15 +19,10 @@ namespace Assets.Scripts
 
         private int _width;
         private int _height;
-        List<GameObject> _interactiveObjects;
-        List<GameObject> _enemies;
-
+       
         public MapGenerator(TileContainer tileContainer, InteractiveDungeonObject interactiveObjects,
             ItemContainer itemContainer, EnemyContainer enemyContainer, TrapContainer trapContainer)
         {
-            _interactiveObjects = new List<GameObject>();
-            _enemies = new List<GameObject>();
-
             _floor = GameObject.Find("Floor").GetComponent<Tilemap>();
             _walls = GameObject.Find("Walls").GetComponent<Tilemap>();
             _tileContainer = tileContainer;
@@ -36,36 +31,17 @@ namespace Assets.Scripts
             _enemyContainer = enemyContainer;
             _trapContainer = trapContainer;
         }
-
-        public List<Enemy> GetEnemiesInCircle(Vector2 position, float radius) {
-            List<Enemy> closeEnemies = new List<Enemy>();
-            foreach (GameObject enemy in _enemies) {
-                if (enemy == null || enemy.Equals(null)) continue;
-                if(Vector2.Distance(enemy.transform.position, position) <= radius) {
-                    closeEnemies.Add(enemy.GetComponent<Enemy>());
-                }
-            }
-            return closeEnemies;
-        }
-
+           
         public void DrawDebug()
         {
             //if (_root != null)
             //    BSPTree.DebugDrawBspNode(_root);
-        }
-
-        public void Clear() {
-            _floor.ClearAllTiles();
-            _walls.ClearAllTiles();
-            DestroyAllInteractiveObjects();
-        }
+        }   
                                     
         public Map GenerateDungeon(int subdivisions, int width, int height, int currentLevel, Player player)
         {
             _width = width;
             _height = height;
-
-            Clear();
 
             int[,] collisionMap = new int[_width, _height];
 
@@ -83,53 +59,44 @@ namespace Assets.Scripts
             FillTilemap(root, collisionMap);
             PaintTilemap(collisionMap);
 
+            List<GameObject> interactiveObjects = new List<GameObject>();
+            List<GameObject> enemies = new List<GameObject>();
+
             Map map = new Map(root, _walls, _floor, _width, _height, collisionMap);
-            AddStairs(map);
+            AddStairs(map, interactiveObjects);
             map.MovePlayerToSpawn(player);
 
-            PopulateMap(map, player, currentLevel);
-            _enemies.ForEach(x => x.SetActive(true));
+            PopulateMap(map, player, currentLevel, interactiveObjects, enemies);
+            enemies.ForEach(x => x.SetActive(true));
+            map.SetInteractiveObjects(interactiveObjects, enemies);
+
             return map;
         }
 
-        public void DestroyAllInteractiveObjects()
-        {
-            _interactiveObjects.ForEach(x =>
-            {
-                GameObject.Destroy(x);
-            });
-            _interactiveObjects.Clear();
-
-            _enemies.ForEach(x =>
-            {
-                GameObject.Destroy(x);
-            });
-            _enemies.Clear();
-        }
-
-        private void AddStairs(Map map)
+        private void AddStairs(Map map, List<GameObject> interactiveObjects)
         {
             //Stairs to next level
             Vector3Int stairsPosition = map.GetOpenPositionInRoom(2, 2);
-            _interactiveObjects.Add(GameObject.Instantiate(_interactiveObjectsContainer.Stairs,
+            interactiveObjects.Add(GameObject.Instantiate(_interactiveObjectsContainer.Stairs,
                 new Vector3(stairsPosition.x, stairsPosition.y, 0.0f), Quaternion.identity));
 
-            map.stairs = _interactiveObjects[0];
+            map.stairs = interactiveObjects[0];
         }
 
-        void PopulateMap(Map map, Player player, int currentLevel)
+        void PopulateMap(Map map, Player player, int currentLevel, List<GameObject> interactiveObjects,
+            List<GameObject> enemies)
         {
             int trapCount = Random.Range(0, 10);
             for(int i = 0; i < trapCount; i++)
             {
                 Vector3Int pos = map.GetOpenPositionInRoom(2, 2);
                 while(Vector3.Distance(pos, player.transform.position) < 4 
-                    || _interactiveObjects.Any(x => Vector3.Distance(x.transform.position, pos) < 4))
+                    || interactiveObjects.Any(x => Vector3.Distance(x.transform.position, pos) < 4))
                 {
                     pos = map.GetOpenPositionInRoom(2, 2);
                 }
-            
-                _interactiveObjects.Add(GameObject.Instantiate(_trapContainer.GetRandomTrap(),
+
+                interactiveObjects.Add(GameObject.Instantiate(_trapContainer.GetRandomTrap(),
                     new Vector3(pos.x, pos.y, 0.0f), Quaternion.identity).gameObject);
             }
 
@@ -155,10 +122,10 @@ namespace Assets.Scripts
                     spawnPos = map.GetOpenPositionInRoom(1, 1);
                 }
 
-                _enemies.Add(GameObject.Instantiate(_enemyContainer.basicZombie, 
+                enemies.Add(GameObject.Instantiate(_enemyContainer.basicZombie, 
                     new Vector3(spawnPos.x, spawnPos.y, 0.0f), Quaternion.identity));
-                _enemies[_enemies.Count - 1].SetActive(false);
-                _enemies[_enemies.Count - 1].GetComponent<Enemy>().maxSpeedMultiplier = Random.Range(0.9f, 1.2f);
+                enemies[enemies.Count - 1].SetActive(false);
+                enemies[enemies.Count - 1].GetComponent<Enemy>().maxSpeedMultiplier = Random.Range(0.9f, 1.2f);
             }
 
             for (int i = 0; i < shootingZombieCount; i++)
@@ -170,8 +137,8 @@ namespace Assets.Scripts
                 }
 
                 GameObject type = Random.Range(0.0f, 1.0f) < 0.5f ? _enemyContainer.shootingZombie : _enemyContainer.shotgunZombie;
-                _enemies.Add(GameObject.Instantiate(type, new Vector3(spawnPos.x, spawnPos.y, 0.0f), Quaternion.identity));
-                _enemies[_enemies.Count - 1].SetActive(false);
+                enemies.Add(GameObject.Instantiate(type, new Vector3(spawnPos.x, spawnPos.y, 0.0f), Quaternion.identity));
+                enemies[enemies.Count - 1].SetActive(false);
             }
         }
 
