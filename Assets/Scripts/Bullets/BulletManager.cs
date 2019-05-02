@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 
 public class BulletManager : MonoBehaviour {
-    public int bulletZIndex = -3;
     private int preAllocateCount = 50;
 
     private GameObject bulletPoolWrapper;
@@ -63,7 +62,7 @@ public class BulletManager : MonoBehaviour {
 
         Bullet bullet = availableBullet.instance;
         bullet.gameObject.SetActive(true);
-        bullet.transform.position = new Vector3(position.x, position.y, bulletZIndex);
+        bullet.transform.position = new Vector3(position.x, position.y, 0.0f);
         bullet.SetSize(description.size);
         bullet.SetTint(description.tint);
         bullet.SetOwner(owner);

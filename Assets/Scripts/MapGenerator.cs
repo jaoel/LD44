@@ -112,7 +112,7 @@ namespace Assets.Scripts
             //Stairs to next level
             Vector3Int stairsPosition = map.GetOpenPositionInRoom(2, 2);
             _interactiveObjects.Add(GameObject.Instantiate(_interactiveObjectsContainer.Stairs,
-                new Vector3(stairsPosition.x, stairsPosition.y, -1.0f), Quaternion.identity));
+                new Vector3(stairsPosition.x, stairsPosition.y, 0.0f), Quaternion.identity));
 
             map.stairs = _interactiveObjects[0];
         }
@@ -130,7 +130,7 @@ namespace Assets.Scripts
                 }
             
                 _interactiveObjects.Add(GameObject.Instantiate(_trapContainer.GetRandomTrap(),
-                    new Vector3(pos.x, pos.y, -1.0f), Quaternion.identity).gameObject);
+                    new Vector3(pos.x, pos.y, 0.0f), Quaternion.identity).gameObject);
             }
 
             int enemyCount = 0;
@@ -156,7 +156,7 @@ namespace Assets.Scripts
                 }
 
                 _enemies.Add(GameObject.Instantiate(_enemyContainer.basicZombie, 
-                    new Vector3(spawnPos.x, spawnPos.y, -2), Quaternion.identity));
+                    new Vector3(spawnPos.x, spawnPos.y, 0.0f), Quaternion.identity));
                 _enemies[_enemies.Count - 1].SetActive(false);
                 _enemies[_enemies.Count - 1].GetComponent<Enemy>().maxSpeedMultiplier = Random.Range(0.9f, 1.2f);
             }
@@ -170,7 +170,7 @@ namespace Assets.Scripts
                 }
 
                 GameObject type = Random.Range(0.0f, 1.0f) < 0.5f ? _enemyContainer.shootingZombie : _enemyContainer.shotgunZombie;
-                _enemies.Add(GameObject.Instantiate(type, new Vector3(spawnPos.x, spawnPos.y, -2), Quaternion.identity));
+                _enemies.Add(GameObject.Instantiate(type, new Vector3(spawnPos.x, spawnPos.y, 0.0f), Quaternion.identity));
                 _enemies[_enemies.Count - 1].SetActive(false);
             }
         }
