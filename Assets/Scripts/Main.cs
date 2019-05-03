@@ -18,7 +18,7 @@ public class Main : MonoBehaviour
     public Player player;
 
     MapGenerator _mapGen;
-    public Map _currentMap;
+    public BSPMap _currentMap;
     bool _renderBSP;
 
     public GameObject gameOverUI;

@@ -5,7 +5,7 @@ using UnityEngine;
 using UnityEngine.Tilemaps;
 
 
-public class Map
+public class BSPMap
 {
     public int[,] CollisionMap
     {
@@ -28,7 +28,7 @@ public class Map
     private List<GameObject> _interactiveObjects;
     private List<GameObject> _enemies;
 
-    public Map(BSPTree bspTree, Tilemap walls, Tilemap floor, int width, int height, int[,] collisionMap)
+    public BSPMap(BSPTree bspTree, Tilemap walls, Tilemap floor, int width, int height, int[,] collisionMap)
     {
         _bspTree = bspTree;
         _walls = walls;

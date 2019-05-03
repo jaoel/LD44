@@ -7,7 +7,7 @@ using Random = UnityEngine.Random;
 
 namespace Assets.Scripts
 {
-    public class MapGenerator
+    public class BSPMapGenerator
     {
         private Tilemap _floor;
         private Tilemap _walls;
@@ -20,7 +20,7 @@ namespace Assets.Scripts
         private int _width;
         private int _height;
        
-        public MapGenerator(TileContainer tileContainer, InteractiveDungeonObject interactiveObjects,
+        public BSPMapGenerator(TileContainer tileContainer, InteractiveDungeonObject interactiveObjects,
             ItemContainer itemContainer, EnemyContainer enemyContainer, TrapContainer trapContainer)
         {
             _floor = GameObject.Find("Floor").GetComponent<Tilemap>();
