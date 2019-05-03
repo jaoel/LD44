@@ -1,3 +1,5 @@
+using System;
+
 public abstract class LCG
 {
     protected readonly int _multiplier;
