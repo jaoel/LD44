@@ -43,6 +43,9 @@ public abstract class LCG
         if (min > max)
             return int.MinValue;
 
+        if (min == max)
+            return min;
+
         return (Next() % (max - min)) + min;
     }
 
@@ -50,6 +53,9 @@ public abstract class LCG
     {
         if (min > max)
             return float.MinValue;
+
+        if (min == max)
+            return min;
 
         return (NextFloat() * (max - min)) + min;
     }

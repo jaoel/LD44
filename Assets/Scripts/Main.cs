@@ -17,7 +17,7 @@ public class Main : MonoBehaviour
     public TrapContainer trapContainer;
     public Player player;
 
-    MapGenerator _mapGen;
+    BSPMapGenerator _mapGen;
     public BSPMap _currentMap;
     bool _renderBSP;
 
@@ -55,7 +55,7 @@ public class Main : MonoBehaviour
         shopInstance = Instantiate(shopRoomPrefab);
         Time.timeScale = 1.0f;
         _gamePaused = false;
-        _mapGen = new MapGenerator(tileContainer, interactiveDungeonObjectContainer, itemContainer,
+        _mapGen = new BSPMapGenerator(tileContainer, interactiveDungeonObjectContainer, itemContainer,
             enemyContainer, trapContainer);
         _renderBSP = false;
 
