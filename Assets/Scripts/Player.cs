@@ -4,6 +4,7 @@ using DG.Tweening;
 public class Player : MonoBehaviour
 {
     public ParticleSystemContainer particleSystemContainer;
+    public ParticleSystem dustTrail;
 
     public float maxSpeed = 8f;
     public float acceleration = 25f;
@@ -177,7 +178,8 @@ public class Player : MonoBehaviour
     private void CalculateDeceleration() {
         if (inputVector.x <=  0f && velocity.x > 0f) {
             velocity.x -= deceleration * Time.deltaTime;
-            if (velocity.x < 0f) velocity.x = 0f;
+            if (velocity.x < 0f)
+                velocity.x = 0f;
         }
         if (inputVector.x >= 0f && velocity.x < 0f)
         {
@@ -259,5 +261,10 @@ public class Player : MonoBehaviour
                 SoundManager.Instance.PlayPainSound();
             }
         }
+    } 
+    
+    public void Test(int foo)
+    {
+        Debug.Log(foo);
     }
 }
