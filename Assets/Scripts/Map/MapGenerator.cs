@@ -16,30 +16,44 @@ public class MapGenerator : MonoBehaviour
     private void Update()
     {
         MapGeneratorParameters parameters = new MapGeneratorParameters();
-        parameters.GenerationRadius = 50;
+        parameters.GenerationRadius = 25;
 
         parameters.MinCellSize = 3;
         parameters.MaxCellSize = 10;
 
-        parameters.MinCellCount = 10;
-        parameters.MaxCellCount = 150;
+        parameters.MinCellCount = 4;
+        parameters.MaxCellCount = 4;
 
-        parameters.MinRoomWidth = 5;
-        parameters.MinRoomHeight = 5;
+        parameters.MinRoomWidth = 0;
+        parameters.MinRoomHeight = 0;
 
-        if (Input.GetKey(KeyCode.Alpha1))
+        if (Input.GetKeyDown(KeyCode.Alpha1))
         {
-            _currentMap = GenerateMap(DateTime.Now.Ticks, parameters);
+            _currentMap = GenerateMap(2, parameters);
         }
 
-        if (Input.GetKey(KeyCode.Alpha2))
+        if (Input.GetKeyDown(KeyCode.Alpha2))
         {
             SeparateCells(ref _currentMap._cells, parameters);
         }
 
-        if (Input.GetKey(KeyCode.Alpha3))
+        if (Input.GetKeyDown(KeyCode.Alpha3))
         {
             IdentifyRooms(ref _currentMap._cells, parameters);
+        }
+
+        if (Input.GetKeyDown(KeyCode.Alpha4))
+        {
+            Triangulate(ref _currentMap._cells);
+        }
+
+        if (Input.GetKeyDown(KeyCode.R))
+        {
+            _currentMap = GenerateMap(2, parameters);
+            SeparateCells(ref _currentMap._cells, parameters);
+            IdentifyRooms(ref _currentMap._cells, parameters);
+
+            Triangulate(ref _currentMap._cells);
         }
     }
 
@@ -59,6 +73,8 @@ public class MapGenerator : MonoBehaviour
 
         GenerateCells(ref nodes, parameters);
         //SeparateCells(ref nodes, parameters);
+        //IdentifyRooms(ref nodes, parameters);
+        //Triangulate(ref nodes);
 
         result._cells = nodes;
 
@@ -76,10 +92,7 @@ public class MapGenerator : MonoBehaviour
 
             nodes.Add(new MapNode(i, position, size));
 
-            //nodes = nodes.OrderBy(x => x.Cell.x).ThenBy(x => x.Cell.y).ToList();
-
-            if (nodes[i].Cell.width == 0 || nodes[i].Cell.height == 0)
-                Debug.Log(i);
+            nodes = nodes.OrderBy(x => x.Cell.x).ThenBy(x => x.Cell.y).ToList();   
         }
     }
 
@@ -140,6 +153,11 @@ public class MapGenerator : MonoBehaviour
             else
                 node.Type = MapNodeType.Room;
         } 
+    }
+
+    private void Triangulate(ref List<MapNode> nodes)
+    {
+        _currentMap._triangulation = DelaunayTriangulation.Triangulate(nodes.Where(x => x.Type == MapNodeType.Room).ToList());
     }
 
     private Vector2Int GenerateRandomSize(in MapGeneratorParameters parameters)

@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 public class MapGeneratorParameters
 {
-    public float GenerationRadius { get; set; }
+    public int GenerationRadius { get; set; }
 
     public int MaxCellCount { get; set; }
     public int MinCellCount { get; set; }
