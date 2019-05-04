@@ -16,7 +16,9 @@ public class ShadedText : MonoBehaviour {
     private TMPro.TextMeshProUGUI shadowUp;
     private TMPro.TextMeshProUGUI shadowDown;
 
-    // Use this for initialization
+    private string oldText = "";
+    private bool initialized = false;
+
     void Awake() {
         textMesh = GetComponent<TMPro.TextMeshProUGUI>();
     }
@@ -44,9 +46,9 @@ public class ShadedText : MonoBehaviour {
         shadowDown.rectTransform.anchoredPosition = shadowDown.rectTransform.anchoredPosition + Vector2.down * offset;
 
         transform.SetAsLastSibling();
-    }
 
-    private string oldText = "";
+        initialized = true;
+    }
 
     private void SetText(string text) {
         shadowLeft.text = text;
@@ -60,5 +62,22 @@ public class ShadedText : MonoBehaviour {
             oldText = textMesh.text;
             SetText(textMesh.text);
         }
+    }
+
+    private void SetActiveAll(bool active) {
+        if (!initialized) return;
+
+        shadowLeft.gameObject.SetActive(active);
+        shadowRight.gameObject.SetActive(active);
+        shadowUp.gameObject.SetActive(active);
+        shadowDown.gameObject.SetActive(active);
+    }
+
+    private void OnDisable() {
+        SetActiveAll(false);
+    }
+
+    private void OnEnable() {
+        SetActiveAll(true);
     }
 }

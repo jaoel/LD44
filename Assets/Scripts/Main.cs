@@ -29,6 +29,7 @@ public class Main : MonoBehaviour
     private ShopRoom shopInstance;
     public TextMeshProUGUI currentLevelText;
     public TextMeshProUGUI gameOverLevelText;
+    public GameObject blackOverlay;
 
     private int _currentLevel = 0;
     public int CurrentLevel => _currentLevel;
@@ -137,14 +138,14 @@ public class Main : MonoBehaviour
 
     void Update()
     {
-        if (Input.GetKeyDown(KeyCode.Escape) && (!_gamePaused || pauseUI.activeInHierarchy))
+        if (!_gameOver && Input.GetKeyDown(KeyCode.Escape) && (!_gamePaused || pauseUI.activeInHierarchy))
         {
             SoundManager.Instance.PlayUIButtonClick();
             TogglePause(!_gamePaused);
         }
 
-        if (!player.IsAlive && !_gameOver)
-        {
+        if (!player.IsAlive && !_gameOver) {
+            TogglePause(false);
             Cursor.visible = true;
             _gameOver = true;
 
@@ -152,7 +153,7 @@ public class Main : MonoBehaviour
                 MusicController.Instance.PlayMusic("Defeat", false);
 
             gameOverUI.SetActive(true);
-            currentLevelText.gameObject.SetActive(false);
+            blackOverlay.SetActive(true);
             gameOverLevelText.text = _currentLevel.ToString(); 
         }
     }
@@ -164,6 +165,7 @@ public class Main : MonoBehaviour
         _gamePaused = pause;
         Time.timeScale = _gamePaused ? 0.0f : 1.0f;
         pauseUI.SetActive(_gamePaused);
+        blackOverlay.SetActive(_gamePaused);
     }
 
     public void OnClickStartGame()
@@ -177,6 +179,7 @@ public class Main : MonoBehaviour
         Cursor.visible = true;
         TogglePause(false);
         gameOverUI.SetActive(false);
+        blackOverlay.SetActive(false);
         SoundManager.Instance.PlayUIButtonClick();
 
         SceneManager.LoadScene("GameScene", LoadSceneMode.Single);
@@ -187,6 +190,7 @@ public class Main : MonoBehaviour
         Cursor.visible = true;
         TogglePause(false);
         gameOverUI.SetActive(false);
+        blackOverlay.SetActive(false);
         SoundManager.Instance.PlayUIButtonClick();
 
         SceneManager.LoadScene("MainMenuScene", LoadSceneMode.Single);
