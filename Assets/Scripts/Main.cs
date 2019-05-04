@@ -107,7 +107,7 @@ public class Main : MonoBehaviour
             MusicController.Instance.PlayMusic("Shop");
 
         shopInstance.gameObject.SetActive(true);
-        shopInstance.GenerateRandomItems(_currentLevel);
+        shopInstance.GenerateRandomItems(_currentLevel, player);
         shopInstance.MovePlayerToSpawn(player);
     }
 

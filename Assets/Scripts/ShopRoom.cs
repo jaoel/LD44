@@ -1,7 +1,7 @@
 ﻿using UnityEngine;
 using System.Collections.Generic;
 using TMPro;
-using System;
+using System.Linq;
 
 public class ShopRoom : MonoBehaviour {
     public Transform spawnPoint;
@@ -17,25 +17,33 @@ public class ShopRoom : MonoBehaviour {
         CameraManager.Instance.SetCameraPosition(player.transform.position);
     }
 
-    public void GenerateRandomItems(int currentLevel) {
+    public void GenerateRandomItems(int currentLevel, Player player) {
         bool healthGlobeAdded = false;
         List<ItemDescription> shuffledShopItems = GetShuffledShopItems();
         List<ItemDescription> rareItems = GetRareItems();
+
+        shuffledShopItems = shuffledShopItems.Where(itemDesc => {
+            if (itemDesc.itemPrefab is WeaponPickup weaponPickup) {
+                return weaponPickup.Weapon.Description != player.CurrentWeapon.Description;
+            } else {
+                return true;
+            }
+        }).ToList();
 
         if (currentLevel < 5)
             rareItems.ForEach(x => shuffledShopItems.Remove(x));
 
         for (int i = 0; i < shopItems.Length; i++) {
 
-            if (UnityEngine.Random.Range(0.0f, 1.0f) < healthGlobeDroprate && !healthGlobeAdded)
+            if (Random.Range(0.0f, 1.0f) < healthGlobeDroprate && !healthGlobeAdded)
             {
                 shopItems[i].description = ItemContainer.HealthGlobe;
                 shopItems[i].InstantiateItem(itemsParent.transform);
             }
             else
             {
-                float chance = (float)((20 + Math.Pow(currentLevel, 2)) / 100.0f);
-                if (UnityEngine.Random.Range(0.0f, 1.0f) < chance)
+                float chance = (float)((20 + System.Math.Pow(currentLevel, 2)) / 100.0f);
+                if (Random.Range(0.0f, 1.0f) < chance)
                 {
                     shopItems[i].description = rareItems[i % rareItems.Count];
                     shopItems[i].InstantiateItem(itemsParent.transform);
@@ -72,7 +80,7 @@ public class ShopRoom : MonoBehaviour {
         while (n > 1)
         {
             n--;
-            int k = UnityEngine.Random.Range(0, n + 1);
+            int k = Random.Range(0, n + 1);
             ItemDescription value = shuffled[k];
             shuffled[k] = shuffled[n];
             shuffled[n] = value;
@@ -87,12 +95,19 @@ public class ShopRoom : MonoBehaviour {
         int n = shuffled.Count;
         while (n > 1) {
             n--;
-            int k = UnityEngine.Random.Range(0, n + 1);
+            int k = Random.Range(0, n + 1);
             ItemDescription value = shuffled[k];
             shuffled[k] = shuffled[n];
             shuffled[n] = value;
         }
 
         return shuffled;
+    }
+
+    private void Update() {
+        if (Input.GetKeyDown(KeyCode.X)) {
+            ClearItems();
+            Main.Instance.GenerateShop();
+        }
     }
 }
