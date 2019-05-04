@@ -91,8 +91,12 @@ public class Player : MonoBehaviour
     {
         CalculateAnimation();
 
-        if (!IsAlive || Main.Instance._gamePaused)
+        UIManager.Instance.playerUI.SetHealthbar(currentHealth, maxHealth);
+
+        if (!IsAlive || Main.Instance._gamePaused) {
+            CurrentWeapon.StoppedShooting();
             return;
+        }
 
         CalculateInputVector();
 
@@ -111,8 +115,6 @@ public class Player : MonoBehaviour
         {
             CurrentWeapon.StoppedShooting();
         }
-
-        UIManager.Instance.playerUI.SetHealthbar(currentHealth, maxHealth);
     }
 
     void FixedUpdate()
