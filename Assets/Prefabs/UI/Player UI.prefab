@@ -1011,7 +1011,7 @@ PrefabInstance:
     - target: {fileID: 1550186713553510468, guid: 041c8728bb3ea9a49835cf1389858cd2,
         type: 3}
       propertyPath: m_SizeDelta.x
-      value: 75
+      value: 264
       objectReference: {fileID: 0}
     - target: {fileID: 1550186713553510468, guid: 041c8728bb3ea9a49835cf1389858cd2,
         type: 3}
@@ -1051,12 +1051,12 @@ PrefabInstance:
     - target: {fileID: 6415969519950650587, guid: 041c8728bb3ea9a49835cf1389858cd2,
         type: 3}
       propertyPath: m_textInfo.characterCount
-      value: 7
+      value: 6
       objectReference: {fileID: 0}
     - target: {fileID: 6415969519950650587, guid: 041c8728bb3ea9a49835cf1389858cd2,
         type: 3}
       propertyPath: m_textInfo.wordCount
-      value: 2
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 6415969519950650587, guid: 041c8728bb3ea9a49835cf1389858cd2,
         type: 3}
@@ -1071,12 +1071,32 @@ PrefabInstance:
     - target: {fileID: 6415969519950650587, guid: 041c8728bb3ea9a49835cf1389858cd2,
         type: 3}
       propertyPath: m_text
-      value: Level 1
+      value: 'Level '
       objectReference: {fileID: 0}
     - target: {fileID: 6415969519950650587, guid: 041c8728bb3ea9a49835cf1389858cd2,
         type: 3}
       propertyPath: m_textInfo.spaceCount
       value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 6415969519950650587, guid: 041c8728bb3ea9a49835cf1389858cd2,
+        type: 3}
+      propertyPath: m_textAlignment
+      value: 260
+      objectReference: {fileID: 0}
+    - target: {fileID: 6415969519950650587, guid: 041c8728bb3ea9a49835cf1389858cd2,
+        type: 3}
+      propertyPath: m_firstOverflowCharacterIndex
+      value: -1
+      objectReference: {fileID: 0}
+    - target: {fileID: 6415969519950650587, guid: 041c8728bb3ea9a49835cf1389858cd2,
+        type: 3}
+      propertyPath: m_overflowMode
+      value: 3
+      objectReference: {fileID: 0}
+    - target: {fileID: 6415969519950650587, guid: 041c8728bb3ea9a49835cf1389858cd2,
+        type: 3}
+      propertyPath: m_isTextTruncated
+      value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 041c8728bb3ea9a49835cf1389858cd2, type: 3}
