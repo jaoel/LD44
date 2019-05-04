@@ -312,4 +312,4 @@ MonoBehaviour:
   shotTimer: 0
   reloadTimer: 0
   shotsFired: 0
-  bulletSpeed: 10
+  bulletSpeed: 5

@@ -310,6 +310,6 @@ MonoBehaviour:
   maxSpeedMultiplier: 1
   bulletDescription: {fileID: 11400000, guid: 953cdf6ae09340c44915bc70bf6d95e3, type: 2}
   shotTimer: 0
-  reloadTimer: 3.4028235e+38
+  reloadTimer: 0
   shotsFired: 0
-  bulletSpeed: 10
+  bulletSpeed: 5

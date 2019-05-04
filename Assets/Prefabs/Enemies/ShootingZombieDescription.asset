@@ -17,6 +17,6 @@ MonoBehaviour:
   acceleration: 15
   aggroDistance: 10
   damage: 3
-  shotCooldown: 0.2
-  magazineSize: 6
-  reloadTime: 2
+  shotCooldown: 0.4
+  magazineSize: 3
+  reloadTime: 4
