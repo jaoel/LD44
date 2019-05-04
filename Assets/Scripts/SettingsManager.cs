@@ -14,7 +14,7 @@ public class SettingsManager {
         }
         set {
             linearMusicVolume = value;
-            MusicVolume = Mathf.Pow(value, 4f);
+            MusicVolume = value * value;
         }
     }
 
@@ -24,7 +24,7 @@ public class SettingsManager {
         }
         set {
             linearSFXVolume = value;
-            SFXVolume = Mathf.Pow(value, 4f);
+            SFXVolume = value * value;
         }
     }
 
