@@ -33,7 +33,9 @@ public static class DelaunayTriangulation
         Triangulation right = Triangulate(splitList.Item2);
 
         Triangulation result = new Triangulation();
+
         Edge baseEdge = GetBaseEdge(left, right);
+        result.AddEdge(baseEdge);
 
         AddLREdge(ref result, left, right, baseEdge);
 
@@ -41,8 +43,6 @@ public static class DelaunayTriangulation
         result.AddVertices(right.Vertices);
         result.AddEdges(left.Edges);
         result.AddEdges(right.Edges);
-
-        result.AddEdge(baseEdge);
 
         return result;
     }
@@ -68,17 +68,35 @@ public static class DelaunayTriangulation
         Vertex finalLeftCandidate = FindPotentialCandidate(left, sortedLeft, baseEdge, true);
         Vertex finalRightCandidate = FindPotentialCandidate(right, sortedRight, baseEdge, false);
 
+        if (current.Edges.Count > 100)
+        {
+            Debug.Log("looping");
+            return;
+        }
+
         if (finalLeftCandidate != null && finalRightCandidate != null)
         {
-
+            Circle circle = new Circle(baseEdge.Origin, baseEdge.Target, finalLeftCandidate);
+            if (!circle.PointInCircle(finalRightCandidate.Position))
+            {
+                current.AddEdge(new Edge(finalLeftCandidate, baseEdge.Target));
+                AddLREdge(ref current, left, right, current.Edges.Last());
+            }
+            else
+            {
+                current.AddEdge(new Edge(baseEdge.Origin, finalRightCandidate));
+                AddLREdge(ref current, left, right, current.Edges.Last());
+            }
         }
         else if (finalLeftCandidate != null && finalRightCandidate == null)
         {
-
+            current.AddEdge(new Edge(finalLeftCandidate, baseEdge.Target));
+            AddLREdge(ref current, left, right, current.Edges.Last());
         }
-        else if (finalLeftCandidate == null && finalRightCandidate == null)
+        else if (finalLeftCandidate == null && finalRightCandidate != null)
         {
-
+            current.AddEdge(new Edge(baseEdge.Origin, finalRightCandidate));
+            AddLREdge(ref current, left, right, current.Edges.Last());
         }
 
         /*
@@ -168,25 +186,28 @@ public static class DelaunayTriangulation
     }
 
     public static double FindAngle(Edge baseEdge, Vertex candidate, bool left)
-    {
+    {      
         Vector2 baseVector = Vector2.zero;
         Vector2 toCandidate = Vector2.zero;
         double angle = 0.0;
+
         if (left)
         {
             baseVector = (baseEdge.Target.Position - baseEdge.Origin.Position).normalized;
             toCandidate = (candidate.Position - baseEdge.Origin.Position).normalized;
-            angle = Vector2.SignedAngle(baseVector, toCandidate);
+            angle = -Vector2.SignedAngle(baseVector, toCandidate);
+            //angle = Mathf.DeltaAngle(0.0f, Vector2.Angle(toCandidate, baseVector));
         }
         else
         {
             baseVector = (baseEdge.Origin.Position - baseEdge.Target.Position).normalized;
             toCandidate = (candidate.Position - baseEdge.Target.Position).normalized;
-            angle = Vector2.SignedAngle(toCandidate, baseVector);
+            angle = -Vector2.SignedAngle(baseVector, toCandidate);
+            //angle = Mathf.DeltaAngle(0.0f, Vector2.Angle(baseVector, toCandidate));
         }
 
         if (Math.Sign(angle) == -1)
-            angle += 360.0;
+            angle += 360.0;   
 
         return angle;
 
@@ -204,17 +225,21 @@ public static class DelaunayTriangulation
             p0.Set(baseEdge.Origin.Position.x, baseEdge.Origin.Position.y);
             p1.Set(baseEdge.Target.Position.x, baseEdge.Target.Position.y);
         }
-        var p2 = new Vector2(candidate.Position.x, candidate.Position.y);
+        p0.Normalize();
+        p1.Normalize();
+        var p2 = new Vector2(candidate.Position.x, candidate.Position.y).normalized;
 
-        var v1 = new Vector2(p1.x - p0.x, p1.y - p0.y);
-        var v2 = new Vector2(p2.x - p0.x, p2.y - p0.y);
+        var v1 = new Vector2(p1.x - p0.x, p1.y - p0.y).normalized;
+        var v2 = new Vector2(p2.x - p0.x, p2.y - p0.y).normalized;
 
         var dot = v1.x * v2.x + v1.y * v2.y;
         var det = v1.x * v2.y + v1.y * v2.x;
-        return Math.Atan2(det, dot);
-        */
+        double deg = Math.Atan2(det, dot) * Mathf.Rad2Deg;
 
-        return 0.0;
+        if (Math.Sign(deg) == -1)
+            deg += 360;
+        return deg; 
+        */
     }
 
     private static Edge GetBaseEdge(Triangulation left, Triangulation right)

@@ -41,7 +41,8 @@ public class Map
                 DrawLine(x, new Color(165 / 255.0f, 55 / 255.0f, 253 / 255.0f));
             });
 
-            DrawLine(_triangulation.Edges.Last(), Color.blue);
+            DrawLine(_triangulation.Edges.First(), Color.blue);
+            DrawLine(_triangulation.Edges[1], Color.magenta);
         }
     }
 

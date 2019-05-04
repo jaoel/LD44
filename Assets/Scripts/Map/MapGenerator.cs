@@ -49,7 +49,7 @@ public class MapGenerator : MonoBehaviour
 
         if (Input.GetKeyDown(KeyCode.R))
         {
-            _currentMap = GenerateMap(2, parameters);
+            _currentMap = GenerateMap(3, parameters);
             SeparateCells(ref _currentMap._cells, parameters);
             IdentifyRooms(ref _currentMap._cells, parameters);
 
