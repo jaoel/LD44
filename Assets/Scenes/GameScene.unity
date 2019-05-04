@@ -2796,6 +2796,11 @@ PrefabInstance:
       propertyPath: m_textInfo.pageCount
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 2005604694364208984, guid: 9614d92947da49d49986e225c3cbba6d,
+        type: 3}
+      propertyPath: m_SortingOrder
+      value: -200
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 9614d92947da49d49986e225c3cbba6d, type: 3}
 --- !u!114 &1824384383 stripped
@@ -4147,7 +4152,7 @@ Canvas:
   m_SortingBucketNormalizedSize: 0
   m_AdditionalShaderChannelsFlag: 25
   m_SortingLayerID: 0
-  m_SortingOrder: -999
+  m_SortingOrder: -100
   m_TargetDisplay: 0
 --- !u!224 &5502668721478803627
 RectTransform:
