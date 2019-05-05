@@ -22,7 +22,7 @@ public class MapGenerator : MonoBehaviour
         parameters.MinCellSize = 3;
         parameters.MaxCellSize = 30;
 
-        parameters.MinCellCount = 3;
+        parameters.MinCellCount = 150;
         parameters.MaxCellCount = 150;
 
         parameters.MinRoomWidth = 0;

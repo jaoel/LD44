@@ -6,9 +6,18 @@ using UnityEngine;
 namespace Delaunay
 {
     public class BowerWatsonDelaunay<T>
-    {                                               
+    {
+        private Timer _timer;
+
+        public BowerWatsonDelaunay()
+        {
+            _timer = new Timer();
+        }
+
         public IEnumerable<Triangle<T>> Triangulate(IEnumerable<Vertex<T>> vertices)
         {
+            _timer.Start();
+
             Triangle<T> supraTriangle = GetSupraTriangle(vertices);
             HashSet<Triangle<T>> triangulation = new HashSet<Triangle<T>>() { supraTriangle };
 
@@ -35,6 +44,10 @@ namespace Delaunay
             }
 
             triangulation.RemoveWhere(x => x.Vertices.Any(v => supraTriangle.Vertices.Contains(v)));
+
+            _timer.Stop();
+            _timer.Print("BowerWatsonDelaunay.Triangulate");
+
             return triangulation;
         }
 
@@ -54,6 +67,8 @@ namespace Delaunay
 
         public HashSet<Edge<T>> GetGabrielGraph(in HashSet<Edge<T>> delaunayEdges, in IEnumerable<Vertex<T>> vertices)
         {
+            _timer.Start();
+
             HashSet<Edge<T>> result = new HashSet<Edge<T>>(delaunayEdges);
             List<Edge<T>> removalList = new List<Edge<T>>();
 
@@ -70,11 +85,17 @@ namespace Delaunay
             }
 
             result.RemoveWhere(x => removalList.Contains(x));
+
+            _timer.Stop();
+            _timer.Print("BowerWatsonDelaunay.GetGabrielGraph");
+
             return result;
         }
 
         public HashSet<Edge<T>> GetPrimEMST(in HashSet<Edge<T>> gabrielGraph, in IEnumerable<Vertex<T>> vertices)
         {
+            _timer.Start();
+
             HashSet<Edge<T>> emst = new HashSet<Edge<T>>();
             List<Vertex<T>> queue = new List<Vertex<T>>(vertices);
             List<Vertex<T>> tree = new List<Vertex<T>>();
@@ -100,6 +121,9 @@ namespace Delaunay
 
                 queue.Remove(tree.Last());
             }
+
+            _timer.Stop();
+            _timer.Print("BowerWatsonDelaunay.GetPrimEMST");
 
             return emst;
         }
