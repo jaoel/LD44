@@ -1,37 +1,43 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.Collections.Generic;
 using UnityEngine;
 
-public class Vertex
+namespace Delaunay
 {
-    private MapNode _node;
-    private double _angle;
-
-    public RectInt Cell => _node.Cell;
-    public Vector2 Position => _node.Cell.center;
-    public double Angle => _angle;
-    public MapNode Node => _node;
-
-    public Vertex()
+    public class Vertex<T>
     {
+        public Vector2 Position { get; set; }
+        public HashSet<Triangle<T>> AdjacentTriangles { get; }
+        public T Data { get; set; }
 
-    }
+        private Vertex()
+        {
+            AdjacentTriangles = new HashSet<Triangle<T>>();
+        }
 
-    public Vertex(MapNode node)
-    {
-        _node = node;
-    }
+        public Vertex(Vector2 position)
+            : this()
+        {
+            Position = position;
+        }
 
-    public void SetNode(MapNode node)
-    {
-        _node = node;
-    }
+        public Vertex(float x, float y)
+           : this()
+        {
+            Position = new Vector2(x, y);
+        }
 
-    public void SetAngle(double angle)
-    {
-        _angle = angle;
+        public Vertex(Vector2 position, T data)
+            : this()
+        {
+            Position = position;
+            Data = data;
+        }
+
+        public Vertex(float x, float y, T data)
+          : this()
+        {
+            Position = new Vector2(x, y);
+            Data = data;
+        }
     }
 }

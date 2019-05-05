@@ -6,7 +6,10 @@ using UnityEngine;
 public class Map
 {
     public List<MapNode> _cells;
-    public Triangulation _triangulation;
+    public List<Delaunay.Triangle<MapNode>> Triangles;
+    //public Triangulation _triangulation;
+
+    //public List<QuadEdge<int>> _edges;
 
     public void DrawDebug()
     {
@@ -34,16 +37,36 @@ public class Map
             });
         }   
 
-        if (_triangulation != null)
+        if (Triangles != null)
         {
-            _triangulation.Edges.ForEach(x =>
+            Triangles.ForEach(x =>
             {
-                DrawLine(x, new Color(165 / 255.0f, 55 / 255.0f, 253 / 255.0f));
-            });
+                Gizmos.color = Color.cyan;
 
-            DrawLine(_triangulation.Edges.First(), Color.blue);
-            DrawLine(_triangulation.Edges[1], Color.magenta);
+                Gizmos.DrawLine(new Vector3(x.Vertices[0].Position.x, x.Vertices[0].Position.y, 0), new Vector3(x.Vertices[1].Position.x, x.Vertices[1].Position.y, 0));
+                Gizmos.DrawLine(new Vector3(x.Vertices[1].Position.x, x.Vertices[1].Position.y, 0), new Vector3(x.Vertices[2].Position.x, x.Vertices[2].Position.y, 0));
+                Gizmos.DrawLine(new Vector3(x.Vertices[2].Position.x, x.Vertices[2].Position.y, 0), new Vector3(x.Vertices[0].Position.x, x.Vertices[0].Position.y, 0));
+            });
         }
+
+        //if (_triangulation != null)
+        //{
+            //_triangulation.Edges.ForEach(x =>
+            //{
+            //    DrawLine(x, new Color(165 / 255.0f, 55 / 255.0f, 253 / 255.0f));
+            //});
+            //
+            //DrawLine(_triangulation.Edges.First(), Color.blue);
+            //DrawLine(_triangulation.Edges[1], Color.magenta);
+        //}
+
+        //if (_edges != null)
+        //{
+        //    _edges.ForEach(x =>
+        //    {
+        //        DrawLine(x, new Color(165 / 255.0f, 55 / 255.0f, 253 / 255.0f));
+        //    });
+        //}
     }
 
     private void DrawRectangle(RectInt rect, Color color)
@@ -55,12 +78,19 @@ public class Map
         Gizmos.DrawLine(new Vector3(rect.x, rect.y, 0), new Vector3Int(rect.x, rect.yMax, 0));
     }
 
-    private void DrawLine(Edge edge, Color color)
-    {
-        Gizmos.color = color;
-        Gizmos.DrawLine(new Vector3(edge.Origin.Cell.center.x, edge.Origin.Cell.center.y, 0), new Vector3(edge.Target.Cell.center.x, edge.Target.Cell.center.y, 0));
+    //private void DrawLine(Edge edge, Color color)
+    //{
+    //    Gizmos.color = color;
+    //    Gizmos.DrawLine(new Vector3(edge.Origin.Cell.center.x, edge.Origin.Cell.center.y, 0), new Vector3(edge.Target.Cell.center.x, edge.Target.Cell.center.y, 0));
+    //
+    //}
 
-    }   
+    //private void DrawLine(QuadEdge<int> edge, Color color)
+    //{
+    //    Gizmos.color = color;
+    //    Gizmos.DrawLine(new Vector3(edge.Origin.x, edge.Origin.y, 0), new Vector3(edge.Destination.x, edge.Destination.y, 0));
+    //
+    //}
 
     private void DrawText(Vector2 position, Color color)
     {

@@ -6,11 +6,12 @@ using UnityEngine;
 public class MapGenerator : MonoBehaviour
 {
     private MillerParkLCG _random;
-
+    private int _seed;
     private Map _currentMap;
     private void Awake()
     {
         _random = new MillerParkLCG();
+        _seed = 1;
     }
 
     private void Update()
@@ -22,7 +23,7 @@ public class MapGenerator : MonoBehaviour
         parameters.MaxCellSize = 10;
 
         parameters.MinCellCount = 4;
-        parameters.MaxCellCount = 4;
+        parameters.MaxCellCount = 100;
 
         parameters.MinRoomWidth = 0;
         parameters.MinRoomHeight = 0;
@@ -47,9 +48,14 @@ public class MapGenerator : MonoBehaviour
             Triangulate(ref _currentMap._cells);
         }
 
+        if (Input.GetKeyDown(KeyCode.KeypadPlus))
+        {
+            _seed++;
+        }
+
         if (Input.GetKeyDown(KeyCode.R))
         {
-            _currentMap = GenerateMap(3, parameters);
+            _currentMap = GenerateMap(DateTime.Now.Ticks, parameters);
             SeparateCells(ref _currentMap._cells, parameters);
             IdentifyRooms(ref _currentMap._cells, parameters);
 
@@ -91,7 +97,6 @@ public class MapGenerator : MonoBehaviour
             Vector2Int position = RandomPointInCircle(parameters.GenerationRadius); 
 
             nodes.Add(new MapNode(i, position, size));
-
             nodes = nodes.OrderBy(x => x.Cell.x).ThenBy(x => x.Cell.y).ToList();   
         }
     }
@@ -157,7 +162,9 @@ public class MapGenerator : MonoBehaviour
 
     private void Triangulate(ref List<MapNode> nodes)
     {
-        _currentMap._triangulation = DelaunayTriangulation.Triangulate(nodes.Where(x => x.Type == MapNodeType.Room).ToList());
+        Delaunay.BowerWatsonDelaunay<MapNode> triangulator = new Delaunay.BowerWatsonDelaunay<MapNode>();
+        IEnumerable<Delaunay.Triangle<MapNode>> triangles = triangulator.Triangulate(nodes.Select(x => new Delaunay.Vertex<MapNode>(x.Cell.center, x)));
+        _currentMap.Triangles = triangles.ToList();  
     }
 
     private Vector2Int GenerateRandomSize(in MapGeneratorParameters parameters)
