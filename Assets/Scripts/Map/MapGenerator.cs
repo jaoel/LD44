@@ -17,20 +17,20 @@ public class MapGenerator : MonoBehaviour
     private void Update()
     {
         MapGeneratorParameters parameters = new MapGeneratorParameters();
-        parameters.GenerationRadius = 25;
+        parameters.GenerationRadius = 50;
 
         parameters.MinCellSize = 3;
-        parameters.MaxCellSize = 10;
+        parameters.MaxCellSize = 30;
 
-        parameters.MinCellCount = 6;
-        parameters.MaxCellCount = 6;
+        parameters.MinCellCount = 3;
+        parameters.MaxCellCount = 150;
 
         parameters.MinRoomWidth = 0;
         parameters.MinRoomHeight = 0;
 
         if (Input.GetKeyDown(KeyCode.Alpha1))
         {
-            _currentMap = GenerateMap(2, parameters);
+            _currentMap = GenerateMap(DateTime.Now.Ticks, parameters);
         }
 
         if (Input.GetKeyDown(KeyCode.Alpha2))
@@ -56,6 +56,15 @@ public class MapGenerator : MonoBehaviour
         if (Input.GetKeyDown(KeyCode.R))
         {
             _currentMap = GenerateMap(_seed, parameters);
+            SeparateCells(ref _currentMap._cells, parameters);
+            IdentifyRooms(ref _currentMap._cells, parameters);
+
+            Triangulate(ref _currentMap._cells);
+        }
+
+        if (Input.GetKeyDown(KeyCode.T))
+        {
+            _currentMap = GenerateMap(DateTime.Now.Ticks, parameters);
             SeparateCells(ref _currentMap._cells, parameters);
             IdentifyRooms(ref _currentMap._cells, parameters);
 
@@ -169,9 +178,11 @@ public class MapGenerator : MonoBehaviour
 
         HashSet<Delaunay.Edge<MapNode>> delaunayEdges = triangulator.GetDelaunayEdges(triangles);
         HashSet<Delaunay.Edge<MapNode>> gabrielGraph = triangulator.GetGabrielGraph(delaunayEdges, vertices);
+        HashSet<Delaunay.Edge<MapNode>> emst = triangulator.GetPrimEMST(gabrielGraph, vertices);
 
         _currentMap.DelaunayGraph = delaunayEdges.ToList();
-        _currentMap.GabrielGraph = gabrielGraph.ToList(); 
+        _currentMap.GabrielGraph = gabrielGraph.ToList();
+        _currentMap.EMSTGraph = emst.ToList();
     }
 
     private Vector2Int GenerateRandomSize(in MapGeneratorParameters parameters)

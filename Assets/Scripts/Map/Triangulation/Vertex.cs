@@ -39,5 +39,23 @@ namespace Delaunay
             Position = new Vector2(x, y);
             Data = data;
         }
+
+        public override bool Equals(object obj)
+        {
+            if (obj == null)
+                return false;
+
+            Vertex<T> other = (Vertex<T>)obj;
+
+            if (other.Position == this.Position)
+                return true;
+
+            return false;
+        }
+
+        public override int GetHashCode()
+        {
+            return -425505606 + EqualityComparer<Vector2>.Default.GetHashCode(Position);
+        }
     }
 }

@@ -9,6 +9,8 @@ public class Map
     public List<Delaunay.Triangle<MapNode>> Triangles;
     public List<Delaunay.Edge<MapNode>> DelaunayGraph;
     public List<Delaunay.Edge<MapNode>> GabrielGraph;
+    public List<Delaunay.Edge<MapNode>> EMSTGraph;
+
     //public Triangulation _triangulation;
 
     //public List<QuadEdge<int>> _edges;
@@ -64,6 +66,14 @@ public class Map
             GabrielGraph.ForEach(x =>
             {
                 DrawLine(x, Color.magenta);
+            });
+        }
+
+        if (EMSTGraph != null)
+        {
+            EMSTGraph.ForEach(x =>
+            {
+                DrawLine(x, Color.blue);
             });
         }
     }

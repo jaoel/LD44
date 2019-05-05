@@ -70,8 +70,38 @@ namespace Delaunay
             }
 
             result.RemoveWhere(x => removalList.Contains(x));
-
             return result;
+        }
+
+        public HashSet<Edge<T>> GetPrimEMST(in HashSet<Edge<T>> gabrielGraph, in IEnumerable<Vertex<T>> vertices)
+        {
+            HashSet<Edge<T>> emst = new HashSet<Edge<T>>();
+            List<Vertex<T>> queue = new List<Vertex<T>>(vertices);
+            List<Vertex<T>> tree = new List<Vertex<T>>();
+
+            tree.Add(queue[0]);
+            queue.RemoveAt(0);
+
+            while(queue.Count > 0)
+            {                                                  
+                List<Edge<T>> candidates = new List<Edge<T>>();
+                foreach(Vertex<T> vertex in tree)
+                {
+                    candidates.AddRange(gabrielGraph.Where(edge => edge.ContainsVertex(vertex) && (!tree.Contains(edge.Point1) || !tree.Contains(edge.Point2))));
+                }
+
+                Edge<T> finalCandidate = candidates.Aggregate((min, x) => min.DistanceSquared < x.DistanceSquared ? min : x);
+                emst.Add(finalCandidate);
+
+                if (tree.Contains(finalCandidate.Point1))
+                    tree.Add(finalCandidate.Point2);
+                else
+                    tree.Add(finalCandidate.Point1);
+
+                queue.Remove(tree.Last());
+            }
+
+            return emst;
         }
 
         private Triangle<T> GetSupraTriangle(IEnumerable<Vertex<T>> vertices)
