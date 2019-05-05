@@ -7,6 +7,8 @@ public class Map
 {
     public List<MapNode> _cells;
     public List<Delaunay.Triangle<MapNode>> Triangles;
+    public List<Delaunay.Edge<MapNode>> DelaunayGraph;
+    public List<Delaunay.Edge<MapNode>> GabrielGraph;
     //public Triangulation _triangulation;
 
     //public List<QuadEdge<int>> _edges;
@@ -37,36 +39,33 @@ public class Map
             });
         }   
 
-        if (Triangles != null)
-        {
-            Triangles.ForEach(x =>
-            {
-                Gizmos.color = Color.cyan;
+        //if (Triangles != null)
+        //{
+        //    Triangles.ForEach(x =>
+        //    {
+        //        Gizmos.color = Color.cyan;
+        //
+        //        Gizmos.DrawLine(new Vector3(x.Vertices[0].Position.x, x.Vertices[0].Position.y, 0), new Vector3(x.Vertices[1].Position.x, x.Vertices[1].Position.y, 0));
+        //        Gizmos.DrawLine(new Vector3(x.Vertices[1].Position.x, x.Vertices[1].Position.y, 0), new Vector3(x.Vertices[2].Position.x, x.Vertices[2].Position.y, 0));
+        //        Gizmos.DrawLine(new Vector3(x.Vertices[2].Position.x, x.Vertices[2].Position.y, 0), new Vector3(x.Vertices[0].Position.x, x.Vertices[0].Position.y, 0));
+        //    });
+        //}
 
-                Gizmos.DrawLine(new Vector3(x.Vertices[0].Position.x, x.Vertices[0].Position.y, 0), new Vector3(x.Vertices[1].Position.x, x.Vertices[1].Position.y, 0));
-                Gizmos.DrawLine(new Vector3(x.Vertices[1].Position.x, x.Vertices[1].Position.y, 0), new Vector3(x.Vertices[2].Position.x, x.Vertices[2].Position.y, 0));
-                Gizmos.DrawLine(new Vector3(x.Vertices[2].Position.x, x.Vertices[2].Position.y, 0), new Vector3(x.Vertices[0].Position.x, x.Vertices[0].Position.y, 0));
+        if (DelaunayGraph != null)
+        {
+            DelaunayGraph.ForEach(x =>
+            {
+                DrawLine(x, Color.cyan);
             });
         }
 
-        //if (_triangulation != null)
-        //{
-            //_triangulation.Edges.ForEach(x =>
-            //{
-            //    DrawLine(x, new Color(165 / 255.0f, 55 / 255.0f, 253 / 255.0f));
-            //});
-            //
-            //DrawLine(_triangulation.Edges.First(), Color.blue);
-            //DrawLine(_triangulation.Edges[1], Color.magenta);
-        //}
-
-        //if (_edges != null)
-        //{
-        //    _edges.ForEach(x =>
-        //    {
-        //        DrawLine(x, new Color(165 / 255.0f, 55 / 255.0f, 253 / 255.0f));
-        //    });
-        //}
+        if (GabrielGraph != null)
+        {
+            GabrielGraph.ForEach(x =>
+            {
+                DrawLine(x, Color.magenta);
+            });
+        }
     }
 
     private void DrawRectangle(RectInt rect, Color color)
@@ -78,19 +77,12 @@ public class Map
         Gizmos.DrawLine(new Vector3(rect.x, rect.y, 0), new Vector3Int(rect.x, rect.yMax, 0));
     }
 
-    //private void DrawLine(Edge edge, Color color)
-    //{
-    //    Gizmos.color = color;
-    //    Gizmos.DrawLine(new Vector3(edge.Origin.Cell.center.x, edge.Origin.Cell.center.y, 0), new Vector3(edge.Target.Cell.center.x, edge.Target.Cell.center.y, 0));
-    //
-    //}
-
-    //private void DrawLine(QuadEdge<int> edge, Color color)
-    //{
-    //    Gizmos.color = color;
-    //    Gizmos.DrawLine(new Vector3(edge.Origin.x, edge.Origin.y, 0), new Vector3(edge.Destination.x, edge.Destination.y, 0));
-    //
-    //}
+    private void DrawLine(Delaunay.Edge<MapNode> edge, Color color)
+    {
+        Gizmos.color = color;
+        Gizmos.DrawLine(new Vector3(edge.Point1.Position.x, edge.Point1.Position.y, 0), 
+            new Vector3(edge.Point2.Position.x, edge.Point2.Position.y, 0)); 
+    }
 
     private void DrawText(Vector2 position, Color color)
     {

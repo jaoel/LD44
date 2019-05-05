@@ -38,6 +38,42 @@ namespace Delaunay
             return triangulation;
         }
 
+        public HashSet<Edge<T>> GetDelaunayEdges(IEnumerable<Triangle<T>> triangles)
+        {
+            HashSet<Edge<T>> result = new HashSet<Edge<T>>();
+            foreach (Triangle<T> triangle in triangles)
+            {
+                foreach(Edge<T> edge in triangle.Edges)
+                {
+                    result.Add(edge);
+                }
+            }
+
+            return result;
+        }
+
+        public HashSet<Edge<T>> GetGabrielGraph(in HashSet<Edge<T>> delaunayEdges, in IEnumerable<Vertex<T>> vertices)
+        {
+            HashSet<Edge<T>> result = new HashSet<Edge<T>>(delaunayEdges);
+            List<Edge<T>> removalList = new List<Edge<T>>();
+
+            foreach (Edge<T> edge in result)
+            {   
+                foreach (Vertex<T> vertex in vertices)
+                {
+                    if (edge.CircumCircleContainsPoint(vertex))
+                    {
+                        removalList.Add(edge);
+                        break;
+                    }
+                }
+            }
+
+            result.RemoveWhere(x => removalList.Contains(x));
+
+            return result;
+        }
+
         private Triangle<T> GetSupraTriangle(IEnumerable<Vertex<T>> vertices)
         {
             float xMax = float.MinValue;

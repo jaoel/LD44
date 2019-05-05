@@ -7,10 +7,13 @@ namespace Delaunay
     public class Triangle<T>
     {
         private Vertex<T>[] _vertices;
+        private Edge<T>[] _edges;
+
         private Vector2 _circumCenter;
         private float _radiusSquared;
 
         public Vertex<T>[] Vertices => _vertices;
+        public Edge<T>[] Edges => _edges;
 
         public IEnumerable<Triangle<T>> TrianglesWithSharedEdge
         {
@@ -28,22 +31,28 @@ namespace Delaunay
                 return neighbors;
             }
         }
-
+            
         public Triangle(Vertex<T> a, Vertex<T> b, Vertex<T> c)
         {
             _vertices = new Vertex<T>[3];
+            _edges = new Edge<T>[3];
+
             if (!IsCounterClockwise(a.Position, b.Position, c.Position))
             {
-                Vertices[0] = a;
-                Vertices[1] = b;
-                Vertices[2] = c;
+                _vertices[0] = a;
+                _vertices[1] = b;
+                _vertices[2] = c;
             }
             else
             {
-                Vertices[0] = a;
-                Vertices[1] = b;
-                Vertices[2] = c;
+                _vertices[0] = a;
+                _vertices[1] = b;
+                _vertices[2] = c;
             }
+
+            _edges[0] = new Edge<T>(_vertices[0], _vertices[1]);
+            _edges[1] = new Edge<T>(_vertices[1], _vertices[2]);
+            _edges[2] = new Edge<T>(_vertices[2], _vertices[0]);
 
             Vertices[0].AdjacentTriangles.Add(this);
             Vertices[1].AdjacentTriangles.Add(this);
@@ -53,30 +62,30 @@ namespace Delaunay
 
         private void UpdateCircumcircle()
         {
-            var p0 = Vertices[0];
-            var p1 = Vertices[1];
-            var p2 = Vertices[2];
-            var dA = p0.Position.x * p0.Position.x + p0.Position.y * p0.Position.y;
-            var dB = p1.Position.x * p1.Position.x + p1.Position.y * p1.Position.y;
-            var dC = p2.Position.x * p2.Position.x + p2.Position.y * p2.Position.y;
+            Vertex<T> p0 = Vertices[0];
+            Vertex<T> p1 = Vertices[1];
+            Vertex<T> p2 = Vertices[2];
+            float dA = p0.Position.x * p0.Position.x + p0.Position.y * p0.Position.y;
+            float dB = p1.Position.x * p1.Position.x + p1.Position.y * p1.Position.y;
+            float dC = p2.Position.x * p2.Position.x + p2.Position.y * p2.Position.y;
 
-            var aux1 = (dA * (p2.Position.y - p1.Position.y) + dB * (p0.Position.y - p2.Position.y) + dC * (p1.Position.y - p0.Position.y));
-            var aux2 = -(dA * (p2.Position.x - p1.Position.x) + dB * (p0.Position.x - p2.Position.x) + dC * (p1.Position.x - p0.Position.x));
-            var div = (2 * (p0.Position.x * (p2.Position.y - p1.Position.y) + p1.Position.x * (p0.Position.y - p2.Position.y) + p2.Position.x * (p1.Position.y - p0.Position.y)));
+            float aux1 = (dA * (p2.Position.y - p1.Position.y) + dB * (p0.Position.y - p2.Position.y) + dC * (p1.Position.y - p0.Position.y));
+            float aux2 = -(dA * (p2.Position.x - p1.Position.x) + dB * (p0.Position.x - p2.Position.x) + dC * (p1.Position.x - p0.Position.x));
+            float div = (2 * (p0.Position.x * (p2.Position.y - p1.Position.y) + p1.Position.x * (p0.Position.y - p2.Position.y) + p2.Position.x * (p1.Position.y - p0.Position.y)));
 
             if (div == 0)
             {
                 throw new System.Exception();
             }
 
-            var center = new Vector2(aux1 / div, aux2 / div);
+            Vector2 center = new Vector2(aux1 / div, aux2 / div);
             _circumCenter = center;
-            _radiusSquared = (center.x - p0.Position.x) * (center.x - p0.Position.x) + (center.y - p0.Position.y) * (center.y - p0.Position.y);
+            _radiusSquared = (_circumCenter - p0.Position).sqrMagnitude; 
         }
 
         private bool IsCounterClockwise(Vector2 a, Vector2 b, Vector2 c)
         {
-            var result = (b.x - a.x) * (c.y - a.y) - (c.x - a.x) * (b.y - a.y);
+            float result = (b.x - a.x) * (c.y - a.y) - (c.x - a.x) * (b.y - a.y);
             return result > 0;
         }
 
@@ -106,6 +115,11 @@ namespace Delaunay
             }
 
             return true;
-        } 
+        }
+
+        public override int GetHashCode()
+        {
+            return 59827589 + EqualityComparer<Vertex<T>[]>.Default.GetHashCode(_vertices);
+        }
     }
 }

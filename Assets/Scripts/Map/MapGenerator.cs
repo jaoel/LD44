@@ -22,8 +22,8 @@ public class MapGenerator : MonoBehaviour
         parameters.MinCellSize = 3;
         parameters.MaxCellSize = 10;
 
-        parameters.MinCellCount = 4;
-        parameters.MaxCellCount = 100;
+        parameters.MinCellCount = 6;
+        parameters.MaxCellCount = 6;
 
         parameters.MinRoomWidth = 0;
         parameters.MinRoomHeight = 0;
@@ -55,7 +55,7 @@ public class MapGenerator : MonoBehaviour
 
         if (Input.GetKeyDown(KeyCode.R))
         {
-            _currentMap = GenerateMap(DateTime.Now.Ticks, parameters);
+            _currentMap = GenerateMap(_seed, parameters);
             SeparateCells(ref _currentMap._cells, parameters);
             IdentifyRooms(ref _currentMap._cells, parameters);
 
@@ -163,8 +163,15 @@ public class MapGenerator : MonoBehaviour
     private void Triangulate(ref List<MapNode> nodes)
     {
         Delaunay.BowerWatsonDelaunay<MapNode> triangulator = new Delaunay.BowerWatsonDelaunay<MapNode>();
-        IEnumerable<Delaunay.Triangle<MapNode>> triangles = triangulator.Triangulate(nodes.Select(x => new Delaunay.Vertex<MapNode>(x.Cell.center, x)));
-        _currentMap.Triangles = triangles.ToList();  
+        IEnumerable<Delaunay.Vertex<MapNode>> vertices = nodes.Select(x => new Delaunay.Vertex<MapNode>(x.Cell.center, x));
+        IEnumerable<Delaunay.Triangle<MapNode>> triangles = triangulator.Triangulate(vertices);
+        _currentMap.Triangles = triangles.ToList();
+
+        HashSet<Delaunay.Edge<MapNode>> delaunayEdges = triangulator.GetDelaunayEdges(triangles);
+        HashSet<Delaunay.Edge<MapNode>> gabrielGraph = triangulator.GetGabrielGraph(delaunayEdges, vertices);
+
+        _currentMap.DelaunayGraph = delaunayEdges.ToList();
+        _currentMap.GabrielGraph = gabrielGraph.ToList(); 
     }
 
     private Vector2Int GenerateRandomSize(in MapGeneratorParameters parameters)

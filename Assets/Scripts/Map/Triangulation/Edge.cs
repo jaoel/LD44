@@ -1,4 +1,6 @@
-﻿namespace Delaunay
+﻿using UnityEngine;
+
+namespace Delaunay
 {
     public class Edge<T>
     {
@@ -12,6 +14,21 @@
         {
             _point1 = point1;
             _point2 = point2;
+        }
+
+        public bool CircumCircleContainsPoint(Vertex<T> vertex)
+        {
+            if (vertex.Position == _point1.Position || vertex.Position == _point2.Position)
+                return false;
+
+            Vector2 distance = _point2.Position - _point1.Position;
+            float radius = distance.magnitude / 2.0f;
+            Vector2 center = _point1.Position + distance / 2.0f;
+
+            if ((vertex.Position - center).magnitude < radius)
+                return true;
+
+            return false;
         }
 
         public override bool Equals(object obj)
