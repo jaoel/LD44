@@ -10,6 +10,7 @@ public class PixelPerfectCamera : MonoBehaviour {
 
     void Awake() {
         camera = GetComponent<Camera>();
+        QualitySettings.vSyncCount = 1;
     }
 
     void LateUpdate() {
