@@ -10,10 +10,7 @@ public class Map
     public List<Delaunay.Edge<MapNode>> DelaunayGraph;
     public List<Delaunay.Edge<MapNode>> GabrielGraph;
     public List<Delaunay.Edge<MapNode>> EMSTGraph;
-
-    //public Triangulation _triangulation;
-
-    //public List<QuadEdge<int>> _edges;
+    public List<Delaunay.Edge<MapNode>> CorridorGraph;
 
     public void DrawDebug()
     {
@@ -28,12 +25,11 @@ public class Map
             {
                 switch (x.Type)
                 {
-                    case MapNodeType.Room:
-                        DrawRectangle(x.Cell, Color.green);
-                        DrawText(x.Cell.center, Color.cyan);
+                    case MapNodeType.Default:
+                        DrawRectangle(x.Cell, Color.black);
                         break;
-                    case MapNodeType.Corridor:
-                        DrawRectangle(x.Cell, Color.blue);
+                    case MapNodeType.Room:
+                        DrawRectangle(x.Cell, Color.green);   
                         break;
                     default:
                         break;
@@ -41,23 +37,11 @@ public class Map
             });
         }   
 
-        //if (Triangles != null)
-        //{
-        //    Triangles.ForEach(x =>
-        //    {
-        //        Gizmos.color = Color.cyan;
-        //
-        //        Gizmos.DrawLine(new Vector3(x.Vertices[0].Position.x, x.Vertices[0].Position.y, 0), new Vector3(x.Vertices[1].Position.x, x.Vertices[1].Position.y, 0));
-        //        Gizmos.DrawLine(new Vector3(x.Vertices[1].Position.x, x.Vertices[1].Position.y, 0), new Vector3(x.Vertices[2].Position.x, x.Vertices[2].Position.y, 0));
-        //        Gizmos.DrawLine(new Vector3(x.Vertices[2].Position.x, x.Vertices[2].Position.y, 0), new Vector3(x.Vertices[0].Position.x, x.Vertices[0].Position.y, 0));
-        //    });
-        //}
-
         if (DelaunayGraph != null)
         {
             DelaunayGraph.ForEach(x =>
             {
-                DrawLine(x, Color.cyan);
+                //DrawLine(x, Color.cyan);
             });
         }
 
@@ -65,7 +49,7 @@ public class Map
         {
             GabrielGraph.ForEach(x =>
             {
-                DrawLine(x, Color.magenta);
+                //DrawLine(x, Color.magenta);
             });
         }
 
@@ -73,7 +57,15 @@ public class Map
         {
             EMSTGraph.ForEach(x =>
             {
-                DrawLine(x, Color.blue);
+                DrawLine(x, Color.cyan);
+            });
+        }
+
+        if (CorridorGraph != null)
+        {
+            CorridorGraph.ForEach(x =>
+            {
+                DrawLine(x, Color.red);
             });
         }
     }

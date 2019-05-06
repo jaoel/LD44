@@ -2,8 +2,10 @@
 
 public enum MapNodeType
 {
+    Default,
     Room,   
-    Corridor
+    Corridor,
+    None
 }
 
 public class MapNode

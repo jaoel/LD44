@@ -25,7 +25,7 @@ namespace Delaunay
             _edgeVector = _point2.Position - point1.Position;
             _distanceSquared = _edgeVector.sqrMagnitude;
 
-            _circumCircleCenter = _point1.Position + _edgeVector / 2.0f;
+            _circumCircleCenter = (_point1.Position + _point2.Position) / 2.0f;
             _radius = _edgeVector.magnitude / 2.0f;
         }
 
