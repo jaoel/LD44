@@ -22,13 +22,13 @@ public class MapGenerator : MonoBehaviour
     private void Update()
     {
         MapGeneratorParameters parameters = new MapGeneratorParameters();
-        parameters.GenerationRadius = 50;
+        parameters.GenerationRadius = 200;
 
         parameters.MinCellSize = 3;
         parameters.MaxCellSize = 30;
 
-        parameters.MinCellCount = 3;
-        parameters.MaxCellCount = 10;
+        parameters.MinCellCount = 100;
+        parameters.MaxCellCount = 150;
 
         parameters.MinRoomWidth = 5;
         parameters.MinRoomHeight = 5;
@@ -75,6 +75,7 @@ public class MapGenerator : MonoBehaviour
         if (Input.GetKeyDown(KeyCode.T))
         {
             Floor.ClearAllTiles();
+            Walls.ClearAllTiles();
 
             _currentMap = GenerateMap(DateTime.Now.Ticks, parameters);
             SeparateCells(ref _currentMap._cells, parameters);
@@ -224,13 +225,49 @@ public class MapGenerator : MonoBehaviour
             Vector3Int pos = new Vector3Int(node.Cell.xMin, node.Cell.yMin, 0);
             Vector3Int size = new Vector3Int(node.Cell.width, node.Cell.height, 1);
 
-            TileBase[] tiles = new TileBase[size.x * size.y];
+            TileBase[] floorTiles = new TileBase[size.x * size.y];
             for (int i = 0; i < size.x * size.y; i++)
             {
-                tiles[i] = TileContainer.FloorTiles[0];
+                floorTiles[i] = TileContainer.FloorTiles[0];
             }
 
-            Floor.SetTilesBlock(new BoundsInt(pos, size), tiles);
+            Floor.SetTilesBlock(new BoundsInt(pos, size), floorTiles);
+
+            TileBase[] sideWalls = new TileBase[node.Cell.height];
+            for (int i = 0; i < node.Cell.height; i++)
+            {
+                sideWalls[i] = TileContainer.MiddleLeft;
+            }
+
+            pos = new Vector3Int(node.Cell.position.x, node.Cell.position.y, 0);
+            size = new Vector3Int(1, node.Cell.height, 1);
+            Walls.SetTilesBlock(new BoundsInt(pos, size), sideWalls);
+
+            for (int i = 0; i < node.Cell.height; i++)
+            {
+                sideWalls[i] = TileContainer.MiddleRight;
+            }
+
+            pos = new Vector3Int(node.Cell.xMax - 1, node.Cell.position.y, 0);
+            Walls.SetTilesBlock(new BoundsInt(pos, size), sideWalls);
+
+            TileBase[] topBottomWalls = new TileBase[node.Cell.width];
+            for (int i = 0; i < node.Cell.width; i++)
+            {
+                topBottomWalls[i] = TileContainer.TopMiddle;
+            }
+
+            pos = new Vector3Int(node.Cell.x, node.Cell.yMax - 1, 0);
+            size = new Vector3Int(node.Cell.width, 1, 1);
+            Walls.SetTilesBlock(new BoundsInt(pos, size), topBottomWalls);
+
+            for (int i = 0; i < node.Cell.width; i++)
+            {
+                topBottomWalls[i] = TileContainer.BottomMiddle;
+            }
+
+            pos = new Vector3Int(node.Cell.x, node.Cell.position.y, 0);
+            Walls.SetTilesBlock(new BoundsInt(pos, size), topBottomWalls);
         }
     }
 
@@ -336,20 +373,21 @@ public class MapGenerator : MonoBehaviour
 
             if (size.x <= 1)
             {
-                size.x = 1;    
+                size.x = 3;    
             }
             if (size.y <= 1)
             {
-                size.y = 1;
+                size.y = 3;
             }
 
             TileBase[] tiles = new TileBase[size.x * size.y];
             for(int i = 0; i < size.x * size.y; i++)
             {
-                tiles[i] = TileContainer.FloorTiles[4];
+                tiles[i] = TileContainer.FloorTiles[0];
             }
             
-            Floor.SetTilesBlock(new BoundsInt(pos, size), tiles);                        
+            Floor.SetTilesBlock(new BoundsInt(pos, size), tiles);
+            Walls.SetTilesBlock(new BoundsInt(pos, size), new TileBase[size.x * size.y]);
         }
     }
 
