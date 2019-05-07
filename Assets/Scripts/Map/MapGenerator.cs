@@ -225,49 +225,40 @@ public class MapGenerator : MonoBehaviour
             Vector3Int pos = new Vector3Int(node.Cell.xMin, node.Cell.yMin, 0);
             Vector3Int size = new Vector3Int(node.Cell.width, node.Cell.height, 1);
 
-            TileBase[] floorTiles = new TileBase[size.x * size.y];
+            TileBase[] tiles = new TileBase[size.x * size.y];
             for (int i = 0; i < size.x * size.y; i++)
             {
-                floorTiles[i] = TileContainer.FloorTiles[0];
+                tiles[i] = TileContainer.FloorTiles[0];
             }
 
-            Floor.SetTilesBlock(new BoundsInt(pos, size), floorTiles);
+            Floor.SetTilesBlock(new BoundsInt(pos, size), tiles);
 
-            TileBase[] sideWalls = new TileBase[node.Cell.height];
-            for (int i = 0; i < node.Cell.height; i++)
+            for (int i = 0; i < size.x * size.y; i++)
             {
-                sideWalls[i] = TileContainer.MiddleLeft;
+                tiles[i] = null;
+
+                int x = i % size.x + pos.x;
+                int y = i / size.x + pos.y;
+
+                if (x == pos.x && y == pos.y)
+                    tiles[i] = TileContainer.BottomLeft;
+                else if (x == pos.x && y == node.Cell.yMax - 1)
+                    tiles[i] = TileContainer.TopLeft;
+                else if (x == node.Cell.xMax - 1 && y == pos.y)
+                    tiles[i] = TileContainer.BottomRight;
+                else if (x == node.Cell.xMax - 1 && y == node.Cell.yMax - 1)
+                    tiles[i] = TileContainer.TopRight;
+                else if (y == node.Cell.yMax - 1)
+                    tiles[i] = TileContainer.TopMiddle;
+                else if (y == pos.y)
+                    tiles[i] = TileContainer.BottomMiddle;
+                else if (x == node.Cell.xMax - 1)
+                    tiles[i] = TileContainer.MiddleRight;
+                else if (x == pos.x)
+                    tiles[i] = TileContainer.MiddleLeft;
             }
 
-            pos = new Vector3Int(node.Cell.position.x, node.Cell.position.y, 0);
-            size = new Vector3Int(1, node.Cell.height, 1);
-            Walls.SetTilesBlock(new BoundsInt(pos, size), sideWalls);
-
-            for (int i = 0; i < node.Cell.height; i++)
-            {
-                sideWalls[i] = TileContainer.MiddleRight;
-            }
-
-            pos = new Vector3Int(node.Cell.xMax - 1, node.Cell.position.y, 0);
-            Walls.SetTilesBlock(new BoundsInt(pos, size), sideWalls);
-
-            TileBase[] topBottomWalls = new TileBase[node.Cell.width];
-            for (int i = 0; i < node.Cell.width; i++)
-            {
-                topBottomWalls[i] = TileContainer.TopMiddle;
-            }
-
-            pos = new Vector3Int(node.Cell.x, node.Cell.yMax - 1, 0);
-            size = new Vector3Int(node.Cell.width, 1, 1);
-            Walls.SetTilesBlock(new BoundsInt(pos, size), topBottomWalls);
-
-            for (int i = 0; i < node.Cell.width; i++)
-            {
-                topBottomWalls[i] = TileContainer.BottomMiddle;
-            }
-
-            pos = new Vector3Int(node.Cell.x, node.Cell.position.y, 0);
-            Walls.SetTilesBlock(new BoundsInt(pos, size), topBottomWalls);
+            Walls.SetTilesBlock(new BoundsInt(pos, size), tiles);
         }
     }
 

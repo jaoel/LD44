@@ -19,8 +19,6 @@ public class Map
 
     private void DrawCells()
     {
-        return;
-
         if (_cells != null)
         {
             _cells.ForEach(x =>
