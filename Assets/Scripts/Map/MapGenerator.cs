@@ -194,7 +194,7 @@ public class MapGenerator : MonoBehaviour
 
     private void Triangulate(ref List<MapNode> nodes)
     {
-        Delaunay.BowerWatsonDelaunay<MapNode> triangulator = new Delaunay.BowerWatsonDelaunay<MapNode>();
+        Delaunay.BowerWatsonDelaunay triangulator = new Delaunay.BowerWatsonDelaunay();
         IEnumerable<Delaunay.Vertex<MapNode>> vertices = nodes.Where(x => x.Type == MapNodeType.Room)
             .Select(x => new Delaunay.Vertex<MapNode>(x.Cell.center, x));
         IEnumerable<Delaunay.Triangle<MapNode>> triangles = triangulator.Triangulate(vertices);
