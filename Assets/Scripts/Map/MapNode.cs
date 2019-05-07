@@ -16,16 +16,13 @@ public class MapNode
     public MapNodeType Type { get; set; }
     public List<Vector2Int> EntryPoints { get; set; }
 
+    public bool HasEntryPoint => EntryPoints.Count > 0;
+
     public MapNode(int id, Vector2Int position, Vector2Int size, bool useDefaultEntryPoint = true)
     {
         Id = id;
         Cell = new RectInt(position, size);
         EntryPoints = new List<Vector2Int>();
-
-        if (useDefaultEntryPoint)
-        {
-            EntryPoints.Add(new Vector2Int((int)Cell.center.x, (int)Cell.center.y));
-        }
     }
 
     public Vector2Int GetClosestEntryPoint(Vector2 position)

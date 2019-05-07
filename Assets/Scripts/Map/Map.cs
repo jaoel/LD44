@@ -19,6 +19,8 @@ public class Map
 
     private void DrawCells()
     {
+        return;
+
         if (_cells != null)
         {
             _cells.ForEach(x =>
@@ -57,7 +59,7 @@ public class Map
         {
             EMSTGraph.ForEach(x =>
             {
-                //DrawLine(x, Color.cyan);
+                DrawLine(x, Color.cyan);
             });
         }
 

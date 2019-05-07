@@ -22,7 +22,7 @@ public class MapGenerator : MonoBehaviour
     private void Update()
     {
         MapGeneratorParameters parameters = new MapGeneratorParameters();
-        parameters.GenerationRadius = 200;
+        parameters.GenerationRadius = 100;
 
         parameters.MinCellSize = 3;
         parameters.MaxCellSize = 30;
@@ -30,28 +30,11 @@ public class MapGenerator : MonoBehaviour
         parameters.MinCellCount = 100;
         parameters.MaxCellCount = 150;
 
-        parameters.MinRoomWidth = 5;
-        parameters.MinRoomHeight = 5;
+        parameters.MinRoomWidth = 7;
+        parameters.MinRoomHeight = 7;
 
-        if (Input.GetKeyDown(KeyCode.Alpha1))
-        {
-            _currentMap = GenerateMap(DateTime.Now.Ticks, parameters);
-        }
-
-        if (Input.GetKeyDown(KeyCode.Alpha2))
-        {
-            SeparateCells(ref _currentMap._cells, parameters);
-        }
-
-        if (Input.GetKeyDown(KeyCode.Alpha3))
-        {
-            IdentifyRooms(ref _currentMap._cells, parameters);
-        }
-
-        if (Input.GetKeyDown(KeyCode.Alpha4))
-        {
-            Triangulate(ref _currentMap._cells);
-        }
+        parameters.MinCorridorWidth = 3;
+        parameters.MaxCorridorWidth = 5;
 
         if (Input.GetKeyDown(KeyCode.KeypadPlus))
         {
@@ -63,13 +46,13 @@ public class MapGenerator : MonoBehaviour
             Floor.ClearAllTiles();
 
             _currentMap = GenerateMap(_seed, parameters);
-            SeparateCells(ref _currentMap._cells, parameters);
-            IdentifyRooms(ref _currentMap._cells, parameters);
-            Triangulate(ref _currentMap._cells);
-            GenerateLayoutGraph(ref _currentMap);
-            _currentMap.CorridorGraph = GenerateCorridorGraph(_currentMap.EMSTGraph, _currentMap);
-            PaintRoomFloors(_currentMap);
-            PaintCorridors(_currentMap.CorridorGraph);
+            SeparateCells(ref _currentMap, parameters);
+            IdentifyRooms(ref _currentMap, parameters);
+            Triangulate(ref _currentMap, parameters);
+            GenerateLayoutGraph(ref _currentMap, parameters);
+            GenerateCorridorGraph(ref _currentMap, parameters);
+            PaintRoomFloors(_currentMap, parameters);
+            PaintCorridors(ref _currentMap, parameters);
         }
 
         if (Input.GetKeyDown(KeyCode.T))
@@ -78,13 +61,13 @@ public class MapGenerator : MonoBehaviour
             Walls.ClearAllTiles();
 
             _currentMap = GenerateMap(DateTime.Now.Ticks, parameters);
-            SeparateCells(ref _currentMap._cells, parameters);
-            IdentifyRooms(ref _currentMap._cells, parameters);
-            Triangulate(ref _currentMap._cells);
-            GenerateLayoutGraph(ref _currentMap);
-            _currentMap.CorridorGraph = GenerateCorridorGraph(_currentMap.EMSTGraph, _currentMap);
-            PaintRoomFloors(_currentMap);
-            PaintCorridors(_currentMap.CorridorGraph);
+            SeparateCells(ref _currentMap, parameters);
+            IdentifyRooms(ref _currentMap, parameters);
+            Triangulate(ref _currentMap, parameters);
+            GenerateLayoutGraph(ref _currentMap, parameters);
+            GenerateCorridorGraph(ref _currentMap, parameters);
+            PaintRoomFloors(_currentMap, parameters);
+            PaintCorridors(ref _currentMap, parameters);
         }
     }
 
@@ -101,47 +84,43 @@ public class MapGenerator : MonoBehaviour
         Map result = new Map();
 
         _random.SetSeed(seed);
-
-        List<MapNode> nodes = new List<MapNode>();
-
-        GenerateCells(ref nodes, parameters);
+        GenerateCells(ref result, parameters);
         //SeparateCells(ref nodes, parameters);
         //IdentifyRooms(ref nodes, parameters);
         //Triangulate(ref nodes);
         //AddCorridorEdges(ref result);
 
-        result._cells = nodes;
-
         return result;
     }
 
-    private void GenerateCells(ref List<MapNode> nodes, in MapGeneratorParameters parameters)
+    private void GenerateCells(ref Map map, in MapGeneratorParameters parameters)
     {
         int cellCount = _random.Range(parameters.MinCellCount, parameters.MaxCellCount);
+        map._cells = new List<MapNode>(cellCount);
 
         for (int i = 0; i < cellCount; i++)
         {
             Vector2Int size = GenerateRandomSize(parameters);
             Vector2Int position = RandomPointInCircle(parameters.GenerationRadius);
 
-            nodes.Add(new MapNode(i, position, size));
-            nodes = nodes.OrderBy(x => x.Cell.x).ThenBy(x => x.Cell.y).ToList();
+            map._cells.Add(new MapNode(i, position, size));
+            map._cells = map._cells.OrderBy(x => x.Cell.x).ThenBy(x => x.Cell.y).ToList();
         }
     }
 
-    private void SeparateCells(ref List<MapNode> cells, in MapGeneratorParameters parameters)
+    private void SeparateCells(ref Map map, in MapGeneratorParameters parameters)
     {
         bool regionsSeparated = false;
         int iterations = 0;
 
-        while (!regionsSeparated && iterations < 2 * cells.Count)
+        while (!regionsSeparated && iterations < 2 * map._cells.Count)
         {
             regionsSeparated = true;
-            foreach (MapNode node in cells)
+            foreach (MapNode node in map._cells)
             {
                 Vector2 movement = Vector2.zero;
                 int separationCount = 0;
-                foreach (MapNode other in cells)
+                foreach (MapNode other in map._cells)
                 {
                     if (node == other)
                     {
@@ -181,9 +160,9 @@ public class MapGenerator : MonoBehaviour
         }
     }
 
-    private void IdentifyRooms(ref List<MapNode> nodes, in MapGeneratorParameters parameters)
+    private void IdentifyRooms(ref Map map, in MapGeneratorParameters parameters)
     {
-        foreach (MapNode node in nodes)
+        foreach (MapNode node in map._cells)
         {
             if ((node.Cell.width >= parameters.MinRoomWidth && node.Cell.height >= parameters.MinRoomHeight)
                 || (node.Cell.height >= parameters.MinRoomWidth && node.Cell.width >= parameters.MinRoomHeight))
@@ -193,29 +172,29 @@ public class MapGenerator : MonoBehaviour
         }
     }
 
-    private void Triangulate(ref List<MapNode> nodes)
+    private void Triangulate(ref Map map, in MapGeneratorParameters parameters)
     {
         Delaunay.BowerWatsonDelaunay triangulator = new Delaunay.BowerWatsonDelaunay();
-        IEnumerable<Delaunay.Vertex<MapNode>> vertices = nodes.Where(x => x.Type == MapNodeType.Room)
+        IEnumerable<Delaunay.Vertex<MapNode>> vertices = map._cells.Where(x => x.Type == MapNodeType.Room)
             .Select(x => new Delaunay.Vertex<MapNode>(x.Cell.center, x));
         IEnumerable<Delaunay.Triangle<MapNode>> triangles = triangulator.Triangulate(vertices);
-        _currentMap.Triangles = triangles.ToList();
+        map.Triangles = triangles.ToList();
 
         HashSet<Delaunay.Edge<MapNode>> delaunayEdges = triangulator.GetDelaunayEdges(triangles);
         HashSet<Delaunay.Edge<MapNode>> gabrielGraph = triangulator.GetGabrielGraph(delaunayEdges, vertices);
         HashSet<Delaunay.Edge<MapNode>> emst = triangulator.GetPrimEMST(gabrielGraph, vertices);
 
-        _currentMap.DelaunayGraph = delaunayEdges.ToList();
-        _currentMap.GabrielGraph = gabrielGraph.ToList();
-        _currentMap.EMSTGraph = emst.ToList();
+        map.DelaunayGraph = delaunayEdges.ToList();
+        map.GabrielGraph = gabrielGraph.ToList();
+        map.EMSTGraph = emst.ToList();
     }
 
-    private void GenerateLayoutGraph(ref Map map)
+    private void GenerateLayoutGraph(ref Map map, in MapGeneratorParameters parameters)
     {
 
     }
 
-    private void PaintRoomFloors(in Map map)
+    private void PaintRoomFloors(in Map map, in MapGeneratorParameters parameters)
     {
         foreach (MapNode node in map._cells)
         {
@@ -262,10 +241,10 @@ public class MapGenerator : MonoBehaviour
         }
     }
 
-    private List<Delaunay.Edge<MapNode>> GenerateCorridorGraph(in List<Delaunay.Edge<MapNode>> edges, in Map map)
+    private void GenerateCorridorGraph(ref Map map, in MapGeneratorParameters parameters)
     {
         List<Delaunay.Edge<MapNode>> result = new List<Delaunay.Edge<MapNode>>();
-        foreach (Delaunay.Edge<MapNode> edge in edges)
+        foreach (Delaunay.Edge<MapNode> edge in map.EMSTGraph)
         {
             MapNode a = null;
             MapNode b = null;
@@ -330,12 +309,16 @@ public class MapGenerator : MonoBehaviour
                 // Hallway goes up/down
                 result.Add(new Delaunay.Edge<MapNode>(new Delaunay.Vertex<MapNode>(midpoint.x, aCenter.y),
                      new Delaunay.Vertex<MapNode>(midpoint.x, bCenter.y)));
+                result.Add(new Delaunay.Edge<MapNode>(new Delaunay.Vertex<MapNode>(midpoint.x, bCenter.y),
+                    new Delaunay.Vertex<MapNode>(bCenter.x, bCenter.y)));
             }
             else if (useY)
             {
                 // Hallway goes left/right
                 result.Add(new Delaunay.Edge<MapNode>(new Delaunay.Vertex<MapNode>(aCenter.x, midpoint.y),
                       new Delaunay.Vertex<MapNode>(bCenter.x, midpoint.y)));
+                result.Add(new Delaunay.Edge<MapNode>(new Delaunay.Vertex<MapNode>(bCenter.x, midpoint.y),
+                   new Delaunay.Vertex<MapNode>(bCenter.x, bCenter.y)));
             }
             else
             {
@@ -347,38 +330,54 @@ public class MapGenerator : MonoBehaviour
             }
         }
 
-        return result;
+        map.CorridorGraph = result;
     }
 
-    private void PaintCorridors(in List<Delaunay.Edge<MapNode>> corridorGraph)
+    private void PaintCorridors(ref Map map, in MapGeneratorParameters parameters)
     {
-        foreach (Delaunay.Edge<MapNode> corridor in corridorGraph)
+        Vector3Int size = Vector3Int.zero;
+        int width = 0;
+        for (int i = 0; i < map.CorridorGraph.Count; i++)
         {
+            Delaunay.Edge<MapNode> corridor = map.CorridorGraph[i];
             int minX = (int)Mathf.Floor(Mathf.Min(corridor.Point1.Position.x, corridor.Point2.Position.x));
-            int maxX = (int)Mathf.Ceil(Mathf.Max(corridor.Point1.Position.x, corridor.Point2.Position.x));
+            int maxX = (int)Mathf.Floor(Mathf.Max(corridor.Point1.Position.x, corridor.Point2.Position.x));
             int minY = (int)Mathf.Floor(Mathf.Min(corridor.Point1.Position.y, corridor.Point2.Position.y));
-            int maxY = (int)Mathf.Ceil(Mathf.Max(corridor.Point1.Position.y, corridor.Point2.Position.y));
+            int maxY = (int)Mathf.Floor(Mathf.Max(corridor.Point1.Position.y, corridor.Point2.Position.y));
 
             Vector3Int pos = new Vector3Int(minX, minY, 0);
-            Vector3Int size = new Vector3Int(Math.Abs(maxX - minX), Math.Abs(maxY - minY), 1);
+            size = new Vector3Int(Math.Abs(maxX - minX), Math.Abs(maxY - minY), 1);
+
+            bool addOffset = false;
+            if (i % 2 == 0)
+            {
+                width = _random.Range(parameters.MinCorridorWidth, parameters.MaxCorridorWidth);
+
+                if (map.CorridorGraph[i + 1].Point2.Position.x < minX)
+                    addOffset = true;
+            }
 
             if (size.x <= 1)
             {
-                size.x = 3;    
+                size.x = width;
             }
             if (size.y <= 1)
             {
-                size.y = 3;
+                size.y = width;
             }
 
+            if (addOffset)
+                size.y += width;
+
             TileBase[] tiles = new TileBase[size.x * size.y];
-            for(int i = 0; i < size.x * size.y; i++)
+            for(int tileIndex = 0; tileIndex < size.x * size.y; tileIndex++)
             {
-                tiles[i] = TileContainer.FloorTiles[0];
+                tiles[tileIndex] = TileContainer.FloorTiles[0];
             }
-            
-            Floor.SetTilesBlock(new BoundsInt(pos, size), tiles);
-            Walls.SetTilesBlock(new BoundsInt(pos, size), new TileBase[size.x * size.y]);
+
+            BoundsInt bounds = new BoundsInt(pos, size);
+            Floor.SetTilesBlock(bounds, tiles);
+            Walls.SetTilesBlock(bounds, new TileBase[size.x * size.y]);
         }
     }
 
