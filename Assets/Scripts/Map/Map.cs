@@ -12,6 +12,23 @@ public class Map
     public List<Delaunay.Edge<MapNode>> EMSTGraph;
     public List<Delaunay.Edge<MapNode>> CorridorGraph;
 
+    public BoundsInt Bounds;
+
+    private bool _drawCells;
+    private bool _drawDelaunay;
+    private bool _drawGabriel;
+    private bool _drawEMST;
+    private bool _drawCorridors;
+
+    public Map()
+    {
+        _drawCells = false;
+        _drawDelaunay = false;
+        _drawGabriel = false;
+        _drawEMST = false;
+        _drawCorridors = false;
+    }
+
     public void DrawDebug()
     {
         DrawCells();
@@ -19,19 +36,17 @@ public class Map
 
     private void DrawCells()
     {
-        return;
-
-        if (_cells != null)
+        if (_drawCells && _cells != null)
         {
             _cells.ForEach(x =>
             {
                 switch (x.Type)
                 {
                     case MapNodeType.Default:
-                        DrawRectangle(x.Cell, Color.black);
+                        GizmoUtility.DrawRectangle(x.Cell, Color.black);
                         break;
                     case MapNodeType.Room:
-                        DrawRectangle(x.Cell, Color.green);   
+                        GizmoUtility.DrawRectangle(x.Cell, Color.green);   
                         break;
                     default:
                         break;
@@ -39,58 +54,38 @@ public class Map
             });
         }   
 
-        if (DelaunayGraph != null)
+        if (_drawDelaunay && DelaunayGraph != null)
         {
             DelaunayGraph.ForEach(x =>
             {
-                //DrawLine(x, Color.cyan);
+                GizmoUtility.DrawLine(x, Color.cyan);
             });
         }
 
-        if (GabrielGraph != null)
+        if (_drawGabriel && GabrielGraph != null)
         {
             GabrielGraph.ForEach(x =>
             {
-                //DrawLine(x, Color.magenta);
+                GizmoUtility.DrawLine(x, Color.magenta);
             });
         }
 
-        if (EMSTGraph != null)
+        if (_drawEMST && EMSTGraph != null)
         {
             EMSTGraph.ForEach(x =>
             {
-                DrawLine(x, Color.cyan);
+                GizmoUtility.DrawLine(x, Color.cyan);
             });
         }
 
-        if (CorridorGraph != null)
+        if (_drawCorridors && CorridorGraph != null)
         {
             CorridorGraph.ForEach(x =>
             {
-                DrawLine(x, Color.red);
+               GizmoUtility.DrawLine(x, Color.red);
             });
         }
     }
 
-    private void DrawRectangle(RectInt rect, Color color)
-    {
-        Gizmos.color = color;
-        Gizmos.DrawLine(new Vector3(rect.x, rect.y, 0), new Vector3Int(rect.xMax, rect.y, 0));
-        Gizmos.DrawLine(new Vector3(rect.xMax, rect.y, 0), new Vector3Int(rect.xMax, rect.yMax, 0));
-        Gizmos.DrawLine(new Vector3(rect.x, rect.yMax, 0), new Vector3Int(rect.xMax, rect.yMax, 0));
-        Gizmos.DrawLine(new Vector3(rect.x, rect.y, 0), new Vector3Int(rect.x, rect.yMax, 0));
-    }
-
-    private void DrawLine(Delaunay.Edge<MapNode> edge, Color color)
-    {
-        Gizmos.color = color;
-        Gizmos.DrawLine(new Vector3(edge.Point1.Position.x, edge.Point1.Position.y, 0), 
-            new Vector3(edge.Point2.Position.x, edge.Point2.Position.y, 0)); 
-    }
-
-    private void DrawText(Vector2 position, Color color)
-    {
-        Gizmos.color = color;
-        Handles.Label(new Vector3(position.x, position.y, 0.0f), position.x + " : " + position.y);
-    }
+   
 }
