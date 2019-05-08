@@ -11,24 +11,25 @@ public class MapGenerator : MonoBehaviour
     public TileContainer TileContainer;
 
     private MillerParkLCG _random;
-    private int _seed;
     private Map _currentMap;
+
+    private Timer _timer;
     private void Awake()
     {
         _random = new MillerParkLCG();
-        _seed = 1;
+        _timer = new Timer();
     }
 
     private void Update()
     {
         MapGeneratorParameters parameters = new MapGeneratorParameters();
-        parameters.GenerationRadius = 100;
+        parameters.GenerationRadius = 20;
 
         parameters.MinCellSize = 3;
         parameters.MaxCellSize = 30;
 
-        parameters.MinCellCount = 100;
-        parameters.MaxCellCount = 150;
+        parameters.MinCellCount = 20;
+        parameters.MaxCellCount = 50;
 
         parameters.MinRoomWidth = 7;
         parameters.MinRoomHeight = 7;
@@ -36,38 +37,17 @@ public class MapGenerator : MonoBehaviour
         parameters.MinCorridorWidth = 3;
         parameters.MaxCorridorWidth = 5;
 
-        if (Input.GetKeyDown(KeyCode.KeypadPlus))
-        {
-            _seed++;
-        }
-
-        if (Input.GetKeyDown(KeyCode.R))
-        {
-            Floor.ClearAllTiles();
-
-            _currentMap = GenerateMap(_seed, parameters);
-            SeparateCells(ref _currentMap, parameters);
-            IdentifyRooms(ref _currentMap, parameters);
-            Triangulate(ref _currentMap, parameters);
-            GenerateLayoutGraph(ref _currentMap, parameters);
-            GenerateCorridorGraph(ref _currentMap, parameters);
-            PaintRoomFloors(_currentMap, parameters);
-            PaintCorridors(ref _currentMap, parameters);
-        }
-
         if (Input.GetKeyDown(KeyCode.T))
         {
             Floor.ClearAllTiles();
             Walls.ClearAllTiles();
 
             _currentMap = GenerateMap(DateTime.Now.Ticks, parameters);
-            SeparateCells(ref _currentMap, parameters);
-            IdentifyRooms(ref _currentMap, parameters);
-            Triangulate(ref _currentMap, parameters);
-            GenerateLayoutGraph(ref _currentMap, parameters);
-            GenerateCorridorGraph(ref _currentMap, parameters);
-            PaintRoomFloors(_currentMap, parameters);
-            PaintCorridors(ref _currentMap, parameters);
+        }
+
+        if (Input.GetKeyDown(KeyCode.R))
+        {
+            PaintTiles(_currentMap, parameters);
         }
     }
 
@@ -81,14 +61,24 @@ public class MapGenerator : MonoBehaviour
 
     public Map GenerateMap(long seed, in MapGeneratorParameters parameters)
     {
+        _timer.Start();
         Map result = new Map();
 
         _random.SetSeed(seed);
+
         GenerateCells(ref result, parameters);
-        //SeparateCells(ref nodes, parameters);
-        //IdentifyRooms(ref nodes, parameters);
-        //Triangulate(ref nodes);
-        //AddCorridorEdges(ref result);
+        SeparateCells(ref result, parameters);
+        IdentifyRooms(ref result, parameters);
+        Triangulate(ref result, parameters);
+        GenerateLayoutGraph(ref result, parameters);
+        GenerateCorridorGraph(ref result, parameters);
+        PaintRooms(result, parameters);
+        PaintCorridors(ref result, parameters);
+        PaintTiles(result, parameters);
+        PostProcessTiles(result, parameters);
+
+        _timer.Stop();
+        _timer.Print("MapGenerator.GenerateMap");
 
         return result;
     }
@@ -96,16 +86,17 @@ public class MapGenerator : MonoBehaviour
     private void GenerateCells(ref Map map, in MapGeneratorParameters parameters)
     {
         int cellCount = _random.Range(parameters.MinCellCount, parameters.MaxCellCount);
-        map._cells = new List<MapNode>(cellCount);
-
+        map.Cells = new List<MapNode>(cellCount);
+      
         for (int i = 0; i < cellCount; i++)
         {
             Vector2Int size = GenerateRandomSize(parameters);
             Vector2Int position = RandomPointInCircle(parameters.GenerationRadius);
 
-            map._cells.Add(new MapNode(i, position, size));
-            map._cells = map._cells.OrderBy(x => x.Cell.x).ThenBy(x => x.Cell.y).ToList();
+            map.Cells.Add(new MapNode(i, position, size));
+            map.Cells = map.Cells.OrderBy(x => x.Cell.x).ThenBy(x => x.Cell.y).ToList();
         }
+
     }
 
     private void SeparateCells(ref Map map, in MapGeneratorParameters parameters)
@@ -113,14 +104,19 @@ public class MapGenerator : MonoBehaviour
         bool regionsSeparated = false;
         int iterations = 0;
 
-        while (!regionsSeparated && iterations < 2 * map._cells.Count)
+        int xMin = int.MaxValue;
+        int xMax = int.MinValue;
+        int yMin = int.MaxValue;
+        int yMax = int.MinValue;
+
+        while (!regionsSeparated && iterations < 2 * map.Cells.Count)
         {
             regionsSeparated = true;
-            foreach (MapNode node in map._cells)
+            foreach (MapNode node in map.Cells)
             {
                 Vector2 movement = Vector2.zero;
                 int separationCount = 0;
-                foreach (MapNode other in map._cells)
+                foreach (MapNode other in map.Cells)
                 {
                     if (node == other)
                     {
@@ -148,10 +144,21 @@ public class MapGenerator : MonoBehaviour
                         node.Cell = newRect;
                         regionsSeparated = false;
                     }
+
+                    if (node.Cell.xMin < xMin)
+                        xMin = node.Cell.xMin;
+                    if (node.Cell.xMax > xMax)
+                        xMax = node.Cell.xMax;
+                    if (node.Cell.yMin < yMin)
+                        yMin = node.Cell.yMin;
+                    if (node.Cell.yMax > yMax)
+                        yMax = node.Cell.yMax;
                 }
             }
             iterations++;
         }
+
+        map.Bounds = new BoundsInt(xMin, yMin, 0, Mathf.Abs(xMax - xMin), Mathf.Abs(yMax - yMin), 0);
 
         if (!regionsSeparated)
         {
@@ -162,7 +169,7 @@ public class MapGenerator : MonoBehaviour
 
     private void IdentifyRooms(ref Map map, in MapGeneratorParameters parameters)
     {
-        foreach (MapNode node in map._cells)
+        foreach (MapNode node in map.Cells)
         {
             if ((node.Cell.width >= parameters.MinRoomWidth && node.Cell.height >= parameters.MinRoomHeight)
                 || (node.Cell.height >= parameters.MinRoomWidth && node.Cell.width >= parameters.MinRoomHeight))
@@ -175,7 +182,7 @@ public class MapGenerator : MonoBehaviour
     private void Triangulate(ref Map map, in MapGeneratorParameters parameters)
     {
         Delaunay.BowerWatsonDelaunay triangulator = new Delaunay.BowerWatsonDelaunay();
-        IEnumerable<Delaunay.Vertex<MapNode>> vertices = map._cells.Where(x => x.Type == MapNodeType.Room)
+        IEnumerable<Delaunay.Vertex<MapNode>> vertices = map.Cells.Where(x => x.Type == MapNodeType.Room)
             .Select(x => new Delaunay.Vertex<MapNode>(x.Cell.center, x));
         IEnumerable<Delaunay.Triangle<MapNode>> triangles = triangulator.Triangulate(vertices);
         map.Triangles = triangles.ToList();
@@ -194,9 +201,9 @@ public class MapGenerator : MonoBehaviour
 
     }
 
-    private void PaintRoomFloors(in Map map, in MapGeneratorParameters parameters)
+    private void PaintRooms(in Map map, in MapGeneratorParameters parameters)
     {
-        foreach (MapNode node in map._cells)
+        foreach (MapNode node in map.Cells)
         {
             if (node.Type != MapNodeType.Room)
                 continue;
@@ -249,7 +256,7 @@ public class MapGenerator : MonoBehaviour
             MapNode a = null;
             MapNode b = null;
 
-            foreach (MapNode node in map._cells)
+            foreach (MapNode node in map.Cells)
             {
                 if (node.Type != MapNodeType.Room)
                 {
@@ -307,6 +314,12 @@ public class MapGenerator : MonoBehaviour
             if (useX)
             {
                 // Hallway goes up/down
+
+                if (midpoint.x < bCenter.x)
+                    midpoint.x -= 1;
+                if (midpoint.x > bCenter.x)
+                    midpoint.x += 1;
+
                 result.Add(new Delaunay.Edge<MapNode>(new Delaunay.Vertex<MapNode>(midpoint.x, aCenter.y),
                      new Delaunay.Vertex<MapNode>(midpoint.x, bCenter.y)));
                 result.Add(new Delaunay.Edge<MapNode>(new Delaunay.Vertex<MapNode>(midpoint.x, bCenter.y),
@@ -314,6 +327,11 @@ public class MapGenerator : MonoBehaviour
             }
             else if (useY)
             {
+                if (midpoint.y < bCenter.y)
+                    midpoint.y -= 1;
+                if (midpoint.y > bCenter.y)
+                    midpoint.x += 1;
+
                 // Hallway goes left/right
                 result.Add(new Delaunay.Edge<MapNode>(new Delaunay.Vertex<MapNode>(aCenter.x, midpoint.y),
                       new Delaunay.Vertex<MapNode>(bCenter.x, midpoint.y)));
@@ -381,6 +399,73 @@ public class MapGenerator : MonoBehaviour
         }
     }
 
+    private void PaintTiles(in Map map, in MapGeneratorParameters parameters)
+    {
+        _timer.Start();
+        for(int x = map.Bounds.xMin; x < map.Bounds.xMax; x++)
+        {
+            for(int y = map.Bounds.yMin; y < map.Bounds.yMax; y++)
+            {
+                Tile tile = GetTileByNeighbours(x, y);
+                if (tile == null)
+                    continue;
+
+                Walls.SetTile(new Vector3Int(x, y, 0), tile);
+            }
+        }
+        _timer.Stop();
+        _timer.Print("MapGenerator.PaintTiles");
+    }
+
+    private void PostProcessTiles(in Map map, in MapGeneratorParameters parameters)
+    {
+        for (int x = map.Bounds.xMin; x < map.Bounds.xMax; x++)
+        {
+            for (int y = map.Bounds.yMin; y < map.Bounds.yMax; y++)
+            {
+                Vector3Int pos = new Vector3Int(x, y, 0);
+                Tile currentTile = (Tile)Walls.GetTile(pos);
+
+                if (currentTile == null)
+                    continue;
+
+                Tile result = null;               
+                Tile middleRight = (Tile)Walls.GetTile(pos + new Vector3Int(1, 0, 0));
+                Tile middleLeft = (Tile)Walls.GetTile(pos - new Vector3Int(1, 0, 0));
+                Tile middleTop = (Tile)Walls.GetTile(pos + new Vector3Int(0, 1, 0));
+                Tile middleBottom = (Tile)Walls.GetTile(pos - new Vector3Int(0, 1, 0));
+
+
+                if (currentTile == TileContainer.MiddleRight && middleRight == TileContainer.MiddleLeft && middleTop == null)
+                    result = TileContainer.TopLeftOuter;
+
+                if (currentTile == TileContainer.MiddleRight && middleRight == TileContainer.MiddleLeft && middleBottom == null)
+                    result = TileContainer.BottomRightOuter;
+
+                if (currentTile == TileContainer.MiddleLeft && middleLeft != TileContainer.MiddleRight && middleTop == null)
+                    result = TileContainer.TopRightOuter;
+
+                if (currentTile == TileContainer.MiddleLeft && middleLeft == TileContainer.BottomRightOuter && middleBottom == null)
+                    result = TileContainer.BottomLeftOuter;
+
+                if (currentTile == TileContainer.TopMiddle && middleTop == TileContainer.BottomMiddle && middleRight == null)
+                    result = TileContainer.BottomLeftOuter;
+
+                if (currentTile == TileContainer.BottomMiddle && middleBottom == TileContainer.BottomLeftOuter && middleRight == null)
+                    result = TileContainer.TopRightOuter;
+
+                if (currentTile == TileContainer.TopMiddle && middleTop == TileContainer.BottomMiddle && middleLeft == null)
+                    result = TileContainer.BottomRightOuter;
+
+                if (currentTile == TileContainer.BottomMiddle && middleBottom == TileContainer.BottomRightOuter && middleLeft == null)
+                    result = TileContainer.TopLeftOuter;
+
+                if (result != null)
+                    Walls.SetTile(new Vector3Int(x, y, 0), result);
+            }
+        }
+    }
+
     private Vector2Int GenerateRandomSize(in MapGeneratorParameters parameters)
     {
         int width = _random.Range(parameters.MinCellSize, parameters.MaxCellSize);
@@ -398,5 +483,62 @@ public class MapGenerator : MonoBehaviour
         int y = (int)Math.Round(r * Math.Sin(theta));
 
         return new Vector2Int(x, y);
+    }
+
+    private Tile GetTileByNeighbours(int x, int y)
+    {
+        TileBase currentFloorTile = Floor.GetTile(new Vector3Int(x, y, 0));
+        TileBase currentWallTile = Walls.GetTile(new Vector3Int(x, y, 0));
+
+        if (currentFloorTile == null || currentWallTile != null)
+            return null;
+
+        Tile bottomLeft = Floor.GetTile<Tile>(new Vector3Int(x - 1, y - 1, 0));
+        Tile bottomMiddle = Floor.GetTile<Tile>(new Vector3Int(x, y - 1, 0));
+        Tile bottomRight = Floor.GetTile<Tile>(new Vector3Int(x + 1, y - 1, 0));
+
+        Tile middleLeft = Floor.GetTile<Tile>(new Vector3Int(x - 1, y, 0));
+        Tile middleRight = Floor.GetTile<Tile>(new Vector3Int(x + 1, y, 0));
+
+        Tile topLeft = Floor.GetTile<Tile>(new Vector3Int(x - 1, y + 1, 0));
+        Tile topMiddle = Floor.GetTile<Tile>(new Vector3Int(x, y + 1, 0));
+        Tile topRight = Floor.GetTile<Tile>(new Vector3Int(x + 1, y + 1, 0));
+
+        Tile wallMiddleLeft = Walls.GetTile<Tile>(new Vector3Int(x - 1, y, 0));
+        Tile wallMiddleRight = Walls.GetTile<Tile>(new Vector3Int(x + 1, y, 0));
+        Tile wallTopMiddle = Walls.GetTile<Tile>(new Vector3Int(x, y + 1, 0));
+
+        //left
+        if (middleLeft == null && topMiddle == null)
+            return TileContainer.TopLeft;
+        if (middleLeft == null && topMiddle != null && bottomMiddle != null)
+            return TileContainer.MiddleLeft;
+        if (middleLeft == null && bottomMiddle == null && topMiddle != null)
+            return TileContainer.BottomLeft;
+
+        //middle
+        if (middleLeft != null && topMiddle == null && middleRight != null)
+            return TileContainer.TopMiddle;
+        if (middleLeft != null && bottomMiddle == null && middleRight != null)
+            return TileContainer.BottomMiddle;
+
+        // right
+        if (middleLeft != null && topMiddle == null && middleRight == null)
+            return TileContainer.TopRight;
+        if (topMiddle != null && bottomMiddle != null && middleRight == null)
+            return TileContainer.MiddleRight;
+        if (topMiddle != null && bottomMiddle == null && middleRight == null)
+            return TileContainer.BottomRight;
+
+        if (bottomMiddle != null && bottomLeft == null && wallMiddleLeft != null && wallMiddleRight == null)
+            return TileContainer.TopRightOuter;
+        if (bottomMiddle != null && bottomRight == null && wallTopMiddle == null)
+            return TileContainer.TopLeftOuter;
+        if (topRight == null && wallMiddleLeft == null)
+            return TileContainer.BottomRightOuter;
+        if (topLeft == null && topMiddle != null && wallMiddleLeft != null)
+            return TileContainer.BottomLeftOuter;
+
+        return null;
     }
 }

@@ -5,14 +5,13 @@ using UnityEngine;
 
 public class Map
 {
-    public List<MapNode> _cells;
-    public List<Delaunay.Triangle<MapNode>> Triangles;
-    public List<Delaunay.Edge<MapNode>> DelaunayGraph;
-    public List<Delaunay.Edge<MapNode>> GabrielGraph;
-    public List<Delaunay.Edge<MapNode>> EMSTGraph;
-    public List<Delaunay.Edge<MapNode>> CorridorGraph;
-
-    public BoundsInt Bounds;
+    public List<MapNode> Cells { get; set; }
+    public List<Delaunay.Triangle<MapNode>> Triangles { get; set; }
+    public List<Delaunay.Edge<MapNode>> DelaunayGraph { get; set; }
+    public List<Delaunay.Edge<MapNode>> GabrielGraph { get; set; }
+    public List<Delaunay.Edge<MapNode>> EMSTGraph { get; set; }
+    public List<Delaunay.Edge<MapNode>> CorridorGraph { get; set; }
+    public BoundsInt Bounds { get; set; }
 
     private bool _drawCells;
     private bool _drawDelaunay;
@@ -22,11 +21,11 @@ public class Map
 
     public Map()
     {
-        _drawCells = false;
+        _drawCells = true;
         _drawDelaunay = false;
         _drawGabriel = false;
-        _drawEMST = false;
-        _drawCorridors = false;
+        _drawEMST = true;
+        _drawCorridors = true;
     }
 
     public void DrawDebug()
@@ -36,9 +35,9 @@ public class Map
 
     private void DrawCells()
     {
-        if (_drawCells && _cells != null)
+        if (_drawCells && Cells != null)
         {
-            _cells.ForEach(x =>
+            Cells.ForEach(x =>
             {
                 switch (x.Type)
                 {
