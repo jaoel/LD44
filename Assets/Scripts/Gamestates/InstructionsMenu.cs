@@ -51,7 +51,7 @@ public class InstructionsMenu : MonoBehaviour
             pageTwo.SetActive(false);
             pageThree.SetActive(false);
             previousButton.SetActive(false);
-            nextButton.SetActive(true); 
+            nextButton.SetActive(true);
         }
         else if (_currentPage == 1)
         {
@@ -68,4 +68,4 @@ public class InstructionsMenu : MonoBehaviour
             nextButton.SetActive(false);
         }
     }
-} 
+}
