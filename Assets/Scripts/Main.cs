@@ -101,7 +101,7 @@ public class Main : MonoBehaviour
         parameters.MinCorridorWidth = 3;
         parameters.MaxCorridorWidth = 5;
 
-        parameters.MinRoomDistance = 0;
+        parameters.MinRoomDistance = 1;
 
         _currentMap = MapGenerator.Instance.GenerateMap(DateTime.Now.Ticks, parameters);
         MapGenerator.Instance.PopulateMap(ref _currentMap, ref player, parameters);
