@@ -24,14 +24,22 @@ public class DustParticleSpawner : MonoBehaviour
             }
 
             if (rigidBody.velocity.x > 0.0f)
+            {
                 dustTrail.transform.eulerAngles = new Vector3(0.0f, 180.0f, 0.0f);
+            }
             else if (rigidBody.velocity.x < 0.0f)
+            {
                 dustTrail.transform.eulerAngles = new Vector3(0.0f, 0.0f, 0.0f);
+            }
 
             if (rigidBody.velocity.y < 0.0f)
+            {
                 dustTrail.GetComponent<Renderer>().sortingLayerName = "Character";
+            }
             else
+            {
                 dustTrail.GetComponent<Renderer>().sortingLayerName = "Particles";
+            }
         }
     }
 }
