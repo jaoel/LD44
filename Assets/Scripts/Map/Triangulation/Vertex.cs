@@ -43,12 +43,16 @@ namespace Delaunay
         public override bool Equals(object obj)
         {
             if (obj == null)
+            {
                 return false;
+            }
 
             Vertex<T> other = (Vertex<T>)obj;
 
             if (other.Position == this.Position)
+            {
                 return true;
+            }
 
             return false;
         }

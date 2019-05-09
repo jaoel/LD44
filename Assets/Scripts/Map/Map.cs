@@ -73,7 +73,9 @@ public class Map
         foreach (GameObject enemy in Enemies)
         {
             if (enemy == null || enemy.Equals(null))
+            {
                 continue;
+            }
 
             if (Vector2.Distance(enemy.transform.position, position) <= radius)
             {
@@ -105,16 +107,22 @@ public class Map
             MapNode potential = Cells[_random.Range(0, Cells.Count)];
 
             if (!includeCorridorRooms && potential.Type == MapNodeType.Corridor)
+            {
                 continue;
+            }
 
             if (excludedRooms != null && excludedRooms.Contains(potential))
+            {
                 continue;
+            }
 
             int floorWidth = potential.Cell.width - 2;
             int floorHeight = potential.Cell.height - 2;
 
             if (floorWidth < tileWidth || floorHeight < tileHeight)
+            {
                 continue;
+            }
 
             room = potential;
         }
@@ -162,13 +170,19 @@ public class Map
                 switch (x.Type)
                 {
                     case MapNodeType.Default:
-                        GizmoUtility.DrawRectangle(x.Cell, Color.black);
+                        {
+                            GizmoUtility.DrawRectangle(x.Cell, Color.black);
+                        }
                         break;
                     case MapNodeType.Room:
-                        GizmoUtility.DrawRectangle(x.Cell, Color.green);   
+                        {
+                            GizmoUtility.DrawRectangle(x.Cell, Color.green);
+                        }
                         break;
                     case MapNodeType.Corridor:
-                        GizmoUtility.DrawRectangle(x.Cell, Color.blue);
+                        {
+                            GizmoUtility.DrawRectangle(x.Cell, Color.blue);
+                        }
                         break;
                     default:
                         break;

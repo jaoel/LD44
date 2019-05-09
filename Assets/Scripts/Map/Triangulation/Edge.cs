@@ -32,10 +32,14 @@ namespace Delaunay
         public bool CircumCircleContainsPoint(Vertex<T> vertex)
         {
             if (vertex.Position == _point1.Position || vertex.Position == _point2.Position)
+            {
                 return false;
+            }
 
             if ((vertex.Position - _circumCircleCenter).magnitude < _radius)
+            {
                 return true;
+            }
 
             return false;
         }
@@ -43,7 +47,9 @@ namespace Delaunay
         public bool ContainsVertex(Vertex<T> vertex)
         {
             if (_point1.Position == vertex.Position || _point2.Position == vertex.Position)
+            {
                 return true;
+            }
 
             return false;
         }
@@ -51,9 +57,14 @@ namespace Delaunay
         public override bool Equals(object obj)
         {
             if (obj == null)
+            {
                 return false;
+            }
+
             if (obj.GetType() != GetType())
+            {
                 return false;
+            }
 
             Edge<T> edge = obj as Edge<T>;
 

@@ -47,7 +47,7 @@ namespace Delaunay
             HashSet<Edge<MapNode>> result = new HashSet<Edge<MapNode>>();
             foreach (Triangle<MapNode> triangle in triangles)
             {
-                foreach(Edge<MapNode> edge in triangle.Edges)
+                foreach (Edge<MapNode> edge in triangle.Edges)
                 {
                     result.Add(edge);
                 }
@@ -62,7 +62,7 @@ namespace Delaunay
             List<Edge<MapNode>> removalList = new List<Edge<MapNode>>();
 
             foreach (Edge<MapNode> edge in result)
-            {   
+            {
                 foreach (Vertex<MapNode> vertex in vertices)
                 {
                     if (edge.CircumCircleContainsPoint(vertex))
@@ -87,7 +87,9 @@ namespace Delaunay
                 foreach (Vertex<MapNode> vertex in vertices)
                 {
                     if (emstVertices.Contains(vertex))
+                    {
                         continue;
+                    }
 
                     Edge<MapNode> shortestEdge = null;
                     float shortestDist = float.PositiveInfinity;
@@ -95,7 +97,9 @@ namespace Delaunay
                     foreach (Edge<MapNode> edge in gabrielGraph)
                     {
                         if (emst.Contains(edge))
+                        {
                             continue;
+                        }
 
                         if ((edge.Point1.Equals(vertex) && emstVertices.Contains(edge.Point2)) || (edge.Point2.Equals(vertex) && emstVertices.Contains(edge.Point1)))
                         {
@@ -109,7 +113,9 @@ namespace Delaunay
                     }
 
                     if (float.IsInfinity(shortestDist))
+                    {
                         continue;
+                    }
 
                     emst.Add(shortestEdge);
                     emstVertices.Add(vertex);
@@ -125,19 +131,27 @@ namespace Delaunay
             float yMax = float.MinValue;
             float yMin = float.MaxValue;
 
-            foreach(Vertex<MapNode> vertex in vertices)
+            foreach (Vertex<MapNode> vertex in vertices)
             {
                 if (vertex.Position.x > xMax)
+                {
                     xMax = vertex.Position.x;
+                }
 
                 if (vertex.Position.x < xMin)
+                {
                     xMin = vertex.Position.x;
+                }
 
                 if (vertex.Position.y > yMax)
+                {
                     yMax = vertex.Position.y;
+                }
 
                 if (vertex.Position.y < yMin)
+                {
                     yMin = vertex.Position.y;
+                }
             }
 
             float dx = xMax - xMin;

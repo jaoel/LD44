@@ -4,7 +4,7 @@ using UnityEngine;
 public enum MapNodeType
 {
     Default,
-    Room,   
+    Room,
     Corridor,
     None
 }
@@ -34,7 +34,7 @@ public class MapNode
     {
         Vector2Int result = Vector2Int.zero;
         float minDist = float.PositiveInfinity;
-        foreach(Vector2Int entryPoint in EntryPoints)
+        foreach (Vector2Int entryPoint in EntryPoints)
         {
             float sqrDist = Vector2.SqrMagnitude(entryPoint - position);
             if (sqrDist < minDist)
@@ -50,12 +50,16 @@ public class MapNode
     public override bool Equals(object obj)
     {
         if (obj == null)
+        {
             return false;
+        }
 
         MapNode other = (MapNode)obj;
 
         if (other.Id == Id)
+        {
             return true;
+        }
 
         return false;
     }
@@ -64,4 +68,4 @@ public class MapNode
     {
         return base.GetHashCode();
     }
-} 
+}

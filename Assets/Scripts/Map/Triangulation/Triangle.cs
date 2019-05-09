@@ -6,21 +6,18 @@ namespace Delaunay
 {
     public class Triangle<T>
     {
-        private Vertex<T>[] _vertices;
-        private Edge<T>[] _edges;
-
         private Vector2 _circumCenter;
         private float _radiusSquared;
 
-        public Vertex<T>[] Vertices => _vertices;
-        public Edge<T>[] Edges => _edges;
+        public Vertex<T>[] Vertices { get; }
+        public Edge<T>[] Edges { get; }
 
         public IEnumerable<Triangle<T>> TrianglesWithSharedEdge
         {
             get
             {
                 HashSet<Triangle<T>> neighbors = new HashSet<Triangle<T>>();
-                foreach (Vertex<T> vertex in _vertices)
+                foreach (Vertex<T> vertex in Vertices)
                 {
                     IEnumerable<Triangle<T>> trianglesWithSharedEdge = vertex.AdjacentTriangles.Where(x =>
                     {
@@ -31,28 +28,28 @@ namespace Delaunay
                 return neighbors;
             }
         }
-            
+
         public Triangle(Vertex<T> a, Vertex<T> b, Vertex<T> c)
         {
-            _vertices = new Vertex<T>[3];
-            _edges = new Edge<T>[3];
+            Vertices = new Vertex<T>[3];
+            Edges = new Edge<T>[3];
 
             if (!IsCounterClockwise(a.Position, b.Position, c.Position))
             {
-                _vertices[0] = a;
-                _vertices[1] = b;
-                _vertices[2] = c;
+                Vertices[0] = a;
+                Vertices[1] = b;
+                Vertices[2] = c;
             }
             else
             {
-                _vertices[0] = a;
-                _vertices[1] = b;
-                _vertices[2] = c;
+                Vertices[0] = a;
+                Vertices[1] = b;
+                Vertices[2] = c;
             }
 
-            _edges[0] = new Edge<T>(_vertices[0], _vertices[1]);
-            _edges[1] = new Edge<T>(_vertices[1], _vertices[2]);
-            _edges[2] = new Edge<T>(_vertices[2], _vertices[0]);
+            Edges[0] = new Edge<T>(Vertices[0], Vertices[1]);
+            Edges[1] = new Edge<T>(Vertices[1], Vertices[2]);
+            Edges[2] = new Edge<T>(Vertices[2], Vertices[0]);
 
             Vertices[0].AdjacentTriangles.Add(this);
             Vertices[1].AdjacentTriangles.Add(this);
@@ -80,7 +77,7 @@ namespace Delaunay
 
             Vector2 center = new Vector2(aux1 / div, aux2 / div);
             _circumCenter = center;
-            _radiusSquared = (_circumCenter - p0.Position).sqrMagnitude; 
+            _radiusSquared = (_circumCenter - p0.Position).sqrMagnitude;
         }
 
         private bool IsCounterClockwise(Vector2 a, Vector2 b, Vector2 c)
@@ -91,7 +88,7 @@ namespace Delaunay
 
         public bool SharesEdgeWith(Triangle<T> triangle)
         {
-            int sharedVertexCount = _vertices.Where(x => triangle.Vertices.Contains(x)).Count();
+            int sharedVertexCount = Vertices.Where(x => triangle.Vertices.Contains(x)).Count();
             return sharedVertexCount == 2;
         }
 
@@ -104,14 +101,18 @@ namespace Delaunay
         public override bool Equals(object obj)
         {
             if (obj == null)
+            {
                 return false;
+            }
 
             Triangle<T> otherTriangle = (Triangle<T>)obj;
             Vertex<T>[] otherVertices = otherTriangle.Vertices;
-            foreach(Vertex<T> vertex in _vertices)
+            foreach (Vertex<T> vertex in Vertices)
             {
                 if (!otherVertices.Any(x => x.Position == vertex.Position))
+                {
                     return false;
+                }
             }
 
             return true;
@@ -119,7 +120,7 @@ namespace Delaunay
 
         public override int GetHashCode()
         {
-            return 59827589 + EqualityComparer<Vertex<T>[]>.Default.GetHashCode(_vertices);
+            return 59827589 + EqualityComparer<Vertex<T>[]>.Default.GetHashCode(Vertices);
         }
     }
 }
