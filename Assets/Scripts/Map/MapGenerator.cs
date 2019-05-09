@@ -6,58 +6,47 @@ using UnityEngine.Tilemaps;
 
 public class MapGenerator : MonoBehaviour
 {
-    public Tilemap Floor;
-    public Tilemap Walls;
-    public TileContainer TileContainer;
+    public TileContainer tileContainer;
+    public InteractiveDungeonObject interactiveObjectContainer;
+    public EnemyContainer enemyContainer;
+    public TrapContainer trapContainer;
+
+    public Tilemap floors;
+    public Tilemap walls;
 
     private MillerParkLCG _random;
-    private Map _currentMap;
-
     private Timer _timer;
-    private void Awake()
+
+    private static MapGenerator instance = null;
+    public static MapGenerator Instance
+    {
+        get
+        {
+            if (instance != null)
+            {
+                return instance;
+            }
+            instance = FindObjectOfType<MapGenerator>();
+            if (instance == null || instance.Equals(null))
+            {
+                Debug.LogError("The scene needs a MapGenerator");
+            }
+
+            instance.Initialize();
+            return instance;
+        }
+    }
+
+    private void Initialize()
     {
         _random = new MillerParkLCG();
         _timer = new Timer();
     }
 
-    private void Update()
-    {
-        MapGeneratorParameters parameters = new MapGeneratorParameters();
-        parameters.GenerationRadius = 20;
-
-        parameters.MinCellSize = 3;
-        parameters.MaxCellSize = 30;
-
-        parameters.MinCellCount = 20;
-        parameters.MaxCellCount = 50;
-
-        parameters.MinRoomWidth = 7;
-        parameters.MinRoomHeight = 7;
-
-        parameters.MinCorridorWidth = 3;
-        parameters.MaxCorridorWidth = 5;
-
-        if (Input.GetKeyDown(KeyCode.T))
-        {
-            Floor.ClearAllTiles();
-            Walls.ClearAllTiles();
-
-            _currentMap = GenerateMap(DateTime.Now.Ticks, parameters);
-        }
-    }
-
-    private void OnDrawGizmos()
-    {
-        if (_currentMap != null)
-        {
-            _currentMap.DrawDebug();
-        }
-    }
-
     public Map GenerateMap(long seed, in MapGeneratorParameters parameters)
     {
         _timer.Start();
-        Map result = new Map();
+        Map result = new Map(floors, walls, _random);
 
         _random.SetSeed(seed);
 
@@ -77,6 +66,60 @@ public class MapGenerator : MonoBehaviour
         _timer.Print("MapGenerator.GenerateMap");
 
         return result;
+    }
+
+    public void PopulateMap(ref Map map, ref Player player, in MapGeneratorParameters parameters)
+    {
+        player.transform.position = map.GetPositionInMap(1, 1, false, out MapNode playerSpawnRoom).ToVector3();
+        CameraManager.Instance.SetCameraPosition(player.transform.position);
+
+        map.AddInteractiveObject(Instantiate(interactiveObjectContainer.Stairs, 
+            map.GetPositionInMap(2, 2, false, new List<MapNode>() { playerSpawnRoom }).ToVector3(), Quaternion.identity));
+
+        int trapCount = _random.Range(0, 10);
+        for (int i = 0; i < trapCount; i++)
+        {
+            Vector3Int pos = map.GetPositionInMap(2, 2, false).ToVector3Int();
+            while (Vector3.Distance(pos, player.transform.position) < 4
+                || map.InteractiveObjects.Any(x => Vector3.Distance(x.transform.position, pos) < 4))
+            {
+                pos = map.GetPositionInMap(2, 2, false).ToVector3Int();
+            }
+
+            map.AddInteractiveObject(GameObject.Instantiate(trapContainer.GetRandomTrap(),
+                new Vector3(pos.x, pos.y, 0.0f), Quaternion.identity).gameObject);
+        }
+
+        int enemyCount = 10;
+        int shootingZombieCount = 10;
+      
+        for (int i = 0; i < enemyCount; i++)
+        {
+            Vector3 spawnPos = map.GetPositionInMap(1, 1, true).ToVector3();
+
+            while (Vector3.Distance(player.transform.position, spawnPos) < 10)
+            {
+                spawnPos = map.GetPositionInMap(1, 1, true).ToVector3();
+            }
+
+            map.AddEnemy(GameObject.Instantiate(enemyContainer.basicZombie,
+                new Vector3(spawnPos.x, spawnPos.y, 0.0f), Quaternion.identity));
+            map.Enemies[map.Enemies.Count - 1].SetActive(false);
+            map.Enemies[map.Enemies.Count - 1].GetComponent<Enemy>().maxSpeedMultiplier = _random.Range(0.9f, 1.2f);
+        }
+
+        for (int i = 0; i < shootingZombieCount; i++)
+        {
+            Vector3Int spawnPos = map.GetPositionInMap(1, 1, true).ToVector3Int();
+            while (Vector3.Distance(spawnPos, player.transform.position) < 10)
+            {
+                spawnPos = map.GetPositionInMap(1, 1, true).ToVector3Int();
+            }
+
+            GameObject type = _random.Range(0.0f, 1.0f) < 0.5f ? enemyContainer.shootingZombie : enemyContainer.shotgunZombie;
+            map.AddEnemy(GameObject.Instantiate(type, new Vector3(spawnPos.x, spawnPos.y, 0.0f), Quaternion.identity));
+            map.Enemies[map.Enemies.Count - 1].SetActive(false);
+        }
     }
 
     private void GenerateCells(ref Map map, in MapGeneratorParameters parameters)
@@ -217,10 +260,10 @@ public class MapGenerator : MonoBehaviour
         TileBase[] tiles = new TileBase[size.x * size.y];
         for (int i = 0; i < size.x * size.y; i++)
         {
-            tiles[i] = TileContainer.FloorTiles[0];
+            tiles[i] = tileContainer.FloorTiles[0];
         }
 
-        Floor.SetTilesBlock(new BoundsInt(pos, size), tiles);
+        floors.SetTilesBlock(new BoundsInt(pos, size), tiles);
 
         if (paintWalls)
         {
@@ -232,24 +275,24 @@ public class MapGenerator : MonoBehaviour
                 int y = i / size.x + pos.y;
 
                 if (x == pos.x && y == pos.y)
-                    tiles[i] = TileContainer.BottomLeft;
+                    tiles[i] = tileContainer.BottomLeft;
                 else if (x == pos.x && y == node.Cell.yMax - 1)
-                    tiles[i] = TileContainer.TopLeft;
+                    tiles[i] = tileContainer.TopLeft;
                 else if (x == node.Cell.xMax - 1 && y == pos.y)
-                    tiles[i] = TileContainer.BottomRight;
+                    tiles[i] = tileContainer.BottomRight;
                 else if (x == node.Cell.xMax - 1 && y == node.Cell.yMax - 1)
-                    tiles[i] = TileContainer.TopRight;
+                    tiles[i] = tileContainer.TopRight;
                 else if (y == node.Cell.yMax - 1)
-                    tiles[i] = TileContainer.TopMiddle;
+                    tiles[i] = tileContainer.TopMiddle;
                 else if (y == pos.y)
-                    tiles[i] = TileContainer.BottomMiddle;
+                    tiles[i] = tileContainer.BottomMiddle;
                 else if (x == node.Cell.xMax - 1)
-                    tiles[i] = TileContainer.MiddleRight;
+                    tiles[i] = tileContainer.MiddleRight;
                 else if (x == pos.x)
-                    tiles[i] = TileContainer.MiddleLeft;
+                    tiles[i] = tileContainer.MiddleLeft;
             }
 
-            Walls.SetTilesBlock(new BoundsInt(pos, size), tiles);
+            walls.SetTilesBlock(new BoundsInt(pos, size), tiles);
         }
     }
 
@@ -411,13 +454,13 @@ public class MapGenerator : MonoBehaviour
             TileBase[] tiles = new TileBase[size.x * size.y];
             for(int tileIndex = 0; tileIndex < size.x * size.y; tileIndex++)
             {
-                tiles[tileIndex] = TileContainer.FloorTiles[0];
+                tiles[tileIndex] = tileContainer.FloorTiles[0];
             }
 
             BoundsInt bounds = new BoundsInt(pos, size);
             AddCorridorRooms(ref map, parameters, bounds);
-            Floor.SetTilesBlock(bounds, tiles);
-            Walls.SetTilesBlock(bounds, new TileBase[size.x * size.y]);
+            floors.SetTilesBlock(bounds, tiles);
+            walls.SetTilesBlock(bounds, new TileBase[size.x * size.y]);
         }
     }
 
@@ -434,7 +477,7 @@ public class MapGenerator : MonoBehaviour
                     continue;
 
                 map.CollisionMap[colX, colY] = 1;
-                Walls.SetTile(new Vector3Int(x, y, 0), tile);
+                walls.SetTile(new Vector3Int(x, y, 0), tile);
                 colY++;
             }
             colX++;
@@ -448,44 +491,44 @@ public class MapGenerator : MonoBehaviour
             for (int y = map.Bounds.yMin; y < map.Bounds.yMax; y++)
             {
                 Vector3Int pos = new Vector3Int(x, y, 0);
-                Tile currentTile = (Tile)Walls.GetTile(pos);
+                Tile currentTile = (Tile)walls.GetTile(pos);
 
                 if (currentTile == null)
                     continue;
 
                 Tile result = null;               
-                Tile middleRight = (Tile)Walls.GetTile(pos + new Vector3Int(1, 0, 0));
-                Tile middleLeft = (Tile)Walls.GetTile(pos - new Vector3Int(1, 0, 0));
-                Tile middleTop = (Tile)Walls.GetTile(pos + new Vector3Int(0, 1, 0));
-                Tile middleBottom = (Tile)Walls.GetTile(pos - new Vector3Int(0, 1, 0));
+                Tile middleRight = (Tile)walls.GetTile(pos + new Vector3Int(1, 0, 0));
+                Tile middleLeft = (Tile)walls.GetTile(pos - new Vector3Int(1, 0, 0));
+                Tile middleTop = (Tile)walls.GetTile(pos + new Vector3Int(0, 1, 0));
+                Tile middleBottom = (Tile)walls.GetTile(pos - new Vector3Int(0, 1, 0));
 
 
-                if (currentTile == TileContainer.MiddleRight && middleRight == TileContainer.MiddleLeft && middleTop == null)
-                    result = TileContainer.TopLeftOuter;
+                if (currentTile == tileContainer.MiddleRight && middleRight == tileContainer.MiddleLeft && middleTop == null)
+                    result = tileContainer.TopLeftOuter;
 
-                if (currentTile == TileContainer.MiddleRight && middleRight == TileContainer.MiddleLeft && middleBottom == null)
-                    result = TileContainer.BottomRightOuter;
+                if (currentTile == tileContainer.MiddleRight && middleRight == tileContainer.MiddleLeft && middleBottom == null)
+                    result = tileContainer.BottomRightOuter;
 
-                if (currentTile == TileContainer.MiddleLeft && middleLeft != TileContainer.MiddleRight && middleTop == null)
-                    result = TileContainer.TopRightOuter;
+                if (currentTile == tileContainer.MiddleLeft && middleLeft != tileContainer.MiddleRight && middleTop == null)
+                    result = tileContainer.TopRightOuter;
 
-                if (currentTile == TileContainer.MiddleLeft && middleLeft == TileContainer.BottomRightOuter && middleBottom == null)
-                    result = TileContainer.BottomLeftOuter;
+                if (currentTile == tileContainer.MiddleLeft && middleLeft == tileContainer.BottomRightOuter && middleBottom == null)
+                    result = tileContainer.BottomLeftOuter;
 
-                if (currentTile == TileContainer.TopMiddle && middleTop == TileContainer.BottomMiddle && middleRight == null)
-                    result = TileContainer.BottomLeftOuter;
+                if (currentTile == tileContainer.TopMiddle && middleTop == tileContainer.BottomMiddle && middleRight == null)
+                    result = tileContainer.BottomLeftOuter;
 
-                if (currentTile == TileContainer.BottomMiddle && middleBottom == TileContainer.BottomLeftOuter && middleRight == null)
-                    result = TileContainer.TopRightOuter;
+                if (currentTile == tileContainer.BottomMiddle && middleBottom == tileContainer.BottomLeftOuter && middleRight == null)
+                    result = tileContainer.TopRightOuter;
 
-                if (currentTile == TileContainer.TopMiddle && middleTop == TileContainer.BottomMiddle && middleLeft == null)
-                    result = TileContainer.BottomRightOuter;
+                if (currentTile == tileContainer.TopMiddle && middleTop == tileContainer.BottomMiddle && middleLeft == null)
+                    result = tileContainer.BottomRightOuter;
 
-                if (currentTile == TileContainer.BottomMiddle && middleBottom == TileContainer.BottomRightOuter && middleLeft == null)
-                    result = TileContainer.TopLeftOuter;
+                if (currentTile == tileContainer.BottomMiddle && middleBottom == tileContainer.BottomRightOuter && middleLeft == null)
+                    result = tileContainer.TopLeftOuter;
 
                 if (result != null)
-                    Walls.SetTile(new Vector3Int(x, y, 0), result);
+                    walls.SetTile(new Vector3Int(x, y, 0), result);
             }
         }
     }
@@ -516,8 +559,8 @@ public class MapGenerator : MonoBehaviour
 
     private Tile GetTileByNeighbours(int x, int y)
     {
-        TileBase currentFloorTile = Floor.GetTile(new Vector3Int(x, y, 0));
-        Tile currentWallTile = (Tile)Walls.GetTile(new Vector3Int(x, y, 0));
+        TileBase currentFloorTile = floors.GetTile(new Vector3Int(x, y, 0));
+        Tile currentWallTile = (Tile)walls.GetTile(new Vector3Int(x, y, 0));
 
         if (currentFloorTile == null)
             return null;
@@ -525,51 +568,51 @@ public class MapGenerator : MonoBehaviour
         if (currentWallTile != null)
             return currentWallTile;
 
-        Tile bottomLeft = Floor.GetTile<Tile>(new Vector3Int(x - 1, y - 1, 0));
-        Tile bottomMiddle = Floor.GetTile<Tile>(new Vector3Int(x, y - 1, 0));
-        Tile bottomRight = Floor.GetTile<Tile>(new Vector3Int(x + 1, y - 1, 0));
+        Tile bottomLeft = floors.GetTile<Tile>(new Vector3Int(x - 1, y - 1, 0));
+        Tile bottomMiddle = floors.GetTile<Tile>(new Vector3Int(x, y - 1, 0));
+        Tile bottomRight = floors.GetTile<Tile>(new Vector3Int(x + 1, y - 1, 0));
 
-        Tile middleLeft = Floor.GetTile<Tile>(new Vector3Int(x - 1, y, 0));
-        Tile middleRight = Floor.GetTile<Tile>(new Vector3Int(x + 1, y, 0));
+        Tile middleLeft = floors.GetTile<Tile>(new Vector3Int(x - 1, y, 0));
+        Tile middleRight = floors.GetTile<Tile>(new Vector3Int(x + 1, y, 0));
 
-        Tile topLeft = Floor.GetTile<Tile>(new Vector3Int(x - 1, y + 1, 0));
-        Tile topMiddle = Floor.GetTile<Tile>(new Vector3Int(x, y + 1, 0));
-        Tile topRight = Floor.GetTile<Tile>(new Vector3Int(x + 1, y + 1, 0));
+        Tile topLeft = floors.GetTile<Tile>(new Vector3Int(x - 1, y + 1, 0));
+        Tile topMiddle = floors.GetTile<Tile>(new Vector3Int(x, y + 1, 0));
+        Tile topRight = floors.GetTile<Tile>(new Vector3Int(x + 1, y + 1, 0));
 
-        Tile wallMiddleLeft = Walls.GetTile<Tile>(new Vector3Int(x - 1, y, 0));
-        Tile wallMiddleRight = Walls.GetTile<Tile>(new Vector3Int(x + 1, y, 0));
-        Tile wallTopMiddle = Walls.GetTile<Tile>(new Vector3Int(x, y + 1, 0));
+        Tile wallMiddleLeft = walls.GetTile<Tile>(new Vector3Int(x - 1, y, 0));
+        Tile wallMiddleRight = walls.GetTile<Tile>(new Vector3Int(x + 1, y, 0));
+        Tile wallTopMiddle = walls.GetTile<Tile>(new Vector3Int(x, y + 1, 0));
 
         //left
         if (middleLeft == null && topMiddle == null)
-            return TileContainer.TopLeft;
+            return tileContainer.TopLeft;
         if (middleLeft == null && topMiddle != null && bottomMiddle != null)
-            return TileContainer.MiddleLeft;
+            return tileContainer.MiddleLeft;
         if (middleLeft == null && bottomMiddle == null && topMiddle != null)
-            return TileContainer.BottomLeft;
+            return tileContainer.BottomLeft;
 
         //middle
         if (middleLeft != null && topMiddle == null && middleRight != null)
-            return TileContainer.TopMiddle;
+            return tileContainer.TopMiddle;
         if (middleLeft != null && bottomMiddle == null && middleRight != null)
-            return TileContainer.BottomMiddle;
+            return tileContainer.BottomMiddle;
 
         // right
         if (middleLeft != null && topMiddle == null && middleRight == null)
-            return TileContainer.TopRight;
+            return tileContainer.TopRight;
         if (topMiddle != null && bottomMiddle != null && middleRight == null)
-            return TileContainer.MiddleRight;
+            return tileContainer.MiddleRight;
         if (topMiddle != null && bottomMiddle == null && middleRight == null)
-            return TileContainer.BottomRight;
+            return tileContainer.BottomRight;
 
         if (bottomMiddle != null && bottomLeft == null && wallMiddleLeft != null && wallMiddleRight == null)
-            return TileContainer.TopRightOuter;
+            return tileContainer.TopRightOuter;
         if (bottomMiddle != null && bottomRight == null && wallTopMiddle == null)
-            return TileContainer.TopLeftOuter;
+            return tileContainer.TopLeftOuter;
         if (topRight == null && wallMiddleLeft == null)
-            return TileContainer.BottomRightOuter;
+            return tileContainer.BottomRightOuter;
         if (topLeft == null && topMiddle != null && wallMiddleLeft != null)
-            return TileContainer.BottomLeftOuter;
+            return tileContainer.BottomLeftOuter;
 
         return null;
     }

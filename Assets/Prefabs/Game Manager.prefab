@@ -15,6 +15,7 @@ GameObject:
   - component: {fileID: 1558292210}
   - component: {fileID: 1558292211}
   - component: {fileID: 997353019}
+  - component: {fileID: 6622311546324206256}
   m_Layer: 0
   m_Name: Game Manager
   m_TagString: Untagged
@@ -112,17 +113,31 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   shopRoomPrefab: {fileID: 1157765099317050428, guid: 16d2a58a56d13fc4bb7115311c46e865,
     type: 3}
-  tileContainer: {fileID: 11400000, guid: 122c88a6521bfa344ae44316c6d6a813, type: 2}
-  interactiveDungeonObjectContainer: {fileID: 11400000, guid: 19d0704cc28aabb4c9d5c482d9c8b89d,
-    type: 2}
-  itemContainer: {fileID: 11400000, guid: 74287dc484f187343ab501050ebd52a6, type: 2}
-  enemyContainer: {fileID: 11400000, guid: ae8c7aeb04ccf9340a11daa8a4a5ae53, type: 2}
-  trapContainer: {fileID: 11400000, guid: 7029a12395ce5594db25f5753c6cb57a, type: 2}
   player: {fileID: 0}
   gameOverUI: {fileID: 0}
   pauseUI: {fileID: 0}
   optionsMenu: {fileID: 0}
-  _gamePaused: 0
-  _gameOver: 0
+  gamePaused: 0
+  gameOver: 0
   currentLevelText: {fileID: 0}
   gameOverLevelText: {fileID: 0}
+  blackOverlay: {fileID: 0}
+--- !u!114 &6622311546324206256
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 891346738302845104}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 65ee228239019ca4ab5478760c91f137, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  tileContainer: {fileID: 11400000, guid: 122c88a6521bfa344ae44316c6d6a813, type: 2}
+  interactiveObjectContainer: {fileID: 11400000, guid: 19d0704cc28aabb4c9d5c482d9c8b89d,
+    type: 2}
+  enemyContainer: {fileID: 11400000, guid: ae8c7aeb04ccf9340a11daa8a4a5ae53, type: 2}
+  trapContainer: {fileID: 11400000, guid: 7029a12395ce5594db25f5753c6cb57a, type: 2}
+  floors: {fileID: 0}
+  walls: {fileID: 0}

@@ -1,5 +1,6 @@
 ﻿using Assets.Scripts;
 using DG.Tweening;
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using TMPro;
@@ -10,29 +11,25 @@ using UnityEngine.Tilemaps;
 public class Main : MonoBehaviour
 {
     public ShopRoom shopRoomPrefab;
-    public TileContainer tileContainer;
-    public InteractiveDungeonObject interactiveDungeonObjectContainer;
-    public ItemContainer itemContainer;
-    public EnemyContainer enemyContainer;
-    public TrapContainer trapContainer;
+    //public InteractiveDungeonObject interactiveDungeonObjectContainer;
+    //public ItemContainer itemContainer;
+    //public EnemyContainer enemyContainer;
+    //public TrapContainer trapContainer;
     public Player player;
 
-    BSPMapGenerator _mapGen;
-    public BSPMap _currentMap;
-    bool _renderBSP;
+    private Map _currentMap;
 
     public GameObject gameOverUI;
     public GameObject pauseUI;
     public GameObject optionsMenu;
-    public bool _gamePaused;
-    public bool _gameOver;
+    public bool gamePaused;
+    public bool gameOver;
     private ShopRoom shopInstance;
     public TextMeshProUGUI currentLevelText;
     public TextMeshProUGUI gameOverLevelText;
     public GameObject blackOverlay;
 
-    private int _currentLevel = 0;
-    public int CurrentLevel => _currentLevel;
+    public int CurrentLevel { get; private set; } = 0;
 
     private static Main instance = null;
     public static Main Instance {
@@ -54,17 +51,16 @@ public class Main : MonoBehaviour
 
         shopInstance = Instantiate(shopRoomPrefab);
         Time.timeScale = 1.0f;
-        _gamePaused = false;
-        _mapGen = new BSPMapGenerator(tileContainer, interactiveDungeonObjectContainer, itemContainer,
-            enemyContainer, trapContainer);
-        _renderBSP = false;
-
+        gamePaused = false;
+        //_bspMapGenerator = new BSPMapGenerator(tileContainer, interactiveDungeonObjectContainer, itemContainer,
+        //    enemyContainer, trapContainer);
         LoadLevel();
     }
 
     public void DebugDrawPath(List<Vector2Int> path)
     {
-        _currentMap.DrawPath(path);
+        //_currentBSPMap.DrawPath(path);
+
     }
 
     public void LoadLevel()
@@ -80,7 +76,7 @@ public class Main : MonoBehaviour
 
         if (MusicController.Instance != null)
         {
-            if (_currentLevel == 0)
+            if (CurrentLevel == 0)
             {
                 MusicController.Instance.PlayMusic("RandomGameplay", true);
             }
@@ -90,24 +86,44 @@ public class Main : MonoBehaviour
             }
         }  
 
-        _currentLevel++;
-        currentLevelText.text = "Level " + _currentLevel;
+        CurrentLevel++;
+        currentLevelText.text = "Level " + CurrentLevel;
         shopInstance.ClearItems();
         shopInstance.gameObject.SetActive(false);
 
-        _currentMap = _mapGen.GenerateDungeon(Random.Range(5, 10), Random.Range(30,60), Random.Range(30, 60), _currentLevel, player);
-        NavigationManager.map = _currentMap;
+
+        MapGeneratorParameters parameters = new MapGeneratorParameters();
+        parameters.GenerationRadius = 20;
+
+        parameters.MinCellSize = 3;
+        parameters.MaxCellSize = 30;
+
+        parameters.MinCellCount = 20;
+        parameters.MaxCellCount = 50;
+
+        parameters.MinRoomWidth = 7;
+        parameters.MinRoomHeight = 7;
+
+        parameters.MinCorridorWidth = 3;
+        parameters.MaxCorridorWidth = 5;
+
+        _currentMap = MapGenerator.Instance.GenerateMap(DateTime.Now.Ticks, parameters);
+        MapGenerator.Instance.PopulateMap(ref _currentMap, ref player, parameters);
+        _currentMap.ActivateObjects();
+
+        //_currentBSPMap = _bspMapGenerator.GenerateDungeon(Random.Range(5, 10), Random.Range(30,60), Random.Range(30, 60), CurrentLevel, player);
+        //NavigationManager.map = _currentBSPMap;
     }
 
     public void GenerateShop() {
         BulletManager.Instance.Clear();
-        _currentMap.Clear();
+        _currentMap.ClearMap();
 
         if (MusicController.Instance != null)
             MusicController.Instance.PlayMusic("Shop");
 
         shopInstance.gameObject.SetActive(true);
-        shopInstance.GenerateRandomItems(_currentLevel, player);
+        shopInstance.GenerateRandomItems(CurrentLevel, player);
         shopInstance.MovePlayerToSpawn(player);
     }
 
@@ -116,13 +132,15 @@ public class Main : MonoBehaviour
         _currentMap.AddInteractiveObject(interactiveObject);
     }
 
-    public void DamageAllEnemiesInCircle(Vector2 position, float radius, int damage, bool damagePlayer) {
+    public void DamageAllEnemiesInCircle(Vector2 position, float radius, int damage, bool damagePlayer)
+    {
         List<Enemy> enemies = _currentMap.GetEnemiesInCircle(position, radius);
-        foreach(Enemy enemy in enemies) {
+        foreach(Enemy enemy in enemies)
+        {
             Vector2 dir = new Vector2(enemy.transform.position.x, enemy.transform.position.y) - position;
             enemy.ApplyDamage(damage, dir);
         }
-
+        
         if (damagePlayer && Vector2.Distance(new Vector2(player.transform.position.x, player.transform.position.y), position) <= radius)
         {
             Vector2 dir = new Vector2(player.transform.position.x, player.transform.position.y) - position;
@@ -132,29 +150,27 @@ public class Main : MonoBehaviour
 
     private void OnDrawGizmos()
     {
-        if (_currentMap != null && _renderBSP)
-            _currentMap.DrawDebug();
     }
 
     void Update()
     {
-        if (!_gameOver && Input.GetKeyDown(KeyCode.Escape) && (!_gamePaused || pauseUI.activeInHierarchy))
+        if (!gameOver && Input.GetKeyDown(KeyCode.Escape) && (!gamePaused || pauseUI.activeInHierarchy))
         {
             SoundManager.Instance.PlayUIButtonClick();
-            TogglePause(!_gamePaused);
+            TogglePause(!gamePaused);
         }
 
-        if (!player.IsAlive && !_gameOver) {
+        if (!player.IsAlive && !gameOver) {
             TogglePause(false);
             Cursor.visible = true;
-            _gameOver = true;
+            gameOver = true;
 
             if (MusicController.Instance != null)
                 MusicController.Instance.PlayMusic("Defeat", false);
 
             gameOverUI.SetActive(true);
             blackOverlay.SetActive(true);
-            gameOverLevelText.text = _currentLevel.ToString(); 
+            gameOverLevelText.text = CurrentLevel.ToString(); 
         }
     }
 
@@ -162,10 +178,10 @@ public class Main : MonoBehaviour
     {
         Cursor.visible = pause;
 
-        _gamePaused = pause;
-        Time.timeScale = _gamePaused ? 0.0f : 1.0f;
-        pauseUI.SetActive(_gamePaused);
-        blackOverlay.SetActive(_gamePaused);
+        gamePaused = pause;
+        Time.timeScale = gamePaused ? 0.0f : 1.0f;
+        pauseUI.SetActive(gamePaused);
+        blackOverlay.SetActive(gamePaused);
     }
 
     public void OnClickStartGame()

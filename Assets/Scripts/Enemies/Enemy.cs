@@ -85,17 +85,17 @@ public class Enemy : MonoBehaviour
             }
             else if(aStarCooldown <= 0)
             {
-                aStarCooldown = 200;
-                Vector2Int start = new Vector2Int((int)transform.position.x, (int)transform.position.y);
-                Vector2Int target = new Vector2Int((int)_player.transform.position.x, (int)_player.transform.position.y);
-                _path = NavigationManager.Instance.AStar(start, target);
-                
-                if (_path != null && _path.Count > 0)
-                {
-                    _followPath = true;
-                    SetTarget(new Vector3(_path[0].x, _path[0].y));
-                    _path.RemoveAt(0);
-                }  
+                //aStarCooldown = 200;
+                //Vector2Int start = new Vector2Int((int)transform.position.x, (int)transform.position.y);
+                //Vector2Int target = new Vector2Int((int)_player.transform.position.x, (int)_player.transform.position.y);
+                //_path = NavigationManager.Instance.AStar(start, target);
+                //
+                //if (_path != null && _path.Count > 0)
+                //{
+                //    _followPath = true;
+                //    SetTarget(new Vector3(_path[0].x, _path[0].y));
+                //    _path.RemoveAt(0);
+                //}  
             }
         }
 

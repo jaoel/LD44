@@ -5,11 +5,9 @@ using System.Text;
 using System.Threading.Tasks;
 using UnityEngine;
 
-namespace Assets.Scripts
+
+[CreateAssetMenu]
+public class InteractiveDungeonObject : ScriptableObject
 {
-    [CreateAssetMenu]
-    public class InteractiveDungeonObject : ScriptableObject
-    {
-        public GameObject Stairs;   
-    }
+    public GameObject Stairs;   
 }

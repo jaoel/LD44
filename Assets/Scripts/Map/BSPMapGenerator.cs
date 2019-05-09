@@ -29,6 +29,7 @@ namespace Assets.Scripts
             _interactiveObjectsContainer = interactiveObjects;
             _itemContainer = itemContainer;
             _enemyContainer = enemyContainer;
+            _enemyContainer = enemyContainer;
             _trapContainer = trapContainer;
         }
            
