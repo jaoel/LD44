@@ -9,38 +9,44 @@ public class NavigationManager : MonoBehaviour
 {
     public static int[,] collisionMap;
 
-    private static NavigationManager instance;
+    private static NavigationManager _instance;
     public static NavigationManager Instance
     {
         get
         {
-            if (instance != null)
+            if (_instance != null)
             {
-                return instance;
+                return _instance;
             }
-            instance = FindObjectOfType<NavigationManager>();
-            if (instance == null || instance.Equals(null))
+
+            _instance = FindObjectOfType<NavigationManager>();
+
+            if (_instance == null || _instance.Equals(null))
             {
                 Debug.LogError("The scene needs a NavigationManager");
             }
-            return instance;
+            return _instance;
         }
     }
 
     public List<Vector2Int> AStar(Vector2Int start, Vector2Int target)
     {
         if (start == target)
+        {
             return new List<Vector2Int>();
+        }
 
         int collisionIndex = collisionMap[target.x, target.y];
         if (collisionIndex != 0)
+        {
             return new List<Vector2Int>();
+        }
 
         List<Vector2Int> result = new List<Vector2Int>();
         List<NavigationNode> closedSet = new List<NavigationNode>();
         List<NavigationNode> openSet = new List<NavigationNode>() { new NavigationNode((target - start).sqrMagnitude, 1, start) };
-        
-        while(openSet.Count > 0)
+
+        while (openSet.Count > 0)
         {
             NavigationNode current = openSet.Aggregate((x, y) => x.FScore < y.FScore ? x : y);
 
@@ -54,8 +60,8 @@ public class NavigationManager : MonoBehaviour
             openSet.Remove(current);
             closedSet.Add(current);
             List<NavigationNode> neighbours = GetNeighbours(current, collisionMap, false);
-            
-            for(int i = 0; i < neighbours.Count; i++)
+
+            for (int i = 0; i < neighbours.Count; i++)
             {
                 if (!closedSet.Contains(neighbours[i]))
                 {
@@ -96,10 +102,14 @@ public class NavigationManager : MonoBehaviour
                 for (int y = node.Position.y - 1; y <= node.Position.y + 1; y++)
                 {
                     if (x < 0 || x >= collisionMap.GetLength(0) || y < 0 || y >= collisionMap.GetLength(1))
+                    {
                         continue;
+                    }
 
                     if (new Vector2Int(x, y) == node.Position || collisionMap[x, y] != 0)
+                    {
                         continue;
+                    }
 
                     result.Add(new NavigationNode(x, y));
                 }
@@ -117,12 +127,12 @@ public class NavigationManager : MonoBehaviour
             potentials.ForEach(x =>
             {
                 if (collisionMap[x.x, x.y] == 0)
+                {
                     result.Add(new NavigationNode(x.x, x.y));
+                }
 
             });
         }
-
-      
 
         return result;
     }

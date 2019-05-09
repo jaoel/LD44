@@ -4,10 +4,7 @@ using System.Collections.Generic;
 public class BulletManager : MonoBehaviour
 {
     private int _preAllocateCount = 50;
-
     private GameObject _bulletPoolWrapper;
-
-    // Dictionary indexed by prefab
     private Dictionary<Bullet, List<BulletInstance>> _bulletList = new Dictionary<Bullet, List<BulletInstance>>();
 
     private static BulletManager _instance = null;

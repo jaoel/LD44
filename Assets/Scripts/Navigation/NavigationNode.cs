@@ -1,4 +1,5 @@
-﻿using UnityEngine;
+﻿using System.Collections.Generic;
+using UnityEngine;
 
 public class NavigationNode
 {
@@ -35,12 +36,26 @@ public class NavigationNode
     public override bool Equals(object obj)
     {
         if (obj == null)
+        {
             return false;
+        }
 
         if (this.GetType() != obj.GetType())
+        {
             return false;
+        }
 
         return Position == ((NavigationNode)obj).Position;
+    }
+
+    public override int GetHashCode()
+    {
+        var hashCode = -372316642;
+        hashCode = hashCode * -1521134295 + GScore.GetHashCode();
+        hashCode = hashCode * -1521134295 + HScore.GetHashCode();
+        hashCode = hashCode * -1521134295 + EqualityComparer<NavigationNode>.Default.GetHashCode(Parent);
+        hashCode = hashCode * -1521134295 + EqualityComparer<Vector2Int>.Default.GetHashCode(Position);
+        return hashCode;
     }
 
     public static bool operator == (NavigationNode a, NavigationNode b)
