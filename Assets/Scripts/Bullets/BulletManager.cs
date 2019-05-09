@@ -1,48 +1,62 @@
 ﻿using UnityEngine;
 using System.Collections.Generic;
 
-public class BulletManager : MonoBehaviour {
-    private int preAllocateCount = 50;
+public class BulletManager : MonoBehaviour
+{
+    private int _preAllocateCount = 50;
 
-    private GameObject bulletPoolWrapper;
+    private GameObject _bulletPoolWrapper;
 
     // Dictionary indexed by prefab
-    private Dictionary<Bullet, List<BulletInstance>> bulletList = new Dictionary<Bullet, List<BulletInstance>>();
+    private Dictionary<Bullet, List<BulletInstance>> _bulletList = new Dictionary<Bullet, List<BulletInstance>>();
 
-    private static BulletManager instance = null;
-    public static BulletManager Instance {
-        get {
-            if(instance != null) {
-                return instance;
+    private static BulletManager _instance = null;
+    public static BulletManager Instance
+    {
+        get
+        {
+            if (_instance != null)
+            {
+                return _instance;
             }
-            instance = FindObjectOfType<BulletManager>();
-            if(instance == null || instance.Equals(null)) {
+            _instance = FindObjectOfType<BulletManager>();
+            if (_instance == null || _instance.Equals(null))
+            {
                 Debug.LogError("The scene needs a BulletManager");
             }
-            return instance;
+            return _instance;
         }
     }
 
-    void Start() {
-        bulletPoolWrapper = new GameObject("Bullet Pool");
-        bulletPoolWrapper.transform.parent = transform;
+    void Start()
+    {
+        _bulletPoolWrapper = new GameObject("Bullet Pool");
+        _bulletPoolWrapper.transform.parent = transform;
     }
 
-    void FixedUpdate() {
-        foreach(var keyValue in bulletList) {
+    void FixedUpdate()
+    {
+        foreach (var keyValue in _bulletList)
+        {
             List<BulletInstance> bullets = keyValue.Value;
-            foreach(BulletInstance bullet in bullets) {
-                if (!bullet.instance.gameObject.activeInHierarchy) {
+            foreach (BulletInstance bullet in bullets)
+            {
+                if (!bullet.instance.gameObject.activeInHierarchy)
+                {
                     bullet.active = false;
                 }
 
-                if (bullet.active) {
+                if (bullet.active)
+                {
                     bullet.lifetime -= Time.deltaTime;
-                    if (bullet.lifetime <= 0f) {
+                    if (bullet.lifetime <= 0f)
+                    {
                         bullet.instance.BeforeDestroyed();
                         bullet.instance.gameObject.SetActive(false);
                         bullet.active = false;
-                    } else {
+                    }
+                    else
+                    {
                         bullet.instance.UpdateBullet(bullet);
                     }
                 }
@@ -50,13 +64,15 @@ public class BulletManager : MonoBehaviour {
         }
     }
 
-    private void OnDestroy() {
-        Destroy(bulletPoolWrapper);
-        bulletList.Clear();
-        instance = null;
+    private void OnDestroy()
+    {
+        Destroy(_bulletPoolWrapper);
+        _bulletList.Clear();
+        _instance = null;
     }
 
-    public void SpawnBullet(BulletDescription description, Vector2 position, Vector2 velocity, GameObject owner) {
+    public void SpawnBullet(BulletDescription description, Vector2 position, Vector2 velocity, GameObject owner)
+    {
         PreAllocateBullets(description);
         BulletInstance availableBullet = FindAvailableBulletInstance(description);
 
@@ -67,50 +83,59 @@ public class BulletManager : MonoBehaviour {
         bullet.SetTint(description.tint);
         bullet.SetOwner(owner);
         bullet.SetVelocity(velocity);
-        bullet.description = description;
+        bullet.Description = description;
 
         availableBullet.velocity = velocity;
         availableBullet.lifetime = description.lifetime;
         availableBullet.active = true;
     }
 
-    private BulletInstance FindAvailableBulletInstance(BulletDescription description) {
-        List<BulletInstance> bulletInstances = bulletList[description.bulletPrefab];
-        for (int i = 0; i < bulletInstances.Count; i++) {
+    private BulletInstance FindAvailableBulletInstance(BulletDescription description)
+    {
+        List<BulletInstance> bulletInstances = _bulletList[description.bulletPrefab];
+        for (int i = 0; i < bulletInstances.Count; i++)
+        {
             BulletInstance bulletInstance = bulletInstances[i];
-            if (!bulletInstance.active) {
+            if (!bulletInstance.active)
+            {
                 return bulletInstance;
             }
         }
-        
+
         BulletInstance newInstance = InstantiateBullet(description, true);
         bulletInstances.Add(newInstance);
 
         return newInstance;
     }
 
-    public void Clear() {
-        Destroy(bulletPoolWrapper);
-        bulletList.Clear();
+    public void Clear()
+    {
+        Destroy(_bulletPoolWrapper);
+        _bulletList.Clear();
         Start();
     }
 
-    private void PreAllocateBullets(BulletDescription description) {
-        if (bulletList.ContainsKey(description.bulletPrefab)) {
+    private void PreAllocateBullets(BulletDescription description)
+    {
+        if (_bulletList.ContainsKey(description.bulletPrefab))
+        {
             return;
         }
 
         List<BulletInstance> bullets = new List<BulletInstance>();
-        for(int i = 0; i < preAllocateCount; i++) {
+        for (int i = 0; i < _preAllocateCount; i++)
+        {
             bullets.Add(InstantiateBullet(description, false));
         }
-        bulletList[description.bulletPrefab] = bullets;
+        _bulletList[description.bulletPrefab] = bullets;
     }
 
-    private BulletInstance InstantiateBullet(BulletDescription description, bool active) {
-        Bullet instantiatedBullet = Instantiate<Bullet>(description.bulletPrefab, bulletPoolWrapper.transform);
+    private BulletInstance InstantiateBullet(BulletDescription description, bool active)
+    {
+        Bullet instantiatedBullet = Instantiate<Bullet>(description.bulletPrefab, _bulletPoolWrapper.transform);
         instantiatedBullet.gameObject.SetActive(active);
-        BulletInstance instance = new BulletInstance {
+        BulletInstance instance = new BulletInstance
+        {
             active = active,
             description = description,
             instance = instantiatedBullet,

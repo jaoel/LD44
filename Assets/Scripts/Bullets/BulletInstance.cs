@@ -1,6 +1,7 @@
 ﻿using UnityEngine;
 
-public class BulletInstance {
+public class BulletInstance
+{
     public BulletDescription description;
     public Vector2 velocity = Vector2.zero;
     public Bullet instance = null;

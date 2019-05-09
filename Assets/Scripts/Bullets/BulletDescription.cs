@@ -1,7 +1,8 @@
 ﻿using UnityEngine;
 
 [CreateAssetMenu]
-public class BulletDescription : ScriptableObject {
+public class BulletDescription : ScriptableObject
+{
     public Bullet bulletPrefab;
     public float lifetime = 2f;
     public Vector2 size = Vector2.one;
