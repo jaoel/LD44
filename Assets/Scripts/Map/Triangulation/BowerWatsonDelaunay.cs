@@ -7,17 +7,12 @@ namespace Delaunay
 {
     public class BowerWatsonDelaunay
     {
-        private Timer _timer;
-
         public BowerWatsonDelaunay()
         {
-            _timer = new Timer();
         }
 
         public IEnumerable<Triangle<MapNode>> Triangulate(IEnumerable<Vertex<MapNode>> vertices)
         {
-            _timer.Start();
-
             Triangle<MapNode> supraTriangle = GetSupraTriangle(vertices);
             HashSet<Triangle<MapNode>> triangulation = new HashSet<Triangle<MapNode>>() { supraTriangle };
 
@@ -44,10 +39,6 @@ namespace Delaunay
             }
 
             triangulation.RemoveWhere(x => x.Vertices.Any(v => supraTriangle.Vertices.Contains(v)));
-
-            _timer.Stop();
-            _timer.Print("BowerWatsonDelaunay.Triangulate");
-
             return triangulation;
         }
 
@@ -67,8 +58,6 @@ namespace Delaunay
 
         public HashSet<Edge<MapNode>> GetGabrielGraph(in HashSet<Edge<MapNode>> delaunayEdges, in IEnumerable<Vertex<MapNode>> vertices)
         {
-            _timer.Start();
-
             HashSet<Edge<MapNode>> result = new HashSet<Edge<MapNode>>(delaunayEdges);
             List<Edge<MapNode>> removalList = new List<Edge<MapNode>>();
 
@@ -85,17 +74,11 @@ namespace Delaunay
             }
 
             result.RemoveWhere(x => removalList.Contains(x));
-
-            _timer.Stop();
-            _timer.Print("BowerWatsonDelaunay.GetGabrielGraph");
-
             return result;
         }
 
         public HashSet<Edge<MapNode>> GetPrimEMST(in HashSet<Edge<MapNode>> gabrielGraph, in IEnumerable<Vertex<MapNode>> vertices)
         {
-            _timer.Start();
-
             List<Edge<MapNode>> emst = new List<Edge<MapNode>>();
             List<Vertex<MapNode>> emstVertices = new List<Vertex<MapNode>>();
             emstVertices.Add(vertices.ElementAt(0));
@@ -132,10 +115,6 @@ namespace Delaunay
                     emstVertices.Add(vertex);
                 }
             }
-
-            _timer.Stop();
-            _timer.Print("BowerWatsonDelaunay.GetPrimEMST");
-
             return new HashSet<Edge<MapNode>>(emst);
         }
 

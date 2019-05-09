@@ -44,11 +44,6 @@ public class MapGenerator : MonoBehaviour
 
             _currentMap = GenerateMap(DateTime.Now.Ticks, parameters);
         }
-
-        if (Input.GetKeyDown(KeyCode.R))
-        {
-            PaintTiles(_currentMap, parameters);
-        }
     }
 
     private void OnDrawGizmos()
@@ -76,6 +71,7 @@ public class MapGenerator : MonoBehaviour
         PaintCorridors(ref result, parameters);
         PaintTiles(result, parameters);
         PostProcessTiles(result, parameters);
+        RemoveDeadRooms(ref result, parameters);
 
         _timer.Stop();
         _timer.Print("MapGenerator.GenerateMap");
@@ -159,6 +155,7 @@ public class MapGenerator : MonoBehaviour
         }
 
         map.Bounds = new BoundsInt(xMin, yMin, 0, Mathf.Abs(xMax - xMin), Mathf.Abs(yMax - yMin), 0);
+        map.CollisionMap = new int[map.Bounds.size.x, map.Bounds.size.y];
 
         if (!regionsSeparated)
         {
@@ -208,17 +205,25 @@ public class MapGenerator : MonoBehaviour
             if (node.Type != MapNodeType.Room)
                 continue;
 
-            Vector3Int pos = new Vector3Int(node.Cell.xMin, node.Cell.yMin, 0);
-            Vector3Int size = new Vector3Int(node.Cell.width, node.Cell.height, 1);
+            PaintRoom(node, true);
+        }
+    }
 
-            TileBase[] tiles = new TileBase[size.x * size.y];
-            for (int i = 0; i < size.x * size.y; i++)
-            {
-                tiles[i] = TileContainer.FloorTiles[0];
-            }
+    private void PaintRoom(MapNode node, bool paintWalls)
+    {
+        Vector3Int pos = new Vector3Int(node.Cell.xMin, node.Cell.yMin, 0);
+        Vector3Int size = new Vector3Int(node.Cell.width, node.Cell.height, 1);
 
-            Floor.SetTilesBlock(new BoundsInt(pos, size), tiles);
+        TileBase[] tiles = new TileBase[size.x * size.y];
+        for (int i = 0; i < size.x * size.y; i++)
+        {
+            tiles[i] = TileContainer.FloorTiles[0];
+        }
 
+        Floor.SetTilesBlock(new BoundsInt(pos, size), tiles);
+
+        if (paintWalls)
+        {
             for (int i = 0; i < size.x * size.y; i++)
             {
                 tiles[i] = null;
@@ -351,6 +356,22 @@ public class MapGenerator : MonoBehaviour
         map.CorridorGraph = result;
     }
 
+    private void AddCorridorRooms(ref Map map, in MapGeneratorParameters parameters, BoundsInt corridorBounds)
+    {
+        foreach (MapNode room in map.Cells)
+        {
+            if (room.Type != MapNodeType.Default)
+                continue;
+
+            if (corridorBounds.Overlaps(room.Cell))
+            {
+                room.Type = MapNodeType.Corridor;
+                PaintRoom(room, false);
+                break;
+            }
+        }
+    }
+
     private void PaintCorridors(ref Map map, in MapGeneratorParameters parameters)
     {
         Vector3Int size = Vector3Int.zero;
@@ -394,6 +415,7 @@ public class MapGenerator : MonoBehaviour
             }
 
             BoundsInt bounds = new BoundsInt(pos, size);
+            AddCorridorRooms(ref map, parameters, bounds);
             Floor.SetTilesBlock(bounds, tiles);
             Walls.SetTilesBlock(bounds, new TileBase[size.x * size.y]);
         }
@@ -401,20 +423,22 @@ public class MapGenerator : MonoBehaviour
 
     private void PaintTiles(in Map map, in MapGeneratorParameters parameters)
     {
-        _timer.Start();
+        int colX = 0;
         for(int x = map.Bounds.xMin; x < map.Bounds.xMax; x++)
         {
+            int colY = 0;
             for(int y = map.Bounds.yMin; y < map.Bounds.yMax; y++)
             {
                 Tile tile = GetTileByNeighbours(x, y);
                 if (tile == null)
                     continue;
 
+                map.CollisionMap[colX, colY] = 1;
                 Walls.SetTile(new Vector3Int(x, y, 0), tile);
+                colY++;
             }
+            colX++;
         }
-        _timer.Stop();
-        _timer.Print("MapGenerator.PaintTiles");
     }
 
     private void PostProcessTiles(in Map map, in MapGeneratorParameters parameters)
@@ -466,6 +490,11 @@ public class MapGenerator : MonoBehaviour
         }
     }
 
+    private void RemoveDeadRooms(ref Map map, in MapGeneratorParameters parameters)
+    {
+        map.Cells.RemoveAll(x => x.Type == MapNodeType.Default || x.Type == MapNodeType.None);
+    }
+
     private Vector2Int GenerateRandomSize(in MapGeneratorParameters parameters)
     {
         int width = _random.Range(parameters.MinCellSize, parameters.MaxCellSize);
@@ -488,10 +517,13 @@ public class MapGenerator : MonoBehaviour
     private Tile GetTileByNeighbours(int x, int y)
     {
         TileBase currentFloorTile = Floor.GetTile(new Vector3Int(x, y, 0));
-        TileBase currentWallTile = Walls.GetTile(new Vector3Int(x, y, 0));
+        Tile currentWallTile = (Tile)Walls.GetTile(new Vector3Int(x, y, 0));
 
-        if (currentFloorTile == null || currentWallTile != null)
+        if (currentFloorTile == null)
             return null;
+
+        if (currentWallTile != null)
+            return currentWallTile;
 
         Tile bottomLeft = Floor.GetTile<Tile>(new Vector3Int(x - 1, y - 1, 0));
         Tile bottomMiddle = Floor.GetTile<Tile>(new Vector3Int(x, y - 1, 0));

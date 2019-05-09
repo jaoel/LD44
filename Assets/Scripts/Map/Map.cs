@@ -11,6 +11,7 @@ public class Map
     public List<Delaunay.Edge<MapNode>> GabrielGraph { get; set; }
     public List<Delaunay.Edge<MapNode>> EMSTGraph { get; set; }
     public List<Delaunay.Edge<MapNode>> CorridorGraph { get; set; }
+    public int[,] CollisionMap { get; set; }
     public BoundsInt Bounds { get; set; }
 
     private bool _drawCells;
@@ -24,7 +25,7 @@ public class Map
         _drawCells = true;
         _drawDelaunay = false;
         _drawGabriel = false;
-        _drawEMST = true;
+        _drawEMST = false;
         _drawCorridors = true;
     }
 
@@ -46,6 +47,9 @@ public class Map
                         break;
                     case MapNodeType.Room:
                         GizmoUtility.DrawRectangle(x.Cell, Color.green);   
+                        break;
+                    case MapNodeType.Corridor:
+                        GizmoUtility.DrawRectangle(x.Cell, Color.blue);
                         break;
                     default:
                         break;
