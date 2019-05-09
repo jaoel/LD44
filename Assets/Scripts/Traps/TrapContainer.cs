@@ -17,8 +17,8 @@ public class TrapContainer : ScriptableObject
     {
         return new List<GameObject>()
         {
-           slowTrap, 
+           slowTrap,
            spikeTrap
         };
     }
-} 
+}

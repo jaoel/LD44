@@ -9,4 +9,4 @@ public class SpikeTrap : Trap
 
         base.ApplyEffect(player, playerGO);
     }
-} 
+}

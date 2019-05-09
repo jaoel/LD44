@@ -8,7 +8,7 @@ public abstract class Trap : MonoBehaviour
 
     protected bool _triggered;
     protected float _triggerTimer;
-                                                                         
+
     public virtual void ApplyEffect(Player player, GameObject playerGO)
     {
         audioSource.volume = SettingsManager.Instance.SFXVolume;
@@ -19,15 +19,17 @@ public abstract class Trap : MonoBehaviour
     public virtual void Apply(GameObject playerGO)
     {
         if (_triggered)
+        {
             return;
+        }
 
         Player player = playerGO.GetComponent<Player>();
         if (!player.IsInvulnerable || description.triggerOnInvulnerable)
         {
             ApplyEffect(player, playerGO);
         }
-    }     
-    
+    }
+
     protected virtual void FixedUpdate()
     {
         if (_triggered && description.resetOnExit && _triggerTimer > 0.0f)
@@ -40,7 +42,7 @@ public abstract class Trap : MonoBehaviour
                 _triggered = false;
                 _triggerTimer = 0.0f;
             }
-        }     
+        }
     }
 
     protected virtual void ResetTrap()
@@ -64,4 +66,4 @@ public abstract class Trap : MonoBehaviour
             _triggerTimer = description.resetTime;
         }
     }
-} 
+}
