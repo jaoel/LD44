@@ -108,7 +108,7 @@ public class Player : MonoBehaviour
 
         if (Keybindings.Attack && Time.time >= cooldownEndTime)
         {
-            cooldownEndTime = Time.time + CurrentWeapon.Description.Cooldown / firingRateModifier;
+            cooldownEndTime = Time.time + CurrentWeapon.description.cooldown / firingRateModifier;
             CurrentWeapon.Shoot(aimVector, transform.position, gameObject);
         }
         else if (!Keybindings.Attack)

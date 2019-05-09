@@ -12,9 +12,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d15f2c94552a8794997ce16bdfc199e7, type: 3}
   m_Name: SlingshotDescription
   m_EditorClassIdentifier: 
-  Cooldown: 1.5
-  BulletSpeed: 5
-  BulletDescription: {fileID: 11400000, guid: d525ad8c5eef3bd4d92afcb751072538, type: 2}
+  cooldown: 1.5
+  bulletSpeed: 5
+  bulletDescription: {fileID: 11400000, guid: d525ad8c5eef3bd4d92afcb751072538, type: 2}
   soundPrefab: {fileID: 6183662766363230291, guid: ee95da66d850c0b4b866071989a2a78b,
     type: 3}
   loopSound: 0

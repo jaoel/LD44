@@ -24,7 +24,7 @@ public class ShopRoom : MonoBehaviour {
 
         shuffledShopItems = shuffledShopItems.Where(itemDesc => {
             if (itemDesc.itemPrefab is WeaponPickup weaponPickup) {
-                return weaponPickup.Weapon.Description != player.CurrentWeapon.Description;
+                return weaponPickup.Weapon.description != player.CurrentWeapon.description;
             } else {
                 return true;
             }
