@@ -10,7 +10,7 @@ public class Enemy : MonoBehaviour
     public CharacterAnimation characterAnimation;
 
     private int _currentHealth;
-    private int aStarCooldown = 0;
+    private int _aStarCooldown = 0;
     protected Vector3 _target;
     protected List<Vector2Int> _path;
     protected bool _followPath = false;
@@ -22,10 +22,10 @@ public class Enemy : MonoBehaviour
 
     protected bool _hasAggro;
 
-    private Vector2 dieDirection = Vector2.down;
+    private Vector2 _dieDirection = Vector2.down;
     private bool isDead = false;
 
-    private static int killsSinceLastDrop = 0;
+    private static int _killsSinceLastDrop = 0;
 
     public bool IsAlive => !isDead;
     public float maxSpeedMultiplier = 1.0f;
@@ -39,8 +39,8 @@ public class Enemy : MonoBehaviour
 
     protected virtual void Start()
     {
-        rigidbody = GetComponent<Rigidbody2D>(); 
-        aStarCooldown = Random.Range(0, 200);
+        rigidbody = GetComponent<Rigidbody2D>();
+        _aStarCooldown = Random.Range(0, 200);
     }
 
     public virtual void SetTarget(Vector3 target)
@@ -49,10 +49,14 @@ public class Enemy : MonoBehaviour
         _moveToTarget = true;
     }
 
-    private void SmoothStopVelocity() {
-        if (_velocity.magnitude > 0.001f) {
+    private void SmoothStopVelocity()
+    {
+        if (_velocity.magnitude > 0.001f)
+        {
             _velocity -= _velocity * 2.0f * Time.deltaTime;
-        } else {
+        }
+        else
+        {
             _velocity = Vector2.zero;
         }
         rigidbody.velocity = _velocity;
@@ -62,13 +66,15 @@ public class Enemy : MonoBehaviour
     {
         CalculateAnimation();
 
-        if (!_player.IsAlive) {
+        if (!_player.IsAlive)
+        {
             SmoothStopVelocity();
             return;
         }
 
-        aStarCooldown--;
-        if (KillMe()) {
+        _aStarCooldown--;
+        if (KillMe())
+        {
             SmoothStopVelocity();
             return;
         }
@@ -83,7 +89,7 @@ public class Enemy : MonoBehaviour
                 _followPath = false;
                 _path = new List<Vector2Int>();
             }
-            else if(aStarCooldown <= 0)
+            else if (_aStarCooldown <= 0)
             {
                 //aStarCooldown = 200;
                 //Vector2Int start = new Vector2Int((int)transform.position.x, (int)transform.position.y);
@@ -110,14 +116,16 @@ public class Enemy : MonoBehaviour
     public virtual void CheckAggro()
     {
         if (_hasAggro)
+        {
             return;
+        }
 
         float distance = Vector3.Distance(transform.position, _player.transform.position);
         if (distance < description.aggroDistance && PlayerIsVisible())
         {
             _hasAggro = true;
             SoundManager.Instance.PlayMonsterAggro();
-        }                                                     
+        }
     }
 
     public virtual bool PlayerIsVisible()
@@ -137,7 +145,7 @@ public class Enemy : MonoBehaviour
     }
 
     public virtual bool TargetReached()
-    {  
+    {
         if (_target != Vector3.zero && _moveToTarget)
         {
             Vector3 tempPos = transform.position;
@@ -146,7 +154,9 @@ public class Enemy : MonoBehaviour
             float stoppingDistance = _stoppingDistance;
 
             if (!_followPath)
+            {
                 stoppingDistance = 0;
+            }
 
             if (sqrDistToTarget <= _stoppingDistance)
             {
@@ -185,25 +195,35 @@ public class Enemy : MonoBehaviour
         _velocity.z = 0.0f;
     }
 
-    protected virtual bool PlayAttackAnimation() {
+    protected virtual bool PlayAttackAnimation()
+    {
         return Vector2.Distance(_target, transform.position) < 1f;
     }
 
-    private void CalculateAnimation() {
+    private void CalculateAnimation()
+    {
         CharacterAnimation.AnimationType type;
         Vector2 direction;
 
-        if (!IsAlive) {
+        if (!IsAlive)
+        {
             type = CharacterAnimation.AnimationType.Die;
-            direction = dieDirection;
-        } else {
-            if(PlayAttackAnimation()) {
+            direction = _dieDirection;
+        }
+        else
+        {
+            if (PlayAttackAnimation())
+            {
                 type = CharacterAnimation.AnimationType.Attack;
                 direction = _target - transform.position;
-            } else if (_velocity.magnitude < 0.1f) {
+            }
+            else if (_velocity.magnitude < 0.1f)
+            {
                 type = CharacterAnimation.AnimationType.Idle;
                 direction = Vector2.down;
-            } else {
+            }
+            else
+            {
                 type = CharacterAnimation.AnimationType.Run;
                 direction = _velocity;
             }
@@ -224,9 +244,10 @@ public class Enemy : MonoBehaviour
         bloodSpray.Play();
 
         _currentHealth -= damage;
-        if(_currentHealth <= 0) {
-            dieDirection = velocity;
-            _velocity = dieDirection.normalized * 2.5f;
+        if (_currentHealth <= 0)
+        {
+            _dieDirection = velocity;
+            _velocity = _dieDirection.normalized * 2.5f;
         }
 
         _hasAggro = true;
@@ -236,20 +257,24 @@ public class Enemy : MonoBehaviour
     {
         if (_currentHealth <= 0)
         {
-            if (isDead == false) {
+            if (isDead == false)
+            {
                 float killsForGuaranteedDrop = 5f + Main.Instance.CurrentLevel;
-                float prob = Mathf.Lerp(0.1f, 1f, killsSinceLastDrop / killsForGuaranteedDrop);
+                float prob = Mathf.Lerp(0.1f, 1f, _killsSinceLastDrop / killsForGuaranteedDrop);
                 float rnd = Random.Range(0.0f, 1.0f);
 
-                if (rnd < prob) {
-                    killsSinceLastDrop = 0;
+                if (rnd < prob)
+                {
+                    _killsSinceLastDrop = 0;
                     Item drop = Instantiate(itemContainer.GetEnemyDrop().itemPrefab, transform.position, Quaternion.identity);
                     drop.transform.localScale = new Vector3(0.5f, 0.5f, 0.5f);
                     drop.gameObject.SetActive(true);
 
                     Main.Instance.AddInteractiveObject(drop.gameObject);
-                } else {
-                    killsSinceLastDrop++;
+                }
+                else
+                {
+                    _killsSinceLastDrop++;
                 }
             }
             isDead = true;
@@ -265,5 +290,5 @@ public class Enemy : MonoBehaviour
         {
             _player.ReceiveDamage(description.damage, -collision.contacts[0].normal);
         }
-    }  
+    }
 }

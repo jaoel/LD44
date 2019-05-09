@@ -12,14 +12,15 @@ public class ShootingEnemy : Enemy
     protected override void Awake()
     {
         _stoppingDistance = 3.0f;
-
         base.Awake();
     }
 
     protected override void FixedUpdate()
     {
         if (!_player.IsAlive)
+        {
             return;
+        }
 
         shotTimer += Time.deltaTime;
 
@@ -31,12 +32,12 @@ public class ShootingEnemy : Enemy
                 shotsFired = 0;
                 reloadTimer = 0;
             }
-        } 
-        
-        if (IsAlive &&PlayerIsVisible() && shotTimer > description.shotCooldown && shotsFired <= description.magazineSize)
+        }
+
+        if (IsAlive && PlayerIsVisible() && shotTimer > description.shotCooldown && shotsFired <= description.magazineSize)
         {
             Shoot();
-        }  
+        }
 
         base.FixedUpdate();
     }
@@ -47,13 +48,13 @@ public class ShootingEnemy : Enemy
 
         Vector3 dirToPlayer = (_player.transform.position - transform.position).normalized;
         dirToPlayer.z = 0.0f;
-        BulletManager.Instance.SpawnBullet(bulletDescription, transform.position, dirToPlayer * bulletSpeed, 
-            gameObject);
+        BulletManager.Instance.SpawnBullet(bulletDescription, transform.position, dirToPlayer * bulletSpeed, gameObject);
         shotTimer = 0.0f;
         shotsFired++;
     }
 
-    protected override bool PlayAttackAnimation() {
+    protected override bool PlayAttackAnimation()
+    {
         return Vector2.Distance(_target, transform.position) < _stoppingDistance;
     }
-} 
+}
