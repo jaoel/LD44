@@ -8,7 +8,6 @@ using UnityEngine;
 public class NavigationManager : MonoBehaviour
 {
     public static int[,] collisionMap;
-    public static BSPMap map;
 
     private static NavigationManager instance;
     public static NavigationManager Instance
