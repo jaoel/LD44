@@ -2,55 +2,66 @@
 using System.Collections;
 using DG.Tweening;
 
-public class CameraManager : MonoBehaviour {
-    [SerializeField] private Camera mainCamera;
-    public Camera MainCamera => mainCamera;
+public class CameraManager : MonoBehaviour
+{
+    [SerializeField]
+    private Camera _mainCamera;
+    public Camera MainCamera => _mainCamera;
 
-    private GameObject cameraContainer;
+    private GameObject _cameraContainer;
 
-    private static CameraManager instance = null;
-    public static CameraManager Instance {
-        get {
-            if (instance != null) {
-                return instance;
+    private static CameraManager _instance = null;
+    public static CameraManager Instance
+    {
+        get
+        {
+            if (_instance != null)
+            {
+                return _instance;
             }
-            instance = FindObjectOfType<CameraManager>();
-            if (instance == null || instance.Equals(null)) {
+
+            _instance = FindObjectOfType<CameraManager>();
+
+            if (_instance == null || _instance.Equals(null))
+            {
                 Debug.LogError("The scene needs a CameraManager");
             }
-            return instance;
+            return _instance;
         }
     }
 
-    public void SetCameraPosition(Vector2 position) {
-        if (cameraContainer != null)
+    public void SetCameraPosition(Vector2 position)
+    {
+        if (_cameraContainer != null)
         {
-            Vector3 oldPos = cameraContainer.transform.position;
-            cameraContainer.transform.position = new Vector3(position.x, position.y, oldPos.z);
+            Vector3 oldPos = _cameraContainer.transform.position;
+            _cameraContainer.transform.position = new Vector3(position.x, position.y, oldPos.z);
         }
     }
 
-    public void ShakeCamera(float duration, float positionStrength, float rotationStrength, 
+    public void ShakeCamera(float duration, float positionStrength, float rotationStrength,
         int positionVibrato = 10, float positionRandomness = 90.0f)
     {
         Sequence shake = DOTween.Sequence();
-        shake.Append(mainCamera.DOShakePosition(duration, positionStrength * SettingsManager.Instance.ScreenShakeScale,
+        shake.Append(_mainCamera.DOShakePosition(duration, positionStrength * SettingsManager.Instance.ScreenShakeScale,
             positionVibrato, positionRandomness, false));
-        shake.Join(mainCamera.DOShakeRotation(duration, rotationStrength * SettingsManager.Instance.ScreenShakeScale, 
+        shake.Join(_mainCamera.DOShakeRotation(duration, rotationStrength * SettingsManager.Instance.ScreenShakeScale,
             10, 90, false));
-        shake.Append(mainCamera.transform.DOLocalMove(Vector3.zero, 0.5f, true));
-        shake.Append(mainCamera.transform.DORotate(Vector3.zero, 0.5f));
+        shake.Append(_mainCamera.transform.DOLocalMove(Vector3.zero, 0.5f, true));
+        shake.Append(_mainCamera.transform.DORotate(Vector3.zero, 0.5f));
         shake.Play();
     }
 
-    void Awake() {
-        if (cameraContainer == null)
+    void Awake()
+    {
+        if (_cameraContainer == null)
         {
-            cameraContainer = GameObject.Find("CameraContainer");
+            _cameraContainer = GameObject.Find("CameraContainer");
         }
 
-        if(mainCamera == null) {
-            mainCamera = FindObjectOfType<Camera>();
+        if (_mainCamera == null)
+        {
+            _mainCamera = FindObjectOfType<Camera>();
         }
     }
 }

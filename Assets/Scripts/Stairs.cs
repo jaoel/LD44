@@ -15,9 +15,12 @@ namespace Assets.Scripts
         {
             if (collision.gameObject.layer == LayerContainer.Instance.Layers["Player"])
             {
-                if (isShop) {
+                if (isShop)
+                {
                     Main.Instance.GenerateShop();
-                } else {
+                }
+                else
+                {
                     Main.Instance.GenerateMap();
                 }
             }

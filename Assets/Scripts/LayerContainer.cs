@@ -9,21 +9,23 @@ public class LayerContainer : MonoBehaviour
 {
     public Dictionary<string, int> Layers;
 
-    private static LayerContainer instance = null;
+    private static LayerContainer _instance = null;
     public static LayerContainer Instance
     {
         get
         {
-            if (instance != null)
+            if (_instance != null)
             {
-                return instance;
+                return _instance;
             }
-            instance = FindObjectOfType<LayerContainer>();
-            if (instance == null || instance.Equals(null))
+
+            _instance = FindObjectOfType<LayerContainer>();
+
+            if (_instance == null || _instance.Equals(null))
             {
                 Debug.LogError("The scene needs a BulletManager");
             }
-            return instance;
+            return _instance;
         }
     }
 
@@ -39,8 +41,6 @@ public class LayerContainer : MonoBehaviour
     public static int CombinedLayerMask(params string[] layerNames)
     {
         int result = 0;
-
-
         for (int i = 0; i < layerNames.Length; i++)
         {
             result |= 1 << Instance.Layers[layerNames[i]];

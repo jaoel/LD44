@@ -1,6 +1,7 @@
 ﻿using UnityEngine;
 
-public class SettingsManager {
+public class SettingsManager
+{
     private float linearMusicVolume = 0f;
     private float linearSFXVolume = 0f;
 
@@ -8,21 +9,27 @@ public class SettingsManager {
     public float SFXVolume { get; private set; }
     public float ScreenShakeScale { get; set; }
 
-    public float LinearMusicVolume {
-        get {
+    public float LinearMusicVolume
+    {
+        get
+        {
             return linearMusicVolume;
         }
-        set {
+        set
+        {
             linearMusicVolume = value;
             MusicVolume = value * value;
         }
     }
 
-    public float LinearSFXVolume {
-        get {
+    public float LinearSFXVolume
+    {
+        get
+        {
             return linearSFXVolume;
         }
-        set {
+        set
+        {
             linearSFXVolume = value;
             SFXVolume = value * value;
         }
@@ -51,4 +58,4 @@ public class SettingsManager {
         SFXVolume = 0.2f;
         MusicVolume = 0.2f;
     }
-} 
+}

@@ -15,34 +15,36 @@ public class MusicController : MonoBehaviour
 
     public AudioSource _audioSource;
 
-    bool _fadingMusic = false;
+    private bool _fadingMusic = false;
 
-    AudioClip _lastClip;
-    float _lastTime;
+    private AudioClip _lastClip;
+    private float _lastTime;
 
     private Queue<IEnumerator> _queuedCoroutines;
 
-    private static MusicController instance = null;
+    private static MusicController _instance = null;
     public static MusicController Instance
     {
         get
         {
-            if (instance != null)
+            if (_instance != null)
             {
-                return instance;
+                return _instance;
             }
-            instance = FindObjectOfType<MusicController>();
-            if (instance == null || instance.Equals(null))
+
+            _instance = FindObjectOfType<MusicController>();
+
+            if (_instance == null || _instance.Equals(null))
             {
                 Debug.LogError("The scene needs a MusicController");
                 return null;
             }
 
-            instance._queuedCoroutines = new Queue<IEnumerator>();
-            instance.StartCoroutine(instance.ProcessCoroutines());
+            _instance._queuedCoroutines = new Queue<IEnumerator>();
+            _instance.StartCoroutine(_instance.ProcessCoroutines());
 
-            DontDestroyOnLoad(instance.gameObject);
-            return instance;
+            DontDestroyOnLoad(_instance.gameObject);
+            return _instance;
         }
     }
 
@@ -55,20 +57,23 @@ public class MusicController : MonoBehaviour
     {
     }
 
-    private void Start() {
+    private void Start()
+    {
         SetVolume();
     }
 
     private IEnumerator ProcessCoroutines()
     {
-        while(true)
+        while (true)
         {
             if (_queuedCoroutines != null)
             {
                 while (_queuedCoroutines.Count > 0)
                 {
                     while (_fadingMusic)
+                    {
                         yield return new WaitForSeconds(0.01f);
+                    }
 
                     yield return StartCoroutine(_queuedCoroutines.Dequeue());
                 }
@@ -98,7 +103,7 @@ public class MusicController : MonoBehaviour
             _queuedCoroutines.Enqueue(PlayMusicFade(_audioSource, deathJingle, loop, fadeTime));
         }
         else if (key == "Shop")
-        {                                                                                        
+        {
             _lastClip = _audioSource.clip;
             _lastTime = _audioSource.time;
 
@@ -126,7 +131,9 @@ public class MusicController : MonoBehaviour
         if (fadeOut != null)
         {
             while (fadeOut.MoveNext())
+            {
                 yield return new WaitForSeconds(0.01f);
+            }
         }
 
         source.clip = clip;
@@ -139,7 +146,7 @@ public class MusicController : MonoBehaviour
         yield break;
     }
 
-    private IEnumerator FadeOut(AudioSource audioSource,float fadeTime)
+    private IEnumerator FadeOut(AudioSource audioSource, float fadeTime)
     {
         float startVolume = audioSource.volume;
         float timePassed = 0.0f;

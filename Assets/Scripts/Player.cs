@@ -26,24 +26,24 @@ public class Player : MonoBehaviour
     private Vector2 aimVector = Vector2.zero;
     private Vector2 dieDirection = Vector2.down;
 
-    private float _invulnTimer = float.MaxValue; 
+    private float _invulnTimer = float.MaxValue;
 
     private float cooldownEndTime = 0f;
-    
+
     public float firingRateModifier = 1.0f;
     private float _slowTimer = float.MinValue;
     private float _slowFactor = float.MaxValue;
 
-    public bool IsInvulnerable
-    {
-        get { return _invulnTimer < invulnTime; }
-    }
+    public bool IsInvulnerable => _invulnTimer < invulnTime;
 
-    public int Health {
-        get {
+    public int Health
+    {
+        get
+        {
             return currentHealth;
         }
-        set {
+        set
+        {
             currentHealth = Mathf.Clamp(value, 0, maxHealth);
         }
     }
@@ -64,10 +64,7 @@ public class Player : MonoBehaviour
         }
     }
 
-    public bool IsAlive
-    {
-        get { return currentHealth > 0; }
-    }
+    public bool IsAlive => currentHealth > 0;
 
     void Start()
     {
@@ -93,7 +90,8 @@ public class Player : MonoBehaviour
 
         UIManager.Instance.playerUI.SetHealthbar(currentHealth, maxHealth);
 
-        if (!IsAlive || Main.Instance.gamePaused) {
+        if (!IsAlive || Main.Instance.gamePaused)
+        {
             CurrentWeapon.StoppedShooting();
             return;
         }
@@ -120,12 +118,18 @@ public class Player : MonoBehaviour
     void FixedUpdate()
     {
         if (Main.Instance.gamePaused)
+        {
             return;
+        }
 
-        if (!IsAlive) {
-            if (velocity.magnitude > 0.001f) {
+        if (!IsAlive)
+        {
+            if (velocity.magnitude > 0.001f)
+            {
                 velocity -= velocity * 2.0f * Time.deltaTime;
-            } else {
+            }
+            else
+            {
                 velocity = Vector2.zero;
             }
             rigidbody.velocity = velocity;
@@ -137,10 +141,13 @@ public class Player : MonoBehaviour
         CalculateVelocity();
 
         if (_invulnTimer < invulnTime)
-            _invulnTimer += Time.deltaTime; 
+        {
+            _invulnTimer += Time.deltaTime;
+        }
     }
 
-    private void CalculateInputVector() {
+    private void CalculateInputVector()
+    {
         inputVector = Vector3.zero;
         inputVector.x -= Keybindings.MoveLeft;
         inputVector.x += Keybindings.MoveRight;
@@ -148,27 +155,40 @@ public class Player : MonoBehaviour
         inputVector.y -= Keybindings.MoveDown;
     }
 
-    private void CalculateAnimation() {
+    private void CalculateAnimation()
+    {
         CharacterAnimation.AnimationType type;
         Vector2 direction;
 
-        if (!IsAlive) {
+        if (!IsAlive)
+        {
             type = CharacterAnimation.AnimationType.Die;
             direction = dieDirection;
-        } else {
-            if (velocity.magnitude < 0.1f) {
-                if (Keybindings.Attack) {
+        }
+        else
+        {
+            if (velocity.magnitude < 0.1f)
+            {
+                if (Keybindings.Attack)
+                {
                     type = CharacterAnimation.AnimationType.Attack;
                     direction = aimVector;
-                } else {
+                }
+                else
+                {
                     type = CharacterAnimation.AnimationType.Idle;
                     direction = Vector2.down;
                 }
-            } else {
+            }
+            else
+            {
                 type = CharacterAnimation.AnimationType.Run;
-                if (Keybindings.Attack) {
+                if (Keybindings.Attack)
+                {
                     direction = aimVector;
-                } else {
+                }
+                else
+                {
                     direction = velocity;
                 }
             }
@@ -177,27 +197,40 @@ public class Player : MonoBehaviour
         characterAnimation.UpdateAnimation(type, direction);
     }
 
-    private void CalculateDeceleration() {
-        if (inputVector.x <=  0f && velocity.x > 0f) {
+    private void CalculateDeceleration()
+    {
+        if (inputVector.x <= 0f && velocity.x > 0f)
+        {
             velocity.x -= deceleration * Time.deltaTime;
             if (velocity.x < 0f)
+            {
                 velocity.x = 0f;
+            }
         }
         if (inputVector.x >= 0f && velocity.x < 0f)
         {
             velocity.x += deceleration * Time.deltaTime;
-            if (velocity.x > 0f) velocity.x = 0f;
+            if (velocity.x > 0f)
+            {
+                velocity.x = 0f;
+            }
         }
 
         if (inputVector.y <= 0f && velocity.y > 0f)
         {
             velocity.y -= deceleration * Time.deltaTime;
-            if (velocity.y < 0f) velocity.y = 0f;
+            if (velocity.y < 0f)
+            {
+                velocity.y = 0f;
+            }
         }
         if (inputVector.y >= 0f && velocity.y < 0f)
         {
             velocity.y += deceleration * Time.deltaTime;
-            if (velocity.y > 0f) velocity.y = 0f;
+            if (velocity.y > 0f)
+            {
+                velocity.y = 0f;
+            }
         }
     }
 
@@ -216,7 +249,9 @@ public class Player : MonoBehaviour
             velocity *= _slowFactor;
         }
         else
+        {
             _slowFactor = float.MaxValue;
+        }
 
         rigidbody.velocity = velocity;
     }
@@ -224,7 +259,9 @@ public class Player : MonoBehaviour
     public void SetSlow(float slowFactor, float slowTimer)
     {
         if (slowFactor > _slowFactor && _slowTimer > 0.0f)
+        {
             return;
+        }
 
         _slowFactor = slowFactor;
         _slowTimer = slowTimer;
@@ -241,7 +278,6 @@ public class Player : MonoBehaviour
             colorFlashSequence.Append(renderer.material.DOColor(Color.red, invulnTime / loopCount)
                 .SetLoops(loopCount, LoopType.Yoyo));
             colorFlashSequence.Append(renderer.material.DOColor(Color.white, 0.0f));
-
             colorFlashSequence.Play();
 
             ParticleSystem bloodSpray = Instantiate(particleSystemContainer.bloodSpray, transform.position, Quaternion.identity);
@@ -263,10 +299,5 @@ public class Player : MonoBehaviour
                 SoundManager.Instance.PlayPainSound();
             }
         }
-    } 
-    
-    public void Test(int foo)
-    {
-        Debug.Log(foo);
     }
 }

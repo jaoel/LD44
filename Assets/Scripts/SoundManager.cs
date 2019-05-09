@@ -20,37 +20,42 @@ public class SoundManager : MonoBehaviour
     public List<AudioClip> painSounds;
     public List<AudioClip> monsterPainSounds;
 
-    List<GameObject> shotSoundInstances = new List<GameObject>();
+    private List<GameObject> _shotSoundInstances = new List<GameObject>();
 
     private AudioSource _audioSource;
 
-    private static SoundManager instance = null;
+    private static SoundManager _instance = null;
     public static SoundManager Instance
     {
         get
         {
-            if (instance != null)
+            if (_instance != null)
             {
-                return instance;
+                return _instance;
             }
-           
-            instance = FindObjectOfType<SoundManager>();
-            if (instance == null || instance.Equals(null))
+
+            _instance = FindObjectOfType<SoundManager>();
+
+            if (_instance == null || _instance.Equals(null))
             {
                 Debug.LogError("The scene needs a SoundManager");
             }
-            instance._audioSource = instance.gameObject.GetComponent<AudioSource>();
-            DontDestroyOnLoad(instance.gameObject);
-            return instance;
+
+            _instance._audioSource = _instance.gameObject.GetComponent<AudioSource>();
+            DontDestroyOnLoad(_instance.gameObject);
+
+            return _instance;
         }
     }
 
     private void FixedUpdate()
     {
-        for(int i = shotSoundInstances.Count - 1; i >= 0; i--)
+        for (int i = _shotSoundInstances.Count - 1; i >= 0; i--)
         {
-            if (shotSoundInstances[i] == null)
-                shotSoundInstances.RemoveAt(i);
+            if (_shotSoundInstances[i] == null)
+            {
+                _shotSoundInstances.RemoveAt(i);
+            }
         }
     }
 
@@ -61,8 +66,10 @@ public class SoundManager : MonoBehaviour
 
     public GameObject PlayShotSound(bool loop)
     {
-        if (shotSoundInstances.Count > 20)
+        if (_shotSoundInstances.Count > 20)
+        {
             return null;
+        }
 
         GameObject go = GameObject.Instantiate(simpleShotSound);
         AudioSource audioSource = go.GetComponent<AudioSource>();
@@ -70,7 +77,7 @@ public class SoundManager : MonoBehaviour
 
         Destroy(go, audioSource.clip.length);
 
-        shotSoundInstances.Add(go);
+        _shotSoundInstances.Add(go);
 
         return go;
     }
@@ -120,14 +127,18 @@ public class SoundManager : MonoBehaviour
     public void PlayPlayerDeath(bool memes)
     {
         if (memes)
+        {
             _audioSource.PlayOneShot(playerScream, SettingsManager.Instance.SFXVolume);
+        }
         else
+        {
             _audioSource.PlayOneShot(playerDeath, SettingsManager.Instance.SFXVolume);
+        }
     }
 
     public AudioSource PlaySound(GameObject prefab, bool loop)
     {
-       
+
         if (loop)
         {
             GameObject go = GameObject.Instantiate(prefab);
@@ -140,6 +151,6 @@ public class SoundManager : MonoBehaviour
         {
             _audioSource.PlayOneShot(prefab.GetComponent<AudioSource>().clip, SettingsManager.Instance.SFXVolume);
             return null;
-        }  
-    }   
+        }
+    }
 }

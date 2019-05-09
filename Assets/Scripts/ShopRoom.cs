@@ -3,7 +3,8 @@ using System.Collections.Generic;
 using TMPro;
 using System.Linq;
 
-public class ShopRoom : MonoBehaviour {
+public class ShopRoom : MonoBehaviour
+{
     public Transform spawnPoint;
     public ShopItem[] shopItems;
     public ItemContainer ItemContainer;
@@ -12,28 +13,37 @@ public class ShopRoom : MonoBehaviour {
     public GameObject itemsParent;
     public float healthGlobeDroprate;
 
-    public void MovePlayerToSpawn(Player player) {
+    public void MovePlayerToSpawn(Player player)
+    {
         player.transform.position = spawnPoint.position + new Vector3(0.5f, 0.5f, 0.0f);
         CameraManager.Instance.SetCameraPosition(player.transform.position);
     }
 
-    public void GenerateRandomItems(int currentLevel, Player player) {
+    public void GenerateRandomItems(int currentLevel, Player player)
+    {
         bool healthGlobeAdded = false;
         List<ItemDescription> shuffledShopItems = GetShuffledShopItems();
         List<ItemDescription> rareItems = GetRareItems();
 
-        shuffledShopItems = shuffledShopItems.Where(itemDesc => {
-            if (itemDesc.itemPrefab is WeaponPickup weaponPickup) {
+        shuffledShopItems = shuffledShopItems.Where(itemDesc =>
+        {
+            if (itemDesc.itemPrefab is WeaponPickup weaponPickup)
+            {
                 return weaponPickup.Weapon.description != player.CurrentWeapon.description;
-            } else {
+            }
+            else
+            {
                 return true;
             }
         }).ToList();
 
         if (currentLevel < 5)
+        {
             rareItems.ForEach(x => shuffledShopItems.Remove(x));
+        }
 
-        for (int i = 0; i < shopItems.Length; i++) {
+        for (int i = 0; i < shopItems.Length; i++)
+        {
 
             if (Random.Range(0.0f, 1.0f) < healthGlobeDroprate && !healthGlobeAdded)
             {
@@ -53,7 +63,7 @@ public class ShopRoom : MonoBehaviour {
                     shopItems[i].description = shuffledShopItems[i % shuffledShopItems.Count];
                     shopItems[i].InstantiateItem(itemsParent.transform);
                 }
-               
+
             }
 
             if (shopItems[i].description == ItemContainer.HealthGlobe)
@@ -66,8 +76,10 @@ public class ShopRoom : MonoBehaviour {
         }
     }
 
-    public void ClearItems() {
-        foreach(Transform child in itemsParent.transform) {
+    public void ClearItems()
+    {
+        foreach (Transform child in itemsParent.transform)
+        {
             Destroy(child.gameObject);
         }
     }
@@ -89,11 +101,13 @@ public class ShopRoom : MonoBehaviour {
         return shuffled;
     }
 
-    private List<ItemDescription> GetShuffledShopItems() {
+    private List<ItemDescription> GetShuffledShopItems()
+    {
         List<ItemDescription> shuffled = ItemContainer.GetAllItems();
 
         int n = shuffled.Count;
-        while (n > 1) {
+        while (n > 1)
+        {
             n--;
             int k = Random.Range(0, n + 1);
             ItemDescription value = shuffled[k];
@@ -104,8 +118,10 @@ public class ShopRoom : MonoBehaviour {
         return shuffled;
     }
 
-    private void Update() {
-        if (Input.GetKeyDown(KeyCode.X)) {
+    private void Update()
+    {
+        if (Input.GetKeyDown(KeyCode.X))
+        {
             ClearItems();
             Main.Instance.GenerateShop();
         }

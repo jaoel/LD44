@@ -2,15 +2,18 @@
 using System.Collections;
 
 [RequireComponent(typeof(Animator))]
-public class OneShotAnimation : MonoBehaviour {
-    Animator animator;
+public class OneShotAnimation : MonoBehaviour
+{
+    private Animator _animator;
 
-    void Start() {
-        animator = GetComponent<Animator>();
+    void Start()
+    {
+        _animator = GetComponent<Animator>();
     }
 
-    public void AnimationEnded() {
-        animator.StopPlayback();
+    public void AnimationEnded()
+    {
+        _animator.StopPlayback();
         Destroy(gameObject);
     }
 }

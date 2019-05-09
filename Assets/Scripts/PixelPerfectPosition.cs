@@ -1,12 +1,15 @@
 ﻿using UnityEngine;
 
-public class PixelPerfectPosition : MonoBehaviour {
-    private Vector3 offset;
-    private void Awake() {
-        offset = transform.localPosition;
+public class PixelPerfectPosition : MonoBehaviour
+{
+    private Vector3 _offset;
+    private void Awake()
+    {
+        _offset = transform.localPosition;
     }
 
-    void LateUpdate() {
+    void LateUpdate()
+    {
         int pixelsPerUnit = PixelPerfectCamera.pixelsPerUnit;
         Vector3 position = transform.localPosition;
 
@@ -14,6 +17,6 @@ public class PixelPerfectPosition : MonoBehaviour {
         position.y = (Mathf.Round(transform.parent.position.y * pixelsPerUnit) / pixelsPerUnit) - transform.parent.position.y;
         position.z = 0f;
 
-        transform.localPosition = position + offset;
+        transform.localPosition = position + _offset;
     }
 }

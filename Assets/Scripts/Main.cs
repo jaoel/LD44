@@ -27,23 +27,23 @@ public class Main : MonoBehaviour
 
     public int CurrentLevel { get; private set; } = 0;
 
-    private static Main instance = null;
+    private static Main _instance = null;
     public static Main Instance
     {
         get
         {
-            if (instance != null)
+            if (_instance != null)
             {
-                return instance;
+                return _instance;
             }
 
-            instance = FindObjectOfType<Main>();
+            _instance = FindObjectOfType<Main>();
 
-            if (instance == null || instance.Equals(null))
+            if (_instance == null || _instance.Equals(null))
             {
                 Debug.LogError("The scene needs a Main");
             }
-            return instance;
+            return _instance;
         }
     }
 
@@ -58,7 +58,7 @@ public class Main : MonoBehaviour
     }
 
     public void LoadLevel()
-    {          
+    {
         player.ResetPlayer();
         GenerateMap();
     }
@@ -78,7 +78,7 @@ public class Main : MonoBehaviour
             {
                 MusicController.Instance.PlayMusic("ResumeGameplay", true, 1.0f);
             }
-        }  
+        }
 
         CurrentLevel++;
         currentLevelText.text = "Level " + CurrentLevel;
@@ -107,12 +107,15 @@ public class Main : MonoBehaviour
         //NavigationManager.map = _currentBSPMap;
     }
 
-    public void GenerateShop() {
+    public void GenerateShop()
+    {
         BulletManager.Instance.Clear();
         _currentMap.ClearMap();
 
         if (MusicController.Instance != null)
+        {
             MusicController.Instance.PlayMusic("Shop");
+        }
 
         shopInstance.gameObject.SetActive(true);
         shopInstance.GenerateRandomItems(CurrentLevel, player);
@@ -127,16 +130,16 @@ public class Main : MonoBehaviour
     public void DamageAllEnemiesInCircle(Vector2 position, float radius, int damage, bool damagePlayer)
     {
         List<Enemy> enemies = _currentMap.GetEnemiesInCircle(position, radius);
-        foreach(Enemy enemy in enemies)
+        foreach (Enemy enemy in enemies)
         {
             Vector2 dir = new Vector2(enemy.transform.position.x, enemy.transform.position.y) - position;
             enemy.ApplyDamage(damage, dir);
         }
-        
+
         if (damagePlayer && Vector2.Distance(new Vector2(player.transform.position.x, player.transform.position.y), position) <= radius)
         {
             Vector2 dir = new Vector2(player.transform.position.x, player.transform.position.y) - position;
-            player.ReceiveDamage(damage, dir);                                                              
+            player.ReceiveDamage(damage, dir);
         }
     }
 
@@ -152,17 +155,20 @@ public class Main : MonoBehaviour
             TogglePause(!gamePaused);
         }
 
-        if (!player.IsAlive && !gameOver) {
+        if (!player.IsAlive && !gameOver)
+        {
             TogglePause(false);
             Cursor.visible = true;
             gameOver = true;
 
             if (MusicController.Instance != null)
+            {
                 MusicController.Instance.PlayMusic("Defeat", false);
+            }
 
             gameOverUI.SetActive(true);
             blackOverlay.SetActive(true);
-            gameOverLevelText.text = CurrentLevel.ToString(); 
+            gameOverLevelText.text = CurrentLevel.ToString();
         }
     }
 
