@@ -171,7 +171,7 @@ public class MapGenerator : MonoBehaviour
         int yMin = map.Bounds.yMin;
         int yMax = map.Bounds.yMax;
 
-        while (!regionsSeparated && iterations < 2 * map.Cells.Count)
+        while (!regionsSeparated && iterations < 3 * map.Cells.Count)
         {
             regionsSeparated = true;
             foreach (MapNode node in map.Cells)
@@ -185,12 +185,16 @@ public class MapGenerator : MonoBehaviour
                         continue;
                     }
 
-                    if (!node.Cell.Overlaps(other.Cell))
+                    RectInt overSizeNode = node.Cell;
+                    overSizeNode.width += parameters.MinRoomDistance;
+                    overSizeNode.height += parameters.MinRoomDistance;
+
+                    if (!overSizeNode.Overlaps(other.Cell))
                     {
                         continue;
                     }
 
-                    movement += other.Cell.center - node.Cell.center;
+                    movement += other.Cell.center - overSizeNode.center;
                     separationCount++;
                 }
 
@@ -199,7 +203,8 @@ public class MapGenerator : MonoBehaviour
                     movement *= -1.0f;
                     movement = movement.normalized;
                     RectInt newRect = node.Cell;
-                    newRect.position += new Vector2Int((int)Math.Round(movement.x), (int)Math.Round(movement.y));
+                    newRect.position += new Vector2Int((int)Math.Round(movement.x) + parameters.MinRoomDistance, 
+                        (int)Math.Round(movement.y) + parameters.MinRoomDistance);
 
                     if (!newRect.Equals(node.Cell))
                     {
@@ -228,13 +233,13 @@ public class MapGenerator : MonoBehaviour
             iterations++;
         }
 
-        map.Bounds = new BoundsInt(xMin, yMin, 0, Mathf.Abs(xMax - xMin), Mathf.Abs(yMax - yMin), 0);
+        map.Bounds = new BoundsInt(xMin - 1, yMin - 1, 0, Mathf.Abs(xMax - xMin) + 1, Mathf.Abs(yMax - yMin) + 1, 0);
         map.CollisionMap = new int[map.Bounds.size.x, map.Bounds.size.y];
 
         if (!regionsSeparated)
         {
             //We should iterate over nodes overlapping and discard them
-            Debug.Log("Unable to separate all nodes");
+            //Debug.Log("Unable to separate all nodes");
         }
     }
 
@@ -465,11 +470,14 @@ public class MapGenerator : MonoBehaviour
                 continue;
             }
 
-            if (corridorBounds.Overlaps(room.Cell))
+            if (corridorBounds.Intersects(room.Cell, out RectInt area))
             {
-                room.Type = MapNodeType.Corridor;
-                PaintRoom(room, false);
-                break;
+                if (area.width > 1 && area.height > 1)
+                {
+                    room.Type = MapNodeType.Corridor;
+                    PaintRoom(room, true);
+                    break;
+                }
             }
         }
     }
@@ -537,18 +545,45 @@ public class MapGenerator : MonoBehaviour
             int colY = 0;
             for (int y = map.Bounds.yMin; y < map.Bounds.yMax; y++)
             {
+                RemoveThinWalls(x, y);
+
                 Tile tile = GetTileByNeighbours(x, y);
                 if (tile == null)
                 {
                     continue;
                 }
-        
+
                 map.CollisionMap[colX, colY] = 1;
                 walls.SetTile(new Vector3Int(x, y, 0), tile);
-        
+
                 colY++;
             }
             colX++;
+        }
+    }
+
+    private void RemoveThinWalls(int x, int y)
+    {
+        Vector3Int pos = new Vector3Int(x, y, 0);
+
+        Tile middleRightWall = (Tile)walls.GetTile(pos + new Vector3Int(1, 0, 0));
+        Tile middleLeftWall = (Tile)walls.GetTile(pos - new Vector3Int(1, 0, 0));
+        Tile middleTopWall = (Tile)walls.GetTile(pos + new Vector3Int(0, 1, 0));
+        Tile middleBottomWall = (Tile)walls.GetTile(pos - new Vector3Int(0, 1, 0));
+
+        Tile middleLeftFloor = (Tile)floors.GetTile(pos - new Vector3Int(1, 0, 0));
+        Tile middleRightFloor = (Tile)floors.GetTile(pos + new Vector3Int(1, 0, 0));
+        Tile middleTopFloor = (Tile)floors.GetTile(pos + new Vector3Int(0, 1, 0));
+        Tile middleBottomFloor = (Tile)floors.GetTile(pos - new Vector3Int(0, 1, 0));
+
+        if (middleLeftFloor != null && middleRightFloor != null && middleRightWall == null && middleLeftWall == null)
+        {
+            walls.SetTile(pos, null);
+        }
+
+        if (middleTopFloor != null && middleBottomFloor != null && middleTopWall == null && middleBottomWall == null)
+        {
+            walls.SetTile(pos, null);
         }
     }
 
@@ -559,58 +594,60 @@ public class MapGenerator : MonoBehaviour
             for (int y = map.Bounds.yMin; y < map.Bounds.yMax; y++)
             {
                 Vector3Int pos = new Vector3Int(x, y, 0);
-                Tile currentTile = (Tile)walls.GetTile(pos);
-
-                if (currentTile == null)
-                {
-                    continue;
-                }
+                Tile currentWallTile = (Tile)walls.GetTile(pos);
 
                 Tile result = null;
-                Tile middleRight = (Tile)walls.GetTile(pos + new Vector3Int(1, 0, 0));
-                Tile middleLeft = (Tile)walls.GetTile(pos - new Vector3Int(1, 0, 0));
-                Tile middleTop = (Tile)walls.GetTile(pos + new Vector3Int(0, 1, 0));
-                Tile middleBottom = (Tile)walls.GetTile(pos - new Vector3Int(0, 1, 0));
+                Tile middleRightWall = (Tile)walls.GetTile(pos + new Vector3Int(1, 0, 0));
+                Tile middleLeftWall = (Tile)walls.GetTile(pos - new Vector3Int(1, 0, 0));
+                Tile middleTopWall = (Tile)walls.GetTile(pos + new Vector3Int(0, 1, 0));
+                Tile middleBottomWall = (Tile)walls.GetTile(pos - new Vector3Int(0, 1, 0));
 
+                Tile middleLeftFloor = (Tile)floors.GetTile(pos - new Vector3Int(1, 0, 0));
+                Tile middleRightFloor = (Tile)floors.GetTile(pos + new Vector3Int(1, 0, 0));
+                Tile middleTopFloor = (Tile)floors.GetTile(pos + new Vector3Int(0, 1, 0));
+                Tile middleBottomFloor = (Tile)floors.GetTile(pos - new Vector3Int(0, 1, 0));
 
-                if (currentTile == tileContainer.MiddleRight && middleRight == tileContainer.MiddleLeft && middleTop == null)
+                if (currentWallTile != null)
                 {
-                    result = tileContainer.TopLeftOuter;
-                }
+                    if (currentWallTile == tileContainer.MiddleRight && middleRightWall == tileContainer.MiddleLeft && middleTopWall == null)
+                    {
+                        result = tileContainer.TopLeftOuter;
+                    }
 
-                if (currentTile == tileContainer.MiddleRight && middleRight == tileContainer.MiddleLeft && middleBottom == null)
-                {
-                    result = tileContainer.BottomRightOuter;
-                }
+                    if (currentWallTile == tileContainer.MiddleRight && middleRightWall == tileContainer.MiddleLeft && middleBottomWall == null)
+                    {
+                        result = tileContainer.BottomRightOuter;
+                    }
 
-                if (currentTile == tileContainer.MiddleLeft && middleLeft != tileContainer.MiddleRight && middleTop == null)
-                {
-                    result = tileContainer.TopRightOuter;
-                }
+                    if (currentWallTile == tileContainer.MiddleLeft && middleLeftWall != tileContainer.MiddleRight && middleTopWall == null)
+                    {
+                        result = tileContainer.TopRightOuter;
+                    }
 
-                if (currentTile == tileContainer.MiddleLeft && middleLeft == tileContainer.BottomRightOuter && middleBottom == null)
-                {
-                    result = tileContainer.BottomLeftOuter;
-                }
+                    if (currentWallTile == tileContainer.MiddleLeft && middleLeftWall == tileContainer.BottomRightOuter && middleBottomWall == null)
+                    {
+                        result = tileContainer.BottomLeftOuter;
+                    }
 
-                if (currentTile == tileContainer.TopMiddle && middleTop == tileContainer.BottomMiddle && middleRight == null)
-                {
-                    result = tileContainer.BottomLeftOuter;
-                }
+                    if (currentWallTile == tileContainer.TopMiddle && middleTopWall == tileContainer.BottomMiddle && middleRightWall == null)
+                    {
+                        result = tileContainer.BottomLeftOuter;
+                    }
 
-                if (currentTile == tileContainer.BottomMiddle && middleBottom == tileContainer.BottomLeftOuter && middleRight == null)
-                {
-                    result = tileContainer.TopRightOuter;
-                }
+                    if (currentWallTile == tileContainer.BottomMiddle && middleBottomWall == tileContainer.BottomLeftOuter && middleRightWall == null)
+                    {
+                        result = tileContainer.TopRightOuter;
+                    }
 
-                if (currentTile == tileContainer.TopMiddle && middleTop == tileContainer.BottomMiddle && middleLeft == null)
-                {
-                    result = tileContainer.BottomRightOuter;
-                }
+                    if (currentWallTile == tileContainer.TopMiddle && middleTopWall == tileContainer.BottomMiddle && middleLeftWall == null)
+                    {
+                        result = tileContainer.BottomRightOuter;
+                    }
 
-                if (currentTile == tileContainer.BottomMiddle && middleBottom == tileContainer.BottomRightOuter && middleLeft == null)
-                {
-                    result = tileContainer.TopLeftOuter;
+                    if (currentWallTile == tileContainer.BottomMiddle && middleBottomWall == tileContainer.BottomRightOuter && middleLeftWall == null)
+                    {
+                        result = tileContainer.TopLeftOuter;
+                    }
                 }
 
                 if (result != null)

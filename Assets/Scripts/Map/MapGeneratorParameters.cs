@@ -19,4 +19,6 @@ public class MapGeneratorParameters
     public int MinRoomHeight { get; set; }
     public int MinCorridorWidth { get; set; }
     public int MaxCorridorWidth { get; set; }
+
+    public int MinRoomDistance { get; set; }
 }
