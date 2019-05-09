@@ -31,4 +31,9 @@ public static class BoundsIntExtension
     {
         return rect.size.x * rect.size.y;
     }
+
+    public static RectInt ToRectInt(this BoundsInt a)
+    {
+        return new RectInt(a.xMin, a.yMin, a.size.x, a.size.y);
+    }
 }

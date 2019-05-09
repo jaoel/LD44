@@ -33,7 +33,7 @@ public class Map
         _drawCells = true;
         _drawDelaunay = false;
         _drawGabriel = false;
-        _drawEMST = false;
+        _drawEMST = true;
         _drawCorridors = true;
 
         _floors = floors;
@@ -163,6 +163,11 @@ public class Map
 
     private void DrawCells()
     {
+        if (Bounds != null)
+        {
+            GizmoUtility.DrawRectangle(Bounds.ToRectInt(), Color.cyan);
+        }
+
         if (_drawCells && Cells != null)
         {
             Cells.ForEach(x =>

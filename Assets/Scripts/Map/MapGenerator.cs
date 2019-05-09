@@ -127,15 +127,38 @@ public class MapGenerator : MonoBehaviour
         int cellCount = _random.Range(parameters.MinCellCount, parameters.MaxCellCount);
         map.Cells = new List<MapNode>(cellCount);
 
+        int xMin = int.MaxValue;
+        int xMax = int.MinValue;
+        int yMin = int.MaxValue;
+        int yMax = int.MinValue;
+
         for (int i = 0; i < cellCount; i++)
         {
             Vector2Int size = GenerateRandomSize(parameters);
             Vector2Int position = RandomPointInCircle(parameters.GenerationRadius);
 
+            MapNode room = new MapNode(i, position, size);
             map.Cells.Add(new MapNode(i, position, size));
             map.Cells = map.Cells.OrderBy(x => x.Cell.x).ThenBy(x => x.Cell.y).ToList();
-        }
 
+            if (room.Cell.xMin < xMin)
+            {
+                xMin = room.Cell.xMin;
+            }
+            if (room.Cell.xMax > xMax)
+            {
+                xMax = room.Cell.xMax;
+            }
+            if (room.Cell.yMin < yMin)
+            {
+                yMin = room.Cell.yMin;
+            }
+            if (room.Cell.yMax > yMax)
+            {
+                yMax = room.Cell.yMax;
+            }
+        }
+        map.Bounds = new BoundsInt(xMin, yMin, 0, Mathf.Abs(xMax - xMin), Mathf.Abs(yMax - yMin), 0);
     }
 
     private void SeparateCells(ref Map map, in MapGeneratorParameters parameters)
@@ -143,10 +166,10 @@ public class MapGenerator : MonoBehaviour
         bool regionsSeparated = false;
         int iterations = 0;
 
-        int xMin = int.MaxValue;
-        int xMax = int.MinValue;
-        int yMin = int.MaxValue;
-        int yMax = int.MinValue;
+        int xMin = map.Bounds.xMin;
+        int xMax = map.Bounds.xMax;
+        int yMin = map.Bounds.yMin;
+        int yMax = map.Bounds.yMax;
 
         while (!regionsSeparated && iterations < 2 * map.Cells.Count)
         {
@@ -184,21 +207,21 @@ public class MapGenerator : MonoBehaviour
                         regionsSeparated = false;
                     }
 
-                    if (node.Cell.xMin < xMin)
+                    if (newRect.xMin < xMin)
                     {
-                        xMin = node.Cell.xMin;
+                        xMin = newRect.xMin;
                     }
-                    if (node.Cell.xMax > xMax)
+                    if (newRect.xMax > xMax)
                     {
-                        xMax = node.Cell.xMax;
+                        xMax = newRect.xMax;
                     }
-                    if (node.Cell.yMin < yMin)
+                    if (newRect.yMin < yMin)
                     {
-                        yMin = node.Cell.yMin;
+                        yMin = newRect.yMin;
                     }
-                    if (node.Cell.yMax > yMax)
+                    if (newRect.yMax > yMax)
                     {
-                        yMax = node.Cell.yMax;
+                        yMax = newRect.yMax;
                     }
                 }
             }
@@ -492,15 +515,17 @@ public class MapGenerator : MonoBehaviour
             }
 
             TileBase[] tiles = new TileBase[size.x * size.y];
+            TileBase[] wallTiles = new TileBase[size.x * size.y];
             for (int tileIndex = 0; tileIndex < size.x * size.y; tileIndex++)
             {
                 tiles[tileIndex] = tileContainer.FloorTiles[0];
+                wallTiles[tileIndex] = null;
             }
 
             BoundsInt bounds = new BoundsInt(pos, size);
             AddCorridorRooms(ref map, parameters, bounds);
             floors.SetTilesBlock(bounds, tiles);
-            walls.SetTilesBlock(bounds, new TileBase[size.x * size.y]);
+            walls.SetTilesBlock(bounds, wallTiles);
         }
     }
 
@@ -517,9 +542,10 @@ public class MapGenerator : MonoBehaviour
                 {
                     continue;
                 }
-
+        
                 map.CollisionMap[colX, colY] = 1;
                 walls.SetTile(new Vector3Int(x, y, 0), tile);
+        
                 colY++;
             }
             colX++;

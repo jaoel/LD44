@@ -87,7 +87,7 @@ public class Main : MonoBehaviour
 
 
         MapGeneratorParameters parameters = new MapGeneratorParameters();
-        parameters.GenerationRadius = 20;
+        parameters.GenerationRadius = 75;
 
         parameters.MinCellSize = 3;
         parameters.MaxCellSize = 30;
@@ -145,6 +145,10 @@ public class Main : MonoBehaviour
 
     private void OnDrawGizmos()
     {
+        if (_currentMap != null)
+        {
+            _currentMap.DrawDebug();
+        }
     }
 
     void Update()
