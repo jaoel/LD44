@@ -2,7 +2,8 @@
 using System.Collections;
 
 [RequireComponent(typeof(TMPro.TextMeshProUGUI))]
-public class ShadedText : MonoBehaviour {
+public class ShadedText : MonoBehaviour
+{
 
     public float offset = 1;
     public Color colorLeft = Color.black;
@@ -10,74 +11,85 @@ public class ShadedText : MonoBehaviour {
     public Color colorUp = Color.black;
     public Color colorDown = Color.black;
 
-    private TMPro.TextMeshProUGUI textMesh;
-    private TMPro.TextMeshProUGUI shadowLeft;
-    private TMPro.TextMeshProUGUI shadowRight;
-    private TMPro.TextMeshProUGUI shadowUp;
-    private TMPro.TextMeshProUGUI shadowDown;
+    private TMPro.TextMeshProUGUI _textMesh;
+    private TMPro.TextMeshProUGUI _shadowLeft;
+    private TMPro.TextMeshProUGUI _shadowRight;
+    private TMPro.TextMeshProUGUI _shadowUp;
+    private TMPro.TextMeshProUGUI _shadowDown;
 
-    private string oldText = "";
-    private bool initialized = false;
+    private string _oldText = "";
+    private bool _initialized = false;
 
-    void Awake() {
-        textMesh = GetComponent<TMPro.TextMeshProUGUI>();
+    void Awake()
+    {
+        _textMesh = GetComponent<TMPro.TextMeshProUGUI>();
     }
 
-    private void Start() {
+    private void Start()
+    {
 
-        shadowLeft = Instantiate(textMesh, transform.parent);
-        Destroy(shadowLeft.GetComponent<ShadedText>());
-        shadowLeft.color = colorLeft;
-        shadowLeft.rectTransform.anchoredPosition = shadowLeft.rectTransform.anchoredPosition + Vector2.left * offset;
+        _shadowLeft = Instantiate(_textMesh, transform.parent);
+        Destroy(_shadowLeft.GetComponent<ShadedText>());
+        _shadowLeft.color = colorLeft;
+        _shadowLeft.rectTransform.anchoredPosition = _shadowLeft.rectTransform.anchoredPosition + Vector2.left * offset;
 
-        shadowRight = Instantiate(textMesh, transform.parent);
-        Destroy(shadowRight.GetComponent<ShadedText>());
-        shadowRight.color = colorRight;
-        shadowRight.rectTransform.anchoredPosition = shadowRight.rectTransform.anchoredPosition + Vector2.right * offset;
+        _shadowRight = Instantiate(_textMesh, transform.parent);
+        Destroy(_shadowRight.GetComponent<ShadedText>());
+        _shadowRight.color = colorRight;
+        _shadowRight.rectTransform.anchoredPosition = _shadowRight.rectTransform.anchoredPosition + Vector2.right * offset;
 
-        shadowUp = Instantiate(textMesh, transform.parent);
-        Destroy(shadowUp.GetComponent<ShadedText>());
-        shadowUp.color = colorUp;
-        shadowUp.rectTransform.anchoredPosition = shadowUp.rectTransform.anchoredPosition + Vector2.up * offset;
+        _shadowUp = Instantiate(_textMesh, transform.parent);
+        Destroy(_shadowUp.GetComponent<ShadedText>());
+        _shadowUp.color = colorUp;
+        _shadowUp.rectTransform.anchoredPosition = _shadowUp.rectTransform.anchoredPosition + Vector2.up * offset;
 
-        shadowDown = Instantiate(textMesh, transform.parent);
-        Destroy(shadowDown.GetComponent<ShadedText>());
-        shadowDown.color = colorDown;
-        shadowDown.rectTransform.anchoredPosition = shadowDown.rectTransform.anchoredPosition + Vector2.down * offset;
+        _shadowDown = Instantiate(_textMesh, transform.parent);
+        Destroy(_shadowDown.GetComponent<ShadedText>());
+        _shadowDown.color = colorDown;
+        _shadowDown.rectTransform.anchoredPosition = _shadowDown.rectTransform.anchoredPosition + Vector2.down * offset;
 
         transform.SetAsLastSibling();
 
-        initialized = true;
+        _initialized = true;
     }
 
-    private void SetText(string text) {
-        shadowLeft.text = text;
-        shadowRight.text = text;
-        shadowUp.text = text;
-        shadowDown.text = text;
+    private void SetText(string text)
+    {
+        _shadowLeft.text = text;
+        _shadowRight.text = text;
+        _shadowUp.text = text;
+        _shadowDown.text = text;
     }
 
-    private void Update() {
-        if(oldText != textMesh.text) {
-            oldText = textMesh.text;
-            SetText(textMesh.text);
+    private void Update()
+    {
+        if (_oldText != _textMesh.text)
+        {
+            _oldText = _textMesh.text;
+            SetText(_textMesh.text);
         }
     }
 
-    private void SetActiveAll(bool active) {
-        if (!initialized) return;
+    private void SetActiveAll(bool active)
+    {
+        if (!_initialized)
+        {
+            return;
+        }
 
-        shadowLeft.gameObject.SetActive(active);
-        shadowRight.gameObject.SetActive(active);
-        shadowUp.gameObject.SetActive(active);
-        shadowDown.gameObject.SetActive(active);
+        _shadowLeft.gameObject.SetActive(active);
+        _shadowRight.gameObject.SetActive(active);
+        _shadowUp.gameObject.SetActive(active);
+        _shadowDown.gameObject.SetActive(active);
     }
 
-    private void OnDisable() {
+    private void OnDisable()
+    {
         SetActiveAll(false);
     }
 
-    private void OnEnable() {
+    private void OnEnable()
+    {
         SetActiveAll(true);
     }
 }

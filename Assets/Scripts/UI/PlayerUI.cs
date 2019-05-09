@@ -1,7 +1,8 @@
 ﻿using UnityEngine;
 using UnityEngine.UI;
 
-public class PlayerUI : MonoBehaviour {
+public class PlayerUI : MonoBehaviour
+{
     public GameObject healthMarkerPrefab;
 
     [Space(20)]
@@ -13,69 +14,86 @@ public class PlayerUI : MonoBehaviour {
 
     public int healthPerPixel = 2;
 
-    private int targetHealth = 100;
-    private int targetMaxHealth = 100;
+    private int _targetHealth = 100;
+    private int _targetMaxHealth = 100;
 
-    private int currentHealth = 0;
-    private int currentMaxHealth = 0;
+    private int _currentHealth = 0;
+    private int _currentMaxHealth = 0;
 
-    private Vector3 originalPosition;
+    private Vector3 _originalPosition;
 
-    private void Start() {
-        originalPosition = healthBarObject.anchoredPosition;
+    private void Start()
+    {
+        _originalPosition = healthBarObject.anchoredPosition;
     }
 
-    private void FixedUpdate() {
+    private void FixedUpdate()
+    {
         bool shake = false;
-        if(currentHealth != targetHealth) {
-            if (currentHealth < targetHealth) {
-                currentHealth += 1;
-                if (currentHealth > targetHealth) {
-                    currentHealth = targetHealth;
+        if (_currentHealth != _targetHealth)
+        {
+            if (_currentHealth < _targetHealth)
+            {
+                _currentHealth += 1;
+                if (_currentHealth > _targetHealth)
+                {
+                    _currentHealth = _targetHealth;
                 }
             }
-            if (currentHealth > targetHealth) {
+            if (_currentHealth > _targetHealth)
+            {
                 shake = true;
-                currentHealth -= 1;
-                if (currentHealth < targetHealth) {
-                    currentHealth = targetHealth;
+                _currentHealth -= 1;
+                if (_currentHealth < _targetHealth)
+                {
+                    _currentHealth = _targetHealth;
                 }
             }
-            SetHealth(currentHealth);
+            SetHealth(_currentHealth);
         }
 
-        if (currentMaxHealth != targetMaxHealth) {
-            if (currentMaxHealth < targetMaxHealth) {
-                currentMaxHealth += 1;
-                if (currentMaxHealth > targetMaxHealth) {
-                    currentMaxHealth = targetMaxHealth;
+        if (_currentMaxHealth != _targetMaxHealth)
+        {
+            if (_currentMaxHealth < _targetMaxHealth)
+            {
+                _currentMaxHealth += 1;
+                if (_currentMaxHealth > _targetMaxHealth)
+                {
+                    _currentMaxHealth = _targetMaxHealth;
                 }
             }
-            if (currentMaxHealth > targetMaxHealth) {
+            if (_currentMaxHealth > _targetMaxHealth)
+            {
                 shake = true;
-                currentMaxHealth -= 1;
-                if (currentMaxHealth < targetMaxHealth) {
-                    currentMaxHealth = targetMaxHealth;
+                _currentMaxHealth -= 1;
+                if (_currentMaxHealth < _targetMaxHealth)
+                {
+                    _currentMaxHealth = _targetMaxHealth;
                 }
             }
-            SetMaxHealth(currentMaxHealth);
+            SetMaxHealth(_currentMaxHealth);
         }
-                
-        if (shake) {
+
+        if (shake)
+        {
             float s = 8f;
-            healthBarObject.anchoredPosition = originalPosition + new Vector3((int)Random.Range(-s, s), (int)Random.Range(-s, s), 0f);
-        } else {
-            healthBarObject.anchoredPosition = originalPosition;
+            healthBarObject.anchoredPosition = _originalPosition + new Vector3((int)Random.Range(-s, s), (int)Random.Range(-s, s), 0f);
+        }
+        else
+        {
+            healthBarObject.anchoredPosition = _originalPosition;
         }
     }
 
-    public void SetHealthbar(int health, int maxHealth) {
-        targetHealth = health;
-        targetMaxHealth = maxHealth;
+    public void SetHealthbar(int health, int maxHealth)
+    {
+        _targetHealth = health;
+        _targetMaxHealth = maxHealth;
     }
 
-    private void SetHealth(int health) {
-        currentHealth = health;
+    private void SetHealth(int health)
+    {
+        _currentHealth = health;
         health = health * healthPerPixel;
         Vector2 sizeDelta = currentHealthImage.rectTransform.sizeDelta;
 
@@ -84,8 +102,9 @@ public class PlayerUI : MonoBehaviour {
         currentHealthImage.rectTransform.sizeDelta = sizeDelta;
     }
 
-    private void SetMaxHealth(int maxHealth) {
-        currentMaxHealth = maxHealth;
+    private void SetMaxHealth(int maxHealth)
+    {
+        _currentMaxHealth = maxHealth;
         maxHealth = maxHealth * healthPerPixel;
         Vector2 foregroundSizeDelta = maxHealthForegroundImage.rectTransform.sizeDelta;
         Vector2 backgroundSizeDelta = maxHealthBackgroundImage.rectTransform.sizeDelta;
@@ -98,17 +117,23 @@ public class PlayerUI : MonoBehaviour {
 
         int numMarkersWanted = maxHealth / 20;
         int currentMarkerCount = healthMarkersObject.childCount;
-        if (numMarkersWanted > currentMarkerCount) {
+        if (numMarkersWanted > currentMarkerCount)
+        {
             int newMarkerCount = numMarkersWanted - currentMarkerCount;
-            for(int i = 0; i < newMarkerCount; i++) {
+            for (int i = 0; i < newMarkerCount; i++)
+            {
                 Instantiate(healthMarkerPrefab, healthMarkersObject);
             }
         }
 
-        for(int i = 0; i < healthMarkersObject.childCount; i++) {
-            if (i < numMarkersWanted) {
+        for (int i = 0; i < healthMarkersObject.childCount; i++)
+        {
+            if (i < numMarkersWanted)
+            {
                 healthMarkersObject.GetChild(i).gameObject.SetActive(true);
-            } else {
+            }
+            else
+            {
                 healthMarkersObject.GetChild(i).gameObject.SetActive(false);
             }
         }
