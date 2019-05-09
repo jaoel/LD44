@@ -7,4 +7,4 @@ public class FiringRateModifier : Item
     {
         owner.GetComponent<Player>().firingRateModifier += firingRateChange;
     }
-} 
+}

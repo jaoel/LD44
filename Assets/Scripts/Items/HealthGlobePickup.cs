@@ -8,9 +8,8 @@ using UnityEngine;
 public class HealthGlobePickup : Item
 {
     public int health;
-
     public override void ApplyEffect(GameObject owner)
     {
         owner.GetComponent<Player>().Health += health;
     }
-} 
+}

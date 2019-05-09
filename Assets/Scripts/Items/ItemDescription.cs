@@ -10,4 +10,4 @@ public class ItemDescription : ScriptableObject
 {
     public Item itemPrefab;
     public int HealthCost;
-} 
+}

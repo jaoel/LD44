@@ -1,11 +1,13 @@
 ﻿using UnityEngine;
 using System.Collections;
 
-public class ShopItem : MonoBehaviour {
+public class ShopItem : MonoBehaviour
+{
 
     public ItemDescription description;
 
-    public Item InstantiateItem(Transform parent) {
+    public Item InstantiateItem(Transform parent)
+    {
         Vector3 pos = transform.position;
         Item item = Instantiate(description.itemPrefab, pos, Quaternion.identity, parent);
         item.isShopItem = true;

@@ -2,7 +2,8 @@
 using System.Collections.Generic;
 
 [CreateAssetMenu]
-public class ItemContainer : ScriptableObject {
+public class ItemContainer : ScriptableObject
+{
     public ItemDescription Shotgun;
     public ItemDescription Pistol;
     public ItemDescription AK47;
@@ -23,7 +24,8 @@ public class ItemContainer : ScriptableObject {
         return drops[Random.Range(0, drops.Count)];
     }
 
-    public ItemDescription GetRandomItem() {
+    public ItemDescription GetRandomItem()
+    {
         return GetItemByIndex(Random.Range(0, numItems));
     }
 
@@ -37,32 +39,52 @@ public class ItemContainer : ScriptableObject {
         return items;
     }
 
-    public List<ItemDescription> GetAllItems() {
+    public List<ItemDescription> GetAllItems()
+    {
         List<ItemDescription> items = new List<ItemDescription>();
-        for (int i = 0; i < numItems; i++) {
+        for (int i = 0; i < numItems; i++)
+        {
             items.Add(GetItemByIndex(i));
         }
         return items;
     }
 
-    private ItemDescription GetItemByIndex(int index) {
-        switch (index) {
+    private ItemDescription GetItemByIndex(int index)
+    {
+        switch (index)
+        {
             case 0:
-                return Shotgun;
+                {
+                    return Shotgun;
+                }
             case 1:
-                return Pistol;
+                {
+                    return Pistol;
+                }
             case 2:
-                return AK47;
+                {
+                    return AK47;
+                }
             case 3:
-                return Slingshot;
+                {
+                    return Slingshot;
+                }
             case 4:
-                return Grenade;
+                {
+                    return Grenade;
+                }
             case 5:
-                return HealthGlobe;
+                {
+                    return HealthGlobe;
+                }
             case 6:
-                return FiringRateUpgrade;
+                {
+                    return FiringRateUpgrade;
+                }
             default:
-                return Pistol;
+                {
+                    return Pistol;
+                }
         }
     }
 }

@@ -11,12 +11,15 @@ public abstract class Item : MonoBehaviour
     public bool isShopItem = false;
     protected bool _triggered = false;
 
-    public virtual void Apply(GameObject owner) {
+    public virtual void Apply(GameObject owner)
+    {
         Player player = owner.GetComponent<Player>();
-        if (isShopItem) {
+        if (isShopItem)
+        {
             player.MaxHealth -= Description.HealthCost;
         }
-        if (player.Health > 0) {
+        if (player.Health > 0)
+        {
             ApplyEffect(owner);
         }
 
