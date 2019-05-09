@@ -11,10 +11,6 @@ using UnityEngine.Tilemaps;
 public class Main : MonoBehaviour
 {
     public ShopRoom shopRoomPrefab;
-    //public InteractiveDungeonObject interactiveDungeonObjectContainer;
-    //public ItemContainer itemContainer;
-    //public EnemyContainer enemyContainer;
-    //public TrapContainer trapContainer;
     public Player player;
 
     private Map _currentMap;
@@ -32,13 +28,19 @@ public class Main : MonoBehaviour
     public int CurrentLevel { get; private set; } = 0;
 
     private static Main instance = null;
-    public static Main Instance {
-        get {
-            if (instance != null) {
+    public static Main Instance
+    {
+        get
+        {
+            if (instance != null)
+            {
                 return instance;
             }
+
             instance = FindObjectOfType<Main>();
-            if (instance == null || instance.Equals(null)) {
+
+            if (instance == null || instance.Equals(null))
+            {
                 Debug.LogError("The scene needs a Main");
             }
             return instance;
@@ -52,15 +54,7 @@ public class Main : MonoBehaviour
         shopInstance = Instantiate(shopRoomPrefab);
         Time.timeScale = 1.0f;
         gamePaused = false;
-        //_bspMapGenerator = new BSPMapGenerator(tileContainer, interactiveDungeonObjectContainer, itemContainer,
-        //    enemyContainer, trapContainer);
         LoadLevel();
-    }
-
-    public void DebugDrawPath(List<Vector2Int> path)
-    {
-        //_currentBSPMap.DrawPath(path);
-
     }
 
     public void LoadLevel()
@@ -110,8 +104,6 @@ public class Main : MonoBehaviour
         _currentMap = MapGenerator.Instance.GenerateMap(DateTime.Now.Ticks, parameters);
         MapGenerator.Instance.PopulateMap(ref _currentMap, ref player, parameters);
         _currentMap.ActivateObjects();
-
-        //_currentBSPMap = _bspMapGenerator.GenerateDungeon(Random.Range(5, 10), Random.Range(30,60), Random.Range(30, 60), CurrentLevel, player);
         //NavigationManager.map = _currentBSPMap;
     }
 
