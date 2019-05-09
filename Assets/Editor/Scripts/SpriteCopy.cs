@@ -1,22 +1,24 @@
-﻿/*
-using UnityEngine;
+﻿using UnityEngine;
 using UnityEditor;
 using System.Collections.Generic;
 
-public class SpriteCopy : EditorWindow {
+public class SpriteCopy : EditorWindow
+{
 
     Object copyFrom;
     Object copyTo;
 
     // Creates a new option in "Windows"
     [MenuItem("Window/Copy Spritesheet pivots and slices")]
-    static void Init() {
+    static void Init()
+    {
         // Get existing open window or if none, make a new one:
         SpriteCopy window = (SpriteCopy)EditorWindow.GetWindow(typeof(SpriteCopy));
         window.Show();
     }
 
-    void OnGUI() {
+    void OnGUI()
+    {
         GUILayout.BeginHorizontal();
         GUILayout.Label("Copy from:", EditorStyles.boldLabel);
         copyFrom = EditorGUILayout.ObjectField(copyFrom, typeof(Texture2D), false, GUILayout.Width(220));
@@ -28,18 +30,22 @@ public class SpriteCopy : EditorWindow {
         GUILayout.EndHorizontal();
 
         GUILayout.Space(25f);
-        if (GUILayout.Button("Copy pivots and slices")) {
+        if (GUILayout.Button("Copy pivots and slices"))
+        {
             CopyPivotsAndSlices();
         }
     }
 
-    void CopyPivotsAndSlices() {
-        if (!copyFrom || !copyTo) {
+    void CopyPivotsAndSlices()
+    {
+        if (!copyFrom || !copyTo)
+        {
             Debug.Log("Missing one object");
             return;
         }
 
-        if (copyFrom.GetType() != typeof(Texture2D) || copyTo.GetType() != typeof(Texture2D)) {
+        if (copyFrom.GetType() != typeof(Texture2D) || copyTo.GetType() != typeof(Texture2D))
+        {
             Debug.Log("Cant convert from: " + copyFrom.GetType() + "to: " + copyTo.GetType() + ". Needs two Texture2D objects!");
             return;
         }
@@ -58,7 +64,8 @@ public class SpriteCopy : EditorWindow {
 
         Debug.Log("Amount of slices found: " + ti1.spritesheet.Length);
 
-        for (int i = 0; i < ti1.spritesheet.Length; i++) {
+        for (int i = 0; i < ti1.spritesheet.Length; i++)
+        {
             SpriteMetaData d = ti1.spritesheet[i];
             newData.Add(d);
         }
@@ -68,4 +75,3 @@ public class SpriteCopy : EditorWindow {
 
     }
 }
-*/
