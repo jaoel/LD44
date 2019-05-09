@@ -2,7 +2,7 @@
 using UnityEngine;
 
 public static class GizmoUtility
- {
+{
     public static void DrawRectangle(RectInt rect, Color color)
     {
         Gizmos.color = color;

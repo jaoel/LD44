@@ -14,7 +14,9 @@ public abstract class LCG
         _modulus = modulus;
 
         if (seed == null)
+        {
             seed = DateTime.Now.Ticks;
+        }
 
         _startingSeed = (long)seed;
 
@@ -41,10 +43,14 @@ public abstract class LCG
     public int Range(int min, int max)
     {
         if (min > max)
+        {
             return int.MinValue;
+        }
 
         if (min == max)
+        {
             return min;
+        }
 
         return (Next() % (max - min)) + min;
     }
@@ -52,10 +58,14 @@ public abstract class LCG
     public float Range(float min, float max)
     {
         if (min > max)
+        {
             return float.MinValue;
+        }
 
         if (min == max)
+        {
             return min;
+        }
 
         return (NextFloat() * (max - min)) + min;
     }
@@ -63,9 +73,13 @@ public abstract class LCG
     public int Sign()
     {
         if (NextFloat() < 0.5f)
+        {
             return 1;
+        }
         else
+        {
             return -1;
+        }
     }
 }
 

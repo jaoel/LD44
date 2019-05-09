@@ -12,7 +12,9 @@ public class Timer
     public void Start()
     {
         if (_stopWatch.IsRunning)
+        {
             _stopWatch.Stop();
+        }
 
         _stopWatch.Reset();
         _stopWatch.Start();
