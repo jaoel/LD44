@@ -88,7 +88,7 @@ public class Map
     public Vector2Int GetPositionInMap(int widthInTiles, int heightInTiles, bool includeCorridorRooms, out MapNode room,
         List<MapNode> excludedRooms = null)
     {
-        room = GetRandomRoom(widthInTiles, heightInTiles, includeCorridorRooms);
+        room = GetRandomRoom(widthInTiles, heightInTiles, includeCorridorRooms, excludedRooms);
         return GetRandomPositionInRoom(widthInTiles, heightInTiles, room);
     }
 
@@ -96,7 +96,7 @@ public class Map
         List<MapNode> excludedRooms = null)
     {
         return GetRandomPositionInRoom(widthInTiles, heightInTiles, 
-            GetRandomRoom(widthInTiles, heightInTiles, includeCorridorRooms));
+            GetRandomRoom(widthInTiles, heightInTiles, includeCorridorRooms, excludedRooms));
     }
 
     public MapNode GetRandomRoom(int tileWidth, int tileHeight, bool includeCorridorRooms, List<MapNode> excludedRooms = null)
