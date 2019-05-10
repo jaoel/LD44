@@ -29,6 +29,76 @@ public class NavigationManager : MonoBehaviour
         }
     }
 
+    public List<MapNode> AStar(MapNode start, MapNode target, out float distance)
+    {
+        distance = 0;
+        if (start == target)
+        {
+            return new List<MapNode>();
+        }
+
+        List<Vector2Int> result = new List<Vector2Int>();
+        HashSet<NavigationNode<MapNode>> closedSet = new HashSet<NavigationNode<MapNode>>();
+        HashSet<NavigationNode<MapNode>> openSet = new HashSet<NavigationNode<MapNode>>() {
+            new NavigationNode<MapNode>((int)(target.Cell.center - start.Cell.center).sqrMagnitude, 0, start) };
+
+        while (openSet.Count > 0)
+        {
+            NavigationNode<MapNode> current = openSet.Aggregate((x, y) => x.FScore < y.FScore ? x : y);
+            if (current.Data.Equals(target))
+            {
+                return UnwrapPath(current, out distance);
+            }
+
+            openSet.Remove(current);
+            closedSet.Add(current);
+            List<Tuple<MapNode, int>> neighbours = current.Data.Corridors.Aggregate(new List<Tuple<MapNode, int>>(), (list, y) =>
+            {
+                if (!y.Point1.Data.Equals(current.Data))
+                {
+                    list.Add(new Tuple<MapNode, int>(y.Point1.Data, (int)y.DistanceSquared));
+                }
+
+                if (!y.Point2.Data.Equals(current.Data))
+                {
+                    list.Add(new Tuple<MapNode, int>(y.Point2.Data, (int)y.DistanceSquared));
+                }
+
+                return list;
+            });
+
+            neighbours.ForEach(x =>
+            {
+                if (!closedSet.Any(closed => closed.Data.Equals(x.Item1)))
+                {
+                    if (!openSet.Any(open => open.Data.Equals(x.Item1)))
+                    {
+                        NavigationNode<MapNode> node = new NavigationNode<MapNode>((int)(target.Cell.center - x.Item1.Cell.center).sqrMagnitude, x.Item2, x.Item1);
+                        node.Parent = current;
+                        openSet.Add(node);
+                    }
+                }
+            });
+        }
+
+        return null;
+    }
+
+    public List<MapNode> UnwrapPath(NavigationNode<MapNode> node, out float distance)
+    {
+        distance = 0;
+        List<MapNode> result = new List<MapNode>();
+        while (node != null && node.Parent != null)
+        {
+            distance += node.FScore;
+            result.Add(node.Data);
+            node = node.Parent;
+        }
+
+        return result;
+    }
+
+    /*
     public List<Vector2Int> AStar(Vector2Int start, Vector2Int target)
     {
         if (start == target)
@@ -136,4 +206,5 @@ public class NavigationManager : MonoBehaviour
 
         return result;
     }
+    */
 }

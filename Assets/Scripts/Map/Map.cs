@@ -1,6 +1,6 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
-using UnityEditor;
 using UnityEngine;
 using UnityEngine.Tilemaps;
 
@@ -31,7 +31,7 @@ public class Map
 
     public Map(Tilemap floors, Tilemap walls, LCG random)
     {
-        _drawCells = false;
+        _drawCells = true;
         _drawDelaunay = false;
         _drawGabriel = false;
         _drawEMST = false;
@@ -99,6 +99,52 @@ public class Map
     {
         return GetRandomPositionInRoom(widthInTiles, heightInTiles, 
             GetRandomRoom(widthInTiles, heightInTiles, includeCorridorRooms, excludedRooms));
+    }
+
+    public Tuple<MapNode, MapNode> GetRoomsFurthestApart()
+    {
+        List<MapNode> edgeNodes = new List<MapNode>();
+
+        int edgeCount = 1;
+        while(edgeNodes.Count < 2)
+        {
+            edgeNodes.AddRange(Cells.Where(x => x.Corridors.Count == edgeCount));
+            edgeCount++;
+
+            //exit condition
+            if (edgeCount > 10)
+            {
+                return null;
+            }
+        }
+
+        if (edgeNodes.Count == 2)
+        {
+            return new Tuple<MapNode, MapNode>(edgeNodes[0], edgeNodes[1]);
+        }
+
+        Tuple<MapNode, MapNode> result = null;
+        float maxDistance = float.MinValue;
+
+        for(int i = 0; i < edgeNodes.Count; i++)
+        {
+            for (int j = 0; j < edgeNodes.Count; j++)
+            {
+                if (edgeNodes[i].Equals(edgeNodes[j]))
+                {
+                    continue;
+                }
+
+                NavigationManager.Instance.AStar(edgeNodes[i], edgeNodes[j], out float distance);
+                if (distance > maxDistance)
+                {
+                    maxDistance = distance;
+                    result = new Tuple<MapNode, MapNode>(edgeNodes[i], edgeNodes[j]);
+                }
+            }
+        }
+
+        return result;
     }
 
     public MapNode GetRandomRoom(int tileWidth, int tileHeight, bool includeCorridorRooms, List<MapNode> excludedRooms = null)

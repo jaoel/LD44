@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
 using UnityEngine;
 
-public class NavigationNode
+public class NavigationNode<T>
 {
     public int FScore
     {
@@ -11,26 +11,14 @@ public class NavigationNode
     public int GScore { get; set; }
     public int HScore { get; set; }
 
-    public NavigationNode Parent { get; set; }
-    public Vector2Int Position { get; set; }
+    public NavigationNode<T> Parent { get; set; }
+    public T Data { get; set; }
 
-    public NavigationNode(int x, int y)
-    {                       
-        Position = new Vector2Int(x, y);
-    }
-
-    public NavigationNode(int hScore, int gScore, int x, int y)
+    public NavigationNode(int hScore, int gScore, T data)
     {
         HScore = hScore;
         GScore = gScore;
-        Position = new Vector2Int(x, y);
-    }
-
-    public NavigationNode(int hScore, int gScore, Vector2Int pos)
-    {
-        HScore = hScore;
-        GScore = gScore;
-        Position =  pos;
+        Data =  data;
     }
 
     public override bool Equals(object obj)
@@ -45,20 +33,17 @@ public class NavigationNode
             return false;
         }
 
-        return Position == ((NavigationNode)obj).Position;
+        NavigationNode<T> other = (NavigationNode<T>)obj;
+
+        return Data.Equals(other.Data);
     }
 
     public override int GetHashCode()
     {
-        var hashCode = -372316642;
-        hashCode = hashCode * -1521134295 + GScore.GetHashCode();
-        hashCode = hashCode * -1521134295 + HScore.GetHashCode();
-        hashCode = hashCode * -1521134295 + EqualityComparer<NavigationNode>.Default.GetHashCode(Parent);
-        hashCode = hashCode * -1521134295 + EqualityComparer<Vector2Int>.Default.GetHashCode(Position);
-        return hashCode;
+        return Data.GetHashCode();
     }
 
-    public static bool operator == (NavigationNode a, NavigationNode b)
+    public static bool operator == (NavigationNode<T> a, NavigationNode<T> b)
     {
         if (object.ReferenceEquals(a, null))
         {
@@ -68,7 +53,7 @@ public class NavigationNode
         return a.Equals(b);
     }
 
-    public static bool operator != (NavigationNode a, NavigationNode b)
+    public static bool operator != (NavigationNode<T> a, NavigationNode<T> b)
     {
         if (object.ReferenceEquals(a, null))
         {

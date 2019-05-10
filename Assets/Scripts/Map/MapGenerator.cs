@@ -70,6 +70,16 @@ public class MapGenerator : MonoBehaviour
 
     public void PopulateMap(ref Map map, ref Player player, in MapGeneratorParameters parameters)
     {
+        Tuple<MapNode, MapNode> startAndGoal = map.GetRoomsFurthestApart();
+
+        //player.transform.position = map.GetPositionInMap(1, 1, false, out MapNode playerSpawnRoom).ToVector3();
+        player.transform.position = map.GetRandomPositionInRoom(1, 1, startAndGoal.Item1).ToVector3();
+        CameraManager.Instance.SetCameraPosition(player.transform.position);
+
+        map.AddInteractiveObject(Instantiate(interactiveObjectContainer.Stairs,
+            map.GetRandomPositionInRoom(2, 2, startAndGoal.Item2).ToVector3(), Quaternion.identity));
+
+        /*
         player.transform.position = map.GetPositionInMap(1, 1, false, out MapNode playerSpawnRoom).ToVector3();
         CameraManager.Instance.SetCameraPosition(player.transform.position);
 
@@ -120,6 +130,7 @@ public class MapGenerator : MonoBehaviour
             map.AddEnemy(GameObject.Instantiate(type, new Vector3(spawnPos.x, spawnPos.y, 0.0f), Quaternion.identity));
             map.Enemies[map.Enemies.Count - 1].SetActive(false);
         }
+        */
     }
 
     private void GenerateCells(ref Map map, in MapGeneratorParameters parameters)
@@ -456,6 +467,9 @@ public class MapGenerator : MonoBehaviour
                 result.Add(new Delaunay.Edge<MapNode>(new Delaunay.Vertex<MapNode>(aCenter.x, bCenter.y),
                     new Delaunay.Vertex<MapNode>(bCenter.x, bCenter.y)));
             }
+
+            a.Corridors.Add(edge);
+            b.Corridors.Add(edge);
         }
 
         map.CorridorGraph = result;

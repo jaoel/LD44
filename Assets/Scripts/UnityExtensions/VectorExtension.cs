@@ -11,5 +11,10 @@ public static class VectorExtension
     {
         return new Vector3Int(a.x, a.y, z);
     }
+
+    public static Vector2 ToVector2(this Vector2Int a)
+    {
+        return new Vector2(a.x, a.y);
+    }
 }
 

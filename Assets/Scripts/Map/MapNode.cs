@@ -15,6 +15,7 @@ public class MapNode
     public RectInt Cell { get; set; }
     public MapNodeType Type { get; set; }
     public List<Vector2Int> EntryPoints { get; set; }
+    public List<Delaunay.Edge<MapNode>> Corridors;
 
     public bool HasEntryPoint => EntryPoints.Count > 0;
 
@@ -23,6 +24,7 @@ public class MapNode
         Id = id;
         Cell = new RectInt(position, size);
         EntryPoints = new List<Vector2Int>();
+        Corridors = new List<Delaunay.Edge<MapNode>>();
     }
 
     public Vector2Int GetClosestEntryPoint(Vector2 position)
@@ -50,6 +52,11 @@ public class MapNode
     public override bool Equals(object obj)
     {
         if (obj == null)
+        {
+            return false;
+        }
+
+        if (this.GetType() != obj.GetType())
         {
             return false;
         }

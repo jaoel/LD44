@@ -7,7 +7,7 @@ public class FollowCamera : MonoBehaviour
 
     public bool showDeadzoneDebugRect = false;
 
-    private float _spring = 10f;
+    private readonly float _spring = 10f;
     private Vector2 _deadZoneRectSize = new Vector2(0.3f, 0.15f);
 
     private Camera _camera;
