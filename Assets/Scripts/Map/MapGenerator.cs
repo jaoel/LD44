@@ -97,11 +97,11 @@ public class MapGenerator : MonoBehaviour
 
         for (int i = 0; i < enemyCount; i++)
         {
-            Vector3 spawnPos = map.GetPositionInMap(1, 1, true).ToVector3();
+            Vector3 spawnPos = map.GetPositionInMap(1, 1, true, new List<MapNode>() { startAndGoal.Item1 }).ToVector3();
 
             while (Vector3.Distance(player.transform.position, spawnPos) < 10)
             {
-                spawnPos = map.GetPositionInMap(1, 1, true).ToVector3();
+                spawnPos = map.GetPositionInMap(1, 1, true, new List<MapNode>() { startAndGoal.Item1 }).ToVector3();
             }
 
             map.AddEnemy(GameObject.Instantiate(enemyContainer.basicZombie,
@@ -112,10 +112,10 @@ public class MapGenerator : MonoBehaviour
 
         for (int i = 0; i < shootingZombieCount; i++)
         {
-            Vector3Int spawnPos = map.GetPositionInMap(1, 1, true).ToVector3Int();
+            Vector3Int spawnPos = map.GetPositionInMap(1, 1, true, new List<MapNode>() { startAndGoal.Item1 }).ToVector3Int();
             while (Vector3.Distance(spawnPos, player.transform.position) < 10)
             {
-                spawnPos = map.GetPositionInMap(1, 1, true).ToVector3Int();
+                spawnPos = map.GetPositionInMap(1, 1, true, new List<MapNode>() { startAndGoal.Item1 }).ToVector3Int();
             }
 
             GameObject type = _random.Range(0.0f, 1.0f) < 0.5f ? enemyContainer.shootingZombie : enemyContainer.shotgunZombie;
