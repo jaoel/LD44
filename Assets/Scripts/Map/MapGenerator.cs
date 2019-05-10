@@ -17,23 +17,23 @@ public class MapGenerator : MonoBehaviour
     private MillerParkLCG _random;
     private Timer _timer;
 
-    private static MapGenerator instance = null;
+    private static MapGenerator _instance = null;
     public static MapGenerator Instance
     {
         get
         {
-            if (instance != null)
+            if (_instance != null)
             {
-                return instance;
+                return _instance;
             }
-            instance = FindObjectOfType<MapGenerator>();
-            if (instance == null || instance.Equals(null))
+            _instance = FindObjectOfType<MapGenerator>();
+            if (_instance == null || _instance.Equals(null))
             {
                 Debug.LogError("The scene needs a MapGenerator");
             }
 
-            instance.Initialize();
-            return instance;
+            _instance.Initialize();
+            return _instance;
         }
     }
 

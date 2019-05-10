@@ -10,7 +10,7 @@ public class FollowCamera : MonoBehaviour
     private float _spring = 10f;
     private Vector2 _deadZoneRectSize = new Vector2(0.3f, 0.15f);
 
-    private new Camera _camera;
+    private Camera _camera;
     private Rect _deadzoneRect;
 
     private void Start()

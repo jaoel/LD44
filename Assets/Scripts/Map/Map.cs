@@ -18,23 +18,25 @@ public class Map
     public List<GameObject> InteractiveObjects { get; }
     public List<GameObject> Enemies { get; }
 
-    private bool _drawCells;
-    private bool _drawDelaunay;
-    private bool _drawGabriel;
-    private bool _drawEMST;
-    private bool _drawCorridors;
+    private readonly bool _drawCells;
+    private readonly bool _drawDelaunay;
+    private readonly bool _drawGabriel;
+    private readonly bool _drawEMST;
+    private readonly bool _drawCorridors;
+    private readonly bool _drawBounds;
 
-    private Tilemap _floors;
-    private Tilemap _walls;
-    private LCG _random;
+    private readonly Tilemap _floors;
+    private readonly Tilemap _walls;
+    private readonly LCG _random;
 
     public Map(Tilemap floors, Tilemap walls, LCG random)
     {
-        _drawCells = true;
+        _drawCells = false;
         _drawDelaunay = false;
         _drawGabriel = false;
-        _drawEMST = true;
-        _drawCorridors = true;
+        _drawEMST = false;
+        _drawCorridors = false;
+        _drawBounds = false;
 
         _floors = floors;
         _walls = walls;
@@ -163,7 +165,7 @@ public class Map
 
     private void DrawCells()
     {
-        if (Bounds != null)
+        if (_drawBounds && Bounds != null)
         {
             GizmoUtility.DrawRectangle(Bounds.ToRectInt(), Color.cyan);
         }

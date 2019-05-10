@@ -7,7 +7,7 @@ public class PixelPerfectCamera : MonoBehaviour
     public static int pixelScale = 3;
     public static int pixelsPerUnit = 16;
 
-    private new Camera _camera;
+    private Camera _camera;
 
     void Awake()
     {
