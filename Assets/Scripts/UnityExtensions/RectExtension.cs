@@ -1,8 +1,8 @@
 ﻿using UnityEngine;
 
-public static class RectIntExtension
+public static class RectExtension
 {
-    public static bool Overlaps(this RectInt a, RectInt b)
+    public static bool Overlaps(this Rect a, Rect b)
     {
         if (a.x < b.x + b.width && a.x + a.width > b.x && a.y < b.y + b.height && a.y + a.height > b.y)
         {
@@ -11,16 +11,16 @@ public static class RectIntExtension
         return false;
     }
 
-    public static bool Intersects(this RectInt a, RectInt b, out RectInt area)
+    public static bool Intersects(this Rect a, Rect b, out Rect area)
     {
-        area = new RectInt();
+        area = new Rect();
 
         if (b.Overlaps(a))
         {
-            int x1 = Mathf.Min(a.xMax, b.xMax);
-            int x2 = Mathf.Max(a.xMin, b.xMin);
-            int y1 = Mathf.Min(a.yMax, b.yMax);
-            int y2 = Mathf.Max(a.yMin, b.yMin);
+            float x1 = Mathf.Min(a.xMax, b.xMax);
+            float x2 = Mathf.Max(a.xMin, b.xMin);
+            float y1 = Mathf.Min(a.yMax, b.yMax);
+            float y2 = Mathf.Max(a.yMin, b.yMin);
             area.x = Mathf.Min(x1, x2);
             area.y = Mathf.Min(y1, y2);
             area.width = Mathf.Max(0, x1 - x2);
@@ -32,7 +32,7 @@ public static class RectIntExtension
         return false;
     }
 
-    public static bool Contains(this RectInt a, Vector2 point)
+    public static bool Contains(this Rect a, Vector2 point)
     {
         if (a.xMin <= point.x && a.xMax >= point.x && a.yMin <= point.y && a.yMax >= point.y)
         {
@@ -41,7 +41,7 @@ public static class RectIntExtension
         return false;
     }
 
-    public static int Area(this RectInt rect)
+    public static float Area(this Rect rect)
     {
         return rect.width * rect.height;
     }
@@ -49,13 +49,13 @@ public static class RectIntExtension
     /// <summary>
     /// Expands a rect with the fiven amount in all directions
     /// </summary>
-    public static RectInt Expand(this RectInt rect, int amount)
+    public static Rect Expand(this Rect rect, float amount)
     {
-        RectInt newRect = rect;
+        Rect newRect = rect;
         newRect.x = rect.x - amount;
         newRect.y = rect.y - amount;
-        newRect.width = rect.width + amount * 2;
-        newRect.height = rect.height + amount * 2;
+        newRect.width = rect.width + amount * 2f;
+        newRect.height = rect.height + amount * 2f;
         return newRect;
     }
 }
