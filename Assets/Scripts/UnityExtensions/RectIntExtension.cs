@@ -41,6 +41,21 @@ public static class RectIntExtension
         return false;
     }
 
+    public static bool Contains(this RectInt a, RectInt b)
+    {
+        if (a.xMin <= b.xMin && a.xMax >= b.xMax && a.yMin <= b.yMin && a.yMax >= b.yMax)
+        {
+            return true;
+        }
+
+        return false;
+    }
+
+    public static bool Contains(this RectInt a, BoundsInt b)
+    {
+        return Contains(a, b.ToRectInt());
+    }
+
     public static int Area(this RectInt rect)
     {
         return rect.width * rect.height;

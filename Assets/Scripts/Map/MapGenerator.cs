@@ -61,6 +61,7 @@ public class MapGenerator : MonoBehaviour
         PaintTiles(result, parameters);
         PostProcessTiles(result, parameters);
         RemoveDeadRooms(ref result, parameters);
+        FindChokepoints(ref result, parameters);
 
         _timer.Stop();
         _timer.Print("MapGenerator.GenerateMap");
@@ -241,7 +242,7 @@ public class MapGenerator : MonoBehaviour
         if (!regionsSeparated)
         {
             //We should iterate over nodes overlapping and discard them
-            //Debug.Log("Unable to separate all nodes");
+            Debug.Log("Unable to separate all nodes");
         }
     }
 
@@ -772,6 +773,82 @@ public class MapGenerator : MonoBehaviour
     private void RemoveDeadRooms(ref Map map, in MapGeneratorParameters parameters)
     {
         map.Cells.RemoveAll(x => x.Type == MapNodeType.Default || x.Type == MapNodeType.None);
+    }
+
+    private void FindChokepoints(ref Map map, in MapGeneratorParameters parameters)
+    {
+        foreach (MapNode room in map.Cells)
+        {
+            if (room.Type != MapNodeType.Room)
+            {
+                continue;
+            }
+
+            BoundsInt upper = new BoundsInt();
+            upper.xMin = room.Cell.xMin;
+            upper.xMax = room.Cell.xMax;
+            upper.y = room.Cell.yMax - 1;
+            upper.yMax = room.Cell.yMax;
+            upper.zMax = 1;
+
+            map.ChokePoints.AddRange(FindChokepoints(upper, true));
+
+            BoundsInt lower = new BoundsInt();
+            lower.xMin = room.Cell.xMin;
+            lower.xMax = room.Cell.xMax;
+            lower.y = room.Cell.yMin;
+            lower.yMax = room.Cell.yMin + 1;
+            lower.zMax = 1;
+
+            map.ChokePoints.AddRange(FindChokepoints(lower, true));
+
+            BoundsInt left = new BoundsInt();
+            left.xMin = room.Cell.xMin;
+            left.xMax = room.Cell.xMin + 1;
+            left.yMin = room.Cell.yMin;
+            left.yMax = room.Cell.yMax;
+            left.zMax = 1;
+
+            map.ChokePoints.AddRange(FindChokepoints(left, false));
+
+            BoundsInt right = new BoundsInt();
+            right.xMin = room.Cell.xMax - 1;
+            right.xMax = room.Cell.xMax;
+            right.yMin = room.Cell.yMin;
+            right.yMax = room.Cell.yMax;
+            right.zMax = 1;
+
+            map.ChokePoints.AddRange(FindChokepoints(right, false));
+        }
+    }
+
+    private List<BoundsInt> FindChokepoints(BoundsInt bounds, bool horizontal)
+    {
+        List<BoundsInt> result = new List<BoundsInt>();
+        TileBase[] tempWalls = walls.GetTilesBlock(bounds);
+
+        for (int i = 0; i < tempWalls.Length - 3; i++)
+        {
+            if (tempWalls[i] != null && tempWalls[i + 1] == null && tempWalls[i + 2] == null && tempWalls[i + 3] != null)
+            {
+                BoundsInt chokepoint = bounds;
+
+                if (horizontal)
+                {
+                    chokepoint.xMin = bounds.xMin + i;
+                    chokepoint.xMax = bounds.xMin + i + 4;
+                }
+                else
+                {
+                    chokepoint.yMin = bounds.yMin + i;
+                    chokepoint.yMax = bounds.yMin + i + 4;
+                }
+
+                result.Add(chokepoint);
+            }
+        }
+
+        return result;
     }
 
     private Vector2Int GenerateRandomSize(in MapGeneratorParameters parameters)

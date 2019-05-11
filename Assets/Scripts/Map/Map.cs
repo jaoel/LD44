@@ -12,6 +12,7 @@ public class Map
     public List<Delaunay.Edge<MapNode>> GabrielGraph { get; set; }
     public List<Delaunay.Edge<MapNode>> EMSTGraph { get; set; }
     public List<Delaunay.Edge<MapNode>> CorridorGraph { get; set; }
+    public List<BoundsInt> ChokePoints { get; set; }
     public int[,] CollisionMap { get; set; }
     public BoundsInt Bounds { get; set; }
 
@@ -34,7 +35,7 @@ public class Map
         _drawCells = true;
         _drawDelaunay = false;
         _drawGabriel = false;
-        _drawEMST = false;
+        _drawEMST = true;
         _drawCorridors = false;
         _drawBounds = false;
 
@@ -44,6 +45,7 @@ public class Map
 
         InteractiveObjects = new List<GameObject>();
         Enemies = new List<GameObject>();
+        ChokePoints = new List<BoundsInt>();
     }
 
     public void AddInteractiveObject(GameObject interactiveObject)
@@ -240,6 +242,11 @@ public class Map
                     default:
                         break;
                 }
+            });
+
+            ChokePoints.ForEach(x =>
+            {
+                GizmoUtility.DrawRectangle(x.ToRectInt(), Color.magenta);
             });
         }   
 

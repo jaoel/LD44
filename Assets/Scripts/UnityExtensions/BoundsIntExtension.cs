@@ -20,6 +20,16 @@ public static class BoundsIntExtension
         return false;
     }
 
+    public static bool Contains(this BoundsInt a, RectInt b)
+    {
+        if (a.xMin <= b.xMin && a.xMax >= b.xMax && a.yMin <= b.yMin && a.yMax >= b.yMax)
+        {
+            return true;
+        }
+
+        return false;
+    }
+
     public static bool Intersects(this BoundsInt a, RectInt b, out RectInt area)
     {
         area = new RectInt();
