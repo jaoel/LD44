@@ -52,7 +52,14 @@ public class MapGenerator : MonoBehaviour
 
         GenerateCells(ref result, parameters);
         SeparateCells(ref result, parameters);
-        IdentifyRooms(ref result, parameters);
+        int roomCount = IdentifyRooms(ref result, parameters);
+
+        if (roomCount < 3)
+        {
+            seed += 1;
+            return GenerateMap(seed, parameters);
+        }
+
         Triangulate(ref result, parameters);
         GenerateLayoutGraph(ref result, parameters);
         GenerateCorridorGraph(ref result, parameters);
@@ -246,16 +253,35 @@ public class MapGenerator : MonoBehaviour
         }
     }
 
-    private void IdentifyRooms(ref Map map, in MapGeneratorParameters parameters)
+    private int IdentifyRooms(ref Map map, in MapGeneratorParameters parameters)
     {
+
+        double roomThresholdX = 0;
+        double roomThresholdY = 0;
+
         foreach (MapNode node in map.Cells)
         {
-            if ((node.Cell.width >= parameters.MinRoomWidth && node.Cell.height >= parameters.MinRoomHeight)
-                || (node.Cell.height >= parameters.MinRoomWidth && node.Cell.width >= parameters.MinRoomHeight))
+            roomThresholdX += node.Cell.width;
+            roomThresholdY += node.Cell.height;
+        }
+
+        roomThresholdX /= map.Cells.Count;
+        roomThresholdY /= map.Cells.Count;
+
+        roomThresholdX *= parameters.RoomThresholdMultiplier;
+        roomThresholdY *= parameters.RoomThresholdMultiplier;
+
+        int roomCount = 0;
+        foreach (MapNode node in map.Cells)
+        {
+            if(node.Cell.width > roomThresholdX && node.Cell.height > roomThresholdY)
             {
                 node.Type = MapNodeType.Room;
+                roomCount++;
             }
         }
+
+        return roomCount;
     }
 
     private void Triangulate(ref Map map, in MapGeneratorParameters parameters)
@@ -482,7 +508,6 @@ public class MapGenerator : MonoBehaviour
                 {
                     room.Type = MapNodeType.Corridor;
                     PaintRoom(room, true);
-                    break;
                 }
             }
         }
@@ -545,12 +570,12 @@ public class MapGenerator : MonoBehaviour
 
     private void PaintTiles(in Map map, in MapGeneratorParameters parameters)
     {
-        int colX = 0;
-        for (int x = map.Bounds.xMin; x < map.Bounds.xMax; x++)
+        for(int i = 0; i < map.Bounds.size.x; i++)
         {
-            int colY = 0;
-            for (int y = map.Bounds.yMin; y < map.Bounds.yMax; y++)
+            for(int j = 0; j < map.Bounds.size.y; j++)
             {
+                int x = map.Bounds.xMin + i;
+                int y = map.Bounds.yMin + j;
                 RemoveThinWalls(x, y);
 
                 Tile tile = GetTileByNeighbours(x, y);
@@ -559,13 +584,12 @@ public class MapGenerator : MonoBehaviour
                     continue;
                 }
 
-                map.CollisionMap[colX, colY] = 1;
+                map.CollisionMap[i, j] = 1;
                 walls.SetTile(new Vector3Int(x, y, 0), tile);
-
-                colY++;
             }
-            colX++;
         }
+
+        map.UpdateCollisionMapDebug();
     }
 
     private void RemoveThinWalls(int x, int y)
@@ -784,38 +808,40 @@ public class MapGenerator : MonoBehaviour
                 continue;
             }
 
+            RectInt overSizeRoom = room.Cell;
+
             BoundsInt upper = new BoundsInt();
-            upper.xMin = room.Cell.xMin;
-            upper.xMax = room.Cell.xMax;
-            upper.y = room.Cell.yMax - 1;
-            upper.yMax = room.Cell.yMax;
+            upper.xMin = overSizeRoom.xMin;
+            upper.xMax = overSizeRoom.xMax;
+            upper.y = overSizeRoom.yMax - 1;
+            upper.yMax = overSizeRoom.yMax;
             upper.zMax = 1;
 
             map.ChokePoints.AddRange(FindChokepoints(upper, true));
 
             BoundsInt lower = new BoundsInt();
-            lower.xMin = room.Cell.xMin;
-            lower.xMax = room.Cell.xMax;
-            lower.y = room.Cell.yMin;
-            lower.yMax = room.Cell.yMin + 1;
+            lower.xMin = overSizeRoom.xMin;
+            lower.xMax = overSizeRoom.xMax;
+            lower.y = overSizeRoom.yMin;
+            lower.yMax = overSizeRoom.yMin + 1;
             lower.zMax = 1;
 
             map.ChokePoints.AddRange(FindChokepoints(lower, true));
 
             BoundsInt left = new BoundsInt();
-            left.xMin = room.Cell.xMin;
-            left.xMax = room.Cell.xMin + 1;
-            left.yMin = room.Cell.yMin;
-            left.yMax = room.Cell.yMax;
+            left.xMin = overSizeRoom.xMin;
+            left.xMax = overSizeRoom.xMin + 1;
+            left.yMin = overSizeRoom.yMin;
+            left.yMax = overSizeRoom.yMax;
             left.zMax = 1;
 
             map.ChokePoints.AddRange(FindChokepoints(left, false));
 
             BoundsInt right = new BoundsInt();
-            right.xMin = room.Cell.xMax - 1;
-            right.xMax = room.Cell.xMax;
-            right.yMin = room.Cell.yMin;
-            right.yMax = room.Cell.yMax;
+            right.xMin = overSizeRoom.xMax - 1;
+            right.xMax = overSizeRoom.xMax;
+            right.yMin = overSizeRoom.yMin;
+            right.yMax = overSizeRoom.yMax;
             right.zMax = 1;
 
             map.ChokePoints.AddRange(FindChokepoints(right, false));

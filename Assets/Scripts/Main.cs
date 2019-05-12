@@ -95,13 +95,12 @@ public class Main : MonoBehaviour
         parameters.MinCellCount = 3;
         parameters.MaxCellCount = 50;
 
-        parameters.MinRoomWidth = 7;
-        parameters.MinRoomHeight = 7;
+        parameters.RoomThresholdMultiplier = 1.25f;
 
-        parameters.MinCorridorWidth = 4;
-        parameters.MaxCorridorWidth = 4;
+        parameters.MinCorridorWidth = 3;
+        parameters.MaxCorridorWidth = 5;
 
-        parameters.MinRoomDistance = 2;
+        parameters.MinRoomDistance = 0;
 
         _currentMap = MapGenerator.Instance.GenerateMap(DateTime.Now.Ticks, parameters);
         MapGenerator.Instance.PopulateMap(ref _currentMap, ref player, parameters);
