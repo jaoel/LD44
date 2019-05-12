@@ -268,8 +268,8 @@ public class MapGenerator : MonoBehaviour
         roomThresholdX /= map.Cells.Count;
         roomThresholdY /= map.Cells.Count;
 
-        roomThresholdX *= parameters.RoomThresholdMultiplier;
-        roomThresholdY *= parameters.RoomThresholdMultiplier;
+        //roomThresholdX *= parameters.RoomThresholdMultiplier;
+        //roomThresholdY *= parameters.RoomThresholdMultiplier;
 
         int roomCount = 0;
         foreach (MapNode node in map.Cells)
@@ -589,7 +589,7 @@ public class MapGenerator : MonoBehaviour
             }
         }
 
-        map.UpdateCollisionMapDebug();
+        //map.UpdateCollisionMapDebug();
     }
 
     private void RemoveThinWalls(int x, int y)

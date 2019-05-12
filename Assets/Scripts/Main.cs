@@ -1,12 +1,9 @@
-﻿using Assets.Scripts;
-using DG.Tweening;
+﻿using DG.Tweening;
 using System;
-using System.Collections;
 using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
 using UnityEngine.SceneManagement;
-using UnityEngine.Tilemaps;
 
 public class Main : MonoBehaviour
 {
@@ -14,18 +11,14 @@ public class Main : MonoBehaviour
     public Player player;
 
     private Map _currentMap;
-
-    public GameObject gameOverUI;
-    public GameObject pauseUI;
-    public GameObject optionsMenu;
-    public bool gamePaused;
+    
     public bool gameOver;
     private ShopRoom shopInstance;
     public TextMeshProUGUI currentLevelText;
-    public TextMeshProUGUI gameOverLevelText;
     public GameObject blackOverlay;
 
     public int CurrentLevel { get; private set; } = 0;
+    public bool Paused { get; private set; } = false;
 
     private static Main _instance = null;
     public static Main Instance
@@ -53,7 +46,6 @@ public class Main : MonoBehaviour
 
         shopInstance = Instantiate(shopRoomPrefab);
         Time.timeScale = 1.0f;
-        gamePaused = false;
         LoadLevel();
     }
 
@@ -95,7 +87,7 @@ public class Main : MonoBehaviour
         parameters.MinCellCount = 3;
         parameters.MaxCellCount = 50;
 
-        parameters.RoomThresholdMultiplier = 1.25f;
+        //parameters.RoomThresholdMultiplier = 1.25f;
 
         parameters.MinCorridorWidth = 3;
         parameters.MaxCorridorWidth = 5;
@@ -154,72 +146,30 @@ public class Main : MonoBehaviour
 
     void Update()
     {
-        if (!gameOver && Input.GetKeyDown(KeyCode.Escape) && (!gamePaused || pauseUI.activeInHierarchy))
+        if (MenuManager.Instance.IsOpen())
         {
-            SoundManager.Instance.PlayUIButtonClick();
-            TogglePause(!gamePaused);
-        }
-
-        if (!player.IsAlive && !gameOver)
-        {
-            TogglePause(false);
-            Cursor.visible = true;
-            gameOver = true;
-
-            if (MusicController.Instance != null)
-            {
-                MusicController.Instance.PlayMusic("Defeat", false);
-            }
-
-            gameOverUI.SetActive(true);
             blackOverlay.SetActive(true);
-            gameOverLevelText.text = CurrentLevel.ToString();
+            return;
+        }
+
+        Paused = false;
+        blackOverlay.SetActive(false);
+
+        if (Input.GetKeyDown(KeyCode.Escape))
+        {
+            Paused = true;
+            SoundManager.Instance.PlayUIButtonClick();
+            MenuManager.Instance.PushMenu<PauseMenu>();
         }
     }
 
-    private void TogglePause(bool pause)
+    public void RestartGame()
     {
-        Cursor.visible = pause;
-
-        gamePaused = pause;
-        Time.timeScale = gamePaused ? 0.0f : 1.0f;
-        pauseUI.SetActive(gamePaused);
-        blackOverlay.SetActive(gamePaused);
-    }
-
-    public void OnClickStartGame()
-    {
-        TogglePause(false);
-        SoundManager.Instance.PlayUIButtonClick();
-    }
-
-    public void OnClickRestart()
-    {
-        Cursor.visible = true;
-        TogglePause(false);
-        gameOverUI.SetActive(false);
-        blackOverlay.SetActive(false);
-        SoundManager.Instance.PlayUIButtonClick();
-
         SceneManager.LoadScene("GameScene", LoadSceneMode.Single);
     }
 
-    public void OnClickReturnToMainMenu()
+    public void QuitToMenu()
     {
-        Cursor.visible = true;
-        TogglePause(false);
-        gameOverUI.SetActive(false);
-        blackOverlay.SetActive(false);
-        SoundManager.Instance.PlayUIButtonClick();
-
         SceneManager.LoadScene("MainMenuScene", LoadSceneMode.Single);
-    }
-
-    public void OnOptionsClick()
-    {
-        Cursor.visible = true;
-        optionsMenu.SetActive(true);
-        pauseUI.SetActive(false);
-        SoundManager.Instance.PlayUIButtonClick();
     }
 }

@@ -1,37 +1,40 @@
 ﻿using UnityEngine;
 using UnityEngine.SceneManagement;
 
-public class MainMenuController : MonoBehaviour
+public class MainMenu : Menu
 {
-    public GameObject optionsMenu;
-    public GameObject instructionsMenu;
-    public GameObject creditsMenu;
-
-    public void Awake()
+    bool initialized = false;
+    public override void OnEnter()
     {
         Cursor.visible = true;
-        MusicController.Instance.PlayMusic("MainMenu");
+        if (!initialized)
+        {
+            MusicController.Instance.PlayMusic("MainMenu");
+            initialized = true;
+        }
+    }
+
+    public override void OnPressedEscape()
+    {
+        OnQuitClick();
     }
 
     public void OnCreditsClick()
     {
-        creditsMenu.SetActive(!creditsMenu.activeInHierarchy);
-        gameObject.SetActive(!gameObject.activeInHierarchy);
         SoundManager.Instance.PlayUIButtonClick();
+        MenuManager.Instance.PushMenu<CreditsMenu>();
     }
 
     public void OnInstructionsClick()
     {
-        instructionsMenu.SetActive(true);
-        gameObject.SetActive(false);
         SoundManager.Instance.PlayUIButtonClick();
+        MenuManager.Instance.PushMenu<InstructionsMenu>();
     }
 
     public void OnOptionsClick()
     {
-        optionsMenu.SetActive(true);
-        gameObject.SetActive(false);
         SoundManager.Instance.PlayUIButtonClick();
+        MenuManager.Instance.PushMenu<OptionsMenu>();
     }
 
     public void OnStartClick()

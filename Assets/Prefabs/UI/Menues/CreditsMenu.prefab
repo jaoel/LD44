@@ -82,7 +82,7 @@ GameObject:
   - component: {fileID: 3160731554850527236}
   - component: {fileID: 3160731554850527239}
   - component: {fileID: 3160731554850527238}
-  - component: {fileID: 4519856964619169050}
+  - component: {fileID: 1580353550197619879}
   m_Layer: 5
   m_Name: CreditsMenu
   m_TagString: Untagged
@@ -170,7 +170,7 @@ MonoBehaviour:
   m_BlockingMask:
     serializedVersion: 2
     m_Bits: 4294967295
---- !u!114 &4519856964619169050
+--- !u!114 &1580353550197619879
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -179,7 +179,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 3160731554850527241}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 6a185d6dcd0e28f47b2e1d4b514f703b, type: 3}
+  m_Script: {fileID: 11500000, guid: 017eb7917c1047b4d8765dee70be1d91, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
 --- !u!1 &3160731555286187913
@@ -839,11 +839,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Target
       value: 
-      objectReference: {fileID: 0}
+      objectReference: {fileID: 1580353550197619879}
     - target: {fileID: 3455649338358966303, guid: 75b7f9b7e480ac748af76d1c4e9a34de,
         type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_MethodName
-      value: OnQuitClick
+      value: OnMainMenuClick
       objectReference: {fileID: 0}
     - target: {fileID: 6807669074885817636, guid: 75b7f9b7e480ac748af76d1c4e9a34de,
         type: 3}

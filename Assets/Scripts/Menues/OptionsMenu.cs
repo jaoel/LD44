@@ -1,24 +1,26 @@
-﻿using UnityEngine;
-using UnityEngine.UI;
+﻿using UnityEngine.UI;
 
-public class OptionsMenu : MonoBehaviour
+public class OptionsMenu : Menu
 {
-    public GameObject previousMenu;
-    public GameObject optionsMenuWrapper;
     public Slider musicVolumeSlider;
     public Slider sfxVolumeSlider;
 
-    private void OnEnable()
+    public override void OnEnter()
     {
+        base.OnEnter();
         sfxVolumeSlider.value = SettingsManager.Instance.LinearSFXVolume;
         musicVolumeSlider.value = SettingsManager.Instance.LinearMusicVolume;
     }
 
-    public void OnMainMenuClick()
+    public override void OnPressedEscape()
     {
-        previousMenu.SetActive(true);
-        optionsMenuWrapper.SetActive(false);
+        OnBackClick();
+    }
+
+    public void OnBackClick()
+    {
         SoundManager.Instance.PlayUIButtonClick();
+        MenuManager.Instance.PopMenu();
     }
 
     public void OnMusicSliderValueChange(float value)

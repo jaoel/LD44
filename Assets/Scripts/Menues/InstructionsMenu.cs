@@ -1,7 +1,6 @@
 ﻿using UnityEngine;
-using UnityEngine.UI;
 
-public class InstructionsMenu : MonoBehaviour
+public class InstructionsMenu : Menu
 {
     public GameObject pageOne;
     public GameObject pageTwo;
@@ -9,24 +8,26 @@ public class InstructionsMenu : MonoBehaviour
     public GameObject nextButton;
     public GameObject previousButton;
 
-    public GameObject mainMenu;
-    public GameObject instructionsMenuWrapper;
-
     private int _currentPage = 0;
 
-    private void OnEnable()
+    public override void OnEnter()
     {
+        base.OnEnter();
         previousButton.SetActive(false);
         _currentPage = 0;
         OnPageChanged();
     }
 
+    public override void OnPressedEscape()
+    {
+        OnMainMenuClick();
+    }
+
     public void OnMainMenuClick()
     {
         _currentPage = 0;
-        mainMenu.SetActive(true);
-        instructionsMenuWrapper.SetActive(false);
         SoundManager.Instance.PlayUIButtonClick();
+        MenuManager.Instance.PopMenu();
     }
 
     public void OnNextClick()
