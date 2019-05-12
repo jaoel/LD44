@@ -36,8 +36,8 @@ public class Map
         _drawDelaunay = false;
         _drawGabriel = false;
         _drawEMST = true;
-        _drawCorridors = false;
-        _drawBounds = false;
+        _drawCorridors = true;
+        _drawBounds = true;
 
         _floors = floors;
         _walls = walls;
@@ -194,6 +194,37 @@ public class Map
     public void DrawDebug()
     {
         DrawCells();
+    }
+
+    public void UpdateCollisionMapDebug()
+    {
+        Tilemap debug = GameObject.Find("CollisionMap").GetComponent<Tilemap>();
+
+        for(int i = 0; i < CollisionMap.GetLength(0); i++)
+        {
+            for(int j = 0; j < CollisionMap.GetLength(1); j++)
+            {
+                int collisionIndex = CollisionMap[i, j];
+
+                if (collisionIndex > 0)
+                {
+                    debug.SetTile(new Vector3Int(Bounds.xMin + i, Bounds.yMin + j, 0), MapGenerator.Instance.tileContainer.FloorTiles[0]);
+                }
+            }
+        }
+    }
+
+    public void UpdateCollisionMap(RectInt bounds, int value)
+    {
+        for(int i = 0; i < bounds.size.x; i++)
+        {
+            for (int j = 0; j < bounds.size.y; j++)
+            {
+                CollisionMap[bounds.xMin - Bounds.xMin + i, bounds.yMin - Bounds.yMin + j] = value;
+            }
+        }
+
+        UpdateCollisionMapDebug();
     }
 
     private void DestroyAllInteractiveObjects()

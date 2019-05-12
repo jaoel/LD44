@@ -79,6 +79,10 @@ public class MapGenerator : MonoBehaviour
     public void PopulateMap(ref Map map, ref Player player, in MapGeneratorParameters parameters)
     {
         Tuple<MapNode, MapNode> startAndGoal = map.GetRoomsFurthestApart();
+        if (_random.NextFloat() < 0.5f)
+        {
+            startAndGoal = new Tuple<MapNode, MapNode>(startAndGoal.Item2, startAndGoal.Item1);
+        }
 
         player.transform.position = map.GetRandomPositionInRoom(1, 1, startAndGoal.Item1).ToVector3();
         CameraManager.Instance.SetCameraPosition(player.transform.position);
@@ -86,6 +90,9 @@ public class MapGenerator : MonoBehaviour
         map.AddInteractiveObject(Instantiate(interactiveObjectContainer.Stairs,
             map.GetRandomPositionInRoom(2, 2, startAndGoal.Item2).ToVector3(), Quaternion.identity));
 
+        GenerateDoors(ref map, startAndGoal.Item1, startAndGoal.Item2, parameters);
+
+        /*
         int trapCount = _random.Range(0, 10);
         for (int i = 0; i < trapCount; i++)
         {
@@ -130,6 +137,7 @@ public class MapGenerator : MonoBehaviour
             map.AddEnemy(GameObject.Instantiate(type, new Vector3(spawnPos.x, spawnPos.y, 0.0f), Quaternion.identity));
             map.Enemies[map.Enemies.Count - 1].SetActive(false);
         }
+        */
     }
 
     private void GenerateCells(ref Map map, in MapGeneratorParameters parameters)
@@ -245,7 +253,7 @@ public class MapGenerator : MonoBehaviour
 
         map.Bounds = new BoundsInt(xMin - 1, yMin - 1, 0, Mathf.Abs(xMax - xMin) + 1, Mathf.Abs(yMax - yMin) + 1, 0);
         map.CollisionMap = new int[map.Bounds.size.x, map.Bounds.size.y];
-
+        
         if (!regionsSeparated)
         {
             //We should iterate over nodes overlapping and discard them
@@ -853,28 +861,119 @@ public class MapGenerator : MonoBehaviour
         List<BoundsInt> result = new List<BoundsInt>();
         TileBase[] tempWalls = walls.GetTilesBlock(bounds);
 
-        for (int i = 0; i < tempWalls.Length - 3; i++)
+        for (int i = 0; i < tempWalls.Length - 1; i++)
         {
-            if (tempWalls[i] != null && tempWalls[i + 1] == null && tempWalls[i + 2] == null && tempWalls[i + 3] != null)
+            if (tempWalls[i] != null && tempWalls[i + 1] == null)
             {
                 BoundsInt chokepoint = bounds;
-
-                if (horizontal)
+                for (int j = i + 2; j < tempWalls.Length - 1; j++)
                 {
-                    chokepoint.xMin = bounds.xMin + i;
-                    chokepoint.xMax = bounds.xMin + i + 4;
+                    if (tempWalls[j] != null)
+                    {
+                        if (horizontal)
+                        {
+                            chokepoint.xMin = bounds.xMin + i;
+                            chokepoint.xMax = bounds.xMin + j + 1;
+                        }
+                        else
+                        {
+                            chokepoint.yMin = bounds.yMin + i;
+                            chokepoint.yMax = bounds.yMin + j + 1;
+                        }
+                        result.Add(chokepoint);
+                        i = j + 1;
+                        break;
+                    }
                 }
-                else
-                {
-                    chokepoint.yMin = bounds.yMin + i;
-                    chokepoint.yMax = bounds.yMin + i + 4;
-                }
-
-                result.Add(chokepoint);
             }
         }
 
         return result;
+    }
+
+    private void GenerateDoors(ref Map map, in MapNode spawnRoom, in MapNode exitRoom, in MapGeneratorParameters parameters)
+    {
+        LockRoom(ref map, exitRoom, parameters);
+        /*
+        List<Door> doors = new List<Door>();
+        for(int i = map.ChokePoints.Count - 1; i >= 0; i--)
+        {
+            if (map.ChokePoints[i].Overlaps(exitRoom.Cell))
+            {
+                if (map.ChokePoints[i].size.x > 1)
+                {
+                    doors.Add(Instantiate(interactiveObjectContainer.horizontalDoor, map.ChokePoints[i].center, Quaternion.identity).GetComponent<Door>());
+                }
+                else
+                {
+                    doors.Add(Instantiate(interactiveObjectContainer.verticalDoor, map.ChokePoints[i].center, Quaternion.identity).GetComponent<Door>());
+                }
+
+                map.ChokePoints.RemoveAt(i);
+            }
+        }
+
+        Key key = Instantiate(interactiveObjectContainer.key, spawnRoom.Cell.center, Quaternion.identity).GetComponent<Key>();
+        doors.ForEach(x =>
+        {
+            x.Keys.Add(key);
+        });
+        */
+
+        //doors.ForEach(x =>
+        //{
+        //    key.Owner = x;
+        //});
+        //key.GetComponent<Key>().Owner = 
+    }
+
+    private void LockRoom(ref Map map, in MapNode room, in MapGeneratorParameters parameters, List<Key> keys = null)
+    {
+        List<Door> doors = new List<Door>();
+        foreach(BoundsInt chokepoint in map.ChokePoints)
+        {
+            if (chokepoint.Overlaps(room.Cell))
+            {
+                Door door = null;
+                if (chokepoint.size.x > 1)
+                {
+                    door = Instantiate(interactiveObjectContainer.horizontalDoor, chokepoint.center, Quaternion.identity).GetComponent<Door>();
+                }
+                else
+                {
+                    door = Instantiate(interactiveObjectContainer.verticalDoor, chokepoint.center, Quaternion.identity).GetComponent<Door>();
+                }
+
+                door.Bounds = chokepoint.ToRectInt();
+                doors.Add(door);
+                map.UpdateCollisionMap(chokepoint.ToRectInt(), 1);
+            }
+        }
+
+        Key newKey = Instantiate(interactiveObjectContainer.key, room.Cell.center, Quaternion.identity).GetComponent<Key>();
+
+        doors.ForEach(x =>
+        {
+            x.Keys.Add(newKey);
+        });
+
+        if (keys != null)
+        {
+            keys.ForEach(key =>
+            {
+                doors.ForEach(door =>
+                {
+                    door.Keys.Add(key);
+                });
+            });
+
+            keys.Add(newKey);
+        }
+    }
+
+    private MapNode FindKeyRoom()
+    {
+        return null;
     }
 
     private Vector2Int GenerateRandomSize(in MapGeneratorParameters parameters)

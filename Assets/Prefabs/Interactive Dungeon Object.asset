@@ -13,3 +13,8 @@ MonoBehaviour:
   m_Name: Interactive Dungeon Object
   m_EditorClassIdentifier: 
   Stairs: {fileID: 2227333186477711901, guid: 478254d33b1e24f45bee4d2a2b014ea1, type: 3}
+  horizontalDoor: {fileID: 8699708023185844279, guid: 667e080d12a6bf547994cae1da638a36,
+    type: 3}
+  verticalDoor: {fileID: 8699708023185844279, guid: 5ef9981b32662514f90916b216a50e01,
+    type: 3}
+  key: {fileID: 1201071571481572198, guid: c29eba6a30475314cab0d5752bf421f3, type: 3}

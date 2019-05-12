@@ -87,7 +87,7 @@ public class Main : MonoBehaviour
 
 
         MapGeneratorParameters parameters = new MapGeneratorParameters();
-        parameters.GenerationRadius = 20;
+        parameters.GenerationRadius = 10;
 
         parameters.MinCellSize = 3;
         parameters.MaxCellSize = 20;

@@ -15,8 +15,7 @@ public class MapGeneratorParameters
     public int MaxCellSize { get; set; }
     public int MinCellSize { get; set; }
 
-    public int MinRoomWidth { get; set; }
-    public int MinRoomHeight { get; set; }
+    public float RoomThresholdMultiplier { get; set; }
     public int MinCorridorWidth { get; set; }
     public int MaxCorridorWidth { get; set; }
 

@@ -81,8 +81,9 @@ namespace Delaunay
         {
             List<Edge<MapNode>> emst = new List<Edge<MapNode>>();
             List<Vertex<MapNode>> emstVertices = new List<Vertex<MapNode>>();
+            List<Vertex<MapNode>> graphVertices = vertices.ToList();
             emstVertices.Add(vertices.ElementAt(0));
-            while (emstVertices.Count != vertices.Count())
+            while (emstVertices.Count != graphVertices.Count)
             {
                 foreach (Vertex<MapNode> vertex in vertices)
                 {

@@ -1,8 +1,11 @@
 ﻿using UnityEngine;
 using DG.Tweening;
+using System.Collections.Generic;
 
 public class Player : MonoBehaviour
 {
+    private List<Key> _keys;
+
     public ParticleSystemContainer particleSystemContainer;
     public ParticleSystem dustTrail;
 
@@ -82,6 +85,26 @@ public class Player : MonoBehaviour
         velocity = Vector3.zero;
         cooldownEndTime = 0f;
         inputVector = Vector3.zero;
+        _keys = new List<Key>();
+    }
+
+    public void AddKey(Key key)
+    {
+        _keys.Add(key);
+    }
+
+    public bool UseKey(in Door door)
+    {
+        for(int i = _keys.Count - 1; i >= 0; i--)
+        {
+            if (door.Keys.Contains(_keys[i]))
+            {
+                _keys.RemoveAt(i);
+                return true;
+            }
+        }
+
+        return false;
     }
 
     private void Update()

@@ -9,5 +9,8 @@ using UnityEngine;
 [CreateAssetMenu]
 public class InteractiveDungeonObject : ScriptableObject
 {
-    public GameObject Stairs;   
+    public GameObject Stairs;
+    public GameObject horizontalDoor;
+    public GameObject verticalDoor;
+    public GameObject key;
 }
