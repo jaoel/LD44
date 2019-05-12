@@ -104,7 +104,7 @@ MonoBehaviour:
       Version=1.0.0.0, Culture=neutral, PublicKeyToken=null
   m_text: Text
   m_isRightToLeft: 0
-  m_fontAsset: {fileID: 11400000, guid: 98b233c08f68c0549bdff35ba2286508, type: 2}
+  m_fontAsset: {fileID: 11400000, guid: 2f20135b43013fb48aa4b1e30fb1141f, type: 2}
   m_sharedMaterial: {fileID: 3893677287675215031, guid: 98b233c08f68c0549bdff35ba2286508,
     type: 2}
   m_fontSharedMaterials: []

@@ -488,6 +488,12 @@ PrefabInstance:
       propertyPath: m_textInfo.wordCount
       value: 2
       objectReference: {fileID: 0}
+    - target: {fileID: 6415969519950650587, guid: 041c8728bb3ea9a49835cf1389858cd2,
+        type: 3}
+      propertyPath: m_sharedMaterial
+      value: 
+      objectReference: {fileID: -9021846766091189397, guid: 2f20135b43013fb48aa4b1e30fb1141f,
+        type: 2}
     - target: {fileID: 7245967946808388337, guid: 041c8728bb3ea9a49835cf1389858cd2,
         type: 3}
       propertyPath: m_text
@@ -538,6 +544,11 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 3160731555286187910}
     m_Modifications:
+    - target: {fileID: 2563288920547214706, guid: db99a6011e4d8214f81479290332dc10,
+        type: 3}
+      propertyPath: m_Name
+      value: Bentebent
+      objectReference: {fileID: 0}
     - target: {fileID: 2511538579886028591, guid: db99a6011e4d8214f81479290332dc10,
         type: 3}
       propertyPath: m_LocalPosition.x
@@ -643,11 +654,32 @@ PrefabInstance:
       propertyPath: m_Pivot.y
       value: 0.5
       objectReference: {fileID: 0}
-    - target: {fileID: 2563288920547214706, guid: db99a6011e4d8214f81479290332dc10,
+    - target: {fileID: 731663016239170735, guid: db99a6011e4d8214f81479290332dc10,
         type: 3}
-      propertyPath: m_Name
-      value: Bentebent
+      propertyPath: m_text
+      value: Tim Henriksson (bentebent)
       objectReference: {fileID: 0}
+    - target: {fileID: 731663016239170735, guid: db99a6011e4d8214f81479290332dc10,
+        type: 3}
+      propertyPath: m_textInfo.characterCount
+      value: 26
+      objectReference: {fileID: 0}
+    - target: {fileID: 731663016239170735, guid: db99a6011e4d8214f81479290332dc10,
+        type: 3}
+      propertyPath: m_textInfo.spaceCount
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 731663016239170735, guid: db99a6011e4d8214f81479290332dc10,
+        type: 3}
+      propertyPath: m_textInfo.wordCount
+      value: 3
+      objectReference: {fileID: 0}
+    - target: {fileID: 731663016239170735, guid: db99a6011e4d8214f81479290332dc10,
+        type: 3}
+      propertyPath: m_sharedMaterial
+      value: 
+      objectReference: {fileID: 2619359302124258194, guid: 2f107c9016948a54ea6158d16fc345dd,
+        type: 2}
     - target: {fileID: 7802524278593934888, guid: db99a6011e4d8214f81479290332dc10,
         type: 3}
       propertyPath: m_text
@@ -677,26 +709,6 @@ PrefabInstance:
         type: 3}
       propertyPath: m_textInfo.lineCount
       value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 731663016239170735, guid: db99a6011e4d8214f81479290332dc10,
-        type: 3}
-      propertyPath: m_text
-      value: Tim Henriksson (bentebent)
-      objectReference: {fileID: 0}
-    - target: {fileID: 731663016239170735, guid: db99a6011e4d8214f81479290332dc10,
-        type: 3}
-      propertyPath: m_textInfo.characterCount
-      value: 26
-      objectReference: {fileID: 0}
-    - target: {fileID: 731663016239170735, guid: db99a6011e4d8214f81479290332dc10,
-        type: 3}
-      propertyPath: m_textInfo.spaceCount
-      value: 2
-      objectReference: {fileID: 0}
-    - target: {fileID: 731663016239170735, guid: db99a6011e4d8214f81479290332dc10,
-        type: 3}
-      propertyPath: m_textInfo.wordCount
-      value: 3
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: db99a6011e4d8214f81479290332dc10, type: 3}
@@ -863,6 +875,12 @@ PrefabInstance:
       propertyPath: m_textInfo.spaceCount
       value: 1
       objectReference: {fileID: 0}
+    - target: {fileID: 6807669074885817636, guid: 75b7f9b7e480ac748af76d1c4e9a34de,
+        type: 3}
+      propertyPath: m_sharedMaterial
+      value: 
+      objectReference: {fileID: 2619359302124258194, guid: 2f107c9016948a54ea6158d16fc345dd,
+        type: 2}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 75b7f9b7e480ac748af76d1c4e9a34de, type: 3}
 --- !u!224 &1958517518131177439 stripped
@@ -998,6 +1016,12 @@ PrefabInstance:
       propertyPath: m_textInfo.characterCount
       value: 4
       objectReference: {fileID: 0}
+    - target: {fileID: 6415969519950650587, guid: 041c8728bb3ea9a49835cf1389858cd2,
+        type: 3}
+      propertyPath: m_sharedMaterial
+      value: 
+      objectReference: {fileID: -9021846766091189397, guid: 2f20135b43013fb48aa4b1e30fb1141f,
+        type: 2}
     - target: {fileID: 7245967946808388337, guid: 041c8728bb3ea9a49835cf1389858cd2,
         type: 3}
       propertyPath: m_text
@@ -1033,6 +1057,11 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 3160731555286187910}
     m_Modifications:
+    - target: {fileID: 2563288920547214706, guid: db99a6011e4d8214f81479290332dc10,
+        type: 3}
+      propertyPath: m_Name
+      value: Jaoel
+      objectReference: {fileID: 0}
     - target: {fileID: 2511538579886028591, guid: db99a6011e4d8214f81479290332dc10,
         type: 3}
       propertyPath: m_LocalPosition.x
@@ -1138,11 +1167,32 @@ PrefabInstance:
       propertyPath: m_Pivot.y
       value: 0.5
       objectReference: {fileID: 0}
-    - target: {fileID: 2563288920547214706, guid: db99a6011e4d8214f81479290332dc10,
+    - target: {fileID: 731663016239170735, guid: db99a6011e4d8214f81479290332dc10,
         type: 3}
-      propertyPath: m_Name
-      value: Jaoel
+      propertyPath: m_text
+      value: Joel Svensson (jaoel)
       objectReference: {fileID: 0}
+    - target: {fileID: 731663016239170735, guid: db99a6011e4d8214f81479290332dc10,
+        type: 3}
+      propertyPath: m_textInfo.characterCount
+      value: 21
+      objectReference: {fileID: 0}
+    - target: {fileID: 731663016239170735, guid: db99a6011e4d8214f81479290332dc10,
+        type: 3}
+      propertyPath: m_textInfo.spaceCount
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 731663016239170735, guid: db99a6011e4d8214f81479290332dc10,
+        type: 3}
+      propertyPath: m_textInfo.wordCount
+      value: 3
+      objectReference: {fileID: 0}
+    - target: {fileID: 731663016239170735, guid: db99a6011e4d8214f81479290332dc10,
+        type: 3}
+      propertyPath: m_sharedMaterial
+      value: 
+      objectReference: {fileID: 2619359302124258194, guid: 2f107c9016948a54ea6158d16fc345dd,
+        type: 2}
     - target: {fileID: 7802524278593934888, guid: db99a6011e4d8214f81479290332dc10,
         type: 3}
       propertyPath: m_text
@@ -1177,26 +1227,6 @@ PrefabInstance:
         type: 3}
       propertyPath: m_textInfo.pageCount
       value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 731663016239170735, guid: db99a6011e4d8214f81479290332dc10,
-        type: 3}
-      propertyPath: m_text
-      value: Joel Svensson (jaoel)
-      objectReference: {fileID: 0}
-    - target: {fileID: 731663016239170735, guid: db99a6011e4d8214f81479290332dc10,
-        type: 3}
-      propertyPath: m_textInfo.characterCount
-      value: 21
-      objectReference: {fileID: 0}
-    - target: {fileID: 731663016239170735, guid: db99a6011e4d8214f81479290332dc10,
-        type: 3}
-      propertyPath: m_textInfo.spaceCount
-      value: 2
-      objectReference: {fileID: 0}
-    - target: {fileID: 731663016239170735, guid: db99a6011e4d8214f81479290332dc10,
-        type: 3}
-      propertyPath: m_textInfo.wordCount
-      value: 3
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: db99a6011e4d8214f81479290332dc10, type: 3}
