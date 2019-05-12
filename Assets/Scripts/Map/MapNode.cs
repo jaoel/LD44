@@ -15,7 +15,8 @@ public class MapNode
     public RectInt Cell { get; set; }
     public MapNodeType Type { get; set; }
     public List<Vector2Int> EntryPoints { get; set; }
-    public List<Delaunay.Edge<MapNode>> Corridors;
+    public List<Delaunay.Edge<MapNode>> Corridors { get; set; }
+    public List<BoundsInt> Chokepoints { get; set; }
 
     public bool HasEntryPoint => EntryPoints.Count > 0;
 
@@ -25,6 +26,7 @@ public class MapNode
         Cell = new RectInt(position, size);
         EntryPoints = new List<Vector2Int>();
         Corridors = new List<Delaunay.Edge<MapNode>>();
+        Chokepoints = new List<BoundsInt>();
     }
 
     public Vector2Int GetClosestEntryPoint(Vector2 position)

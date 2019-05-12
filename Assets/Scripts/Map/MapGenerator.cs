@@ -845,6 +845,7 @@ public class MapGenerator : MonoBehaviour
                 upper.zMax = 1;
 
                 List<BoundsInt> result = FindChokepoints(upper, true);
+                room.Chokepoints.AddRange(result);
                 map.ChokePoints.AddRange(result);
 
                 if (result.Count > 0)
@@ -864,6 +865,7 @@ public class MapGenerator : MonoBehaviour
                 lower.zMax = 1;
             
                 List<BoundsInt> result = FindChokepoints(lower, true);
+                room.Chokepoints.AddRange(result);
                 map.ChokePoints.AddRange(result);
             
                 if (result.Count > 0)
@@ -882,6 +884,7 @@ public class MapGenerator : MonoBehaviour
                 left.zMax = 1;
             
                 List<BoundsInt> result = FindChokepoints(left, false);
+                room.Chokepoints.AddRange(result);
                 map.ChokePoints.AddRange(result);
             
                 if (result.Count > 0)
@@ -900,6 +903,7 @@ public class MapGenerator : MonoBehaviour
                 right.zMax = 1;
             
                 List<BoundsInt> result = FindChokepoints(right, false);
+                room.Chokepoints.AddRange(result);
                 map.ChokePoints.AddRange(result);
             
                 if (result.Count > 0)
@@ -951,6 +955,8 @@ public class MapGenerator : MonoBehaviour
         List<MapNode> rooms = new List<MapNode>(map.Cells.Where(x => x.Type == MapNodeType.Room));
 
         int lockedDoorCount = (int)Mathf.Round(rooms.Count * parameters.LockFactor);
+        rooms.Remove(spawnRoom);
+        rooms.Remove(exitRoom);
 
         LockRoom(map, spawnRoom, exitRoom, rooms, out MapNode keyRoom);
         for (int i = 0; i < lockedDoorCount; i++)
@@ -964,25 +970,22 @@ public class MapGenerator : MonoBehaviour
     {
         keyRoom = null;
         List<Door> doors = new List<Door>();
-        foreach(BoundsInt chokepoint in map.ChokePoints)
+        foreach(BoundsInt chokepoint in target.Chokepoints)
         {
-            if (chokepoint.Overlaps(target.Cell))
+            Door door = null;
+            if (chokepoint.size.x > 1)
             {
-                Door door = null;
-                if (chokepoint.size.x > 1)
-                {
-                    door = Instantiate(interactiveObjectContainer.horizontalDoor, chokepoint.center, Quaternion.identity).GetComponent<Door>();
-                }
-                else
-                {
-                    door = Instantiate(interactiveObjectContainer.verticalDoor, chokepoint.center, Quaternion.identity).GetComponent<Door>();
-                }
-
-                door.Bounds = chokepoint.ToRectInt();
-                doors.Add(door);
-                map.UpdateCollisionMap(chokepoint.ToRectInt(), 1);
-                map.AddInteractiveObject(door.gameObject);
+                door = Instantiate(interactiveObjectContainer.horizontalDoor, chokepoint.center, Quaternion.identity).GetComponent<Door>();
             }
+            else
+            {
+                door = Instantiate(interactiveObjectContainer.verticalDoor, chokepoint.center, Quaternion.identity).GetComponent<Door>();
+            }
+
+            door.Bounds = chokepoint.ToRectInt();
+            doors.Add(door);
+            map.UpdateCollisionMap(chokepoint.ToRectInt(), 1);
+            map.AddInteractiveObject(door.gameObject);
         }
 
         if (doors.Count > 0)
