@@ -20,6 +20,14 @@ public class Door : MonoBehaviour
         _locked = true;
     }
 
+    public void Unlock()
+    {
+        Destroy(trigger);
+        Destroy(collider);
+        Destroy(rigidBody);
+        _locked = false;
+    }
+
     private void OnTriggerEnter2D(Collider2D collision)
     {
         if (!_locked)
@@ -34,10 +42,11 @@ public class Door : MonoBehaviour
             {
                 if (player.UseKey(this))
                 {
-                    Destroy(trigger);
-                    Destroy(collider);
-                    Destroy(rigidBody);
-                    _locked = false;
+                    Unlock();
+                    Siblings.ForEach(x =>
+                    {
+                        x.Unlock();
+                    });
                 }
             }
         }

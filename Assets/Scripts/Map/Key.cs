@@ -2,6 +2,10 @@
 
 public class Key : MonoBehaviour
 {
+    public CircleCollider2D trigger;
+    public Rigidbody2D rigidBody;
+    public GameObject visual;
+
     public Door Owner { get; set; }
     public bool Consumed { get; set; }
 
@@ -11,7 +15,10 @@ public class Key : MonoBehaviour
         {
             Player player = collision.gameObject.GetComponent<Player>();
             player.AddKey(this);
-            Destroy(gameObject);
+
+            Destroy(trigger);
+            Destroy(rigidBody);
+            Destroy(visual);
         }
     }
 }

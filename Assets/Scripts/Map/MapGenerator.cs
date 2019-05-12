@@ -221,8 +221,7 @@ public class MapGenerator : MonoBehaviour
                     movement *= -1.0f;
                     movement = movement.normalized;
                     RectInt newRect = node.Cell;
-                    newRect.position += new Vector2Int((int)Math.Round(movement.x) + parameters.MinRoomDistance,
-                        (int)Math.Round(movement.y) + parameters.MinRoomDistance);
+                    newRect.position += new Vector2Int((int)Math.Round(movement.x), (int)Math.Round(movement.y));
 
                     if (!newRect.Equals(node.Cell))
                     {
@@ -311,7 +310,26 @@ public class MapGenerator : MonoBehaviour
 
     private void GenerateLayoutGraph(ref Map map, in MapGeneratorParameters parameters)
     {
+        List<Delaunay.Edge<MapNode>> result = new List<Delaunay.Edge<MapNode>>(map.EMSTGraph);
+        List<Delaunay.Edge<MapNode>> allowedEdges = new List<Delaunay.Edge<MapNode>>();
 
+        foreach(Delaunay.Edge<MapNode> edge in map.GabrielGraph)
+        {
+            if (!allowedEdges.Contains(edge) && !map.EMSTGraph.Contains(edge))
+            {
+                allowedEdges.Add(edge);
+            }
+        }
+
+        int extraEdgeCount = (int)Math.Round(allowedEdges.Count * parameters.MazeFactor);
+        for (int i = 0; i < extraEdgeCount; i++)
+        {
+            int edgeIndex = _random.Range(0, allowedEdges.Count);
+            result.Add(allowedEdges[edgeIndex]);
+            allowedEdges.RemoveAt(edgeIndex);
+        }
+
+        map.LayoutGraph = result;
     }
 
     private void PaintRooms(in Map map, in MapGeneratorParameters parameters)
@@ -390,7 +408,7 @@ public class MapGenerator : MonoBehaviour
     private void GenerateCorridorGraph(ref Map map, in MapGeneratorParameters parameters)
     {
         List<Delaunay.Edge<MapNode>> result = new List<Delaunay.Edge<MapNode>>();
-        foreach (Delaunay.Edge<MapNode> edge in map.EMSTGraph)
+        foreach (Delaunay.Edge<MapNode> edge in map.LayoutGraph)
         {
             MapNode a = null;
             MapNode b = null;
@@ -817,42 +835,78 @@ public class MapGenerator : MonoBehaviour
             }
 
             RectInt overSizeRoom = room.Cell;
+            for (int i = 0; i < 3; i++)
+            {
+                BoundsInt upper = new BoundsInt();
+                upper.xMin = overSizeRoom.xMin - i;
+                upper.xMax = overSizeRoom.xMax + i;
+                upper.y = overSizeRoom.yMax - 1 + i;
+                upper.yMax = overSizeRoom.yMax + i;
+                upper.zMax = 1;
 
-            BoundsInt upper = new BoundsInt();
-            upper.xMin = overSizeRoom.xMin;
-            upper.xMax = overSizeRoom.xMax;
-            upper.y = overSizeRoom.yMax - 1;
-            upper.yMax = overSizeRoom.yMax;
-            upper.zMax = 1;
+                List<BoundsInt> result = FindChokepoints(upper, true);
+                map.ChokePoints.AddRange(result);
 
-            map.ChokePoints.AddRange(FindChokepoints(upper, true));
+                if (result.Count > 0)
+                {
+                    break;
+                }
+            }
 
-            BoundsInt lower = new BoundsInt();
-            lower.xMin = overSizeRoom.xMin;
-            lower.xMax = overSizeRoom.xMax;
-            lower.y = overSizeRoom.yMin;
-            lower.yMax = overSizeRoom.yMin + 1;
-            lower.zMax = 1;
-
-            map.ChokePoints.AddRange(FindChokepoints(lower, true));
-
-            BoundsInt left = new BoundsInt();
-            left.xMin = overSizeRoom.xMin;
-            left.xMax = overSizeRoom.xMin + 1;
-            left.yMin = overSizeRoom.yMin;
-            left.yMax = overSizeRoom.yMax;
-            left.zMax = 1;
-
-            map.ChokePoints.AddRange(FindChokepoints(left, false));
-
-            BoundsInt right = new BoundsInt();
-            right.xMin = overSizeRoom.xMax - 1;
-            right.xMax = overSizeRoom.xMax;
-            right.yMin = overSizeRoom.yMin;
-            right.yMax = overSizeRoom.yMax;
-            right.zMax = 1;
-
-            map.ChokePoints.AddRange(FindChokepoints(right, false));
+            
+            for (int i = 0; i < 3; i++)
+            {
+                BoundsInt lower = new BoundsInt();
+                lower.xMin = overSizeRoom.xMin - i;
+                lower.xMax = overSizeRoom.xMax + i;
+                lower.y = overSizeRoom.yMin - i;
+                lower.yMax = overSizeRoom.yMin + 1 - i;
+                lower.zMax = 1;
+            
+                List<BoundsInt> result = FindChokepoints(lower, true);
+                map.ChokePoints.AddRange(result);
+            
+                if (result.Count > 0)
+                {
+                    break;
+                }
+            }
+            
+            for (int i = 0; i < 3; i++)
+            {
+                BoundsInt left = new BoundsInt();
+                left.xMin = overSizeRoom.xMin - i;
+                left.xMax = overSizeRoom.xMin + 1 - i;
+                left.yMin = overSizeRoom.yMin - i;
+                left.yMax = overSizeRoom.yMax + i;
+                left.zMax = 1;
+            
+                List<BoundsInt> result = FindChokepoints(left, false);
+                map.ChokePoints.AddRange(result);
+            
+                if (result.Count > 0)
+                {
+                    break;
+                }
+            }
+            
+            for (int i = 0; i < 3; i++)
+            {
+                BoundsInt right = new BoundsInt();
+                right.xMin = overSizeRoom.xMax - 1 + i;
+                right.xMax = overSizeRoom.xMax + i;
+                right.yMin = overSizeRoom.yMin - i;
+                right.yMax = overSizeRoom.yMax + i;
+                right.zMax = 1;
+            
+                List<BoundsInt> result = FindChokepoints(right, false);
+                map.ChokePoints.AddRange(result);
+            
+                if (result.Count > 0)
+                {
+                    break;
+                }
+            }
         }
     }
 
@@ -860,10 +914,11 @@ public class MapGenerator : MonoBehaviour
     {
         List<BoundsInt> result = new List<BoundsInt>();
         TileBase[] tempWalls = walls.GetTilesBlock(bounds);
+        TileBase[] tempFloors = floors.GetTilesBlock(bounds);
 
         for (int i = 0; i < tempWalls.Length - 1; i++)
         {
-            if (tempWalls[i] != null && tempWalls[i + 1] == null)
+            if (tempWalls[i] != null && tempWalls[i + 1] == null && tempFloors[i + 1] != null)
             {
                 BoundsInt chokepoint = bounds;
                 for (int j = i + 2; j < tempWalls.Length - 1; j++)
@@ -881,7 +936,7 @@ public class MapGenerator : MonoBehaviour
                             chokepoint.yMax = bounds.yMin + j + 1;
                         }
                         result.Add(chokepoint);
-                        i = j + 1;
+                        i = j;
                         break;
                     }
                 }
@@ -891,48 +946,27 @@ public class MapGenerator : MonoBehaviour
         return result;
     }
 
-    private void GenerateDoors(ref Map map, in MapNode spawnRoom, in MapNode exitRoom, in MapGeneratorParameters parameters)
+    private void GenerateDoors(ref Map map, MapNode spawnRoom, in MapNode exitRoom, in MapGeneratorParameters parameters)
     {
-        LockRoom(ref map, exitRoom, parameters);
-        /*
-        List<Door> doors = new List<Door>();
-        for(int i = map.ChokePoints.Count - 1; i >= 0; i--)
-        {
-            if (map.ChokePoints[i].Overlaps(exitRoom.Cell))
-            {
-                if (map.ChokePoints[i].size.x > 1)
-                {
-                    doors.Add(Instantiate(interactiveObjectContainer.horizontalDoor, map.ChokePoints[i].center, Quaternion.identity).GetComponent<Door>());
-                }
-                else
-                {
-                    doors.Add(Instantiate(interactiveObjectContainer.verticalDoor, map.ChokePoints[i].center, Quaternion.identity).GetComponent<Door>());
-                }
+        List<MapNode> rooms = new List<MapNode>(map.Cells.Where(x => x.Type == MapNodeType.Room));
 
-                map.ChokePoints.RemoveAt(i);
-            }
+        int lockedDoorCount = (int)Mathf.Round(rooms.Count * parameters.LockFactor);
+
+        LockRoom(map, spawnRoom, exitRoom, rooms, out MapNode keyRoom);
+        for (int i = 0; i < lockedDoorCount; i++)
+        {
+            LockRoom(map, spawnRoom, rooms[_random.Range(0, rooms.Count)], rooms, out keyRoom);
+            rooms.Remove(keyRoom);
         }
-
-        Key key = Instantiate(interactiveObjectContainer.key, spawnRoom.Cell.center, Quaternion.identity).GetComponent<Key>();
-        doors.ForEach(x =>
-        {
-            x.Keys.Add(key);
-        });
-        */
-
-        //doors.ForEach(x =>
-        //{
-        //    key.Owner = x;
-        //});
-        //key.GetComponent<Key>().Owner = 
     }
 
-    private void LockRoom(ref Map map, in MapNode room, in MapGeneratorParameters parameters, List<Key> keys = null)
+    private bool LockRoom(Map map, MapNode spawnRoom, MapNode target, List<MapNode> rooms, out MapNode keyRoom, List<Key> keys = null)
     {
+        keyRoom = null;
         List<Door> doors = new List<Door>();
         foreach(BoundsInt chokepoint in map.ChokePoints)
         {
-            if (chokepoint.Overlaps(room.Cell))
+            if (chokepoint.Overlaps(target.Cell))
             {
                 Door door = null;
                 if (chokepoint.size.x > 1)
@@ -947,33 +981,94 @@ public class MapGenerator : MonoBehaviour
                 door.Bounds = chokepoint.ToRectInt();
                 doors.Add(door);
                 map.UpdateCollisionMap(chokepoint.ToRectInt(), 1);
+                map.AddInteractiveObject(door.gameObject);
             }
         }
 
-        Key newKey = Instantiate(interactiveObjectContainer.key, room.Cell.center, Quaternion.identity).GetComponent<Key>();
-
-        doors.ForEach(x =>
+        if (doors.Count > 0)
         {
-            x.Keys.Add(newKey);
-        });
-
-        if (keys != null)
-        {
-            keys.ForEach(key =>
+            for (int i = 0; i < doors.Count; i++)
             {
-                doors.ForEach(door =>
+                for (int j = 0; j < doors.Count; j++)
                 {
-                    door.Keys.Add(key);
-                });
+                    if (i == j)
+                    {
+                        continue;
+                    }
+                    doors[i].Siblings.Add(doors[j]);
+                }
+            }
+
+            Delaunay.Vertex<MapNode> lockedRoom = new Delaunay.Vertex<MapNode>(target.Cell.center, target);
+            rooms.ForEach(x =>
+            {
+                x.Corridors.RemoveAll(corridor => corridor.ContainsVertex(lockedRoom));
             });
 
-            keys.Add(newKey);
+            rooms.RemoveAll(x => x.Equals(target));
+            keyRoom = FindKeyRoom(spawnRoom, target, rooms);
+
+            Key newKey = Instantiate(interactiveObjectContainer.key, keyRoom.Cell.center, Quaternion.identity).GetComponent<Key>();
+
+            doors.ForEach(x =>
+            {
+                x.Keys.Add(newKey);
+            });
+
+            if (keys != null)
+            {
+                keys.ForEach(key =>
+                {
+                    doors.ForEach(door =>
+                    {
+                        door.Keys.Add(key);
+                    });
+                });
+
+                keys.Add(newKey);
+            }
+
+            map.AddInteractiveObject(newKey.gameObject);
+            return true;
         }
+
+        return false;
     }
 
-    private MapNode FindKeyRoom()
+    private MapNode FindKeyRoom(MapNode spawnRoom, MapNode target, List<MapNode> rooms)
     {
-        return null;
+        List<Tuple<int, float>> distances = new List<Tuple<int, float>>();
+
+        rooms.ForEach(x =>
+        {
+            float distToSpawn = (x.Cell.center - spawnRoom.Cell.center).sqrMagnitude;
+            float distToTarget = (x.Cell.center - target.Cell.center).sqrMagnitude;
+
+            distances.Add(new Tuple<int, float>(x.Id, Mathf.Min(distToSpawn, distToTarget)));
+        });
+
+        distances = distances.OrderByDescending(x => x.Item2).ToList();
+
+        MapNode result = null;
+        while(result == null)
+        {
+            if (distances.Count == 0)
+            {
+                result = spawnRoom;
+                break;
+            }
+
+            MapNode candidate = rooms.Single(x => x.Id == distances[0].Item1);
+            List<MapNode> path = NavigationManager.Instance.AStar(spawnRoom, candidate, out float distance);
+            distances.RemoveAt(0);
+
+            if (path != null)
+            {
+                result = candidate;
+            }
+        }
+
+        return result;
     }
 
     private Vector2Int GenerateRandomSize(in MapGeneratorParameters parameters)

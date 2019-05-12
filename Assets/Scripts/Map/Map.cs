@@ -11,6 +11,7 @@ public class Map
     public List<Delaunay.Edge<MapNode>> DelaunayGraph { get; set; }
     public List<Delaunay.Edge<MapNode>> GabrielGraph { get; set; }
     public List<Delaunay.Edge<MapNode>> EMSTGraph { get; set; }
+    public List<Delaunay.Edge<MapNode>> LayoutGraph { get; set; }
     public List<Delaunay.Edge<MapNode>> CorridorGraph { get; set; }
     public List<BoundsInt> ChokePoints { get; set; }
     public int[,] CollisionMap { get; set; }
@@ -23,6 +24,7 @@ public class Map
     private readonly bool _drawDelaunay;
     private readonly bool _drawGabriel;
     private readonly bool _drawEMST;
+    private readonly bool _drawLayout;
     private readonly bool _drawCorridors;
     private readonly bool _drawBounds;
 
@@ -36,7 +38,8 @@ public class Map
         _drawDelaunay = false;
         _drawGabriel = false;
         _drawEMST = true;
-        _drawCorridors = true;
+        _drawCorridors = false;
+        _drawLayout = true;
         _drawBounds = true;
 
         _floors = floors;
@@ -62,6 +65,7 @@ public class Map
     {
         _floors.ClearAllTiles();
         _walls.ClearAllTiles();
+        GameObject.Find("CollisionMap").GetComponent<Tilemap>().ClearAllTiles();
 
         DestroyAllInteractiveObjects();
     }
@@ -193,7 +197,82 @@ public class Map
 
     public void DrawDebug()
     {
-        DrawCells();
+        if (_drawBounds && Bounds != null)
+        {
+            GizmoUtility.DrawRectangle(Bounds.ToRectInt(), Color.cyan);
+        }
+
+        if (_drawCells && Cells != null)
+        {
+            Cells.ForEach(x =>
+            {
+                switch (x.Type)
+                {
+                    case MapNodeType.Default:
+                        {
+                            GizmoUtility.DrawRectangle(x.Cell, Color.black);
+                        }
+                        break;
+                    case MapNodeType.Room:
+                        {
+                            GizmoUtility.DrawRectangle(x.Cell, Color.green);
+                        }
+                        break;
+                    case MapNodeType.Corridor:
+                        {
+                            GizmoUtility.DrawRectangle(x.Cell, Color.blue);
+                        }
+                        break;
+                    default:
+                        break;
+                }
+            });
+
+            ChokePoints.ForEach(x =>
+            {
+                GizmoUtility.DrawRectangle(x.ToRectInt(), Color.magenta);
+            });
+        }
+
+        if (_drawDelaunay && DelaunayGraph != null)
+        {
+            DelaunayGraph.ForEach(x =>
+            {
+                GizmoUtility.DrawLine(x, Color.cyan);
+            });
+        }
+
+        if (_drawGabriel && GabrielGraph != null)
+        {
+            GabrielGraph.ForEach(x =>
+            {
+                GizmoUtility.DrawLine(x, Color.magenta);
+            });
+        }
+
+        if (_drawEMST && EMSTGraph != null)
+        {
+            EMSTGraph.ForEach(x =>
+            {
+                GizmoUtility.DrawLine(x, Color.cyan);
+            });
+        }
+
+        if (_drawLayout && LayoutGraph != null)
+        {
+            LayoutGraph.ForEach(x =>
+            {
+                GizmoUtility.DrawLine(x, Color.magenta);
+            });
+        }
+
+        if (_drawCorridors && CorridorGraph != null)
+        {
+            CorridorGraph.ForEach(x =>
+            {
+                GizmoUtility.DrawLine(x, Color.red);
+            });
+        }
     }
 
     public void UpdateCollisionMapDebug()
@@ -241,78 +320,4 @@ public class Map
         });
         Enemies.Clear();
     }
-
-    private void DrawCells()
-    {
-        if (_drawBounds && Bounds != null)
-        {
-            GizmoUtility.DrawRectangle(Bounds.ToRectInt(), Color.cyan);
-        }
-
-        if (_drawCells && Cells != null)
-        {
-            Cells.ForEach(x =>
-            {
-                switch (x.Type)
-                {
-                    case MapNodeType.Default:
-                        {
-                            GizmoUtility.DrawRectangle(x.Cell, Color.black);
-                        }
-                        break;
-                    case MapNodeType.Room:
-                        {
-                            GizmoUtility.DrawRectangle(x.Cell, Color.green);
-                        }
-                        break;
-                    case MapNodeType.Corridor:
-                        {
-                            GizmoUtility.DrawRectangle(x.Cell, Color.blue);
-                        }
-                        break;
-                    default:
-                        break;
-                }
-            });
-
-            ChokePoints.ForEach(x =>
-            {
-                GizmoUtility.DrawRectangle(x.ToRectInt(), Color.magenta);
-            });
-        }   
-
-        if (_drawDelaunay && DelaunayGraph != null)
-        {
-            DelaunayGraph.ForEach(x =>
-            {
-                GizmoUtility.DrawLine(x, Color.cyan);
-            });
-        }
-
-        if (_drawGabriel && GabrielGraph != null)
-        {
-            GabrielGraph.ForEach(x =>
-            {
-                GizmoUtility.DrawLine(x, Color.magenta);
-            });
-        }
-
-        if (_drawEMST && EMSTGraph != null)
-        {
-            EMSTGraph.ForEach(x =>
-            {
-                GizmoUtility.DrawLine(x, Color.cyan);
-            });
-        }
-
-        if (_drawCorridors && CorridorGraph != null)
-        {
-            CorridorGraph.ForEach(x =>
-            {
-               GizmoUtility.DrawLine(x, Color.red);
-            });
-        }
-    }
-
-   
 }

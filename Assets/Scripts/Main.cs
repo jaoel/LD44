@@ -87,20 +87,22 @@ public class Main : MonoBehaviour
 
 
         MapGeneratorParameters parameters = new MapGeneratorParameters();
-        parameters.GenerationRadius = 10;
+        parameters.GenerationRadius = 50;
 
         parameters.MinCellSize = 3;
         parameters.MaxCellSize = 20;
 
-        parameters.MinCellCount = 3;
-        parameters.MaxCellCount = 50;
+        parameters.MinCellCount = 20;
+        parameters.MaxCellCount = 100;
 
-        parameters.RoomThresholdMultiplier = 1.25f;
+        parameters.RoomThresholdMultiplier = 1.1f;
+        parameters.MazeFactor = 0.15f;
 
         parameters.MinCorridorWidth = 3;
         parameters.MaxCorridorWidth = 5;
 
         parameters.MinRoomDistance = 0;
+        parameters.LockFactor = 0.2f;
 
         _currentMap = MapGenerator.Instance.GenerateMap(DateTime.Now.Ticks, parameters);
         MapGenerator.Instance.PopulateMap(ref _currentMap, ref player, parameters);

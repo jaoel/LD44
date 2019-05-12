@@ -98,9 +98,9 @@ public class NavigationManager : MonoBehaviour
         return result;
     }
 
-    /*
-    public List<Vector2Int> AStar(Vector2Int start, Vector2Int target)
+    public List<Vector2Int> AStar(Vector2Int start, Vector2Int target, out float distance)
     {
+        distance = 0.0f;
         if (start == target)
         {
             return new List<Vector2Int>();
@@ -113,23 +113,23 @@ public class NavigationManager : MonoBehaviour
         }
 
         List<Vector2Int> result = new List<Vector2Int>();
-        List<NavigationNode> closedSet = new List<NavigationNode>();
-        List<NavigationNode> openSet = new List<NavigationNode>() { new NavigationNode((target - start).sqrMagnitude, 1, start) };
+        List<NavigationNode<Vector2Int>> closedSet = new List<NavigationNode<Vector2Int>>();
+        List<NavigationNode<Vector2Int>> openSet = new List<NavigationNode<Vector2Int>>() { new NavigationNode<Vector2Int>((target - start).sqrMagnitude, 1, start) };
 
         while (openSet.Count > 0)
         {
-            NavigationNode current = openSet.Aggregate((x, y) => x.FScore < y.FScore ? x : y);
+            NavigationNode<Vector2Int> current = openSet.Aggregate((x, y) => x.FScore < y.FScore ? x : y);
 
-            if (current.Position == target)
+            if (current.Data == target)
             {
-                result = UnwrapPath(current);
+                result = UnwrapPath(current, out distance);
                 result.Reverse();
                 break;
             }
 
             openSet.Remove(current);
             closedSet.Add(current);
-            List<NavigationNode> neighbours = GetNeighbours(current, collisionMap, false);
+            List<NavigationNode<Vector2Int>> neighbours = GetNeighbours(current, collisionMap, false);
 
             for (int i = 0; i < neighbours.Count; i++)
             {
@@ -138,7 +138,7 @@ public class NavigationManager : MonoBehaviour
                     if (!openSet.Contains(neighbours[i]))
                     {
                         neighbours[i].Parent = current;
-                        neighbours[i].HScore = (target - neighbours[i].Position).sqrMagnitude;
+                        neighbours[i].HScore = (target - neighbours[i].Data).sqrMagnitude;
                         neighbours[i].GScore = current.GScore + 1;
                         openSet.Add(neighbours[i]);
                     }
@@ -148,40 +148,42 @@ public class NavigationManager : MonoBehaviour
         return result;
     }
 
-    public List<Vector2Int> UnwrapPath(NavigationNode node)
+    public List<Vector2Int> UnwrapPath(NavigationNode<Vector2Int> node, out float distance)
     {
+        distance = 0.0f;
         List<Vector2Int> result = new List<Vector2Int>();
         while (node != null && node.Parent != null)
         {
-            result.Add(node.Position);
+            distance += node.GScore;
+            result.Add(node.Data);
             node = node.Parent;
         }
 
         return result;
     }
 
-    public List<NavigationNode> GetNeighbours(NavigationNode node, int[,] collisionMap, bool allowDiagonal)
+    public List<NavigationNode<Vector2Int>> GetNeighbours(NavigationNode<Vector2Int> node, int[,] collisionMap, bool allowDiagonal)
     {
-        List<NavigationNode> result = new List<NavigationNode>();
+        List<NavigationNode<Vector2Int>> result = new List<NavigationNode<Vector2Int>>();
 
 
         if (allowDiagonal)
         {
-            for (int x = node.Position.x - 1; x <= node.Position.x + 1; x++)
+            for (int x = node.Data.x - 1; x <= node.Data.x + 1; x++)
             {
-                for (int y = node.Position.y - 1; y <= node.Position.y + 1; y++)
+                for (int y = node.Data.y - 1; y <= node.Data.y + 1; y++)
                 {
                     if (x < 0 || x >= collisionMap.GetLength(0) || y < 0 || y >= collisionMap.GetLength(1))
                     {
                         continue;
                     }
 
-                    if (new Vector2Int(x, y) == node.Position || collisionMap[x, y] != 0)
+                    if (new Vector2Int(x, y) == node.Data || collisionMap[x, y] != 0)
                     {
                         continue;
                     }
 
-                    result.Add(new NavigationNode(x, y));
+                    result.Add(new NavigationNode<Vector2Int>(x, y, new Vector2Int(x, y)));
                 }
             }
         }
@@ -189,16 +191,16 @@ public class NavigationManager : MonoBehaviour
         {
             List<Vector2Int> potentials = new List<Vector2Int>();
 
-            potentials.Add(new Vector2Int(node.Position.x, node.Position.y + 1));
-            potentials.Add(new Vector2Int(node.Position.x, node.Position.y - 1));
-            potentials.Add(new Vector2Int(node.Position.x + 1, node.Position.y));
-            potentials.Add(new Vector2Int(node.Position.x - 1, node.Position.y - 1));
+            potentials.Add(new Vector2Int(node.Data.x, node.Data.y + 1));
+            potentials.Add(new Vector2Int(node.Data.x, node.Data.y - 1));
+            potentials.Add(new Vector2Int(node.Data.x + 1, node.Data.y));
+            potentials.Add(new Vector2Int(node.Data.x - 1, node.Data.y - 1));
 
             potentials.ForEach(x =>
             {
                 if (collisionMap[x.x, x.y] == 0)
                 {
-                    result.Add(new NavigationNode(x.x, x.y));
+                    result.Add(new NavigationNode<Vector2Int>(x.x, x.y, new Vector2Int(x.x, x.y)));
                 }
 
             });
@@ -206,5 +208,4 @@ public class NavigationManager : MonoBehaviour
 
         return result;
     }
-    */
 }

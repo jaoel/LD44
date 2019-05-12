@@ -99,7 +99,9 @@ public class Player : MonoBehaviour
         {
             if (door.Keys.Contains(_keys[i]))
             {
+                Destroy(_keys[i]);
                 _keys.RemoveAt(i);
+
                 return true;
             }
         }
