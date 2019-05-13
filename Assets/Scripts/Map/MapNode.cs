@@ -17,6 +17,7 @@ public class MapNode
     public List<Vector2Int> EntryPoints { get; set; }
     public List<Delaunay.Edge<MapNode>> Corridors { get; set; }
     public List<BoundsInt> Chokepoints { get; set; }
+    public bool Lockable { get; set; }
 
     public bool HasEntryPoint => EntryPoints.Count > 0;
 

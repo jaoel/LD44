@@ -99,7 +99,7 @@ public class Main : MonoBehaviour
         parameters.MazeFactor = 0.15f;
 
         parameters.MinCorridorWidth = 3;
-        parameters.MaxCorridorWidth = 5;
+        parameters.MaxCorridorWidth = 3;
 
         parameters.MinRoomDistance = 0;
         parameters.LockFactor = 0.2f;

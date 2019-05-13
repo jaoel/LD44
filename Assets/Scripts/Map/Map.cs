@@ -107,14 +107,14 @@ public class Map
             GetRandomRoom(widthInTiles, heightInTiles, includeCorridorRooms, excludedRooms));
     }
 
-    public Tuple<MapNode, MapNode> GetRoomsFurthestApart()
+    public Tuple<MapNode, MapNode> GetRoomsFurthestApart(bool lockableOnly)
     {
         List<MapNode> edgeNodes = new List<MapNode>();
 
         int edgeCount = 1;
         while(edgeNodes.Count < 2)
         {
-            edgeNodes.AddRange(Cells.Where(x => x.Corridors.Count == edgeCount));
+            edgeNodes.AddRange(Cells.Where(x => x.Corridors.Count == edgeCount && (!lockableOnly || x.Lockable)));
             edgeCount++;
 
             //exit condition
@@ -215,7 +215,14 @@ public class Map
                         break;
                     case MapNodeType.Room:
                         {
-                            GizmoUtility.DrawRectangle(x.Cell, Color.green);
+                            if (x.Lockable)
+                            {
+                                GizmoUtility.DrawRectangle(x.Cell, Color.green);
+                            }
+                            else
+                            {
+                                GizmoUtility.DrawRectangle(x.Cell, Color.red);
+                            }
                         }
                         break;
                     case MapNodeType.Corridor:
