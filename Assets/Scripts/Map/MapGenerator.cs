@@ -302,7 +302,7 @@ public class MapGenerator : MonoBehaviour
 
         HashSet<Delaunay.Edge<MapNode>> delaunayEdges = triangulator.GetDelaunayEdges(triangles);
         HashSet<Delaunay.Edge<MapNode>> gabrielGraph = triangulator.GetGabrielGraph(delaunayEdges, vertices);
-        HashSet<Delaunay.Edge<MapNode>> emst = triangulator.GetPrimEMST(gabrielGraph, vertices);
+        HashSet<Delaunay.Edge<MapNode>> emst = triangulator.GetPrimEMST(gabrielGraph, vertices.Distinct());
 
         map.DelaunayGraph = delaunayEdges.ToList();
         map.GabrielGraph = gabrielGraph.ToList();
