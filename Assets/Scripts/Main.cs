@@ -99,10 +99,10 @@ public class Main : MonoBehaviour
         parameters.MazeFactor = 0.15f;
 
         parameters.MinCorridorWidth = 3;
-        parameters.MaxCorridorWidth = 3;
+        parameters.MaxCorridorWidth = 5;
 
         parameters.MinRoomDistance = 0;
-        parameters.LockFactor = 0.2f;
+        parameters.LockFactor = 0.5f;
 
         _currentMap = MapGenerator.Instance.GenerateMap(DateTime.Now.Ticks, parameters);
         MapGenerator.Instance.PopulateMap(ref _currentMap, ref player, parameters);
