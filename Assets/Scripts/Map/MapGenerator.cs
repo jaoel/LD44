@@ -1009,6 +1009,11 @@ public class MapGenerator : MonoBehaviour
 
             LockRoom(map, spawnRoom, room, rooms, out keyRoom);
             rooms.Remove(keyRoom);
+
+            if (rooms.Count == 0)
+            {
+                break;
+            }
         }
     }
 
@@ -1033,17 +1038,82 @@ public class MapGenerator : MonoBehaviour
                 {
                     door = Instantiate(interactiveObjectContainer.horizontalDoor, new Vector3(chokepoint.xMin + 2, chokepoint.center.y), 
                         Quaternion.identity).GetComponent<Door>();
-                }
 
-                //Chokepoint is on the lower edge
-                if (chokepoint.center.y < target.Cell.center.y)
-                {
-                }
-                //chokepoint is on the upper edge
-                else
-                {
-                }
+                    BoundsInt bounds = chokepoint;
+                    bounds.xMin += 3;
+                    bounds.xMax -= 1;
 
+                    Tile[] tileBlock = new Tile[bounds.size.x * bounds.size.y];
+                   
+                    //Chokepoint is on the lower edge
+                    if (chokepoint.center.y < target.Cell.center.y)
+                    {
+                        for (int i = 0; i < tileBlock.Length; i++)
+                        {
+                            tileBlock[i] = tileContainer.BottomMiddle;
+                        }
+
+                        BoundsInt limit = bounds;
+                        limit.y -= 2;
+
+                        if (floors.GetTilesBlock(limit).Any(x => x != null) && !walls.GetTilesBlock(limit).Any(x => x != null))
+                        {
+                            tileBlock[0] = tileContainer.TopLeftOuter;
+                            walls.SetTilesBlock(bounds, tileBlock);
+                            tileBlock[0] = tileContainer.BottomRightOuter;
+                            bounds.y -= 1;
+                        }
+                        else
+                        {
+                            tileBlock[0] = tileContainer.BottomRightOuter;
+                            walls.SetTilesBlock(bounds, tileBlock);
+                            tileBlock[0] = tileContainer.TopLeftOuter;
+                            bounds.y += 1;
+                        }
+
+                        for (int i = 1; i < tileBlock.Length; i++)
+                        {
+                            tileBlock[i] = tileContainer.TopMiddle;
+                        }
+
+                        map.UpdateCollisionMap(bounds.ToRectInt(), 1);
+                        walls.SetTilesBlock(bounds, tileBlock);
+                    }
+                    //chokepoint is on the upper edge
+                    else
+                    {
+                        for (int i = 0; i < tileBlock.Length; i++)
+                        {
+                            tileBlock[i] = tileContainer.TopMiddle;
+                        }
+
+                        BoundsInt limit = bounds;
+                        limit.y += 2;
+
+                        if (floors.GetTilesBlock(limit).Any(x => x != null) && !walls.GetTilesBlock(limit).Any(x => x != null))
+                        {
+                            tileBlock[0] = tileContainer.BottomRightOuter;
+                            walls.SetTilesBlock(bounds, tileBlock);
+                            tileBlock[0] = tileContainer.TopLeftOuter;
+                            bounds.y += 1;
+                        }
+                        else
+                        {
+                            tileBlock[0] = tileContainer.TopLeftOuter;
+                            walls.SetTilesBlock(bounds, tileBlock);
+                            tileBlock[0] = tileContainer.BottomRightOuter;
+                            bounds.y -= 1;
+                        }
+
+                        for (int i = 1; i < tileBlock.Length; i++)
+                        {
+                            tileBlock[i] = tileContainer.BottomMiddle;
+                        }
+
+                        map.UpdateCollisionMap(bounds.ToRectInt(), 1);
+                        walls.SetTilesBlock(bounds, tileBlock);
+                    }
+                }
             }
             else if (chokepoint.size.y > 1)
             {
@@ -1060,15 +1130,47 @@ public class MapGenerator : MonoBehaviour
 
                     door = Instantiate(interactiveObjectContainer.verticalDoor, new Vector3(chokepoint.center.x, chokepoint.yMin + 2),
                         Quaternion.identity).GetComponent<Door>();
-                }
 
-                //Chokepoint is on the left edge
-                if (chokepoint.center.x < target.Cell.center.x)
-                {
-                }
-                //chokepoint is on the upper edge
-                else
-                {
+                    BoundsInt bounds = chokepoint;
+                    bounds.yMin += 3;
+                    bounds.yMax -= 1;
+
+                    floors.SetTilesBlock(bounds, new TileBase[bounds.size.x * bounds.size.y]);
+
+                    //Chokepoint is on the left edge
+                    if (chokepoint.center.x < target.Cell.center.x)
+                    {
+                        BoundsInt limit = bounds;
+                        limit.x -= 2;
+
+                        if (floors.GetTilesBlock(limit).Any(x => x != null) && !walls.GetTilesBlock(limit).Any(x => x != null))
+                        {
+                            bounds.x -= 1;
+                            floors.SetTilesBlock(bounds, new TileBase[bounds.size.x * bounds.size.y]);
+                        }
+                        else
+                        {
+                            bounds.x += 1;
+                            floors.SetTilesBlock(bounds, new TileBase[bounds.size.x * bounds.size.y]);
+                        }
+                    }
+                    //chokepoint is on the right edge
+                    else
+                    {
+                        BoundsInt limit = bounds;
+                        limit.x += 2;
+
+                        if (floors.GetTilesBlock(limit).Any(x => x != null) && !walls.GetTilesBlock(limit).Any(x => x != null))
+                        {
+                            bounds.x += 1;
+                            floors.SetTilesBlock(bounds, new TileBase[bounds.size.x * bounds.size.y]);
+                        }
+                        else
+                        {
+                            bounds.x -= 1;
+                            floors.SetTilesBlock(bounds, new TileBase[bounds.size.x * bounds.size.y]);
+                        }
+                    }
                 }
             }
 
