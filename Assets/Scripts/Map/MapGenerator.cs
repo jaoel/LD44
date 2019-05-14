@@ -1036,83 +1036,10 @@ public class MapGenerator : MonoBehaviour
                 }
                 else
                 {
-                    door = Instantiate(interactiveObjectContainer.horizontalDoor, new Vector3(chokepoint.xMin + 2, chokepoint.center.y), 
+                    door = Instantiate(interactiveObjectContainer.horizontalDoor, new Vector3(chokepoint.xMin + 2, chokepoint.center.y),
                         Quaternion.identity).GetComponent<Door>();
 
-                    BoundsInt bounds = chokepoint;
-                    bounds.xMin += 3;
-                    bounds.xMax -= 1;
-
-                    Tile[] tileBlock = new Tile[bounds.size.x * bounds.size.y];
-                   
-                    //Chokepoint is on the lower edge
-                    if (chokepoint.center.y < target.Cell.center.y)
-                    {
-                        for (int i = 0; i < tileBlock.Length; i++)
-                        {
-                            tileBlock[i] = tileContainer.BottomMiddle;
-                        }
-
-                        BoundsInt limit = bounds;
-                        limit.y -= 2;
-
-                        if (floors.GetTilesBlock(limit).Any(x => x != null) && !walls.GetTilesBlock(limit).Any(x => x != null))
-                        {
-                            tileBlock[0] = tileContainer.TopLeftOuter;
-                            walls.SetTilesBlock(bounds, tileBlock);
-                            tileBlock[0] = tileContainer.BottomRightOuter;
-                            bounds.y -= 1;
-                        }
-                        else
-                        {
-                            tileBlock[0] = tileContainer.BottomRightOuter;
-                            walls.SetTilesBlock(bounds, tileBlock);
-                            tileBlock[0] = tileContainer.TopLeftOuter;
-                            bounds.y += 1;
-                        }
-
-                        for (int i = 1; i < tileBlock.Length; i++)
-                        {
-                            tileBlock[i] = tileContainer.TopMiddle;
-                        }
-
-                        map.UpdateCollisionMap(bounds.ToRectInt(), 1);
-                        walls.SetTilesBlock(bounds, tileBlock);
-                    }
-                    //chokepoint is on the upper edge
-                    else
-                    {
-                        for (int i = 0; i < tileBlock.Length; i++)
-                        {
-                            tileBlock[i] = tileContainer.TopMiddle;
-                        }
-
-                        BoundsInt limit = bounds;
-                        limit.y += 2;
-
-                        if (floors.GetTilesBlock(limit).Any(x => x != null) && !walls.GetTilesBlock(limit).Any(x => x != null))
-                        {
-                            tileBlock[0] = tileContainer.BottomRightOuter;
-                            walls.SetTilesBlock(bounds, tileBlock);
-                            tileBlock[0] = tileContainer.TopLeftOuter;
-                            bounds.y += 1;
-                        }
-                        else
-                        {
-                            tileBlock[0] = tileContainer.TopLeftOuter;
-                            walls.SetTilesBlock(bounds, tileBlock);
-                            tileBlock[0] = tileContainer.BottomRightOuter;
-                            bounds.y -= 1;
-                        }
-
-                        for (int i = 1; i < tileBlock.Length; i++)
-                        {
-                            tileBlock[i] = tileContainer.BottomMiddle;
-                        }
-
-                        map.UpdateCollisionMap(bounds.ToRectInt(), 1);
-                        walls.SetTilesBlock(bounds, tileBlock);
-                    }
+                    BuildHorizontalDoorWalls(map, target, chokepoint);
                 }
             }
             else if (chokepoint.size.y > 1)
@@ -1127,50 +1054,10 @@ public class MapGenerator : MonoBehaviour
                 }
                 else
                 {
-
                     door = Instantiate(interactiveObjectContainer.verticalDoor, new Vector3(chokepoint.center.x, chokepoint.yMin + 2),
                         Quaternion.identity).GetComponent<Door>();
 
-                    BoundsInt bounds = chokepoint;
-                    bounds.yMin += 3;
-                    bounds.yMax -= 1;
-
-                    floors.SetTilesBlock(bounds, new TileBase[bounds.size.x * bounds.size.y]);
-
-                    //Chokepoint is on the left edge
-                    if (chokepoint.center.x < target.Cell.center.x)
-                    {
-                        BoundsInt limit = bounds;
-                        limit.x -= 2;
-
-                        if (floors.GetTilesBlock(limit).Any(x => x != null) && !walls.GetTilesBlock(limit).Any(x => x != null))
-                        {
-                            bounds.x -= 1;
-                            floors.SetTilesBlock(bounds, new TileBase[bounds.size.x * bounds.size.y]);
-                        }
-                        else
-                        {
-                            bounds.x += 1;
-                            floors.SetTilesBlock(bounds, new TileBase[bounds.size.x * bounds.size.y]);
-                        }
-                    }
-                    //chokepoint is on the right edge
-                    else
-                    {
-                        BoundsInt limit = bounds;
-                        limit.x += 2;
-
-                        if (floors.GetTilesBlock(limit).Any(x => x != null) && !walls.GetTilesBlock(limit).Any(x => x != null))
-                        {
-                            bounds.x += 1;
-                            floors.SetTilesBlock(bounds, new TileBase[bounds.size.x * bounds.size.y]);
-                        }
-                        else
-                        {
-                            bounds.x -= 1;
-                            floors.SetTilesBlock(bounds, new TileBase[bounds.size.x * bounds.size.y]);
-                        }
-                    }
+                    BuildVerticalDoorWalls(map, target, chokepoint);
                 }
             }
 
@@ -1180,128 +1067,6 @@ public class MapGenerator : MonoBehaviour
                 map.UpdateCollisionMap(chokepoint.ToRectInt(), 1);
                 map.AddInteractiveObject(door.gameObject);
             }
-
-            /*
-            int yOffset = 0;
-            Tile chokeTile = null;
-            Tile innerTile = null;
-            if (chokepoint.position.y > target.Cell.center.y)
-            {
-                yOffset = -1;
-                chokeTile = tileContainer.TopMiddle;
-                innerTile = tileContainer.BottomMiddle;
-            }
-            else
-            {
-                yOffset = 1;
-                chokeTile = tileContainer.BottomMiddle;
-                innerTile = tileContainer.TopMiddle;
-            }
-
-            Vector3 pos = new Vector3((int)chokepoint.xMin, chokepoint.center.y);
-            if (chokepoint.size.x == 3)
-            {
-                //single tile door
-                pos = chokepoint.center;
-            }
-            else
-            {
-                int offset = 2;
-                pos += new Vector3(offset, 0);
-            }
-
-            BoundsInt doorBounds = chokepoint;
-            doorBounds.yMin -= 1;
-            doorBounds.yMax += 1;
-            doorBounds.xMin += 1;
-            doorBounds.xMax = doorBounds.xMin + 2;
-
-            if (chokepoint.size.x > 4)
-            {
-                for (int i = 0; i < (int)chokepoint.size.magnitude; i++)
-                {
-                    Vector3Int chokePos = new Vector3Int(chokepoint.xMin + i, chokepoint.y, 0);
-                    Vector3Int innerPos = new Vector3Int(chokepoint.xMin + i, chokepoint.y + yOffset, 0);
-                    Vector3Int outerPos = new Vector3Int(chokepoint.xMin + i, chokepoint.y - yOffset, 0);
-
-                    if(walls.GetTile(chokePos) == null && !doorBounds.Contains(chokePos))
-                    {
-                        walls.SetTile(chokePos, chokeTile);
-                    }
-
-                    if (walls.GetTile(innerPos) == null && !doorBounds.Contains(innerPos) && walls.GetTile(outerPos + new Vector3Int(1, 0, 0)) == null)
-                    {
-                        walls.SetTile(innerPos, innerTile);
-                    }
-                }
-            }
-            map.ChokePoints.Add(doorBounds);
-            door = Instantiate(interactiveObjectContainer.horizontalDoor, pos, Quaternion.identity).GetComponent<Door>();
-        }
-        else
-        {
-            int xOffset = 0;
-            Tile chokeTile = null;
-            Tile innerTile = null;
-            if (chokepoint.position.x > target.Cell.center.x)
-            {
-                xOffset = -1;
-                chokeTile = tileContainer.MiddleRight;
-                innerTile = tileContainer.MiddleLeft;
-            }
-            else
-            {
-                xOffset = 1;
-                chokeTile = tileContainer.MiddleLeft;
-                innerTile = tileContainer.MiddleRight;
-            }
-
-            Vector3 pos = new Vector3(chokepoint.center.x, (int)chokepoint.yMin);
-            if (chokepoint.size.y == 3)
-            {
-                //single tile door
-                pos = chokepoint.center;
-            }
-            else
-            {
-                int offset = 2;
-                pos += new Vector3(0, offset);
-            }
-
-            BoundsInt doorBounds = chokepoint;
-            doorBounds.yMin += 1;
-            doorBounds.yMax = doorBounds.yMin + 2;
-            doorBounds.xMin -= 1;
-            doorBounds.xMax += 1;
-
-            if (chokepoint.size.y > 4)
-            {
-                for (int i = 0; i < (int)chokepoint.size.magnitude; i++)
-                {
-                    Vector3Int chokePos = new Vector3Int(chokepoint.x, chokepoint.y + i, 0);
-                    Vector3Int innerPos = new Vector3Int(chokepoint.x + xOffset, chokepoint.y + i, 0);
-                    Vector3Int outerPos = new Vector3Int(chokepoint.x - xOffset, chokepoint.y + i, 0);
-
-                    if (walls.GetTile(chokePos) == null && !doorBounds.Contains(chokePos))
-                    {
-                        walls.SetTile(chokePos, chokeTile);
-                    }
-
-                    if (walls.GetTile(innerPos) == null && !doorBounds.Contains(innerPos))// && walls.GetTile(outerPos) == null)
-                    {
-                        //walls.SetTile(innerPos, innerTile);
-                    }
-                }
-            }
-            map.ChokePoints.Add(doorBounds);
-            door = Instantiate(interactiveObjectContainer.verticalDoor, pos, Quaternion.identity).GetComponent<Door>();
-        }
-
-        door.Bounds = chokepoint.ToRectInt();
-        doors.Add(door);
-        map.UpdateCollisionMap(chokepoint.ToRectInt(), 1);
-        map.AddInteractiveObject(door.gameObject);
-        */
         }
 
         if (doors.Count > 0)
@@ -1352,6 +1117,163 @@ public class MapGenerator : MonoBehaviour
         }
 
         return false;
+    }
+
+    private void BuildVerticalDoorWalls(Map map, MapNode target, BoundsInt chokepoint)
+    {
+        BoundsInt bounds = chokepoint;
+        bounds.yMin += 3;
+        bounds.yMax -= 1;
+
+        Tile[] tileBlock = new Tile[bounds.size.x * bounds.size.y];
+
+        //Chokepoint is on the left edge
+        if (chokepoint.center.x < target.Cell.center.x)
+        {
+            for (int i = 0; i < tileBlock.Length; i++)
+            {
+                tileBlock[i] = tileContainer.MiddleLeft;
+            }
+
+            BoundsInt limit = bounds;
+            limit.x -= 2;
+
+            if (floors.GetTilesBlock(limit).Any(x => x != null) && !walls.GetTilesBlock(limit).Any(x => x != null))
+            {
+                tileBlock[0] = tileContainer.BottomLeftOuter;
+                walls.SetTilesBlock(bounds, tileBlock);
+                tileBlock[0] = tileContainer.BottomRightOuter;
+                bounds.x -= 1;
+            }
+            else
+            {
+                tileBlock[0] = tileContainer.BottomRightOuter;
+                walls.SetTilesBlock(bounds, tileBlock);
+                tileBlock[0] = tileContainer.BottomLeftOuter;
+                bounds.x += 1;
+            }
+
+            for (int i = 1; i < tileBlock.Length; i++)
+            {
+                tileBlock[i] = tileContainer.MiddleRight;
+            }
+
+            map.UpdateCollisionMap(bounds.ToRectInt(), 1);
+            walls.SetTilesBlock(bounds, tileBlock);
+        }
+        //chokepoint is on the right edge
+        else
+        {
+
+            for (int i = 0; i < tileBlock.Length; i++)
+            {
+                tileBlock[i] = tileContainer.MiddleRight;
+            }
+
+            BoundsInt limit = bounds;
+            limit.x += 2;
+
+            if (floors.GetTilesBlock(limit).Any(x => x != null) && !walls.GetTilesBlock(limit).Any(x => x != null))
+            {
+                tileBlock[0] = tileContainer.BottomRightOuter;
+                walls.SetTilesBlock(bounds, tileBlock);
+                tileBlock[0] = tileContainer.BottomLeftOuter;
+                bounds.x += 1;
+            }
+            else
+            {
+                tileBlock[0] = tileContainer.BottomLeftOuter;
+                walls.SetTilesBlock(bounds, tileBlock);
+                tileBlock[0] = tileContainer.BottomRightOuter;
+                bounds.x -= 1;
+            }
+
+            for (int i = 1; i < tileBlock.Length; i++)
+            {
+                tileBlock[i] = tileContainer.MiddleLeft;
+            }
+
+            map.UpdateCollisionMap(bounds.ToRectInt(), 1);
+            walls.SetTilesBlock(bounds, tileBlock);
+        }
+    }
+
+    private void BuildHorizontalDoorWalls(Map map, MapNode target, BoundsInt chokepoint)
+    {
+        BoundsInt bounds = chokepoint;
+        bounds.xMin += 3;
+        bounds.xMax -= 1;
+
+        Tile[] tileBlock = new Tile[bounds.size.x * bounds.size.y];
+
+        //Chokepoint is on the lower edge
+        if (chokepoint.center.y < target.Cell.center.y)
+        {
+            for (int i = 0; i < tileBlock.Length; i++)
+            {
+                tileBlock[i] = tileContainer.BottomMiddle;
+            }
+
+            BoundsInt limit = bounds;
+            limit.y -= 2;
+
+            if (floors.GetTilesBlock(limit).Any(x => x != null) && !walls.GetTilesBlock(limit).Any(x => x != null))
+            {
+                tileBlock[0] = tileContainer.TopLeftOuter;
+                walls.SetTilesBlock(bounds, tileBlock);
+                tileBlock[0] = tileContainer.BottomRightOuter;
+                bounds.y -= 1;
+            }
+            else
+            {
+                tileBlock[0] = tileContainer.BottomRightOuter;
+                walls.SetTilesBlock(bounds, tileBlock);
+                tileBlock[0] = tileContainer.TopLeftOuter;
+                bounds.y += 1;
+            }
+
+            for (int i = 1; i < tileBlock.Length; i++)
+            {
+                tileBlock[i] = tileContainer.TopMiddle;
+            }
+
+            map.UpdateCollisionMap(bounds.ToRectInt(), 1);
+            walls.SetTilesBlock(bounds, tileBlock);
+        }
+        //chokepoint is on the upper edge
+        else
+        {
+            for (int i = 0; i < tileBlock.Length; i++)
+            {
+                tileBlock[i] = tileContainer.TopMiddle;
+            }
+
+            BoundsInt limit = bounds;
+            limit.y += 2;
+
+            if (floors.GetTilesBlock(limit).Any(x => x != null) && !walls.GetTilesBlock(limit).Any(x => x != null))
+            {
+                tileBlock[0] = tileContainer.BottomRightOuter;
+                walls.SetTilesBlock(bounds, tileBlock);
+                tileBlock[0] = tileContainer.TopLeftOuter;
+                bounds.y += 1;
+            }
+            else
+            {
+                tileBlock[0] = tileContainer.TopLeftOuter;
+                walls.SetTilesBlock(bounds, tileBlock);
+                tileBlock[0] = tileContainer.BottomRightOuter;
+                bounds.y -= 1;
+            }
+
+            for (int i = 1; i < tileBlock.Length; i++)
+            {
+                tileBlock[i] = tileContainer.BottomMiddle;
+            }
+
+            map.UpdateCollisionMap(bounds.ToRectInt(), 1);
+            walls.SetTilesBlock(bounds, tileBlock);
+        }
     }
 
     private MapNode FindKeyRoom(MapNode spawnRoom, MapNode target, List<MapNode> rooms)
