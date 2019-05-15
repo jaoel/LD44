@@ -61,7 +61,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ae40565af309f274694cd5e97336558d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  mainCamera: {fileID: 0}
+  _mainCamera: {fileID: 0}
 --- !u!114 &515992213878927342
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -114,13 +114,8 @@ MonoBehaviour:
   shopRoomPrefab: {fileID: 1157765099317050428, guid: 16d2a58a56d13fc4bb7115311c46e865,
     type: 3}
   player: {fileID: 0}
-  gameOverUI: {fileID: 0}
-  pauseUI: {fileID: 0}
-  optionsMenu: {fileID: 0}
-  gamePaused: 0
   gameOver: 0
   currentLevelText: {fileID: 0}
-  gameOverLevelText: {fileID: 0}
   blackOverlay: {fileID: 0}
 --- !u!114 &6622311546324206256
 MonoBehaviour:

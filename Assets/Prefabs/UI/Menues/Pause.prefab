@@ -47,7 +47,7 @@ GameObject:
   - component: {fileID: 3160731554850527236}
   - component: {fileID: 3160731554850527239}
   - component: {fileID: 3160731554850527238}
-  - component: {fileID: 4519856964619169050}
+  - component: {fileID: 6932094192947216150}
   m_Layer: 5
   m_Name: Pause
   m_TagString: Untagged
@@ -135,7 +135,7 @@ MonoBehaviour:
   m_BlockingMask:
     serializedVersion: 2
     m_Bits: 4294967295
---- !u!114 &4519856964619169050
+--- !u!114 &6932094192947216150
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -144,7 +144,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 3160731554850527241}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 6a185d6dcd0e28f47b2e1d4b514f703b, type: 3}
+  m_Script: {fileID: 11500000, guid: 1d74d739d4773dc40b24c28175a052f7, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
 --- !u!1 &3160731555286187913
@@ -436,11 +436,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Target
       value: 
-      objectReference: {fileID: 0}
+      objectReference: {fileID: 6932094192947216150}
     - target: {fileID: 3455649338358966303, guid: 75b7f9b7e480ac748af76d1c4e9a34de,
         type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_MethodName
-      value: OnQuitClick
+      value: OnMainMenuClick
       objectReference: {fileID: 0}
     - target: {fileID: 6807669074885817636, guid: 75b7f9b7e480ac748af76d1c4e9a34de,
         type: 3}
@@ -472,6 +472,12 @@ PrefabInstance:
       propertyPath: m_textInfo.spaceCount
       value: 1
       objectReference: {fileID: 0}
+    - target: {fileID: 6807669074885817636, guid: 75b7f9b7e480ac748af76d1c4e9a34de,
+        type: 3}
+      propertyPath: m_sharedMaterial
+      value: 
+      objectReference: {fileID: 2619359302124258194, guid: 2f107c9016948a54ea6158d16fc345dd,
+        type: 2}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 75b7f9b7e480ac748af76d1c4e9a34de, type: 3}
 --- !u!224 &3226520403610243883 stripped
@@ -601,11 +607,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Target
       value: 
-      objectReference: {fileID: 0}
+      objectReference: {fileID: 6932094192947216150}
     - target: {fileID: 3455649338358966303, guid: 75b7f9b7e480ac748af76d1c4e9a34de,
         type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_MethodName
-      value: OnQuitClick
+      value: OnOptionsClick
       objectReference: {fileID: 0}
     - target: {fileID: 6807669074885817636, guid: 75b7f9b7e480ac748af76d1c4e9a34de,
         type: 3}
@@ -637,6 +643,12 @@ PrefabInstance:
       propertyPath: m_textInfo.spaceCount
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 6807669074885817636, guid: 75b7f9b7e480ac748af76d1c4e9a34de,
+        type: 3}
+      propertyPath: m_sharedMaterial
+      value: 
+      objectReference: {fileID: 2619359302124258194, guid: 2f107c9016948a54ea6158d16fc345dd,
+        type: 2}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 75b7f9b7e480ac748af76d1c4e9a34de, type: 3}
 --- !u!224 &363984382612662457 stripped
@@ -766,11 +778,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Target
       value: 
-      objectReference: {fileID: 0}
+      objectReference: {fileID: 6932094192947216150}
     - target: {fileID: 3455649338358966303, guid: 75b7f9b7e480ac748af76d1c4e9a34de,
         type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_MethodName
-      value: OnQuitClick
+      value: OnContinueClick
       objectReference: {fileID: 0}
     - target: {fileID: 6807669074885817636, guid: 75b7f9b7e480ac748af76d1c4e9a34de,
         type: 3}
@@ -802,6 +814,12 @@ PrefabInstance:
       propertyPath: m_textInfo.spaceCount
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 6807669074885817636, guid: 75b7f9b7e480ac748af76d1c4e9a34de,
+        type: 3}
+      propertyPath: m_sharedMaterial
+      value: 
+      objectReference: {fileID: 2619359302124258194, guid: 2f107c9016948a54ea6158d16fc345dd,
+        type: 2}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 75b7f9b7e480ac748af76d1c4e9a34de, type: 3}
 --- !u!224 &1958517518131177439 stripped
@@ -962,6 +980,12 @@ PrefabInstance:
       propertyPath: m_textInfo.spaceCount
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 6415969519950650587, guid: 041c8728bb3ea9a49835cf1389858cd2,
+        type: 3}
+      propertyPath: m_sharedMaterial
+      value: 
+      objectReference: {fileID: -9021846766091189397, guid: 2f20135b43013fb48aa4b1e30fb1141f,
+        type: 2}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 041c8728bb3ea9a49835cf1389858cd2, type: 3}
 --- !u!224 &6468815739444378576 stripped
@@ -1091,11 +1115,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Target
       value: 
-      objectReference: {fileID: 0}
+      objectReference: {fileID: 6932094192947216150}
     - target: {fileID: 3455649338358966303, guid: 75b7f9b7e480ac748af76d1c4e9a34de,
         type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_MethodName
-      value: OnQuitClick
+      value: OnRestartClick
       objectReference: {fileID: 0}
     - target: {fileID: 6807669074885817636, guid: 75b7f9b7e480ac748af76d1c4e9a34de,
         type: 3}
@@ -1127,6 +1151,12 @@ PrefabInstance:
       propertyPath: m_textInfo.spaceCount
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 6807669074885817636, guid: 75b7f9b7e480ac748af76d1c4e9a34de,
+        type: 3}
+      propertyPath: m_sharedMaterial
+      value: 
+      objectReference: {fileID: 2619359302124258194, guid: 2f107c9016948a54ea6158d16fc345dd,
+        type: 2}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 75b7f9b7e480ac748af76d1c4e9a34de, type: 3}
 --- !u!224 &6357335864910139619 stripped

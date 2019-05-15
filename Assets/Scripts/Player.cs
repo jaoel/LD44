@@ -115,7 +115,7 @@ public class Player : MonoBehaviour
 
         UIManager.Instance.playerUI.SetHealthbar(currentHealth, maxHealth);
 
-        if (!IsAlive || Main.Instance.gamePaused)
+        if (!IsAlive || Main.Instance.Paused)
         {
             CurrentWeapon.StoppedShooting();
             return;
@@ -142,7 +142,7 @@ public class Player : MonoBehaviour
 
     void FixedUpdate()
     {
-        if (Main.Instance.gamePaused)
+        if (Main.Instance.Paused)
         {
             return;
         }
