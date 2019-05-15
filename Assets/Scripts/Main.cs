@@ -79,13 +79,13 @@ public class Main : MonoBehaviour
 
 
         MapGeneratorParameters parameters = new MapGeneratorParameters();
-        parameters.GenerationRadius = 50;
+        parameters.GenerationRadius = 20;
 
         parameters.MinCellSize = 3;
         parameters.MaxCellSize = 20;
 
         parameters.MinCellCount = 20;
-        parameters.MaxCellCount = 100;
+        parameters.MaxCellCount = 150;
 
         parameters.RoomThresholdMultiplier = 1.1f;
         parameters.MazeFactor = 0.15f;

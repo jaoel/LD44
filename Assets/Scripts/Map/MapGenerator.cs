@@ -66,7 +66,7 @@ public class MapGenerator : MonoBehaviour
         PaintRooms(result, parameters);
         PaintCorridors(ref result, parameters);
         PaintTiles(result, parameters);
-        PostProcessTiles(result, parameters);
+        //PostProcessTiles(result, parameters);
         RemoveDeadRooms(ref result, parameters);
         FindChokepoints(ref result, parameters);
 
@@ -92,7 +92,7 @@ public class MapGenerator : MonoBehaviour
             map.GetRandomPositionInRoom(2, 2, startAndGoal.Item2).ToVector3(), Quaternion.identity));
 
         GenerateDoors(ref map, startAndGoal.Item1, startAndGoal.Item2, parameters);
-
+        PostProcessTiles(map, parameters);
         /*
         int trapCount = _random.Range(0, 10);
         for (int i = 0; i < trapCount; i++)
