@@ -96,7 +96,7 @@ public class Main : MonoBehaviour
         parameters.MinRoomDistance = 0;
         parameters.LockFactor = 0.5f;
 
-        _currentMap = MapGenerator.Instance.GenerateMap(636937933611554912, parameters);
+        _currentMap = MapGenerator.Instance.GenerateMap(DateTime.Now.Ticks, parameters);
         MapGenerator.Instance.PopulateMap(ref _currentMap, ref player, parameters);
         _currentMap.ActivateObjects();
         //NavigationManager.map = _currentBSPMap;
