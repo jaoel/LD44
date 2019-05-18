@@ -23,6 +23,11 @@ public abstract class LCG
         _currentSeed = _startingSeed;
     }
 
+    public long GetStartingSeed()
+    {
+        return _startingSeed;
+    }
+
     public void SetSeed(long seed)
     {
         _startingSeed = seed;
