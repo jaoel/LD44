@@ -18,8 +18,6 @@ public class MapGenerator : MonoBehaviour
     private Timer _timer;
 
     private static MapGenerator _instance = null;
-
-    private Map _debugMap;
     public static MapGenerator Instance
     {
         get
@@ -52,11 +50,6 @@ public class MapGenerator : MonoBehaviour
             Debug.Log("Seed " + _random.GetStartingSeed() + " copied to clipboard");
             GUIUtility.systemCopyBuffer = _random.GetStartingSeed().ToString();
         }
-
-        if (Input.GetKey(KeyCode.P))
-        {
-            PostProcessTiles(_debugMap, null);
-        }
     }
 
     public Map GenerateMap(long seed, in MapGeneratorParameters parameters)
@@ -88,8 +81,6 @@ public class MapGenerator : MonoBehaviour
         _timer.Stop();
         _timer.Print("MapGenerator.GenerateMap");
 
-        _debugMap = result;
-
         return result;
     }
 
@@ -109,7 +100,7 @@ public class MapGenerator : MonoBehaviour
             map.GetRandomPositionInRoom(2, 2, startAndGoal.Item2).ToVector3(), Quaternion.identity));
 
         GenerateDoors(ref map, startAndGoal.Item1, startAndGoal.Item2, parameters);
-        //PostProcessTiles(map, parameters);
+        PostProcessTiles(map, parameters);
         /*
         int trapCount = _random.Range(0, 10);
         for (int i = 0; i < trapCount; i++)
