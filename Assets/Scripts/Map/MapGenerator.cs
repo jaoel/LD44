@@ -1129,14 +1129,17 @@ public class MapGenerator : MonoBehaviour
             {
                 if (chokepoint.size.x == 3)
                 {
-                    door = Instantiate(interactiveObjectContainer.horizontalDoor, chokepoint.center, Quaternion.identity).GetComponent<Door>();
+                    door = Instantiate(interactiveObjectContainer.horizontalDoor, chokepoint.center, 
+                        Quaternion.identity).GetComponent<Door>();
                 }
                 else if (chokepoint.size.x == 4)
                 {
-                    door = Instantiate(interactiveObjectContainer.horizontalDoor, chokepoint.center, Quaternion.identity).GetComponent<Door>();
+                    door = Instantiate(interactiveObjectContainer.horizontalDoor, chokepoint.center, 
+                        Quaternion.identity).GetComponent<Door>();
                 }
                 else
                 {
+                   
                     door = Instantiate(interactiveObjectContainer.horizontalDoor, new Vector3(chokepoint.xMin + 2, chokepoint.center.y),
                         Quaternion.identity).GetComponent<Door>();
             
