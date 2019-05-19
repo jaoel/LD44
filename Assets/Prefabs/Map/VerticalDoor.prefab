@@ -10,6 +10,8 @@ GameObject:
   m_Component:
   - component: {fileID: 5291125008021478752}
   - component: {fileID: 4826854999732045807}
+  - component: {fileID: 7436008414751631945}
+  - component: {fileID: 533902392000629174}
   m_Layer: 8
   m_Name: Visual
   m_TagString: Untagged
@@ -80,6 +82,38 @@ SpriteRenderer:
   m_WasSpriteAssigned: 1
   m_MaskInteraction: 0
   m_SpriteSortPoint: 0
+--- !u!95 &7436008414751631945
+Animator:
+  serializedVersion: 3
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1289062787160454846}
+  m_Enabled: 1
+  m_Avatar: {fileID: 0}
+  m_Controller: {fileID: 9100000, guid: c5a0e146b64fe734693d2811301a3715, type: 2}
+  m_CullingMode: 0
+  m_UpdateMode: 0
+  m_ApplyRootMotion: 0
+  m_LinearVelocityBlending: 0
+  m_WarningMessage: 
+  m_HasTransformHierarchy: 1
+  m_AllowConstantClipSamplingOptimization: 1
+  m_KeepAnimatorControllerStateOnDisable: 0
+--- !u!114 &533902392000629174
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1289062787160454846}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 33e6c9d969188a54f9e9c08c30d924d6, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  door: {fileID: -2468537466822611495}
 --- !u!1 &5327482210711946746
 GameObject:
   m_ObjectHideFlags: 0
@@ -89,7 +123,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 4725409251524710336}
-  - component: {fileID: 4504042949677812748}
+  - component: {fileID: 8253178844917351642}
   m_Layer: 0
   m_Name: Trigger
   m_TagString: Untagged
@@ -111,8 +145,8 @@ Transform:
   m_Father: {fileID: 3813560224829846383}
   m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!58 &4504042949677812748
-CircleCollider2D:
+--- !u!61 &8253178844917351642
+BoxCollider2D:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
@@ -125,8 +159,18 @@ CircleCollider2D:
   m_UsedByEffector: 0
   m_UsedByComposite: 0
   m_Offset: {x: 0, y: 0}
+  m_SpriteTilingProperty:
+    border: {x: 0, y: 0, z: 0, w: 0}
+    pivot: {x: 0, y: 0}
+    oldSize: {x: 0, y: 0}
+    newSize: {x: 0, y: 0}
+    adaptiveTilingThreshold: 0
+    drawMode: 0
+    adaptiveTiling: 0
+  m_AutoTiling: 0
   serializedVersion: 2
-  m_Radius: 4
+  m_Size: {x: 3, y: 2}
+  m_EdgeRadius: 0
 --- !u!1 &7342771040879269800
 GameObject:
   m_ObjectHideFlags: 0
@@ -182,7 +226,7 @@ BoxCollider2D:
     adaptiveTiling: 0
   m_AutoTiling: 0
   serializedVersion: 2
-  m_Size: {x: 1, y: 2}
+  m_Size: {x: 0.8, y: 2}
   m_EdgeRadius: 0
 --- !u!1 &8699708023185844279
 GameObject:
@@ -252,6 +296,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 72255b23e03ed37408b8b16964418ae5, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  trigger: {fileID: 4504042949677812748}
+  trigger: {fileID: 0}
   collider: {fileID: 8346608246156299583}
   rigidBody: {fileID: 8215129947828570310}
+  animator: {fileID: 7436008414751631945}

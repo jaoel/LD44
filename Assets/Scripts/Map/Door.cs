@@ -7,6 +7,7 @@ public class Door : MonoBehaviour
     public CircleCollider2D trigger;
     public new BoxCollider2D collider;
     public Rigidbody2D rigidBody;
+    public Animator animator;
 
     public RectInt Bounds { get; set; }
     public List<Key> Keys { get; set; }
@@ -28,6 +29,22 @@ public class Door : MonoBehaviour
         _locked = false;
     }
 
+    public void ToggleLock(bool locked)
+    {
+        if (!locked)
+        {
+            if (animator != null)
+                animator.SetTrigger("OpenDoor");
+        }
+        else
+        {
+            if (animator != null)
+                animator.SetTrigger("CloseDoor");
+        }
+
+        _locked = locked;
+    }
+
     private void OnTriggerEnter2D(Collider2D collision)
     {
         if (!_locked)
@@ -42,10 +59,11 @@ public class Door : MonoBehaviour
             {
                 if (player.UseKey(this))
                 {
-                    Unlock();
+                    ToggleLock(false);
+
                     Siblings.ForEach(x =>
                     {
-                        x.Unlock();
+                        x.ToggleLock(false);
                     });
                 }
             }
