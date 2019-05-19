@@ -87,7 +87,8 @@ public class Main : MonoBehaviour
         parameters.MinCellCount = 20;
         parameters.MaxCellCount = 150;
 
-        parameters.RoomThresholdMultiplier = 1.1f;
+        parameters.RoomThresholdMultiplier = 1.25f;
+        parameters.CorridorRoomConnectionFactor = 0.5f;
         parameters.MazeFactor = 0.15f;
 
         parameters.MinCorridorWidth = 3;

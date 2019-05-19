@@ -16,6 +16,7 @@ public class MapGeneratorParameters
     public int MinCellSize { get; set; }
 
     public float RoomThresholdMultiplier { get; set; }
+    public float CorridorRoomConnectionFactor { get; set; }
     public float MazeFactor { get; set; }
     public int MinCorridorWidth { get; set; }
     public int MaxCorridorWidth { get; set; }

@@ -37,10 +37,10 @@ public class Map
         _drawCells = true;
         _drawDelaunay = false;
         _drawGabriel = false;
-        _drawEMST = true;
+        _drawEMST = false;
         _drawCorridors = false;
-        _drawLayout = true;
-        _drawBounds = true;
+        _drawLayout = false;
+        _drawBounds = false;
 
         _floors = floors;
         _walls = walls;
