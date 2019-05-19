@@ -8,7 +8,8 @@ public class Door : MonoBehaviour
     public new BoxCollider2D collider;
     public Rigidbody2D rigidBody;
     public Animator animator;
-    public AudioSource audioSource;
+    public AudioSource opening;
+    public AudioSource accessDenied;
 
     public RectInt Bounds { get; set; }
     public List<Key> Keys { get; set; }
@@ -41,8 +42,8 @@ public class Door : MonoBehaviour
             animator.SetTrigger("CloseDoor");
         }
 
-        audioSource.volume = SettingsManager.Instance.SFXVolume;
-        audioSource.Play();
+        opening.volume = SettingsManager.Instance.SFXVolume;
+        opening.Play();
 
         _locked = locked;
     }
@@ -67,6 +68,11 @@ public class Door : MonoBehaviour
                     {
                         x.ToggleLock(false);
                     });
+                }
+                else
+                {
+                    accessDenied.volume = SettingsManager.Instance.SFXVolume;
+                    accessDenied.Play();
                 }
             }
         }
