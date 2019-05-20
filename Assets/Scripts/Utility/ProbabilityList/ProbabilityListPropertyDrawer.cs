@@ -39,10 +39,10 @@ class ProbabilityListPropertyDrawer : PropertyDrawer
 
         if (property.isExpanded)
         {
-            int orig_indent = EditorGUI.indentLevel;
+            int origIndent = EditorGUI.indentLevel;
             EditorGUI.indentLevel = 1;
             elementRect = EditorGUI.IndentedRect(elementRect);
-            EditorGUI.indentLevel = orig_indent;
+            EditorGUI.indentLevel = origIndent;
 
             if (listType.IsSubclassOf(typeof(Object)))
             {

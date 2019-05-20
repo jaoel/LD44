@@ -165,12 +165,12 @@ public class ProbabilityList<T> : ProbabilityListBase, IEnumerable<ProbabilityLi
     {
         for (int i = 0; i < other._values.Count; i++)
         {
-            T overlay_value = other._values[i];
+            T overlayValue = other._values[i];
             for (int k = 0; k < _values.Count; i++)
             {
                 T value = _values[k];
 
-                if (overlay_value.Equals(value))
+                if (overlayValue.Equals(value))
                 {
                     _totalPriority -= _priorities[k];
                     _priorities[k] = other._priorities[i];
