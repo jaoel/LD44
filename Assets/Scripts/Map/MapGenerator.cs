@@ -1098,7 +1098,8 @@ public class MapGenerator : MonoBehaviour
         rooms.Remove(spawnRoom);
         rooms.Remove(exitRoom);
 
-        LockRoom(map, spawnRoom, exitRoom, rooms, out MapNode keyRoom);
+        LockRoom(map, spawnRoom, exitRoom, rooms, out MapNode keyRoom, true);
+        List<Key> skeletonKeys = new List<Key>();
         for (int i = 0; i < lockedDoorCount; i++)
         {
             MapNode room = rooms[_random.Range(0, rooms.Count)];
@@ -1108,7 +1109,7 @@ public class MapGenerator : MonoBehaviour
                 continue;
             }
 
-            LockRoom(map, spawnRoom, room, rooms, out keyRoom);
+            LockRoom(map, spawnRoom, room, rooms, out keyRoom, false, skeletonKeys);
             rooms.Remove(keyRoom);
 
             if (rooms.Count == 0)
@@ -1118,7 +1119,7 @@ public class MapGenerator : MonoBehaviour
         }
     }
 
-    private bool LockRoom(Map map, MapNode spawnRoom, MapNode target, List<MapNode> rooms, out MapNode keyRoom, List<Key> keys = null)
+    private bool LockRoom(Map map, MapNode spawnRoom, MapNode target, List<MapNode> rooms, out MapNode keyRoom, bool goldKey, List<Key> keys = null)
     {
         keyRoom = null;
         List<Door> doors = new List<Door>();
@@ -1196,7 +1197,17 @@ public class MapGenerator : MonoBehaviour
             rooms.RemoveAll(x => x.Equals(target));
             keyRoom = FindKeyRoom(spawnRoom, target, rooms);
 
-            Key newKey = Instantiate(interactiveObjectContainer.key, keyRoom.Cell.center, Quaternion.identity).GetComponent<Key>();
+            Key newKey = null;
+            if (goldKey)
+            {
+                newKey = Instantiate(interactiveObjectContainer.goldKey, map.GetRandomPositionInRoom(1, 1, keyRoom).ToVector3(), 
+                    Quaternion.identity).GetComponent<Key>();
+            }
+            else
+            {
+                newKey = Instantiate(interactiveObjectContainer.skeletonKey, map.GetRandomPositionInRoom(1, 1, keyRoom).ToVector3(), 
+                    Quaternion.identity).GetComponent<Key>();
+            }
 
             doors.ForEach(x =>
             {

@@ -12,5 +12,6 @@ public class InteractiveDungeonObject : ScriptableObject
     public GameObject Stairs;
     public GameObject horizontalDoor;
     public GameObject verticalDoor;
-    public GameObject key;
+    public GameObject skeletonKey;
+    public GameObject goldKey;
 }

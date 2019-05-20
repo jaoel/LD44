@@ -17,4 +17,6 @@ MonoBehaviour:
     type: 3}
   verticalDoor: {fileID: 8699708023185844279, guid: 5ef9981b32662514f90916b216a50e01,
     type: 3}
-  key: {fileID: 1201071571481572198, guid: c29eba6a30475314cab0d5752bf421f3, type: 3}
+  skeletonKey: {fileID: 1201071571481572198, guid: c29eba6a30475314cab0d5752bf421f3,
+    type: 3}
+  goldKey: {fileID: 3543950301171918129, guid: 4ef59d380c133754da419e5981e871e9, type: 3}
