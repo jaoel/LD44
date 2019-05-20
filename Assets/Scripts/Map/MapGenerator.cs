@@ -59,7 +59,7 @@ public class MapGenerator : MonoBehaviour
         }
     }
 
-    public Map GenerateMap(long seed, in MapGeneratorParameters parameters)
+    public Map GenerateMap(long seed, in MapGeneratorParameters parameters, int level)
     {
         _timer.Start();
         Map result = new Map(floors, walls, _random);
@@ -73,7 +73,7 @@ public class MapGenerator : MonoBehaviour
         if (roomCount < 3)
         {
             seed += 1;
-            return GenerateMap(seed, parameters);
+            return GenerateMap(seed, parameters, level);
         }
 
         Triangulate(ref result, parameters);
@@ -91,7 +91,8 @@ public class MapGenerator : MonoBehaviour
         return result;
     }
 
-    public void PopulateMap(ref Map map, ref Player player, in MapGeneratorParameters parameters)
+    public void PopulateMap(ref Map map, ref Player player, in MapGeneratorParameters generationParameters, 
+        in MapPopulationParameters populationParameters, int level)
     {
         Tuple<MapNode, MapNode> startAndGoal = map.GetRoomsFurthestApart(true, out List<MapNode> path);
 
@@ -108,8 +109,8 @@ public class MapGenerator : MonoBehaviour
         map.AddInteractiveObject(Instantiate(interactiveObjectContainer.Stairs,
             map.GetRandomPositionInRoom(2, 2, startAndGoal.Item2).ToVector3(), Quaternion.identity));
 
-        GenerateDoors(ref map, startAndGoal.Item1, startAndGoal.Item2, parameters);
-        PostProcessTiles(map, parameters);
+        GenerateDoors(ref map, startAndGoal.Item1, startAndGoal.Item2, generationParameters);
+        PostProcessTiles(map, generationParameters);
         /*
         int trapCount = _random.Range(0, 10);
         for (int i = 0; i < trapCount; i++)
@@ -124,38 +125,58 @@ public class MapGenerator : MonoBehaviour
             map.AddInteractiveObject(GameObject.Instantiate(trapContainer.GetRandomTrap(),
                 new Vector3(pos.x, pos.y, 0.0f), Quaternion.identity).gameObject);
         }
-
-        int enemyCount = 10;
-        int shootingZombieCount = 10;
-
-        for (int i = 0; i < enemyCount; i++)
-        {
-            Vector3 spawnPos = map.GetPositionInMap(1, 1, true, new List<MapNode>() { startAndGoal.Item1 }).ToVector3();
-
-            while (Vector3.Distance(player.transform.position, spawnPos) < 10)
-            {
-                spawnPos = map.GetPositionInMap(1, 1, true, new List<MapNode>() { startAndGoal.Item1 }).ToVector3();
-            }
-
-            map.AddEnemy(GameObject.Instantiate(enemyContainer.basicZombie,
-                new Vector3(spawnPos.x, spawnPos.y, 0.0f), Quaternion.identity));
-            map.Enemies[map.Enemies.Count - 1].SetActive(false);
-            map.Enemies[map.Enemies.Count - 1].GetComponent<Enemy>().maxSpeedMultiplier = _random.Range(0.9f, 1.2f);
-        }
-
-        for (int i = 0; i < shootingZombieCount; i++)
-        {
-            Vector3Int spawnPos = map.GetPositionInMap(1, 1, true, new List<MapNode>() { startAndGoal.Item1 }).ToVector3Int();
-            while (Vector3.Distance(spawnPos, player.transform.position) < 10)
-            {
-                spawnPos = map.GetPositionInMap(1, 1, true, new List<MapNode>() { startAndGoal.Item1 }).ToVector3Int();
-            }
-
-            GameObject type = _random.Range(0.0f, 1.0f) < 0.5f ? enemyContainer.shootingZombie : enemyContainer.shotgunZombie;
-            map.AddEnemy(GameObject.Instantiate(type, new Vector3(spawnPos.x, spawnPos.y, 0.0f), Quaternion.identity));
-            map.Enemies[map.Enemies.Count - 1].SetActive(false);
-        }
         */
+
+        float zombieDensity = populationParameters.GetDensity(populationParameters.ZombieDensity, level); 
+        foreach(MapNode room in map.Cells)
+        {
+            if (room.Equals(startAndGoal.Item1))
+            {
+                continue;
+            }
+
+            int area = room.Cell.Area();
+            int zombieCount = Mathf.RoundToInt(zombieDensity * area * (1.2f - room.SeclusionFactor));
+            
+            for (int i = 0; i < zombieCount; i++)
+            {
+                Vector3 spawnPos = map.GetRandomPositionInRoom(1, 1, room).ToVector3();
+                map.AddEnemy(GameObject.Instantiate(enemyContainer.basicZombie, new Vector3(spawnPos.x, spawnPos.y, 0.0f), Quaternion.identity));
+                map.Enemies[map.Enemies.Count - 1].SetActive(false);
+                map.Enemies[map.Enemies.Count - 1].GetComponent<Enemy>().maxSpeedMultiplier = _random.Range(0.9f, 1.2f);
+            }
+        }
+
+        //int enemyCount = 10;
+        //int shootingZombieCount = 10;
+        //
+        //for (int i = 0; i < enemyCount; i++)
+        //{
+        //    Vector3 spawnPos = map.GetPositionInMap(1, 1, true, new List<MapNode>() { startAndGoal.Item1 }).ToVector3();
+        //
+        //    while (Vector3.Distance(player.transform.position, spawnPos) < 10)
+        //    {
+        //        spawnPos = map.GetPositionInMap(1, 1, true, new List<MapNode>() { startAndGoal.Item1 }).ToVector3();
+        //    }
+        //
+        //    map.AddEnemy(GameObject.Instantiate(enemyContainer.basicZombie,
+        //        new Vector3(spawnPos.x, spawnPos.y, 0.0f), Quaternion.identity));
+        //    map.Enemies[map.Enemies.Count - 1].SetActive(false);
+        //    map.Enemies[map.Enemies.Count - 1].GetComponent<Enemy>().maxSpeedMultiplier = _random.Range(0.9f, 1.2f);
+        //}
+        //
+        //for (int i = 0; i < shootingZombieCount; i++)
+        //{
+        //    Vector3Int spawnPos = map.GetPositionInMap(1, 1, true, new List<MapNode>() { startAndGoal.Item1 }).ToVector3Int();
+        //    while (Vector3.Distance(spawnPos, player.transform.position) < 10)
+        //    {
+        //        spawnPos = map.GetPositionInMap(1, 1, true, new List<MapNode>() { startAndGoal.Item1 }).ToVector3Int();
+        //    }
+        //
+        //    GameObject type = _random.Range(0.0f, 1.0f) < 0.5f ? enemyContainer.shootingZombie : enemyContainer.shotgunZombie;
+        //    map.AddEnemy(GameObject.Instantiate(type, new Vector3(spawnPos.x, spawnPos.y, 0.0f), Quaternion.identity));
+        //    map.Enemies[map.Enemies.Count - 1].SetActive(false);
+        //}
     }
 
     private void CalculateSeclusionFactor(Map map, Tuple<MapNode, MapNode> startAndGoal, List<MapNode> path)

@@ -297,6 +297,7 @@ public class Map
     public void UpdateCollisionMapDebug()
     {
         Tilemap debug = GameObject.Find("CollisionMap").GetComponent<Tilemap>();
+        debug.ClearAllTiles();
 
         for(int i = 0; i < CollisionMap.GetLength(0); i++)
         {
@@ -308,10 +309,6 @@ public class Map
                 {
                     debug.SetTile(new Vector3Int(Bounds.xMin + i, Bounds.yMin + j, 0), MapGenerator.Instance.tileContainer.FloorTiles[0]);
                 }
-                else
-                {
-                    debug.SetTile(new Vector3Int(Bounds.xMin + i, Bounds.yMin + j, 0), null);
-                }
             }
         }
     }
@@ -319,6 +316,7 @@ public class Map
     public void UpdateStatisticsMapDebug()
     {
         Tilemap debug = GameObject.Find("Statistics").GetComponent<Tilemap>();
+        debug.ClearAllTiles();
 
         Cells.ForEach(room =>
         {

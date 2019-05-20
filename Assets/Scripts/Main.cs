@@ -11,6 +11,7 @@ public class Main : MonoBehaviour
     public Player player;
 
     private Map _currentMap;
+    private MapPopulationParameters _mapPopulationParameters;
     
     public bool gameOver;
     private ShopRoom shopInstance;
@@ -46,6 +47,18 @@ public class Main : MonoBehaviour
 
         shopInstance = Instantiate(shopRoomPrefab);
         Time.timeScale = 1.0f;
+
+        _mapPopulationParameters = new MapPopulationParameters();
+        _mapPopulationParameters.ZombieDensity[0] = 0.01f;
+        _mapPopulationParameters.ZombieDensity[3] = 0.02f;
+        _mapPopulationParameters.ZombieDensity[5] = 0.05f;
+
+        _mapPopulationParameters.GetDensity(_mapPopulationParameters.ZombieDensity, 1);
+        _mapPopulationParameters.GetDensity(_mapPopulationParameters.ZombieDensity, 2);
+        _mapPopulationParameters.GetDensity(_mapPopulationParameters.ZombieDensity, 3);
+        _mapPopulationParameters.GetDensity(_mapPopulationParameters.ZombieDensity, 4);
+        _mapPopulationParameters.GetDensity(_mapPopulationParameters.ZombieDensity, 5);
+
         LoadLevel();
     }
 
@@ -97,8 +110,8 @@ public class Main : MonoBehaviour
         parameters.MinRoomDistance = 0;
         parameters.LockFactor = 0.5f;
 
-        _currentMap = MapGenerator.Instance.GenerateMap(DateTime.Now.Ticks, parameters);
-        MapGenerator.Instance.PopulateMap(ref _currentMap, ref player, parameters);
+        _currentMap = MapGenerator.Instance.GenerateMap(DateTime.Now.Ticks, parameters, CurrentLevel);
+        MapGenerator.Instance.PopulateMap(ref _currentMap, ref player, parameters, _mapPopulationParameters, CurrentLevel);
         _currentMap.ActivateObjects();
         //NavigationManager.map = _currentBSPMap;
     }
