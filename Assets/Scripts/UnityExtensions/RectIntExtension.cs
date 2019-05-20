@@ -2,6 +2,11 @@
 
 public static class RectIntExtension
 {
+    public static BoundsInt ToBoundsInt(this RectInt a, int z = 0, int depth = 1)
+    {
+        return new BoundsInt(a.xMin, a.yMin, z, a.width, a.height, depth);
+    }
+
     public static bool Overlaps(this RectInt a, RectInt b)
     {
         if (a.x < b.x + b.width && a.x + a.width > b.x && a.y < b.y + b.height && a.y + a.height > b.y)

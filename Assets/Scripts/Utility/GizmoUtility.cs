@@ -19,6 +19,12 @@ public static class GizmoUtility
             new Vector3(edge.Point2.Position.x, edge.Point2.Position.y, 0));
     }
 
+    public static void DrawLine(LineSegment2D segment2D, Color color)
+    {
+        Gizmos.color = color;
+        Gizmos.DrawLine(segment2D.From.ToVector3(), segment2D.To.ToVector3());
+    }
+
     public static void DrawText(Vector2 position, Color color)
     {
         Gizmos.color = color;

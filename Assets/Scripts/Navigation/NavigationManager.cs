@@ -88,10 +88,16 @@ public class NavigationManager : MonoBehaviour
     {
         distance = 0;
         List<MapNode> result = new List<MapNode>();
-        while (node != null && node.Parent != null)
+        while (node != null)
         {
             distance += node.FScore;
             result.Add(node.Data);
+
+            if (node.Parent == null)
+            {
+                break;
+            }
+
             node = node.Parent;
         }
 

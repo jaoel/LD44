@@ -13,6 +13,7 @@ public class Map
     public List<Delaunay.Edge<MapNode>> EMSTGraph { get; set; }
     public List<Delaunay.Edge<MapNode>> LayoutGraph { get; set; }
     public List<Delaunay.Edge<MapNode>> CorridorGraph { get; set; }
+    public List<LineSegment2D> StartToGoalPath { get; set; }
     public List<BoundsInt> ChokePoints { get; set; }
     public int[,] CollisionMap { get; set; }
     public BoundsInt Bounds { get; set; }
@@ -39,7 +40,7 @@ public class Map
         _drawGabriel = false;
         _drawEMST = false;
         _drawCorridors = false;
-        _drawLayout = false;
+        _drawLayout = true;
         _drawBounds = false;
 
         _floors = floors;
@@ -49,6 +50,7 @@ public class Map
         InteractiveObjects = new List<GameObject>();
         Enemies = new List<GameObject>();
         ChokePoints = new List<BoundsInt>();
+        StartToGoalPath = new List<LineSegment2D>();
     }
 
     public void AddInteractiveObject(GameObject interactiveObject)
@@ -107,10 +109,10 @@ public class Map
             GetRandomRoom(widthInTiles, heightInTiles, includeCorridorRooms, excludedRooms));
     }
 
-    public Tuple<MapNode, MapNode> GetRoomsFurthestApart(bool lockableOnly)
+    public Tuple<MapNode, MapNode> GetRoomsFurthestApart(bool lockableOnly, out List<MapNode> path)
     {
         List<MapNode> edgeNodes = new List<MapNode>();
-
+        path = null;
         int edgeCount = 1;
         while(edgeNodes.Count < 2)
         {
@@ -118,7 +120,7 @@ public class Map
             edgeCount++;
 
             //exit condition
-            if (edgeCount > 10)
+            if (edgeCount > 100)
             {
                 return null;
             }
@@ -126,6 +128,7 @@ public class Map
 
         if (edgeNodes.Count == 2)
         {
+            path = NavigationManager.Instance.AStar(edgeNodes[0], edgeNodes[1], out float distance);
             return new Tuple<MapNode, MapNode>(edgeNodes[0], edgeNodes[1]);
         }
 
@@ -141,9 +144,10 @@ public class Map
                     continue;
                 }
 
-                NavigationManager.Instance.AStar(edgeNodes[i], edgeNodes[j], out float distance);
+                List<MapNode> tempPath = NavigationManager.Instance.AStar(edgeNodes[i], edgeNodes[j], out float distance);
                 if (distance > maxDistance)
                 {
+                    path = tempPath;
                     maxDistance = distance;
                     result = new Tuple<MapNode, MapNode>(edgeNodes[i], edgeNodes[j]);
                 }
@@ -269,8 +273,16 @@ public class Map
         {
             LayoutGraph.ForEach(x =>
             {
-                GizmoUtility.DrawLine(x, Color.magenta);
+                //GizmoUtility.DrawLine(x, Color.magenta);
             });
+
+            if (StartToGoalPath != null)
+            {
+                StartToGoalPath.ForEach(x =>
+                {
+                    GizmoUtility.DrawLine(x, new Color(159 / 255.0f, 90 / 255.0f, 253 / 255.0f, 1));
+                });
+            }
         }
 
         if (_drawCorridors && CorridorGraph != null)
@@ -302,6 +314,24 @@ public class Map
                 }
             }
         }
+    }
+
+    public void UpdateStatisticsMapDebug()
+    {
+        Tilemap debug = GameObject.Find("Statistics").GetComponent<Tilemap>();
+
+        Cells.ForEach(room =>
+        {
+            for(int x = room.Cell.xMin; x < room.Cell.xMax; x++)
+            {
+                for (int y = room.Cell.yMin; y < room.Cell.yMax; y++)
+                {
+                    debug.SetTile(new Vector3Int(x, y, 0), MapGenerator.Instance.tileContainer.FloorTiles[0]);
+                    debug.SetTileFlags(new Vector3Int(x, y, 0), TileFlags.None);
+                    debug.SetColor(new Vector3Int(x, y, 0), Utility.RGBAColor(207, 0, 15, room.SeclusionFactor));
+                }
+            }
+        });
     }
 
     public void UpdateCollisionMap(RectInt bounds, int value)
