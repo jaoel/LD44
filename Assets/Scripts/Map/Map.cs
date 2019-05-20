@@ -296,6 +296,10 @@ public class Map
                 {
                     debug.SetTile(new Vector3Int(Bounds.xMin + i, Bounds.yMin + j, 0), MapGenerator.Instance.tileContainer.FloorTiles[0]);
                 }
+                else
+                {
+                    debug.SetTile(new Vector3Int(Bounds.xMin + i, Bounds.yMin + j, 0), null);
+                }
             }
         }
     }

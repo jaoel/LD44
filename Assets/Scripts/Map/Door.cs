@@ -12,14 +12,13 @@ public class Door : MonoBehaviour
     public AudioSource accessDenied;
 
     public RectInt Bounds { get; set; }
-    public List<Key> Keys { get; set; }
+    public bool IsGoalDoor { get; set; }
     public List<Door> Siblings { get; set; }
     private bool _locked;
     private bool _closed;
 
     private void Awake()
     {
-        Keys = new List<Key>();
         Siblings = new List<Door>();
         _locked = true;
         _closed = true;

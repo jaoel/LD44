@@ -4,7 +4,8 @@ using System.Collections.Generic;
 
 public class Player : MonoBehaviour
 {
-    private List<Key> _keys;
+    private Key _goldKey;
+    private Queue<Key> _skeletonKeys;
 
     public ParticleSystemContainer particleSystemContainer;
     public ParticleSystem dustTrail;
@@ -85,25 +86,33 @@ public class Player : MonoBehaviour
         velocity = Vector3.zero;
         cooldownEndTime = 0f;
         inputVector = Vector3.zero;
-        _keys = new List<Key>();
+        _skeletonKeys = new Queue<Key>();
     }
 
-    public void AddKey(Key key)
+    public void AddKey(Key key, bool isGoldKey)
     {
-        _keys.Add(key);
+        if (isGoldKey)
+        {
+            _goldKey = key;
+        }
+        else
+        {
+            _skeletonKeys.Enqueue(key);
+        }
     }
 
     public bool UseKey(in Door door)
     {
-        for(int i = _keys.Count - 1; i >= 0; i--)
+        if (door.IsGoalDoor && _goldKey != null)
         {
-            if (door.Keys.Contains(_keys[i]))
-            {
-                Destroy(_keys[i]);
-                _keys.RemoveAt(i);
-
-                return true;
-            }
+            Destroy(_goldKey);
+            return true;
+        }
+        else if (_skeletonKeys.Count > 0 && !door.IsGoalDoor)
+        {
+            Key key = _skeletonKeys.Dequeue();
+            Destroy(key);
+            return true;
         }
 
         return false;

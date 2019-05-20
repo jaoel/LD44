@@ -1099,7 +1099,6 @@ public class MapGenerator : MonoBehaviour
         rooms.Remove(exitRoom);
 
         LockRoom(map, spawnRoom, exitRoom, rooms, out MapNode keyRoom, true);
-        List<Key> skeletonKeys = new List<Key>();
         for (int i = 0; i < lockedDoorCount; i++)
         {
             MapNode room = rooms[_random.Range(0, rooms.Count)];
@@ -1109,7 +1108,7 @@ public class MapGenerator : MonoBehaviour
                 continue;
             }
 
-            LockRoom(map, spawnRoom, room, rooms, out keyRoom, false, skeletonKeys);
+            LockRoom(map, spawnRoom, room, rooms, out keyRoom, false);
             rooms.Remove(keyRoom);
 
             if (rooms.Count == 0)
@@ -1119,7 +1118,7 @@ public class MapGenerator : MonoBehaviour
         }
     }
 
-    private bool LockRoom(Map map, MapNode spawnRoom, MapNode target, List<MapNode> rooms, out MapNode keyRoom, bool goldKey, List<Key> keys = null)
+    private bool LockRoom(Map map, MapNode spawnRoom, MapNode target, List<MapNode> rooms, out MapNode keyRoom, bool goldKey)
     {
         keyRoom = null;
         List<Door> doors = new List<Door>();
@@ -1132,19 +1131,21 @@ public class MapGenerator : MonoBehaviour
                 {
                     door = Instantiate(interactiveObjectContainer.horizontalDoor, chokepoint.center, 
                         Quaternion.identity).GetComponent<Door>();
+                    door.Bounds = new RectInt(chokepoint.xMin + 1, chokepoint.yMin, 1, 1);
                 }
                 else if (chokepoint.size.x == 4)
                 {
                     door = Instantiate(interactiveObjectContainer.horizontalDoor, chokepoint.center, 
                         Quaternion.identity).GetComponent<Door>();
+                    door.Bounds = new RectInt(chokepoint.xMin + 1, chokepoint.yMin, 2, 1);
                 }
                 else
                 {
                    
                     door = Instantiate(interactiveObjectContainer.horizontalDoor, new Vector3(chokepoint.xMin + 2, chokepoint.center.y),
                         Quaternion.identity).GetComponent<Door>();
-            
                     BuildHorizontalDoorWalls(map, target, chokepoint);
+                    door.Bounds = new RectInt(chokepoint.xMin + 1, chokepoint.yMin, 2, 1);
                 }
             }
             else if (chokepoint.size.y > 1)
@@ -1152,16 +1153,18 @@ public class MapGenerator : MonoBehaviour
                 if (chokepoint.size.y == 3)
                 {
                     door = Instantiate(interactiveObjectContainer.verticalDoor, chokepoint.center, Quaternion.identity).GetComponent<Door>();
+                    door.Bounds = new RectInt(chokepoint.x, chokepoint.yMin + 1, 1, 1);
                 }
                 else if (chokepoint.size.y == 4)
                 {
                     door = Instantiate(interactiveObjectContainer.verticalDoor, chokepoint.center, Quaternion.identity).GetComponent<Door>();
+                    door.Bounds = new RectInt(chokepoint.x, chokepoint.yMin + 1, 1, 2);
                 }
                 else
                 {
                     door = Instantiate(interactiveObjectContainer.verticalDoor, new Vector3(chokepoint.center.x, chokepoint.yMin + 2),
                         Quaternion.identity).GetComponent<Door>();
-            
+                    door.Bounds = new RectInt(chokepoint.x, chokepoint.yMin + 1, 1, 2);
                     BuildVerticalDoorWalls(map, target, chokepoint);
                 }
             }
@@ -1170,6 +1173,7 @@ public class MapGenerator : MonoBehaviour
             {
                 doors.Add(door);
                 map.UpdateCollisionMap(chokepoint.ToRectInt(), 1);
+                map.UpdateCollisionMap(door.Bounds, 0);
                 map.AddInteractiveObject(door.gameObject);
             }
         }
@@ -1211,22 +1215,9 @@ public class MapGenerator : MonoBehaviour
 
             doors.ForEach(x =>
             {
-                x.Keys.Add(newKey);
+                x.IsGoalDoor = goldKey;
             });
-
-            if (keys != null)
-            {
-                keys.ForEach(key =>
-                {
-                    doors.ForEach(door =>
-                    {
-                        door.Keys.Add(key);
-                    });
-                });
-
-                keys.Add(newKey);
-            }
-
+            
             map.AddInteractiveObject(newKey.gameObject);
             return true;
         }
