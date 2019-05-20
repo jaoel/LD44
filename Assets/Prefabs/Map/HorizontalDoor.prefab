@@ -298,7 +298,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 72255b23e03ed37408b8b16964418ae5, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  trigger: {fileID: 0}
+  trigger: {fileID: 4905568429502499120}
   collider: {fileID: 9013228130143345901}
   rigidBody: {fileID: 8215129947828570310}
   animator: {fileID: 2324600407579492607}

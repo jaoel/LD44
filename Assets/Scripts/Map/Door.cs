@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class Door : MonoBehaviour
 {
-    public CircleCollider2D trigger;
+    public BoxCollider2D trigger;
     public new BoxCollider2D collider;
     public Rigidbody2D rigidBody;
     public Animator animator;
@@ -15,25 +15,42 @@ public class Door : MonoBehaviour
     public List<Key> Keys { get; set; }
     public List<Door> Siblings { get; set; }
     private bool _locked;
+    private bool _closed;
 
     private void Awake()
     {
         Keys = new List<Key>();
         Siblings = new List<Door>();
         _locked = true;
+        _closed = true;
     }
 
-    public void Unlock()
+    public void Open(bool unlock)
     {
-        Destroy(trigger);
-        Destroy(collider);
-        Destroy(rigidBody);
-        _locked = false;
+        collider.enabled = false;
+
+        if (unlock)
+        {
+            _locked = false;
+        }
+        _closed = false;
     }
 
-    public void ToggleLock(bool locked)
+    public void Close(bool lockDoor)
     {
-        if (!locked)
+        collider.enabled = true;
+
+        if (lockDoor)
+        {
+            _locked = true;
+        }
+
+        _closed = true;
+    }
+
+    public void ToggleClosed(bool closed)
+    {
+        if (!closed)
         {
             animator.SetTrigger("OpenDoor");
         }
@@ -45,34 +62,40 @@ public class Door : MonoBehaviour
         opening.volume = SettingsManager.Instance.SFXVolume;
         opening.Play();
 
-        _locked = locked;
+        _closed = closed;
     }
 
     private void OnTriggerEnter2D(Collider2D collision)
     {
-        if (!_locked)
-        {
-            return;
-        }
-
         if (collision.gameObject)
         {
-            Player player = collision.gameObject.GetComponent<Player>();
-            if (player != null)
+            if (!_locked && _closed)
             {
-                if (player.UseKey(this))
-                {
-                    ToggleLock(false);
+                ToggleClosed(false);
 
-                    Siblings.ForEach(x =>
-                    {
-                        x.ToggleLock(false);
-                    });
-                }
-                else
+                Siblings.ForEach(x =>
                 {
-                    accessDenied.volume = SettingsManager.Instance.SFXVolume;
-                    accessDenied.Play();
+                    x.ToggleClosed(false);
+                });
+            }
+            else if (_locked && _closed)
+            {
+                Player player = collision.gameObject.GetComponent<Player>();
+                if (player != null)
+                {
+                    if(player.UseKey(this))
+                    {
+                        ToggleClosed(false);
+                        Siblings.ForEach(x =>
+                        {
+                            x.ToggleClosed(false);
+                        });
+                    }
+                    else
+                    {
+                        accessDenied.volume = SettingsManager.Instance.SFXVolume;
+                        accessDenied.Play();
+                    }
                 }
             }
         }
