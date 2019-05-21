@@ -304,8 +304,21 @@ public class MapGenerator : MonoBehaviour
         
         if (!regionsSeparated)
         {
-            //We should iterate over nodes overlapping and discard them
-            Debug.Log("Unable to separate all nodes");
+            foreach(MapNode node in map.Cells)
+            {
+                foreach(MapNode other in map.Cells)
+                {
+                    if (node.Equals(other))
+                    {
+                        continue;
+                    }
+
+                    if (node.Cell.Overlaps(other.Cell))
+                    {
+                        other.Type = MapNodeType.None;
+                    }
+                }
+            }
         }
     }
 
@@ -330,6 +343,12 @@ public class MapGenerator : MonoBehaviour
         int roomCount = 0;
         foreach (MapNode node in map.Cells)
         {
+            //These are already discarded
+            if (node.Type == MapNodeType.None)
+            {
+                continue;
+            }
+
             if(node.Cell.width > roomThresholdX && node.Cell.height > roomThresholdY)
             {
                 node.Type = MapNodeType.Room;
@@ -344,7 +363,7 @@ public class MapGenerator : MonoBehaviour
     {
         Delaunay.BowerWatsonDelaunay triangulator = new Delaunay.BowerWatsonDelaunay();
         IEnumerable<Delaunay.Vertex<MapNode>> vertices = map.Cells.Where(x => x.Type == MapNodeType.Room)
-            .Select(x => new Delaunay.Vertex<MapNode>(x.Cell.center, x));
+            .Select(x => new Delaunay.Vertex<MapNode>(x.Cell.center, x)).Distinct();
         IEnumerable<Delaunay.Triangle<MapNode>> triangles = triangulator.Triangulate(vertices);
         map.Triangles = triangles.ToList();
 
