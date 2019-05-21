@@ -326,7 +326,8 @@ public class Map
                 {
                     debug.SetTile(new Vector3Int(x, y, 0), MapGenerator.Instance.tileContainer.FloorTiles[0]);
                     debug.SetTileFlags(new Vector3Int(x, y, 0), TileFlags.None);
-                    debug.SetColor(new Vector3Int(x, y, 0), Utility.RGBAColor(207, 0, 15, room.SeclusionFactor));
+                    debug.SetColor(new Vector3Int(x, y, 0), Utility.RGBAColor(207, 0, 15, 
+                        Utility.ConvertRange(0.0f, 1.0f, 0.0f, 0.75f, room.SeclusionFactor)));
                 }
             }
         });

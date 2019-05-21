@@ -91,11 +91,11 @@ public class Main : MonoBehaviour
         parameters.CorridorRoomConnectionFactor = 0.5f;
         parameters.MazeFactor = 0.15f;
 
-        parameters.MinCorridorWidth = 3;
+        parameters.MinCorridorWidth = 4;
         parameters.MaxCorridorWidth = 5;
 
         parameters.MinRoomDistance = 0;
-        parameters.LockFactor = 0.5f;
+        parameters.LockFactor = 0.2f;
 
         _currentMap = MapGenerator.Instance.GenerateMap(DateTime.Now.Ticks, parameters, CurrentLevel);
         MapGenerator.Instance.PopulateMap(ref _currentMap, ref player, parameters, CurrentLevel);
