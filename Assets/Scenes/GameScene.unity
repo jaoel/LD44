@@ -638,11 +638,6 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
-    - target: {fileID: 131159647817452541, guid: fb3c90fd7da4a7e42b329cb2e0d69797,
-        type: 3}
-      propertyPath: mainCamera
-      value: 
-      objectReference: {fileID: 1238141174}
     - target: {fileID: 515992213878927342, guid: fb3c90fd7da4a7e42b329cb2e0d69797,
         type: 3}
       propertyPath: playerUI
@@ -653,25 +648,9 @@ PrefabInstance:
       value: 
       objectReference: {fileID: 2023222969}
     - target: {fileID: 997353019, guid: fb3c90fd7da4a7e42b329cb2e0d69797, type: 3}
-      propertyPath: gameOverUI
-      value: 
-      objectReference: {fileID: 0}
-    - target: {fileID: 997353019, guid: fb3c90fd7da4a7e42b329cb2e0d69797, type: 3}
-      propertyPath: pauseUI
-      value: 
-      objectReference: {fileID: 0}
-    - target: {fileID: 997353019, guid: fb3c90fd7da4a7e42b329cb2e0d69797, type: 3}
-      propertyPath: optionsMenu
-      value: 
-      objectReference: {fileID: 0}
-    - target: {fileID: 997353019, guid: fb3c90fd7da4a7e42b329cb2e0d69797, type: 3}
       propertyPath: currentLevelText
       value: 
       objectReference: {fileID: 1824384384}
-    - target: {fileID: 997353019, guid: fb3c90fd7da4a7e42b329cb2e0d69797, type: 3}
-      propertyPath: gameOverLevelText
-      value: 
-      objectReference: {fileID: 0}
     - target: {fileID: 997353019, guid: fb3c90fd7da4a7e42b329cb2e0d69797, type: 3}
       propertyPath: blackOverlay
       value: 
@@ -802,6 +781,7 @@ TilemapCollider2D:
   m_UsedByComposite: 0
   m_Offset: {x: 0, y: 0}
   m_MaximumTileChangeCount: 1000
+  m_ExtrusionFactor: 0.00001
 --- !u!483693784 &1140504648
 TilemapRenderer:
   m_ObjectHideFlags: 0
