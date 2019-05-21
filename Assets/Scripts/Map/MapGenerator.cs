@@ -308,7 +308,7 @@ public class MapGenerator : MonoBehaviour
             {
                 foreach(MapNode other in map.Cells)
                 {
-                    if (node.Equals(other))
+                    if (node.Equals(other) || node.Type == MapNodeType.None || other.Type == MapNodeType.None)
                     {
                         continue;
                     }
