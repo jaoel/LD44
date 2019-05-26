@@ -155,6 +155,11 @@ public class Main : MonoBehaviour
             return;
         }
 
+        if (!player.IsAlive)
+        {
+            MenuManager.Instance.PushMenu<GameOverMenu>();
+        }
+
         Paused = false;
         blackOverlay.SetActive(false);
 
