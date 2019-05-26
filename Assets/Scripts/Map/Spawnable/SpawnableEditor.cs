@@ -8,6 +8,7 @@ using UnityEngine.UIElements;
 [CustomEditor(typeof(SpawnableContainer))]
 public class SpawnableInspector : Editor
 {
+    public static SpawnableContainer targetContainer;
     private SerializedProperty _keyframes;
     private float _lineHeight = EditorGUIUtility.singleLineHeight + EditorGUIUtility.standardVerticalSpacing;
 
@@ -28,7 +29,7 @@ public class SpawnableInspector : Editor
 
     public override void OnInspectorGUI()
     {
-        SpawnableContainer targetContainer = (SpawnableContainer)target;
+        targetContainer = (SpawnableContainer)target;
         targetContainer.keyframes = targetContainer.keyframes.OrderBy(x => x.keyframeIndex).ToList();
 
         foreach(SpawnableKeyframe keyframe in targetContainer.keyframes)
@@ -159,6 +160,12 @@ public class SpawnableKeyframeDrawer : PropertyDrawer
                     if (GUI.Button(densityRect, "Del"))
                     {
                         spawnables.DeleteArrayElementAtIndex(i);
+                        SpawnableInspector.targetContainer.keyframes.ForEach(x =>
+                        {
+                            x.spawnableObjects.RemoveAt(i);
+                        });
+
+                        property.serializedObject.Update();
                     }
                 }
             }
@@ -172,6 +179,7 @@ public class SpawnableKeyframeDrawer : PropertyDrawer
             }
         }
 
+        
         property.serializedObject.ApplyModifiedProperties();
         EditorGUI.EndProperty();
     }
