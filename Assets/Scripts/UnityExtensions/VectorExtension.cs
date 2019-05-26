@@ -22,5 +22,10 @@ public static class VectorExtension
         return new Vector2(a.x, a.y);
     }
 
+    public static Vector2 ToVector2(this Vector3 a)
+    {
+        return new Vector2(a.x, a.y);
+    }
+
 }
 

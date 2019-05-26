@@ -2,7 +2,7 @@
 using DG.Tweening;
 using System.Collections.Generic;
 
-public class Player : MonoBehaviour
+public class Player : MonoBehaviour, IWeaponOwner
 {
     private Key _goldKey;
     private Queue<Key> _skeletonKeys;
@@ -31,8 +31,6 @@ public class Player : MonoBehaviour
     private Vector2 dieDirection = Vector2.down;
 
     private float _invulnTimer = float.MaxValue;
-
-    private float cooldownEndTime = 0f;
 
     public float firingRateModifier = 1.0f;
     private float _slowTimer = float.MinValue;
@@ -84,9 +82,10 @@ public class Player : MonoBehaviour
         Health = startHealth;
         _invulnTimer = float.MaxValue;
         velocity = Vector3.zero;
-        cooldownEndTime = 0f;
         inputVector = Vector3.zero;
         _skeletonKeys = new Queue<Key>();
+
+        CurrentWeapon.SetOwner(this);
     }
 
     public void AddKey(Key key, bool isGoldKey)
@@ -132,20 +131,18 @@ public class Player : MonoBehaviour
 
         CalculateInputVector();
 
-        Vector3 mousePositionInWorldSpace = CameraManager.Instance.MainCamera.ScreenToWorldPoint(Keybindings.MousePosition);
-        mousePositionInWorldSpace.z = 0f;
-        Vector3 aimVector3 = mousePositionInWorldSpace - transform.position;
-        aimVector3.z = 0f;
-        aimVector = aimVector3.normalized;
-
-        if (Keybindings.Attack && Time.time >= cooldownEndTime)
+        if (Keybindings.Attack)
         {
-            cooldownEndTime = Time.time + CurrentWeapon.description.cooldown / firingRateModifier;
-            CurrentWeapon.Shoot(aimVector, transform.position, gameObject);
+            CurrentWeapon.Shoot();
         }
         else if (!Keybindings.Attack)
         {
             CurrentWeapon.StoppedShooting();
+        }
+
+        if (Keybindings.Reload)
+        {
+            CurrentWeapon.TriggerReload();
         }
     }
 
@@ -333,5 +330,31 @@ public class Player : MonoBehaviour
                 SoundManager.Instance.PlayPainSound();
             }
         }
+    }
+
+    Vector2 IWeaponOwner.GetAimVector()
+    {
+        Vector3 mousePositionInWorldSpace = CameraManager.Instance.MainCamera.ScreenToWorldPoint(Keybindings.MousePosition);
+        mousePositionInWorldSpace.z = 0f;
+        Vector3 aimVector3 = mousePositionInWorldSpace - transform.position;
+        aimVector3.z = 0f;
+        aimVector = aimVector3.normalized;
+
+        return aimVector;
+    }
+
+    Vector2 IWeaponOwner.GetBulletOrigin()
+    {
+        return transform.position;
+    }
+
+    void IWeaponOwner.Knockback()
+    {
+        throw new System.NotImplementedException();
+    }
+
+    GameObject IWeaponOwner.GetGameObject()
+    {
+        return gameObject;
     }
 }

@@ -15,6 +15,7 @@ MonoBehaviour:
   bulletPrefab: {fileID: 218029869677474905, guid: 9092b4beb318b94479ab334a2f1aa114,
     type: 3}
   lifetime: 2
+  speed: 5
   size: {x: 1, y: 1}
   damage: 10
   tint: {r: 0.19531797, g: 0.24528301, b: 0, a: 1}

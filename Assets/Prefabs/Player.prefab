@@ -33,6 +33,7 @@ Transform:
   m_Children:
   - {fileID: 4043862318088808966}
   - {fileID: 5131680801052958430}
+  - {fileID: 5907829928959333271}
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -77,8 +78,7 @@ MonoBehaviour:
   deceleration: 25
   invulnTime: 1
   characterAnimation: {fileID: 6271302632493112618}
-  CurrentWeapon: {fileID: 8576656811411399088, guid: fe8980b87054e1e4794848ff451c8fc9,
-    type: 3}
+  CurrentWeapon: {fileID: 3587542285098777446}
   startHealth: 30
   firingRateModifier: 1
 --- !u!58 &138352305
@@ -342,5 +342,92 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 52f5714e4d12dc54d8d8e2f99c5fdcf5, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!1001 &3527718101886270974
+PrefabInstance:
+  m_ObjectHideFlags: 0
+  serializedVersion: 2
+  m_Modification:
+    m_TransformParent: {fileID: 1173505191400535231}
+    m_Modifications:
+    - target: {fileID: 5074516897226881580, guid: fe8980b87054e1e4794848ff451c8fc9,
+        type: 3}
+      propertyPath: m_Name
+      value: Slingshot
+      objectReference: {fileID: 0}
+    - target: {fileID: 6991887799652691561, guid: fe8980b87054e1e4794848ff451c8fc9,
+        type: 3}
+      propertyPath: m_LocalPosition.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6991887799652691561, guid: fe8980b87054e1e4794848ff451c8fc9,
+        type: 3}
+      propertyPath: m_LocalPosition.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6991887799652691561, guid: fe8980b87054e1e4794848ff451c8fc9,
+        type: 3}
+      propertyPath: m_LocalPosition.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6991887799652691561, guid: fe8980b87054e1e4794848ff451c8fc9,
+        type: 3}
+      propertyPath: m_LocalRotation.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6991887799652691561, guid: fe8980b87054e1e4794848ff451c8fc9,
+        type: 3}
+      propertyPath: m_LocalRotation.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6991887799652691561, guid: fe8980b87054e1e4794848ff451c8fc9,
+        type: 3}
+      propertyPath: m_LocalRotation.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6991887799652691561, guid: fe8980b87054e1e4794848ff451c8fc9,
+        type: 3}
+      propertyPath: m_LocalRotation.w
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 6991887799652691561, guid: fe8980b87054e1e4794848ff451c8fc9,
+        type: 3}
+      propertyPath: m_RootOrder
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 6991887799652691561, guid: fe8980b87054e1e4794848ff451c8fc9,
+        type: 3}
+      propertyPath: m_LocalEulerAnglesHint.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6991887799652691561, guid: fe8980b87054e1e4794848ff451c8fc9,
+        type: 3}
+      propertyPath: m_LocalEulerAnglesHint.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6991887799652691561, guid: fe8980b87054e1e4794848ff451c8fc9,
+        type: 3}
+      propertyPath: m_LocalEulerAnglesHint.z
+      value: 0
+      objectReference: {fileID: 0}
+    m_RemovedComponents: []
+  m_SourcePrefab: {fileID: 100100000, guid: fe8980b87054e1e4794848ff451c8fc9, type: 3}
+--- !u!4 &5907829928959333271 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 6991887799652691561, guid: fe8980b87054e1e4794848ff451c8fc9,
+    type: 3}
+  m_PrefabInstance: {fileID: 3527718101886270974}
+  m_PrefabAsset: {fileID: 0}
+--- !u!114 &3587542285098777446 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: -9134009920081623400, guid: fe8980b87054e1e4794848ff451c8fc9,
+    type: 3}
+  m_PrefabInstance: {fileID: 3527718101886270974}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e605ba8327503dd439d8b68dba8bd368, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 

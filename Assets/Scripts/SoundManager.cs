@@ -10,7 +10,7 @@ public class SoundManager : MonoBehaviour
 {
     public GameObject simpleShotSound;
     public GameObject machineGunSound;
-    public GameObject explosionSound;
+    public AudioClip explosionSound;
     public AudioClip monsterAggroSound;
     public AudioClip playerDeath;
     public AudioClip playerScream;
@@ -92,14 +92,9 @@ public class SoundManager : MonoBehaviour
         _audioSource.PlayOneShot(monsterAggroSound, SettingsManager.Instance.SFXVolume);
     }
 
-    public GameObject PlayExplosionSound()
+    public void PlayExplosionSound()
     {
-        GameObject go = GameObject.Instantiate(explosionSound);
-        AudioSource audioSource = go.GetComponent<AudioSource>();
-        audioSource.volume = SettingsManager.Instance.SFXVolume;
-
-        Destroy(go, audioSource.clip.length);
-        return go;
+        _audioSource.PlayOneShot(explosionSound, SettingsManager.Instance.SFXVolume);
     }
 
     public GameObject PlayMachinegun()
