@@ -47,7 +47,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   Description: {fileID: 11400000, guid: 33cfe110ba187b54c8f4562be87bee63, type: 2}
   isShopItem: 0
-  Weapon: {fileID: 8576656811411399088, guid: 5529a8b0a5ecb1a4e9c908dff2bd3502, type: 3}
+  weaponPrefab: {fileID: 5074516897226881580, guid: 31120840a724d164db67b906668fb9c9,
+    type: 3}
 --- !u!61 &7979725692751591465
 BoxCollider2D:
   m_ObjectHideFlags: 0

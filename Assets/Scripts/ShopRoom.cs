@@ -21,7 +21,6 @@ public class ShopRoom : MonoBehaviour
 
     public void GenerateRandomItems(int currentLevel, Player player)
     {
-        /*
         bool healthGlobeAdded = false;
         List<ItemDescription> shuffledShopItems = GetShuffledShopItems();
         List<ItemDescription> rareItems = GetRareItems();
@@ -30,7 +29,7 @@ public class ShopRoom : MonoBehaviour
         {
             if (itemDesc.itemPrefab is WeaponPickup weaponPickup)
             {
-                return weaponPickup.Weapon.description != player.CurrentWeapon.description;
+                return weaponPickup.weaponPrefab.GetComponent<Weapon>() != player.CurrentWeapon;
             }
             else
             {
@@ -75,7 +74,6 @@ public class ShopRoom : MonoBehaviour
 
             GameObject.Find("Item" + i).GetComponent<TextMeshProUGUI>().text = shopItems[i].description.HealthCost.ToString();
         }
-        */
     }
 
     public void ClearItems()

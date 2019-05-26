@@ -52,7 +52,7 @@ MonoBehaviour:
   _reloadTime: 3
   _bulletsPerShot: 4
   _burstInterval: 0.1
-  _knockback: 0
+  _knockback: 1000
   _firingArc: 30
   _randomizePattern: 1
   _bulletDescription: {fileID: 11400000, guid: b85b6f222e986484bb7ce58010cb1724, type: 2}
