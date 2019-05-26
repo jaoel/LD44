@@ -348,9 +348,9 @@ public class Player : MonoBehaviour, IWeaponOwner
         return transform.position;
     }
 
-    void IWeaponOwner.Knockback()
+    void IWeaponOwner.Knockback(Vector2 direction, float force)
     {
-        throw new System.NotImplementedException();
+        rigidbody.AddForce(direction.normalized * force);
     }
 
     GameObject IWeaponOwner.GetGameObject()

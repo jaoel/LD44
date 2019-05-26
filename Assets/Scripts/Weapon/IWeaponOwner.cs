@@ -9,6 +9,6 @@ public interface IWeaponOwner
 {
     Vector2 GetAimVector();
     Vector2 GetBulletOrigin();
-    void Knockback();
+    void Knockback(Vector2 direction, float force);
     GameObject GetGameObject();
 }

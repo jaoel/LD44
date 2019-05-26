@@ -110,8 +110,14 @@ public class Weapon : MonoBehaviour
 
             if (_burstInterval > 0)
             {
+                _owner.Knockback(-_owner.GetAimVector(), _knockback);
                 yield return new WaitForSeconds(_burstInterval);
             }
+        }
+
+        if (_burstInterval == 0)
+        {
+            _owner.Knockback(-_owner.GetAimVector(), _knockback);
         }
 
         if (_bulletsLeft <= 0)
