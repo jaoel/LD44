@@ -18,6 +18,7 @@ public class Main : MonoBehaviour
     public GameObject blackOverlay;
 
     public int CurrentLevel { get; private set; } = 0;
+    public Map CurrentMap => _currentMap;
     public bool Paused { get; private set; } = false;
 
     private static Main _instance = null;

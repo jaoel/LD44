@@ -179,7 +179,6 @@ public class MapGenerator : MonoBehaviour
         Vector3 spawnPos = map.GetRandomPositionInRoom(1, 1, room).ToVector3();
         map.AddEnemy(GameObject.Instantiate(lowestAbove.spawnableObjects[i].spawnablePrefab, new Vector3(spawnPos.x, spawnPos.y, 0.0f), Quaternion.identity));
         map.Enemies[map.Enemies.Count - 1].SetActive(false);
-        map.Enemies[map.Enemies.Count - 1].GetComponent<Enemy>().maxSpeedMultiplier = _random.Range(0.9f, 1.2f);
     }
 
     private void CalculateSeclusionFactor(Map map, Tuple<MapNode, MapNode> startAndGoal, List<MapNode> path)

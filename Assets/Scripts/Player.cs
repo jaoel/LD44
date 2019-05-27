@@ -298,7 +298,7 @@ public class Player : MonoBehaviour, IWeaponOwner
         _slowTimer = slowTimer;
     }
 
-    public void ReceiveDamage(int damage, Vector2 direction)
+    public void ReceiveDamage(float damage, Vector2 direction)
     {
         if (_invulnTimer >= invulnTime)
         {
@@ -319,7 +319,7 @@ public class Player : MonoBehaviour, IWeaponOwner
             bloodSpray.Play();
 
             _invulnTimer = 0;
-            Health -= damage;
+            Health -= (int)damage;
 
             if (Health <= 0)
             {

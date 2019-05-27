@@ -1,0 +1,117 @@
+﻿using System.Collections.Generic;
+using UnityEngine;
+
+public class Navigation : MonoBehaviour
+{
+    private Rigidbody2D _rigidbody;
+    private float _maxSpeed;
+    private float _acceleration;
+    private float _deacceleration;
+
+    private Vector2 _target;
+    private Vector2 _destination;
+    private bool _targetIsVisible;
+
+    private float _minPathAge;
+    private float _currentPathAge;
+    private List<Vector2Int> _path;
+
+    public void Initialize(Rigidbody2D rigidbody, float maxSpeed, float acceleration)
+    {
+        _rigidbody = rigidbody;
+        _maxSpeed = maxSpeed;
+        _acceleration = acceleration;
+        _deacceleration = 2.0f;
+
+        _minPathAge = Random.Range(3.0f, 5.0f);
+        _currentPathAge = _minPathAge;
+        _path = new List<Vector2Int>();
+
+        _target = Vector2.zero;
+    }
+
+    public void MoveTo(GameObject target, bool targetIsVisible)
+    {
+        _target = target.transform.position.ToVector2();
+        _targetIsVisible = targetIsVisible;
+    }
+
+    public void Stop()
+    {
+        _target = Vector2.zero;
+        _targetIsVisible = false;
+    }
+
+    private void FixedUpdate()
+    {
+        if (_target != Vector2.zero)
+        {
+            if (_targetIsVisible)
+            {
+                _path = null;
+                _currentPathAge = _minPathAge;
+                _destination = _target;
+            }
+            else
+            {
+                if (_currentPathAge >= _minPathAge)
+                {
+                    _path = NavigationManager.Instance.AStar(Main.Instance.CurrentMap.WorldToCell(transform.position.ToVector2()),
+                        Main.Instance.CurrentMap.WorldToCell(_target), out float distance);
+
+                    Main.Instance.CurrentMap.DrawPath(_path);
+                    _currentPathAge = 0.0f;
+                    SetPathTarget();
+                }
+                else if (_path == null)
+                {
+                    _destination = _target;
+                }
+            }
+
+            CalculateVelocity();
+            FollowPath();
+        }
+        else
+        {
+            SmoothStop();
+        }
+
+        _currentPathAge += Time.deltaTime;
+    }
+
+    private void CalculateVelocity()
+    {
+        _rigidbody.velocity += (_destination - transform.position.ToVector2()).normalized * _acceleration * Time.deltaTime;
+        if (_rigidbody.velocity.magnitude > _maxSpeed)
+        {
+            _rigidbody.velocity = _rigidbody.velocity.normalized * _maxSpeed;
+        }
+    }
+
+    private void SmoothStop()
+    {
+        if (_rigidbody.velocity.magnitude > 0.001f)
+        {
+            _rigidbody.velocity -= _rigidbody.velocity * _deacceleration * Time.deltaTime;
+        }
+        else
+        {
+            _rigidbody.velocity = Vector2.zero;
+        }
+    }
+
+    private void FollowPath()
+    {
+        if (_path != null && _path.Count > 0 && (_destination - transform.position.ToVector2()).magnitude <= 1.0f)
+        {
+            SetPathTarget();
+        }
+    }
+
+    private void SetPathTarget()
+    {
+        _destination = _path[0];
+        _path.RemoveAt(0);
+    }
+}

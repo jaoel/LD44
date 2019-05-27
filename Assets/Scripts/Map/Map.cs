@@ -294,6 +294,15 @@ public class Map
         }
     }
 
+    public void DrawPath(List<Vector2Int> path)
+    {
+        path.ForEach(x =>
+        {
+            _floors.SetTileFlags(x.ToVector3Int(), TileFlags.None);
+            _floors.SetColor(x.ToVector3Int(), Color.blue);
+        });
+    }
+
     public void UpdateCollisionMapDebug()
     {
         Tilemap debug = GameObject.Find("CollisionMap").GetComponent<Tilemap>();
@@ -344,6 +353,25 @@ public class Map
         }
 
         UpdateCollisionMapDebug();
+    }
+
+    public int GetCollisionIndex(int x, int y)
+    {
+        int i = x - Bounds.xMin;
+        int j = y - Bounds.yMin;
+
+        if (i < 0 || i > CollisionMap.GetLength(0) || j < 0 || j > CollisionMap.GetLength(1))
+        {
+            return -1;
+        }
+
+        return CollisionMap[i, j];
+    }
+
+    public Vector2Int WorldToCell(Vector2 worldPos)
+    {
+        Vector3Int wtc = _floors.WorldToCell(worldPos.ToVector3());
+        return new Vector2Int(wtc.x, wtc.y);
     }
 
     private void DestroyAllInteractiveObjects()

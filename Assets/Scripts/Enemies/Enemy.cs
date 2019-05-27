@@ -4,172 +4,109 @@ using DG.Tweening;
 
 public class Enemy : MonoBehaviour
 {
-    public ParticleSystemContainer particleSystemContainer;
-    public ItemContainer itemContainer;
-    public EnemyDescription description;
-    public CharacterAnimation characterAnimation;
+    public bool IsAlive => _currentHealth > 0;
 
-    private int _currentHealth;
-    private int _aStarCooldown = 0;
-    protected Vector3 _target;
-    protected List<Vector2Int> _path;
-    protected bool _followPath = false;
-    protected bool _moveToTarget = false;
-    protected Vector3 _velocity = Vector3.zero;
-    protected float _stoppingDistance = 0.5f;
+    [SerializeField]
+    private float _maxHealth;
+
+    [SerializeField]
+    private float _maxSpeed;
+
+    [SerializeField]
+    private float _acceleration;
+
+    [SerializeField]
+    private float _aggroDistance;
+
+    [SerializeField]
+    private float _meleeDamage;
+
+    [SerializeField]
+    protected Rigidbody2D _rigidbody;
+
+    [SerializeField]
+    protected Navigation _navigation;
+
+    [SerializeField]
+    protected CharacterAnimation _characterAnimation;
+
+    [SerializeField]
+    protected ParticleSystemContainer _particleSystemContainer;
+
+    [SerializeField]
+    protected ItemContainer _itemContainer;
+
+    private float _currentHealth;
+    private bool _hasAggro;
     protected Player _player;
-    protected new Rigidbody2D rigidbody;
-
-    protected bool _hasAggro;
+    protected GameObject _target;
 
     private Vector2 _dieDirection = Vector2.down;
-    private bool isDead = false;
-
     private static int _killsSinceLastDrop = 0;
-
-    public bool IsAlive => !isDead;
-    public float maxSpeedMultiplier = 1.0f;
 
     protected virtual void Awake()
     {
-        _path = new List<Vector2Int>();
+        _currentHealth = _maxHealth;
+        _hasAggro = false;
         _player = GameObject.Find("Player").GetComponent<Player>();
-        _currentHealth = description.maxHealth;
-    }
-
-    protected virtual void Start()
-    {
-        rigidbody = GetComponent<Rigidbody2D>();
-        _aStarCooldown = Random.Range(0, 200);
-    }
-
-    public virtual void SetTarget(Vector3 target)
-    {
-        this._target = target;
-        _moveToTarget = true;
-    }
-
-    private void SmoothStopVelocity()
-    {
-        if (_velocity.magnitude > 0.001f)
-        {
-            _velocity -= _velocity * 2.0f * Time.deltaTime;
-        }
-        else
-        {
-            _velocity = Vector2.zero;
-        }
-        rigidbody.velocity = _velocity;
+        _navigation.Initialize(_rigidbody, _maxSpeed, _acceleration);
     }
 
     protected virtual void FixedUpdate()
     {
         CalculateAnimation();
 
-        if (!_player.IsAlive)
+        if (!_player.IsAlive || !IsAlive)
         {
-            SmoothStopVelocity();
+            _navigation.Stop();
             return;
         }
-
-        _aStarCooldown--;
-        if (KillMe())
-        {
-            SmoothStopVelocity();
-            return;
-        }
-
-        CheckAggro();
 
         if (_hasAggro)
         {
-            if (PlayerIsVisible())
-            {
-                SetTarget(_player.transform.position);
-                _followPath = false;
-                _path = new List<Vector2Int>();
-            }
-            else if (_aStarCooldown <= 0)
-            {
-                //aStarCooldown = 200;
-                //Vector2Int start = new Vector2Int((int)transform.position.x, (int)transform.position.y);
-                //Vector2Int target = new Vector2Int((int)_player.transform.position.x, (int)_player.transform.position.y);
-                //_path = NavigationManager.Instance.AStar(start, target);
-                //
-                //if (_path != null && _path.Count > 0)
-                //{
-                //    _followPath = true;
-                //    SetTarget(new Vector3(_path[0].x, _path[0].y));
-                //    _path.RemoveAt(0);
-                //}  
-            }
+            _navigation.MoveTo(_target, PlayerIsVisible());
         }
-
-        if (_moveToTarget)
+        else
         {
-            MoveToTarget();
+            CheckAggro();
         }
-
-        TargetReached();
     }
 
-    public virtual void CheckAggro()
+    protected virtual void CheckAggro()
     {
-        if (_hasAggro)
-        {
-            return;
-        }
-
         float distance = Vector3.Distance(transform.position, _player.transform.position);
-        if (distance < description.aggroDistance && PlayerIsVisible())
+        if (distance < _aggroDistance && PlayerIsVisible())
         {
-            _hasAggro = true;
-            SoundManager.Instance.PlayMonsterAggro();
+            AggroPlayer();
         }
     }
 
-    public virtual bool PlayerIsVisible()
+    private void AggroPlayer()
     {
-        Vector2 origin = new Vector2(transform.position.x, transform.position.y);
-        Vector2 target = new Vector2(_player.transform.position.x, _player.transform.position.y);
+        _hasAggro = true;
+        _target = _player.gameObject;
 
-        int layerMask = LayerContainer.CombinedLayerMask("Map", "Player");
-        RaycastHit2D hit = Physics2D.Raycast(origin, (target - origin).normalized, description.aggroDistance, layerMask);
-
-        if (hit.collider?.gameObject.layer == LayerContainer.Instance.Layers["Player"])
-        {
-            return true;
-        }
-
-        return false;
+        SoundManager.Instance.PlayMonsterAggro();
     }
 
-    public virtual bool TargetReached()
+    protected virtual bool PlayerIsVisible()
     {
-        if (_target != Vector3.zero && _moveToTarget)
+        Vector2 origin = transform.position.ToVector2();
+        Vector2 target = _player.transform.position.ToVector2();
+
+        float viewDistance = _aggroDistance;
+        if (_hasAggro)
         {
-            Vector3 tempPos = transform.position;
-            tempPos.z = 0.0f;
-            float sqrDistToTarget = (_target - tempPos).magnitude;
-            float stoppingDistance = _stoppingDistance;
+            viewDistance *= 3.0f;
+        }
 
-            if (!_followPath)
+        if ((target - origin).magnitude <= viewDistance)
+        {
+            int layerMask = LayerContainer.CombinedLayerMask("Map", "Player");
+            RaycastHit2D hit = Physics2D.Raycast(origin, (target - origin).normalized, viewDistance, layerMask);
+
+            if (hit.collider?.gameObject.layer == LayerContainer.Instance.Layers["Player"])
             {
-                stoppingDistance = 0;
-            }
-
-            if (sqrDistToTarget <= _stoppingDistance)
-            {
-                if (_followPath && _path.Count > 0)
-                {
-                    SetTarget(new Vector3(_path[0].x, _path[0].y));
-                    _path.RemoveAt(0);
-                    return false;
-                }
-
-                _target = Vector3.zero;
-                _moveToTarget = false;
-                rigidbody.velocity = Vector2.zero;
                 return true;
             }
         }
@@ -177,34 +114,21 @@ public class Enemy : MonoBehaviour
         return false;
     }
 
-    protected virtual void MoveToTarget()
-    {
-        CalculateVelocity();
-        rigidbody.velocity = _velocity;
-    }
-
-    protected virtual void CalculateVelocity()
-    {
-        _velocity += (_target - transform.position).normalized * description.acceleration * Time.deltaTime;
-
-        if (_velocity.magnitude > description.maxSpeed * maxSpeedMultiplier)
-        {
-            _velocity = _velocity.normalized * description.maxSpeed * maxSpeedMultiplier;
-        }
-
-        _velocity.z = 0.0f;
-    }
-
     protected virtual bool PlayAttackAnimation()
     {
-        return Vector2.Distance(_target, transform.position) < 1f;
+        if (_target == null)
+        {
+            return false;
+        }
+
+        return Vector2.Distance(_target.transform.position.ToVector2(), transform.position.ToVector2()) < 1.0f;
     }
 
     private void CalculateAnimation()
     {
         CharacterAnimation.AnimationType type;
         Vector2 direction;
-
+        
         if (!IsAlive)
         {
             type = CharacterAnimation.AnimationType.Die;
@@ -215,9 +139,9 @@ public class Enemy : MonoBehaviour
             if (PlayAttackAnimation())
             {
                 type = CharacterAnimation.AnimationType.Attack;
-                direction = _target - transform.position;
+                direction = _target.transform.position - transform.position;
             }
-            else if (_velocity.magnitude < 0.1f)
+            else if (_rigidbody.velocity.magnitude < 0.1f)
             {
                 type = CharacterAnimation.AnimationType.Idle;
                 direction = Vector2.down;
@@ -225,70 +149,65 @@ public class Enemy : MonoBehaviour
             else
             {
                 type = CharacterAnimation.AnimationType.Run;
-                direction = _velocity;
+                direction = _rigidbody.velocity;
             }
         }
 
-        characterAnimation.UpdateAnimation(type, direction);
+        direction = direction.normalized;
+        _characterAnimation.UpdateAnimation(type, direction);
     }
 
     public virtual void ApplyDamage(int damage, Vector2 velocity)
     {
         SoundManager.Instance.PlayMonsterPainSound();
-
-        ParticleSystem bloodSpray = Instantiate(particleSystemContainer.bloodSpray, transform.position, Quaternion.identity);
-
+        
+        ParticleSystem bloodSpray = Instantiate(_particleSystemContainer.bloodSpray, transform.position, Quaternion.identity);
+        
         Vector3 dir = new Vector3(velocity.normalized.x, velocity.normalized.y, 0);
         bloodSpray.transform.DOLookAt(transform.position + dir, 0.0f);
         bloodSpray.gameObject.SetActive(true);
         bloodSpray.Play();
-
+        
         _currentHealth -= damage;
         if (_currentHealth <= 0)
         {
             _dieDirection = velocity;
-            _velocity = _dieDirection.normalized * 2.5f;
+            _rigidbody.velocity = _dieDirection.normalized * 2.5f;
+
+            DropItem();
         }
 
-        _hasAggro = true;
+        if (!_hasAggro)
+        {
+            AggroPlayer();
+        }
     }
 
-    public virtual bool KillMe()
+    public virtual void DropItem()
     {
-        if (_currentHealth <= 0)
+        float killsForGuaranteedDrop = 5.0f + Main.Instance.CurrentLevel;
+        float probability = Mathf.Lerp(0.1f, 1.0f, _killsSinceLastDrop / killsForGuaranteedDrop);
+        
+        if (Random.Range(0.0f, 1.0f) < probability)
         {
-            if (isDead == false)
-            {
-                float killsForGuaranteedDrop = 5f + Main.Instance.CurrentLevel;
-                float prob = Mathf.Lerp(0.1f, 1f, _killsSinceLastDrop / killsForGuaranteedDrop);
-                float rnd = Random.Range(0.0f, 1.0f);
-
-                if (rnd < prob)
-                {
-                    _killsSinceLastDrop = 0;
-                    Item drop = Instantiate(itemContainer.GetEnemyDrop().itemPrefab, transform.position, Quaternion.identity);
-                    drop.transform.localScale = new Vector3(0.5f, 0.5f, 0.5f);
-                    drop.gameObject.SetActive(true);
-
-                    Main.Instance.AddInteractiveObject(drop.gameObject);
-                }
-                else
-                {
-                    _killsSinceLastDrop++;
-                }
-            }
-            isDead = true;
-            return true;
+            _killsSinceLastDrop = 0;
+            Item drop = Instantiate(_itemContainer.GetEnemyDrop().itemPrefab, transform.position, Quaternion.identity);
+            drop.transform.localScale = new Vector3(0.5f, 0.5f, 0.5f);
+            drop.gameObject.SetActive(true);
+        
+            Main.Instance.AddInteractiveObject(drop.gameObject);
         }
-
-        return false;
+        else
+        {
+            _killsSinceLastDrop++;
+        }
     }
 
     private void OnCollisionStay2D(Collision2D collision)
     {
         if (IsAlive && collision.gameObject.layer == LayerContainer.Instance.Layers["Player"])
         {
-            _player.ReceiveDamage(description.damage, -collision.contacts[0].normal);
+            _player.ReceiveDamage(_meleeDamage, -collision.contacts[0].normal);
         }
     }
 }

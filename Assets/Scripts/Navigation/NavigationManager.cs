@@ -7,8 +7,6 @@ using UnityEngine;
 
 public class NavigationManager : MonoBehaviour
 {
-    public static int[,] collisionMap;
-
     private static NavigationManager _instance;
     public static NavigationManager Instance
     {
@@ -104,15 +102,18 @@ public class NavigationManager : MonoBehaviour
         return result;
     }
 
-    public List<Vector2Int> AStar(Vector2Int start, Vector2Int target, out float distance)
+    public List<Vector2Int> AStar(Vector2 origin, Vector2 destination, out float distance)
     {
+        Vector2Int start = new Vector2Int(Mathf.RoundToInt(origin.x), Mathf.RoundToInt(origin.y));
+        Vector2Int target = new Vector2Int(Mathf.RoundToInt(destination.x), Mathf.RoundToInt(destination.y));
+
         distance = 0.0f;
         if (start == target)
         {
             return new List<Vector2Int>();
         }
 
-        int collisionIndex = collisionMap[target.x, target.y];
+        int collisionIndex = Main.Instance.CurrentMap.GetCollisionIndex(target.x, target.y);
         if (collisionIndex != 0)
         {
             return new List<Vector2Int>();
@@ -135,7 +136,8 @@ public class NavigationManager : MonoBehaviour
 
             openSet.Remove(current);
             closedSet.Add(current);
-            List<NavigationNode<Vector2Int>> neighbours = GetNeighbours(current, collisionMap, false);
+            List<NavigationNode<Vector2Int>> neighbours = GetNeighbours(current, Main.Instance.CurrentMap.CollisionMap, 
+                true);
 
             for (int i = 0; i < neighbours.Count; i++)
             {
@@ -184,7 +186,7 @@ public class NavigationManager : MonoBehaviour
                         continue;
                     }
 
-                    if (new Vector2Int(x, y) == node.Data || collisionMap[x, y] != 0)
+                    if (new Vector2Int(x, y) == node.Data || Main.Instance.CurrentMap.GetCollisionIndex(x, y) != 0)
                     {
                         continue;
                     }
@@ -200,11 +202,11 @@ public class NavigationManager : MonoBehaviour
             potentials.Add(new Vector2Int(node.Data.x, node.Data.y + 1));
             potentials.Add(new Vector2Int(node.Data.x, node.Data.y - 1));
             potentials.Add(new Vector2Int(node.Data.x + 1, node.Data.y));
-            potentials.Add(new Vector2Int(node.Data.x - 1, node.Data.y - 1));
+            potentials.Add(new Vector2Int(node.Data.x - 1, node.Data.y));
 
             potentials.ForEach(x =>
             {
-                if (collisionMap[x.x, x.y] == 0)
+                if (Main.Instance.CurrentMap.GetCollisionIndex(x.x, x.y) == 0)
                 {
                     result.Add(new NavigationNode<Vector2Int>(x.x, x.y, new Vector2Int(x.x, x.y)));
                 }
