@@ -1,7 +1,12 @@
 ﻿using UnityEngine;
 
-public class ShootingEnemy : Enemy
+public class ShootingEnemy : Enemy, IWeaponOwner
 {
+    [SerializeField]
+    private Weapon _weapon;
+
+    [SerializeField]
+    private float _stoppingDistance;
     //public BulletDescription bulletDescription;
     //
     //public float shotTimer = float.MaxValue;
@@ -11,53 +16,60 @@ public class ShootingEnemy : Enemy
 
     protected override void Awake()
     {
-        //_stoppingDistance = 3.0f;
-        //base.Awake();
+        _weapon.SetOwner(this);
+
+        base.Awake();
     }
 
     protected override void FixedUpdate()
     {
-        /*
-        if (!_player.IsAlive)
+        base.FixedUpdate();
+
+        if (!_player.IsAlive || !IsAlive)
         {
+            _navigation.Stop();
             return;
         }
 
-        shotTimer += Time.deltaTime;
-
-        if (shotsFired > description.magazineSize)
+        float distance = Vector3.Distance(transform.position, _player.transform.position);
+        bool playerVisible = PlayerIsVisible();
+        if (distance <= _aggroDistance && playerVisible)
         {
-            reloadTimer += Time.deltaTime;
-            if (reloadTimer >= description.reloadTime)
-            {
-                shotsFired = 0;
-                reloadTimer = 0;
-            }
+            _weapon.Shoot();
         }
 
-        if (IsAlive && PlayerIsVisible() && shotTimer > description.shotCooldown && shotsFired <= description.magazineSize)
+        if (distance <= _stoppingDistance && playerVisible)
         {
-            Shoot();
+            _navigation.Stop();
         }
-
-        base.FixedUpdate();
-        */
-    }
-
-    protected virtual void Shoot()
-    {
-        //SoundManager.Instance.PlayShotSound(false);
-        //
-        //Vector3 dirToPlayer = (_player.transform.position - transform.position).normalized;
-        //dirToPlayer.z = 0.0f;
-        //BulletManager.Instance.SpawnBullet(bulletDescription, transform.position, dirToPlayer * bulletSpeed, gameObject);
-        //shotTimer = 0.0f;
-        //shotsFired++;
     }
 
     protected override bool PlayAttackAnimation()
     {
-        //return Vector2.Distance(_target, transform.position) < _stoppingDistance;
-        return false;
+        if (_target == null)
+        {
+            return false;
+        }
+
+        return Vector2.Distance(_target.transform.position.ToVector2(), transform.position.ToVector2()) < _stoppingDistance;
+    }
+
+    Vector2 IWeaponOwner.GetAimVector()
+    {
+        return (_target.transform.position.ToVector2() - transform.position.ToVector2()).normalized;
+    }
+
+    Vector2 IWeaponOwner.GetBulletOrigin()
+    {
+        return transform.position.ToVector2();
+    }
+
+    void IWeaponOwner.Knockback(Vector2 direction, float force)
+    {
+    }
+
+    GameObject IWeaponOwner.GetGameObject()
+    {
+        return gameObject;
     }
 }

@@ -59,9 +59,12 @@ public class Navigation : MonoBehaviour
                     _path = NavigationManager.Instance.AStar(Main.Instance.CurrentMap.WorldToCell(transform.position.ToVector2()),
                         Main.Instance.CurrentMap.WorldToCell(_target), out float distance);
 
-                    Main.Instance.CurrentMap.DrawPath(_path);
                     _currentPathAge = 0.0f;
-                    SetPathTarget();
+
+                    if (_path.Count > 0)
+                    {
+                        SetPathTarget();
+                    }
                 }
                 else if (_path == null)
                 {

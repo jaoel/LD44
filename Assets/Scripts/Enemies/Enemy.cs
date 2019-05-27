@@ -7,19 +7,19 @@ public class Enemy : MonoBehaviour
     public bool IsAlive => _currentHealth > 0;
 
     [SerializeField]
-    private float _maxHealth;
+    protected float _maxHealth;
 
     [SerializeField]
-    private float _maxSpeed;
+    protected float _maxSpeed;
 
     [SerializeField]
-    private float _acceleration;
+    protected float _acceleration;
 
     [SerializeField]
-    private float _aggroDistance;
+    protected float _aggroDistance;
 
     [SerializeField]
-    private float _meleeDamage;
+    protected float _meleeDamage;
 
     [SerializeField]
     protected Rigidbody2D _rigidbody;
@@ -36,8 +36,8 @@ public class Enemy : MonoBehaviour
     [SerializeField]
     protected ItemContainer _itemContainer;
 
-    private float _currentHealth;
-    private bool _hasAggro;
+    protected float _currentHealth;
+    protected bool _hasAggro;
     protected Player _player;
     protected GameObject _target;
 
