@@ -45,8 +45,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e605ba8327503dd439d8b68dba8bd368, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  uiImage: {fileID: -854259281838472014, guid: 42bd3ffc034dd23409edab32966f490e, type: 3}
   _cooldown: 0
-  _chargeTime: 0.5
+  _chargeTime: 1
   _resetChargeOnShot: 1
   _magazineSize: 5
   _reloadTime: 1
@@ -58,7 +59,6 @@ MonoBehaviour:
   _bulletDescription: {fileID: 11400000, guid: d525ad8c5eef3bd4d92afcb751072538, type: 2}
   _shotSound: {fileID: 7246573145497593685}
   _reloadSound: {fileID: -5912559479772928181}
-  uiImage: {fileID: -854259281838472014, guid: 42bd3ffc034dd23409edab32966f490e, type: 3}
 --- !u!82 &7246573145497593685
 AudioSource:
   m_ObjectHideFlags: 0
