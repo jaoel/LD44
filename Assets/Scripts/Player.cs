@@ -90,6 +90,7 @@ public class Player : MonoBehaviour, IWeaponOwner
         UIManager.Instance.playerUI.weaponImage.sprite = CurrentWeapon.uiImage;
         UIManager.Instance.playerUI.SetGoldKey(false);
         UIManager.Instance.playerUI.RemoveSkeletonKey(_skeletonKeys.Count);
+        UIManager.Instance.playerUI.chargeMeter.value = 0.0f;
     }
 
     public void AddKey(Key key, bool isGoldKey)
@@ -130,6 +131,7 @@ public class Player : MonoBehaviour, IWeaponOwner
         CalculateAnimation();
 
         UIManager.Instance.playerUI.SetHealthbar(currentHealth, maxHealth);
+        UIManager.Instance.playerUI.SetChargeMeterPosition(transform.position);
 
         if (!IsAlive || Main.Instance.Paused)
         {

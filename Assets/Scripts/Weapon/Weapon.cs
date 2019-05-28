@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using UnityEngine;
 using UnityEngine.UI;
+using DG.Tweening;
 
 public class Weapon : MonoBehaviour
 {
@@ -74,6 +75,9 @@ public class Weapon : MonoBehaviour
     private bool _charging;
     private Coroutine _firingSequence;
 
+    private Color _reloadGoalColor = Color.green;
+    private Color _chargeGoalColor = Color.cyan;
+
     protected virtual void Awake()
     {
         _currentCooldown = _cooldown;
@@ -137,7 +141,17 @@ public class Weapon : MonoBehaviour
 
     protected virtual IEnumerator Reload()
     {
-        if(_firingSequence != null)
+        if (_isPlayerOwned)
+        {
+            UIManager.Instance.playerUI.SetChargeMeterColor(Color.clear);
+            UIManager.Instance.playerUI.chargeMeter.value = 0.0f;
+        }
+      
+
+        _charging = false;
+        _currentChargeTime = 0.0f;
+
+        if (_firingSequence != null)
         {
             StopCoroutine(_firingSequence);
         }
@@ -147,18 +161,38 @@ public class Weapon : MonoBehaviour
 
         _reloading = true;
 
-        yield return new WaitForSeconds(_reloadTime);
+        float timePassed = 0.0f;
+
+        while (timePassed < _reloadTime)
+        {
+            if (_isPlayerOwned)
+            {
+                UIManager.Instance.playerUI.SetChargeMeterColor(Color.clear, _reloadGoalColor, timePassed / _reloadTime);
+                UIManager.Instance.playerUI.chargeMeter.value = Mathf.Lerp(0.0f, 1.0f, timePassed / _reloadTime);
+            }
+
+            timePassed += Time.deltaTime;
+            yield return new WaitForEndOfFrame();
+        }
+
 
         _bulletsLeft = _magazineSize;
         _reloading = false;
 
         UpdatePlayerUI();
+
+        if (_isPlayerOwned)
+        {
+            UIManager.Instance.playerUI.SetChargeMeterColor(Color.clear);
+            UIManager.Instance.playerUI.chargeMeter.value = 0.0f;
+        }
+       
         yield return null;
     }
 
     public virtual void Shoot()
     {
-        if (_bulletsLeft <= 0)
+        if (_bulletsLeft <= 0 || _reloading)
         {
             return;
         }
@@ -167,6 +201,12 @@ public class Weapon : MonoBehaviour
         {
             _charging = true;
             _currentChargeTime += Time.deltaTime;
+
+            if (_isPlayerOwned)
+            {
+                UIManager.Instance.playerUI.SetChargeMeterColor(Color.clear, _chargeGoalColor, _currentChargeTime / _chargeTime);
+                UIManager.Instance.playerUI.chargeMeter.value = _currentChargeTime / _chargeTime;
+            }
 
             if (_currentChargeTime >= _chargeTime)
             {
@@ -183,6 +223,12 @@ public class Weapon : MonoBehaviour
                 if (_resetChargeOnShot)
                 {
                     _currentChargeTime = 0.0f;
+
+                    if (_isPlayerOwned)
+                    {
+                        UIManager.Instance.playerUI.SetChargeMeterColor(Color.clear);
+                        UIManager.Instance.playerUI.chargeMeter.value = 0.0f;
+                    }
                 }
                 _currentCooldown = 0.0f;
             }
@@ -199,7 +245,7 @@ public class Weapon : MonoBehaviour
 
     public void TriggerReload()
     {
-        if (_reloading)
+        if (_reloading || _bulletsLeft == _magazineSize)
         {
             return;
         }
@@ -220,6 +266,12 @@ public class Weapon : MonoBehaviour
         {
             _currentChargeTime -= Time.deltaTime;
             _currentChargeTime = Mathf.Max(0.0f, _currentChargeTime);
+
+            if (_isPlayerOwned)
+            {
+                UIManager.Instance.playerUI.SetChargeMeterColor(_chargeGoalColor, Color.clear, _currentChargeTime / _chargeTime);
+                UIManager.Instance.playerUI.chargeMeter.value = _currentChargeTime / _chargeTime;
+            }
         }
     }
 }

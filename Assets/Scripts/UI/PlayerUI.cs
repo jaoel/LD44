@@ -1,6 +1,7 @@
 ﻿using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
+using DG.Tweening;
 
 public class PlayerUI : MonoBehaviour
 {
@@ -10,6 +11,7 @@ public class PlayerUI : MonoBehaviour
     public Image skeletonKeyImage;
     public TMPro.TextMeshProUGUI weaponText;
     public GameObject skeletonKeyContainer;
+    public Slider chargeMeter;
 
     [Space(20)]
     public Image maxHealthForegroundImage;
@@ -28,6 +30,15 @@ public class PlayerUI : MonoBehaviour
     private Color _keyMissingColor = Utility.RGBAColor(17, 17, 17, 1.0f);
 
     private Vector3 _originalPosition;
+    private CanvasScaler _scaler;
+    private Image _chargeMeterFill;
+
+    private void Awake()
+    {
+        _scaler = GetComponent<CanvasScaler>();
+        _chargeMeterFill = chargeMeter.GetComponentInChildren<Image>();
+    }
+
 
     private void Start()
     {
@@ -90,6 +101,21 @@ public class PlayerUI : MonoBehaviour
         {
             healthBarObject.anchoredPosition = _originalPosition;
         }
+    }
+
+    public void SetChargeMeterPosition(Vector2 targetPosition)
+    {
+        chargeMeter.transform.position = Camera.main.WorldToScreenPoint(targetPosition) - new Vector3(0.0f, 16.0f  * _scaler.scaleFactor, 0.0f);
+    }
+
+    public void SetChargeMeterColor(Color newColor)
+    {
+        _chargeMeterFill.color = newColor;
+    }
+
+    public void SetChargeMeterColor(Color startColor, Color endColor, float value)
+    {
+        _chargeMeterFill.color = Color.Lerp(startColor, endColor, value);
     }
 
     public void AddSkeletonKey(int count)
