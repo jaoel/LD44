@@ -35,12 +35,12 @@ public class Map
 
     public Map(Tilemap floors, Tilemap walls, LCG random)
     {
-        _drawCells = true;
+        _drawCells = false;
         _drawDelaunay = false;
         _drawGabriel = false;
         _drawEMST = false;
         _drawCorridors = false;
-        _drawLayout = true;
+        _drawLayout = false;
         _drawBounds = false;
 
         _floors = floors;
