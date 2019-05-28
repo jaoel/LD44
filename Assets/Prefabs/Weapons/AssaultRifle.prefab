@@ -45,6 +45,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e605ba8327503dd439d8b68dba8bd368, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  uiImage: {fileID: -1350236206761516725, guid: 42bd3ffc034dd23409edab32966f490e,
+    type: 3}
   _cooldown: 1
   _chargeTime: 0
   _resetChargeOnShot: 0

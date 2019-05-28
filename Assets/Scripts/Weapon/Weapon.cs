@@ -1,8 +1,11 @@
 ﻿using System.Collections;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class Weapon : MonoBehaviour
 {
+    public Sprite uiImage;
+
     //how long before weapon can shoot again
     [SerializeField]
     private float _cooldown;
@@ -60,6 +63,7 @@ public class Weapon : MonoBehaviour
 
     //Who is shooting
     private IWeaponOwner _owner;
+    private bool _isPlayerOwned;
 
     private float _currentCooldown;
     private float _currentChargeTime;
@@ -81,9 +85,12 @@ public class Weapon : MonoBehaviour
         _degPerBullet = _firingArc / _bulletsPerShot;
     }
 
-    public void SetOwner(IWeaponOwner owner)
+    public void SetOwner(IWeaponOwner owner, bool isPlayerOwned = false)
     {
         _owner = owner;
+        _isPlayerOwned = isPlayerOwned;
+
+        UpdatePlayerUI();
     }
 
     protected virtual IEnumerator FireBullets()
@@ -145,6 +152,7 @@ public class Weapon : MonoBehaviour
         _bulletsLeft = _magazineSize;
         _reloading = false;
 
+        UpdatePlayerUI();
         yield return null;
     }
 
@@ -170,12 +178,22 @@ public class Weapon : MonoBehaviour
                 _bulletsLeft--;
                 _firingSequence = StartCoroutine(FireBullets());
 
+                UpdatePlayerUI();
+
                 if (_resetChargeOnShot)
                 {
                     _currentChargeTime = 0.0f;
                 }
                 _currentCooldown = 0.0f;
             }
+        }
+    }
+
+    private void UpdatePlayerUI()
+    {
+        if (_isPlayerOwned)
+        {
+            UIManager.Instance.playerUI.weaponText.text = _bulletsLeft + "/" + _magazineSize;
         }
     }
 

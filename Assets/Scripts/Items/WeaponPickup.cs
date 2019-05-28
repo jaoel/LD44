@@ -16,7 +16,7 @@ public class WeaponPickup : Item
         Destroy(oldWeapon);
 
         owner.GetComponent<Player>().CurrentWeapon = GameObject.Instantiate(weaponPrefab, owner.transform).GetComponent<Weapon>();
-        owner.GetComponent<Player>().CurrentWeapon.SetOwner(owner.GetComponent<Player>());
-        //owner.GetComponent<Player>().CurrentWeapon = Weapon;
+        owner.GetComponent<Player>().CurrentWeapon.SetOwner(owner.GetComponent<Player>(), true);
+        UIManager.Instance.playerUI.weaponImage.sprite = owner.GetComponent<Player>().CurrentWeapon.uiImage;
     }
 }

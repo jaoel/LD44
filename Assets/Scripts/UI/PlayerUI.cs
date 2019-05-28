@@ -1,9 +1,15 @@
-﻿using UnityEngine;
+﻿using TMPro;
+using UnityEngine;
 using UnityEngine.UI;
 
 public class PlayerUI : MonoBehaviour
 {
     public GameObject healthMarkerPrefab;
+    public Image weaponImage;
+    public Image goldKeyImage;
+    public Image skeletonKeyImage;
+    public TMPro.TextMeshProUGUI skeletonKeyCountText;
+    public TMPro.TextMeshProUGUI weaponText;
 
     [Space(20)]
     public Image maxHealthForegroundImage;
@@ -19,6 +25,7 @@ public class PlayerUI : MonoBehaviour
 
     private int _currentHealth = 0;
     private int _currentMaxHealth = 0;
+    private Color _keyMissingColor = Utility.RGBAColor(17, 17, 17, 1.0f);
 
     private Vector3 _originalPosition;
 
@@ -82,6 +89,32 @@ public class PlayerUI : MonoBehaviour
         else
         {
             healthBarObject.anchoredPosition = _originalPosition;
+        }
+    }
+
+    public void SetSkeletonKey(int count)
+    {
+        if (count <= 0)
+        {
+            skeletonKeyImage.color = _keyMissingColor;
+            skeletonKeyCountText.text = "";
+        }
+        else
+        {
+            skeletonKeyImage.color = Color.white;
+            skeletonKeyCountText.text = "x" + count;
+        }
+    }
+
+    public void SetGoldKey(bool hasKey)
+    {
+        if(hasKey)
+        {
+            goldKeyImage.color = Color.white;
+        }
+        else
+        {
+            goldKeyImage.color = _keyMissingColor;
         }
     }
 
