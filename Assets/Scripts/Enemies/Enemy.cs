@@ -40,6 +40,7 @@ public class Enemy : MonoBehaviour
     protected bool _hasAggro;
     protected Player _player;
     protected GameObject _target;
+    protected Vector2 _spawnPosition;
 
     private Vector2 _dieDirection = Vector2.down;
     private static int _killsSinceLastDrop = 0;
@@ -50,6 +51,7 @@ public class Enemy : MonoBehaviour
         _hasAggro = false;
         _player = GameObject.Find("Player").GetComponent<Player>();
         _navigation.Initialize(_rigidbody, _maxSpeed, _acceleration);
+        _spawnPosition = transform.position.ToVector2();
     }
 
     protected virtual void FixedUpdate()
@@ -64,6 +66,13 @@ public class Enemy : MonoBehaviour
 
         if (_hasAggro)
         {
+            if ((_target.transform.position.ToVector2() - transform.position.ToVector2()).magnitude > _aggroDistance * 2.0f)
+            {
+                _hasAggro = false;
+                _navigation.MoveTo(_spawnPosition, false);
+                return;
+            }
+
             _navigation.MoveTo(_target, PlayerIsVisible());
         }
         else

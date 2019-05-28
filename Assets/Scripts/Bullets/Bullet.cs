@@ -3,7 +3,6 @@ using System.Collections;
 
 public class Bullet : MonoBehaviour
 {
-
     public SpriteRenderer spriteRenderer;
 
     private Color _originalColor;
@@ -15,7 +14,7 @@ public class Bullet : MonoBehaviour
 
     private BulletBehaviour _bulletBehaviour = null;
 
-    private void Start()
+    private void Awake()
     {
         _originalColor = spriteRenderer.color;
         _originalSize = spriteRenderer.transform.localScale;

@@ -136,14 +136,13 @@ public class NavigationManager : MonoBehaviour
 
             openSet.Remove(current);
             closedSet.Add(current);
-            List<NavigationNode<Vector2Int>> neighbours = GetNeighbours(current, Main.Instance.CurrentMap.CollisionMap, 
-                true);
+            List<NavigationNode<Vector2Int>> neighbours = GetNeighbours(current, Main.Instance.CurrentMap.CollisionMap, false);
 
             for (int i = 0; i < neighbours.Count; i++)
             {
-                if (!closedSet.Contains(neighbours[i]))
+                if (!closedSet.Any(x => x.Equals(neighbours[i])))
                 {
-                    if (!openSet.Contains(neighbours[i]))
+                    if (!openSet.Any(x => x.Equals(neighbours[i])))
                     {
                         neighbours[i].Parent = current;
                         neighbours[i].HScore = (target - neighbours[i].Data).sqrMagnitude;

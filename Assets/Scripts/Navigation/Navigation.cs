@@ -23,7 +23,7 @@ public class Navigation : MonoBehaviour
         _acceleration = acceleration;
         _deacceleration = 2.0f;
 
-        _minPathAge = Random.Range(3.0f, 5.0f);
+        _minPathAge = Random.Range(3.0f, 10.0f);
         _currentPathAge = _minPathAge;
         _path = new List<Vector2Int>();
 
@@ -32,7 +32,12 @@ public class Navigation : MonoBehaviour
 
     public void MoveTo(GameObject target, bool targetIsVisible)
     {
-        _target = target.transform.position.ToVector2();
+        MoveTo(target.transform.position.ToVector2(), targetIsVisible);
+    }
+
+    public void MoveTo(Vector2 target, bool targetIsVisible)
+    {
+        _target = target;
         _targetIsVisible = targetIsVisible;
     }
 
