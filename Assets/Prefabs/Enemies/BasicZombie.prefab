@@ -232,8 +232,8 @@ Rigidbody2D:
   m_BodyType: 0
   m_Simulated: 1
   m_UseFullKinematicContacts: 0
-  m_UseAutoMass: 1
-  m_Mass: 0.49634957
+  m_UseAutoMass: 0
+  m_Mass: 1.5
   m_LinearDrag: 0
   m_AngularDrag: 0.05
   m_GravityScale: 0
@@ -260,6 +260,7 @@ MonoBehaviour:
   _aggroDistance: 10
   _meleeDamage: 5
   _rigidbody: {fileID: 7125115978298190024}
+  _collider: {fileID: -2739873472844770597}
   _navigation: {fileID: -4954869916265498941}
   _characterAnimation: {fileID: 9194530984371537756}
   _particleSystemContainer: {fileID: 11400000, guid: 16ab9ed0ce6842c4b9a9e52558b0b55d,
