@@ -36,6 +36,9 @@ public class Enemy : MonoBehaviour
     [SerializeField]
     protected ItemContainer _itemContainer;
 
+    [SerializeField]
+    protected GameObject _minimapIcon;
+
     protected float _currentHealth;
     protected bool _hasAggro;
     protected Player _player;
@@ -182,6 +185,7 @@ public class Enemy : MonoBehaviour
         {
             _dieDirection = velocity;
             _rigidbody.velocity = _dieDirection.normalized * 2.5f;
+            _minimapIcon.SetActive(false);
 
             DropItem();
         }
