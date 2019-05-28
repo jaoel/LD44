@@ -8,8 +8,8 @@ public class PlayerUI : MonoBehaviour
     public Image weaponImage;
     public Image goldKeyImage;
     public Image skeletonKeyImage;
-    public TMPro.TextMeshProUGUI skeletonKeyCountText;
     public TMPro.TextMeshProUGUI weaponText;
+    public GameObject skeletonKeyContainer;
 
     [Space(20)]
     public Image maxHealthForegroundImage;
@@ -92,17 +92,32 @@ public class PlayerUI : MonoBehaviour
         }
     }
 
-    public void SetSkeletonKey(int count)
+    public void AddSkeletonKey(int count)
     {
-        if (count <= 0)
+        if (count == 1)
         {
-            skeletonKeyImage.color = _keyMissingColor;
-            skeletonKeyCountText.text = "";
+            skeletonKeyImage.color = Color.white;
         }
         else
         {
-            skeletonKeyImage.color = Color.white;
-            skeletonKeyCountText.text = "x" + count;
+            GameObject.Instantiate(skeletonKeyImage.gameObject, skeletonKeyContainer.transform);
+        }
+    }
+
+    public void RemoveSkeletonKey(int count)
+    {
+        if (count == 0)
+        {
+            skeletonKeyImage.color = _keyMissingColor;
+
+            for (int i = 1; i < skeletonKeyContainer.transform.childCount; i++)
+            {
+                Destroy(skeletonKeyContainer.transform.GetChild(i).gameObject);
+            }
+        }
+        else
+        {
+            Destroy(skeletonKeyContainer.transform.GetChild(skeletonKeyContainer.transform.childCount - 1).gameObject);
         }
     }
 

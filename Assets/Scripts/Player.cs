@@ -89,7 +89,7 @@ public class Player : MonoBehaviour, IWeaponOwner
 
         UIManager.Instance.playerUI.weaponImage.sprite = CurrentWeapon.uiImage;
         UIManager.Instance.playerUI.SetGoldKey(false);
-        UIManager.Instance.playerUI.SetSkeletonKey(_skeletonKeys.Count);
+        UIManager.Instance.playerUI.RemoveSkeletonKey(_skeletonKeys.Count);
     }
 
     public void AddKey(Key key, bool isGoldKey)
@@ -102,7 +102,7 @@ public class Player : MonoBehaviour, IWeaponOwner
         else
         {
             _skeletonKeys.Enqueue(key);
-            UIManager.Instance.playerUI.SetSkeletonKey(_skeletonKeys.Count);
+            UIManager.Instance.playerUI.AddSkeletonKey(_skeletonKeys.Count);
         }
     }
 
@@ -117,7 +117,7 @@ public class Player : MonoBehaviour, IWeaponOwner
         else if (_skeletonKeys.Count > 0 && !door.IsGoalDoor)
         {
             Key key = _skeletonKeys.Dequeue();
-            UIManager.Instance.playerUI.SetSkeletonKey(_skeletonKeys.Count);
+            UIManager.Instance.playerUI.RemoveSkeletonKey(_skeletonKeys.Count);
             Destroy(key);
             return true;
         }
