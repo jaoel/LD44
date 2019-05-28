@@ -7,12 +7,8 @@ public class ShootingEnemy : Enemy, IWeaponOwner
 
     [SerializeField]
     private float _stoppingDistance;
-    //public BulletDescription bulletDescription;
-    //
-    //public float shotTimer = float.MaxValue;
-    //public float reloadTimer = float.MaxValue;
-    //public int shotsFired = 0;
-    //public float bulletSpeed;
+
+    private Vector2 _overshootPosition;
 
     protected override void Awake()
     {
@@ -36,11 +32,25 @@ public class ShootingEnemy : Enemy, IWeaponOwner
         if (distance <= _aggroDistance && playerVisible)
         {
             _weapon.Shoot();
+
+            if (_overshootPosition == Vector2.zero || (_overshootPosition - _target.transform.position.ToVector2()).magnitude > _aggroDistance / 2.0f)
+            {
+                _overshootPosition = Utility.RandomPointOnCircleEdge(_aggroDistance) + _target.transform.position.ToVector2();
+            }
+            _navigation.MoveTo(_overshootPosition, true);
         }
 
-        if (distance <= _stoppingDistance && playerVisible)
+        if (!playerVisible)
         {
-            _navigation.Stop();
+            _overshootPosition = Vector2.zero;
+        }
+
+        if (_overshootPosition != Vector2.zero)
+        {
+            if ((_overshootPosition - transform.position.ToVector2()).magnitude < 1.0f)
+            {
+                _overshootPosition = Vector2.zero;
+            }
         }
     }
 

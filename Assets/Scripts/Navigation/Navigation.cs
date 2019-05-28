@@ -23,7 +23,7 @@ public class Navigation : MonoBehaviour
         _acceleration = acceleration;
         _deacceleration = 2.0f;
 
-        _minPathAge = Random.Range(3.0f, 10.0f);
+        _minPathAge = Random.Range(3.0f, 5.0f);
         _currentPathAge = _minPathAge;
         _path = new List<Vector2Int>();
 
@@ -90,7 +90,8 @@ public class Navigation : MonoBehaviour
 
     private void CalculateVelocity()
     {
-        _rigidbody.velocity += (_destination - transform.position.ToVector2()).normalized * _acceleration * Time.deltaTime;
+        Vector2 direction = (_destination - transform.position.ToVector2()).normalized;
+        _rigidbody.velocity += direction * _acceleration * Time.deltaTime;
         if (_rigidbody.velocity.magnitude > _maxSpeed)
         {
             _rigidbody.velocity = _rigidbody.velocity.normalized * _maxSpeed;
