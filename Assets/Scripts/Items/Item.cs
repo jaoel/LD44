@@ -8,6 +8,7 @@ using UnityEngine;
 public abstract class Item : MonoBehaviour
 {
     public ItemDescription Description;
+
     public bool isShopItem = false;
     protected bool _triggered = false;
 
