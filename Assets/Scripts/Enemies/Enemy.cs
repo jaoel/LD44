@@ -48,7 +48,7 @@ public class Enemy : MonoBehaviour
     protected GameObject _target;
     protected Vector2 _spawnPosition;
 
-    private Vector2 _dieDirection = Vector2.down;
+    protected Vector2 _dieDirection = Vector2.down;
     private static int _killsSinceLastDrop = 0;
 
     protected virtual void Awake()
@@ -186,20 +186,25 @@ public class Enemy : MonoBehaviour
         _currentHealth -= damage;
         if (_currentHealth <= 0)
         {
-            _dieDirection = velocity;
-            _rigidbody.velocity = _dieDirection.normalized * 2.5f;
-            _minimapIcon.SetActive(false);
-
-            _collider.size = new Vector2(0.6f, 0.6f);
-            _collider.offset = new Vector2(_collider.offset.x, -0.3f);
-
-            DropItem();
+            Die(velocity);
         }
 
         if (!_hasAggro)
         {
             AggroPlayer();
         }
+    }
+
+    protected virtual void Die(Vector2 velocity)
+    {
+        _dieDirection = velocity;
+        _rigidbody.velocity = _dieDirection.normalized * 2.5f;
+        _minimapIcon.SetActive(false);
+
+        _collider.size = new Vector2(0.6f, 0.6f);
+        _collider.offset = new Vector2(_collider.offset.x, -0.3f);
+
+        DropItem();
     }
 
     public virtual void DropItem()
