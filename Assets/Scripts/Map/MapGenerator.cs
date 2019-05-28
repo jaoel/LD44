@@ -112,12 +112,13 @@ public class MapGenerator : MonoBehaviour
         GenerateDoors(ref map, startAndGoal.Item1, startAndGoal.Item2, generationParameters);
         PostProcessTiles(map, generationParameters);
         SpawnSpawnables(map, level, startAndGoal);
-        PlaceTraps(map);
+        PlaceTraps(map, player);
     }
 
-    private void PlaceTraps(Map map)
+    private void PlaceTraps(Map map, Player player)
     {
         List<GameObject> traps = new List<GameObject>();
+        Bounds playerBounds = new Bounds(player.transform.position, new Vector3(1, 1));
         foreach (MapNode room in map.Cells)
         {
             int trapCount = Mathf.RoundToInt(room.Cell.Area() * _random.Range(0.0f, 0.02f));
@@ -127,16 +128,22 @@ public class MapGenerator : MonoBehaviour
                 Vector2 position = map.GetRandomPositionInRoom(2, 2, room);
 
                 Bounds bounds = new Bounds(position, new Vector3(2, 2));
-
                 bool intersects = false;
-                map.InteractiveObjects.ForEach(x =>
+
+                if (bounds.Intersects(playerBounds))
                 {
-                    Bounds otherBounds = new Bounds(x.transform.position, bounds.size);
+                    continue;
+                }
+
+                foreach(GameObject interactiveObject in map.InteractiveObjects)
+                {
+                    Bounds otherBounds = new Bounds(interactiveObject.transform.position, bounds.size);
                     if (otherBounds.Intersects(bounds))
                     {
                         intersects = true;
+                        break;
                     }
-                });
+                }
 
                 if (!intersects)
                 {
