@@ -10,12 +10,12 @@ public class FollowCamera : MonoBehaviour
     private readonly float _spring = 10f;
     private Vector2 _deadZoneRectSize = new Vector2(0.3f, 0.15f);
 
+    [SerializeField]
     private Camera _camera;
     private Rect _deadzoneRect;
 
     private void Start()
     {
-        _camera = GetComponentInChildren<Camera>();// GetComponent<Camera>();
         if (target == null || target.Equals(null))
         {
             target = FindObjectOfType<Player>()?.transform;
