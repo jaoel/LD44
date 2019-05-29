@@ -300,6 +300,7 @@ MonoBehaviour:
   _maxResurrectionTime: 5
   _resurrectedMaxSpeed: 8
   _resurrectedMaxHealth: 2
+  _visual: {fileID: 8890291396755585749}
 --- !u!1 &8747686840831202790
 GameObject:
   m_ObjectHideFlags: 0
