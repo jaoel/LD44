@@ -1,0 +1,25 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ab5cc39f1d8577341a99238dd7c3020a, type: 3}
+  m_Name: VampireTestSpawnableContainer
+  m_EditorClassIdentifier: 
+  keyframes:
+  - keyframeIndex: 0
+    spawnableObjects:
+    - spawnablePrefab: {fileID: 7125115978298190037, guid: 288ccb1b219cbb84ca27d3c84ad5537a,
+        type: 3}
+      density: 0.05
+  - keyframeIndex: 1
+    spawnableObjects:
+    - spawnablePrefab: {fileID: 7125115978298190037, guid: 288ccb1b219cbb84ca27d3c84ad5537a,
+        type: 3}
+      density: 0.05

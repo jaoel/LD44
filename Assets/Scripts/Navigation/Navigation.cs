@@ -30,6 +30,11 @@ public class Navigation : MonoBehaviour
         _target = Vector2.zero;
     }
 
+    public void SetMaxSpeed(float maxSpeed)
+    {
+        _maxSpeed = Mathf.Max(0f, maxSpeed);
+    }
+
     public void MoveTo(GameObject target, bool targetIsVisible)
     {
         MoveTo(target.transform.position.ToVector2(), targetIsVisible);

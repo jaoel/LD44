@@ -74,7 +74,7 @@ public class Bullet : MonoBehaviour
         {
             _bulletBehaviour.BeforeDestroyed(null);
         }
-        else if (collision.gameObject.layer == Layers.Enemy)
+        else if (collision.gameObject.layer == Layers.Enemy || collision.gameObject.layer == Layers.FlyingEnemy)
         {
             Enemy enemy = collision.gameObject.GetComponent<Enemy>();
             if (enemy.IsAlive)
