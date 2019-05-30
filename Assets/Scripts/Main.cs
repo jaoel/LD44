@@ -14,7 +14,6 @@ public class Main : MonoBehaviour
     
     public bool gameOver;
     private ShopRoom shopInstance;
-    public TextMeshProUGUI currentLevelText;
     public GameObject blackOverlay;
 
     public int CurrentLevel { get; private set; } = 0;
@@ -74,7 +73,6 @@ public class Main : MonoBehaviour
         }
 
         CurrentLevel++;
-        currentLevelText.text = "Level " + CurrentLevel;
         shopInstance.ClearItems();
         shopInstance.gameObject.SetActive(false);
 

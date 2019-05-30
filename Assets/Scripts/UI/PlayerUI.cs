@@ -6,6 +6,7 @@ using DG.Tweening;
 public class PlayerUI : MonoBehaviour
 {
     public GameObject healthMarkerPrefab;
+    public TMPro.TextMeshProUGUI currentLevelText;
     public Image weaponImage;
     public Image goldKeyImage;
     public Image skeletonKeyImage;
@@ -32,6 +33,8 @@ public class PlayerUI : MonoBehaviour
     private Vector3 _originalPosition;
     private CanvasScaler _scaler;
     private Image _chargeMeterFill;
+
+    private int _currentLevel = -1;
 
     private void Awake()
     {
@@ -100,6 +103,12 @@ public class PlayerUI : MonoBehaviour
         else
         {
             healthBarObject.anchoredPosition = _originalPosition;
+        }
+
+        if(Main.Instance.CurrentLevel != _currentLevel)
+        {
+            _currentLevel = Main.Instance.CurrentLevel;
+            currentLevelText.text = "Level " + _currentLevel.ToString();
         }
     }
 
