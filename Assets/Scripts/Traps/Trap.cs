@@ -25,7 +25,7 @@ public abstract class Trap : MonoBehaviour
         }
 
         Player player = playerGO.GetComponent<Player>();
-        if (!player.IsInvulnerable || description.triggerOnInvulnerable)
+        if (player != null && (!player.IsInvulnerable || description.triggerOnInvulnerable))
         {
             ApplyEffect(player, playerGO);
             minimapIcon.SetActive(false);
