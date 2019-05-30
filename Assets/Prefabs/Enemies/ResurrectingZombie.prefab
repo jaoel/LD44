@@ -284,7 +284,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _maxHealth: 3
   _maxSpeed: 3
-  _acceleration: 15
+  _acceleration: 150
   _aggroDistance: 10
   _meleeDamage: 5
   _rigidbody: {fileID: 7125115978298190024}

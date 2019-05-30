@@ -49,13 +49,13 @@ MonoBehaviour:
   _cooldown: 0
   _chargeTime: 1
   _resetChargeOnShot: 1
-  _magazineSize: 5
+  _magazineSize: 0
   _reloadTime: 1
   _bulletsPerShot: 1
   _burstInterval: 0
   _knockback: 0
-  _firingArc: 0
-  _randomizePattern: 0
+  _firingArc: 15
+  _randomizePattern: 1
   _bulletDescription: {fileID: 11400000, guid: d525ad8c5eef3bd4d92afcb751072538, type: 2}
   _shotSound: {fileID: 7246573145497593685}
   _reloadSound: {fileID: -5912559479772928181}

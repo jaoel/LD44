@@ -131,7 +131,7 @@ public class Weapon : MonoBehaviour
             _owner.Knockback(-_owner.GetAimVector(), _knockback);
         }
 
-        if (_bulletsLeft <= 0)
+        if (_bulletsLeft <= 0 && _magazineSize > 0)
         {
             TriggerReload();
         }
@@ -147,7 +147,6 @@ public class Weapon : MonoBehaviour
             UIManager.Instance.playerUI.chargeMeter.value = 0.0f;
         }
       
-
         _charging = false;
         _currentChargeTime = 0.0f;
 
@@ -192,7 +191,7 @@ public class Weapon : MonoBehaviour
 
     public virtual void Shoot()
     {
-        if (_bulletsLeft <= 0 || _reloading)
+        if ((_bulletsLeft <= 0 || _reloading) && _magazineSize > 0)
         {
             return;
         }
@@ -215,7 +214,10 @@ public class Weapon : MonoBehaviour
                     StopCoroutine(_firingSequence);
                 }
 
-                _bulletsLeft--;
+                if (_magazineSize > 0)
+                {
+                    _bulletsLeft--;
+                }
                 _firingSequence = StartCoroutine(FireBullets());
 
                 UpdatePlayerUI();
@@ -239,7 +241,9 @@ public class Weapon : MonoBehaviour
     {
         if (_isPlayerOwned)
         {
-            UIManager.Instance.playerUI.weaponText.text = _bulletsLeft + "/" + _magazineSize;
+            string magSize = _magazineSize > 0 ? _magazineSize.ToString() : "∞";
+            string bulletsLeft = _magazineSize > 0 ? _bulletsLeft.ToString() : "1";
+            UIManager.Instance.playerUI.weaponText.text = bulletsLeft + "/" + magSize;
         }
     }
 
