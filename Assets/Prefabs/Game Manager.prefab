@@ -12,7 +12,6 @@ GameObject:
   - component: {fileID: 1237039693920067737}
   - component: {fileID: 131159647817452541}
   - component: {fileID: 515992213878927342}
-  - component: {fileID: 1558292210}
   - component: {fileID: 1558292211}
   - component: {fileID: 997353019}
   - component: {fileID: 6622311546324206256}
@@ -75,18 +74,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   playerUI: {fileID: 0}
---- !u!114 &1558292210
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 891346738302845104}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 0b0bbf313942f284fa79026b571a2736, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!114 &1558292211
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -115,7 +102,6 @@ MonoBehaviour:
     type: 3}
   player: {fileID: 0}
   gameOver: 0
-  currentLevelText: {fileID: 0}
   blackOverlay: {fileID: 0}
 --- !u!114 &6622311546324206256
 MonoBehaviour:
@@ -132,7 +118,6 @@ MonoBehaviour:
   tileContainer: {fileID: 11400000, guid: 122c88a6521bfa344ae44316c6d6a813, type: 2}
   interactiveObjectContainer: {fileID: 11400000, guid: 19d0704cc28aabb4c9d5c482d9c8b89d,
     type: 2}
-  enemyContainer: {fileID: 11400000, guid: ae8c7aeb04ccf9340a11daa8a4a5ae53, type: 2}
   trapContainer: {fileID: 11400000, guid: 7029a12395ce5594db25f5753c6cb57a, type: 2}
   spawnKeyframes: {fileID: 11400000, guid: dee78a13a612660498239acca181dc46, type: 2}
   floors: {fileID: 0}

@@ -117,10 +117,10 @@ public class Enemy : MonoBehaviour
 
         if ((target - origin).magnitude <= viewDistance)
         {
-            int layerMask = LayerContainer.CombinedLayerMask("Map", "Player");
+            int layerMask = Layers.CombinedLayerMask(Layers.Map, Layers.Player);
             RaycastHit2D hit = Physics2D.Raycast(origin, (target - origin).normalized, viewDistance, layerMask);
 
-            if (hit.collider?.gameObject.layer == LayerContainer.Instance.Layers["Player"])
+            if (hit.collider?.gameObject.layer == Layers.Player)
             {
                 return true;
             }
@@ -229,7 +229,7 @@ public class Enemy : MonoBehaviour
 
     private void OnCollisionStay2D(Collision2D collision)
     {
-        if (IsAlive && collision.gameObject.layer == LayerContainer.Instance.Layers["Player"])
+        if (IsAlive && collision.gameObject.layer == Layers.Player)
         {
             _player.ReceiveDamage(_meleeDamage, -collision.contacts[0].normal);
         }

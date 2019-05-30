@@ -1,49 +1,19 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using UnityEngine;
+﻿using UnityEngine;
 
-public class LayerContainer : MonoBehaviour
+public static class Layers
 {
-    public Dictionary<string, int> Layers;
+    public static int Map = LayerMask.NameToLayer("Map");
+    public static int Player = LayerMask.NameToLayer("Player");
+    public static int FriendlyBullet = LayerMask.NameToLayer("FriendlyBullet");
+    public static int Enemy = LayerMask.NameToLayer("Enemy");
+    public static int FlyingEnemy = LayerMask.NameToLayer("FlyingEnemy");
 
-    private static LayerContainer _instance = null;
-    public static LayerContainer Instance
-    {
-        get
-        {
-            if (_instance != null)
-            {
-                return _instance;
-            }
-
-            _instance = FindObjectOfType<LayerContainer>();
-
-            if (_instance == null || _instance.Equals(null))
-            {
-                Debug.LogError("The scene needs a BulletManager");
-            }
-            return _instance;
-        }
-    }
-
-    public void Awake()
-    {
-        Layers = new Dictionary<string, int>();
-        Layers.Add("Map", LayerMask.NameToLayer("Map"));
-        Layers.Add("Player", LayerMask.NameToLayer("Player"));
-        Layers.Add("FriendlyBullet", LayerMask.NameToLayer("FriendlyBullet"));
-        Layers.Add("Enemy", LayerMask.NameToLayer("Enemy")); 
-    }
-
-    public static int CombinedLayerMask(params string[] layerNames)
+    public static int CombinedLayerMask(params int[] layers)
     {
         int result = 0;
-        for (int i = 0; i < layerNames.Length; i++)
+        for (int i = 0; i < layers.Length; i++)
         {
-            result |= 1 << Instance.Layers[layerNames[i]];
+            result |= 1 << layers[i];
         }
 
         return result;

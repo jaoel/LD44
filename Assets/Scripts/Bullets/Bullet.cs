@@ -70,11 +70,11 @@ public class Bullet : MonoBehaviour
 
         bool active = false;
 
-        if (collision.gameObject.layer == LayerContainer.Instance.Layers["Map"])
+        if (collision.gameObject.layer == Layers.Map)
         {
             _bulletBehaviour.BeforeDestroyed(null);
         }
-        else if (collision.gameObject.layer == LayerContainer.Instance.Layers["Enemy"])
+        else if (collision.gameObject.layer == Layers.Enemy)
         {
             Enemy enemy = collision.gameObject.GetComponent<Enemy>();
             if (enemy.IsAlive)
@@ -88,7 +88,7 @@ public class Bullet : MonoBehaviour
                 active = true;
             }
         }
-        else if (collision.gameObject.layer == LayerContainer.Instance.Layers["Player"])
+        else if (collision.gameObject.layer == Layers.Player)
         {
             collision.gameObject.GetComponent<Player>().ReceiveDamage(Description.damage, _velocity);
             _bulletBehaviour.BeforeDestroyed(collision.gameObject);
