@@ -8,7 +8,6 @@ public class MapGenerator : MonoBehaviour
 {
     public TileContainer tileContainer;
     public InteractiveDungeonObject interactiveObjectContainer;
-    public EnemyContainer enemyContainer;
     public TrapContainer trapContainer;
     public SpawnableContainer spawnKeyframes;
 
