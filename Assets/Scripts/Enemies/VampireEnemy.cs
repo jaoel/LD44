@@ -63,11 +63,11 @@ public class VampireEnemy : Enemy
         if (_target != null)
         {
             float distanceToPlayer = Vector2.Distance(_target.transform.position.ToVector2(), transform.position.ToVector2());
-            if (distanceToPlayer > 10f && _currentForm == Form.Humanoid)
+            if (distanceToPlayer > 8f && _currentForm == Form.Humanoid)
             {
                 SwitchForm(Form.Bat);
             }
-            else if (distanceToPlayer < 2f && _currentForm == Form.Bat)
+            else if (distanceToPlayer < 1.5f && _currentForm == Form.Bat)
             {
                 SwitchForm(Form.Humanoid);
             }
