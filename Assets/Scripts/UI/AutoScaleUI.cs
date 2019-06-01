@@ -25,20 +25,30 @@ public class AutoScaleUI : MonoBehaviour
 
     private void AutoScale()
     {
-        if (Screen.height < 800)
+        if (Screen.height <= 768)
         {
             _scaler.scaleFactor = 2;
             PixelPerfectCamera.pixelScale = 2;
         }
-        else if (Screen.height < 1080)
+        else if (Screen.height <= 1152)
         {
             _scaler.scaleFactor = 3;
             PixelPerfectCamera.pixelScale = 3;
         }
-        else
+        else if (Screen.height <= 1536)
         {
             _scaler.scaleFactor = 4;
             PixelPerfectCamera.pixelScale = 4;
+        }
+        else if (Screen.height <= 1920)
+        {
+            _scaler.scaleFactor = 5;
+            PixelPerfectCamera.pixelScale = 5;
+        }
+        else
+        {
+            _scaler.scaleFactor = 6;
+            PixelPerfectCamera.pixelScale = 6;
         }
     }
 }
