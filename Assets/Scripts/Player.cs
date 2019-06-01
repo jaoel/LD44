@@ -314,7 +314,7 @@ public class Player : MonoBehaviour, IWeaponOwner
         _slowTimer = slowTimer;
     }
 
-    public void ReceiveDamage(float damage, Vector2 direction)
+    public bool ReceiveDamage(float damage, Vector2 direction)
     {
         if (_invulnTimer >= invulnTime)
         {
@@ -345,7 +345,11 @@ public class Player : MonoBehaviour, IWeaponOwner
             {
                 SoundManager.Instance.PlayPainSound();
             }
+
+            return true;
         }
+
+        return false;
     }
 
     Vector2 IWeaponOwner.GetAimVector()

@@ -234,7 +234,10 @@ public class Enemy : MonoBehaviour
     {
         if (IsAlive && collision.gameObject.layer == Layers.Player)
         {
-            _player.ReceiveDamage(_meleeDamage, -collision.contacts[0].normal);
+            if(_player.ReceiveDamage(_meleeDamage, -collision.contacts[0].normal))
+            {
+                _rigidbody.velocity = Vector2.zero;
+            }
         }
     }
 }
