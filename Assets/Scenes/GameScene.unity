@@ -576,7 +576,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   target: {fileID: 2023222968}
-  showDeadzoneDebugRect: 0
   _camera: {fileID: 1238141174}
 --- !u!1001 &997353017
 PrefabInstance:
@@ -741,7 +740,7 @@ Camera:
   far clip plane: 1000
   field of view: 60
   orthographic: 1
-  orthographic size: 15
+  orthographic size: 30
   m_Depth: 0
   m_CullingMask:
     serializedVersion: 2
@@ -1749,13 +1748,20 @@ PrefabInstance:
       propertyPath: m_AnchorMax.x
       value: 0
       objectReference: {fileID: 0}
-    - target: {fileID: 1407042379, guid: 9614d92947da49d49986e225c3cbba6d, type: 3}
-      propertyPath: m_Value
-      value: 1
+    - target: {fileID: 1297525562916657447, guid: 9614d92947da49d49986e225c3cbba6d,
+        type: 3}
+      propertyPath: m_AnchorMin.y
+      value: 0
       objectReference: {fileID: 0}
-    - target: {fileID: 1719434170, guid: 9614d92947da49d49986e225c3cbba6d, type: 3}
-      propertyPath: m_Color.a
-      value: 1
+    - target: {fileID: 1297525562916657447, guid: 9614d92947da49d49986e225c3cbba6d,
+        type: 3}
+      propertyPath: m_AnchorMax.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1297525562916657447, guid: 9614d92947da49d49986e225c3cbba6d,
+        type: 3}
+      propertyPath: m_AnchoredPosition.x
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 4250298763829275303, guid: 9614d92947da49d49986e225c3cbba6d,
         type: 3}
@@ -1777,20 +1783,13 @@ PrefabInstance:
       propertyPath: m_textInfo.pageCount
       value: 0
       objectReference: {fileID: 0}
-    - target: {fileID: 1297525562916657447, guid: 9614d92947da49d49986e225c3cbba6d,
-        type: 3}
-      propertyPath: m_AnchorMin.y
-      value: 0
+    - target: {fileID: 1407042379, guid: 9614d92947da49d49986e225c3cbba6d, type: 3}
+      propertyPath: m_Value
+      value: 1
       objectReference: {fileID: 0}
-    - target: {fileID: 1297525562916657447, guid: 9614d92947da49d49986e225c3cbba6d,
-        type: 3}
-      propertyPath: m_AnchorMax.y
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 1297525562916657447, guid: 9614d92947da49d49986e225c3cbba6d,
-        type: 3}
-      propertyPath: m_AnchoredPosition.x
-      value: 0
+    - target: {fileID: 1719434170, guid: 9614d92947da49d49986e225c3cbba6d, type: 3}
+      propertyPath: m_Color.a
+      value: 1
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 9614d92947da49d49986e225c3cbba6d, type: 3}
