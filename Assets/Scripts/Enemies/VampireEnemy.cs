@@ -87,6 +87,7 @@ public class VampireEnemy : Enemy
     protected override void Die(Vector2 velocity)
     {
         SwitchForm(Form.Humanoid);
+        _dieDirection = Random.rotation * Vector2.up;
         base.Die(velocity);
     }
 }
