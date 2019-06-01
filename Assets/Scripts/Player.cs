@@ -194,6 +194,12 @@ public class Player : MonoBehaviour, IWeaponOwner
         inputVector.x += Keybindings.MoveRight;
         inputVector.y += Keybindings.MoveUp;
         inputVector.y -= Keybindings.MoveDown;
+
+        Vector3 mousePositionInWorldSpace = CameraManager.Instance.MainCamera.ScreenToWorldPoint(Keybindings.MousePosition);
+        mousePositionInWorldSpace.z = 0f;
+        Vector3 aimVector3 = mousePositionInWorldSpace - transform.position;
+        aimVector3.z = 0f;
+        aimVector = aimVector3.normalized;
     }
 
     private void CalculateAnimation()
@@ -344,12 +350,6 @@ public class Player : MonoBehaviour, IWeaponOwner
 
     Vector2 IWeaponOwner.GetAimVector()
     {
-        Vector3 mousePositionInWorldSpace = CameraManager.Instance.MainCamera.ScreenToWorldPoint(Keybindings.MousePosition);
-        mousePositionInWorldSpace.z = 0f;
-        Vector3 aimVector3 = mousePositionInWorldSpace - transform.position;
-        aimVector3.z = 0f;
-        aimVector = aimVector3.normalized;
-
         return aimVector;
     }
 
