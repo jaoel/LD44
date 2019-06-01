@@ -19,7 +19,6 @@ public class FollowCamera : MonoBehaviour
     void Update()
     {
         Vector2 mousePosNormalized = new Vector2(2f * Input.mousePosition.x / Screen.width - 1f, 2f * Input.mousePosition.y / Screen.height - 1f);
-        Debug.Log(mousePosNormalized);
         mousePosNormalized = mousePosNormalized.normalized * Mathf.SmoothStep(0f, 1f, Vector3.ClampMagnitude(mousePosNormalized, 1f).magnitude);
 
         Vector2 targetPosition = target.position.ToVector2();
