@@ -1002,16 +1002,14 @@ public class MapGenerator : MonoBehaviour
     {
         List<MapNode> rooms = new List<MapNode>(map.Cells.Where(x => x.Type == MapNodeType.Room));
         
-        int lockedDoorCount = (int)Mathf.Round(rooms.Count * parameters.LockFactor);
-        rooms.Remove(spawnRoom);
-        rooms.Remove(exitRoom);
-
         LockRoom(map, spawnRoom, exitRoom, rooms, out MapNode keyRoom, true);
+        int lockedDoorCount = (int)Mathf.Round(rooms.Count * parameters.LockFactor);
+
         for (int i = 0; i < lockedDoorCount; i++)
         {
             MapNode room = rooms[_random.Range(0, rooms.Count)];
 
-            if (!room.Lockable)
+            if (!room.Lockable || room == spawnRoom || room == exitRoom)
             {
                 continue;
             }
