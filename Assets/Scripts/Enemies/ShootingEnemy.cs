@@ -10,6 +10,8 @@ public class ShootingEnemy : Enemy, IWeaponOwner
 
     private Vector2 _overshootPosition;
 
+    private Vector2 AimVector => (_target.transform.position.ToVector2() - transform.position.ToVector2()).normalized;
+
     protected override void Awake()
     {
         _weapon.SetOwner(this);
@@ -32,6 +34,7 @@ public class ShootingEnemy : Enemy, IWeaponOwner
         if (distance <= _aggroDistance && playerVisible)
         {
             _weapon.Shoot();
+            _characterAnimation.UpdateAnimation(CharacterAnimation.AnimationType.Attack, AimVector);
 
             if (_overshootPosition == Vector2.zero || (_overshootPosition - _target.transform.position.ToVector2()).magnitude > _aggroDistance / 2.0f)
             {
@@ -66,7 +69,7 @@ public class ShootingEnemy : Enemy, IWeaponOwner
 
     Vector2 IWeaponOwner.GetAimVector()
     {
-        return (_target.transform.position.ToVector2() - transform.position.ToVector2()).normalized;
+        return AimVector;
     }
 
     Vector2 IWeaponOwner.GetBulletOrigin()
