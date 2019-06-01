@@ -68,9 +68,8 @@ public class MapGenerator : MonoBehaviour
 
         GenerateCells(ref result, parameters);
         SeparateCells(ref result, parameters);
-        int roomCount = IdentifyRooms(ref result, parameters);
 
-        if (roomCount < 3)
+        if (IdentifyRooms(ref result, parameters) < 3)
         {
             seed += 1;
             return GenerateMap(seed, parameters, level);
@@ -83,7 +82,12 @@ public class MapGenerator : MonoBehaviour
         PaintCorridors(ref result, parameters);
         PaintTiles(result, parameters);
         RemoveDeadRooms(ref result, parameters);
-        FindChokepoints(ref result, parameters);
+
+        if(FindChokepoints(ref result, parameters) < 2)
+        {
+            seed += 1;
+            return GenerateMap(seed, parameters, level);
+        }      
 
         _timer.Stop();
         _timer.Print("MapGenerator.GenerateMap");
@@ -811,8 +815,9 @@ public class MapGenerator : MonoBehaviour
         map.Cells.RemoveAll(x => x.Type == MapNodeType.Default || x.Type == MapNodeType.None);
     }
 
-    private void FindChokepoints(ref Map map, in MapGeneratorParameters parameters)
+    private int FindChokepoints(ref Map map, in MapGeneratorParameters parameters)
     {
+        int lockableRoomCount = 0;
         foreach (MapNode room in map.Cells)
         {
             if (room.Type != MapNodeType.Room)
@@ -846,7 +851,6 @@ public class MapGenerator : MonoBehaviour
                     break;
                 }
             }
-
             
             for (int i = 0; i < offset; i++)
             {
@@ -919,8 +923,15 @@ public class MapGenerator : MonoBehaviour
                     break;
                 }
             }
+
             room.Lockable = roomLockable;
+            if (room.Lockable)
+            {
+                lockableRoomCount++;
+            }
         }
+
+        return lockableRoomCount;
     }
 
     private List<BoundsInt> FindChokepoints(BoundsInt bounds, bool horizontal, out bool fullWall, out bool lockable)
