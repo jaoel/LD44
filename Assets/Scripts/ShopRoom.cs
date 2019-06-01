@@ -126,4 +126,13 @@ public class ShopRoom : MonoBehaviour
             Main.Instance.GenerateShop();
         }
     }
+
+    public void ResetItem1()
+    {
+        ShopItem healthShopItem = shopItems[0];
+        if (healthShopItem != null && healthShopItem.PickedUp)
+        {
+            healthShopItem.InstantiateItem(itemsParent.transform);
+        }
+    }
 }
