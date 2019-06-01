@@ -2,6 +2,7 @@
 
 public class PixelPerfectPosition : MonoBehaviour
 {
+    public bool ignoreScale = false;
     private Vector3 _offset;
     private void Awake()
     {
@@ -11,6 +12,10 @@ public class PixelPerfectPosition : MonoBehaviour
     void LateUpdate()
     {
         int pixelsPerUnit = PixelPerfectCamera.pixelsPerUnit;
+        if (ignoreScale)
+        {
+            pixelsPerUnit *= PixelPerfectCamera.pixelScale;
+        }
         Vector3 position = transform.localPosition;
 
         position.x = (Mathf.Round(transform.parent.position.x * pixelsPerUnit) / pixelsPerUnit) - transform.parent.position.x;
