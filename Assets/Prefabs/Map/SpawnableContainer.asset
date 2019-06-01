@@ -71,34 +71,17 @@ MonoBehaviour:
       density: 0.005
     - spawnablePrefab: {fileID: 7125115978298190037, guid: 6845328107654aa4698bb1993c252619,
         type: 3}
-      density: 0.001
+      density: 0.006
     - spawnablePrefab: {fileID: 7125115978298190037, guid: 159dec3a033257a499f02b1c9177cfdf,
         type: 3}
-      density: 0
+      density: 0.006
     - spawnablePrefab: {fileID: 7125115978298190037, guid: 288ccb1b219cbb84ca27d3c84ad5537a,
         type: 3}
-      density: 0
+      density: 0.005
     - spawnablePrefab: {fileID: 7125115978298190037, guid: 99e3f9f24aee3ce4da3fee32a5250df8,
         type: 3}
-      density: 0
+      density: 0.01
   - keyframeIndex: 4
-    spawnableObjects:
-    - spawnablePrefab: {fileID: 7125115978298190037, guid: cc3e59661492ce04fbcd15c36679a329,
-        type: 3}
-      density: 0.0025
-    - spawnablePrefab: {fileID: 7125115978298190037, guid: 6845328107654aa4698bb1993c252619,
-        type: 3}
-      density: 0.0025
-    - spawnablePrefab: {fileID: 7125115978298190037, guid: 159dec3a033257a499f02b1c9177cfdf,
-        type: 3}
-      density: 0
-    - spawnablePrefab: {fileID: 7125115978298190037, guid: 288ccb1b219cbb84ca27d3c84ad5537a,
-        type: 3}
-      density: 0
-    - spawnablePrefab: {fileID: 7125115978298190037, guid: 99e3f9f24aee3ce4da3fee32a5250df8,
-        type: 3}
-      density: 0
-  - keyframeIndex: 7
     spawnableObjects:
     - spawnablePrefab: {fileID: 7125115978298190037, guid: cc3e59661492ce04fbcd15c36679a329,
         type: 3}
@@ -115,6 +98,23 @@ MonoBehaviour:
     - spawnablePrefab: {fileID: 7125115978298190037, guid: 99e3f9f24aee3ce4da3fee32a5250df8,
         type: 3}
       density: 0.0025
+  - keyframeIndex: 7
+    spawnableObjects:
+    - spawnablePrefab: {fileID: 7125115978298190037, guid: cc3e59661492ce04fbcd15c36679a329,
+        type: 3}
+      density: 0.0025
+    - spawnablePrefab: {fileID: 7125115978298190037, guid: 6845328107654aa4698bb1993c252619,
+        type: 3}
+      density: 0.005
+    - spawnablePrefab: {fileID: 7125115978298190037, guid: 159dec3a033257a499f02b1c9177cfdf,
+        type: 3}
+      density: 0
+    - spawnablePrefab: {fileID: 7125115978298190037, guid: 288ccb1b219cbb84ca27d3c84ad5537a,
+        type: 3}
+      density: 0
+    - spawnablePrefab: {fileID: 7125115978298190037, guid: 99e3f9f24aee3ce4da3fee32a5250df8,
+        type: 3}
+      density: 0.005
   - keyframeIndex: 9
     spawnableObjects:
     - spawnablePrefab: {fileID: 7125115978298190037, guid: cc3e59661492ce04fbcd15c36679a329,
@@ -166,3 +166,20 @@ MonoBehaviour:
     - spawnablePrefab: {fileID: 7125115978298190037, guid: 99e3f9f24aee3ce4da3fee32a5250df8,
         type: 3}
       density: 0.005
+  - keyframeIndex: 24
+    spawnableObjects:
+    - spawnablePrefab: {fileID: 7125115978298190037, guid: cc3e59661492ce04fbcd15c36679a329,
+        type: 3}
+      density: 0.005
+    - spawnablePrefab: {fileID: 7125115978298190037, guid: 6845328107654aa4698bb1993c252619,
+        type: 3}
+      density: 0.006
+    - spawnablePrefab: {fileID: 7125115978298190037, guid: 159dec3a033257a499f02b1c9177cfdf,
+        type: 3}
+      density: 0.006
+    - spawnablePrefab: {fileID: 7125115978298190037, guid: 288ccb1b219cbb84ca27d3c84ad5537a,
+        type: 3}
+      density: 0.005
+    - spawnablePrefab: {fileID: 7125115978298190037, guid: 99e3f9f24aee3ce4da3fee32a5250df8,
+        type: 3}
+      density: 0.01

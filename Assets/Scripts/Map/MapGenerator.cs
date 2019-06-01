@@ -172,8 +172,8 @@ public class MapGenerator : MonoBehaviour
         }
 
         float scaledLevel = Utility.ConvertRange(highestBelow.keyframeIndex, lowestAbove.keyframeIndex, 0.0f, 1.0f, level);
-
         int spawnableTypeCount = lowestAbove.spawnableObjects.Count;
+        int avgArea = Mathf.RoundToInt((float)map.Cells.Average(x => x.Cell.Area()));
 
         foreach (MapNode room in map.Cells)
         {
@@ -185,7 +185,7 @@ public class MapGenerator : MonoBehaviour
             for (int i = 0; i < spawnableTypeCount; i++)
             {
                 float density = Mathf.Lerp(highestBelow.spawnableObjects[i].density, lowestAbove.spawnableObjects[i].density, scaledLevel);
-                int spawnableCount = Mathf.RoundToInt(density * room.Cell.Area() * (1.2f - room.SeclusionFactor));
+                int spawnableCount = Mathf.RoundToInt(density * Mathf.Max(room.Cell.Area(), avgArea) * (1.5f - room.SeclusionFactor));
 
                 for (int j = 0; j < spawnableCount; j++)
                 {

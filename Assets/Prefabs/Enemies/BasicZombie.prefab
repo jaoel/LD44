@@ -92,6 +92,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 52f5714e4d12dc54d8d8e2f99c5fdcf5, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  ignoreScale: 0
 --- !u!1 &6299448941655325229
 GameObject:
   m_ObjectHideFlags: 0
@@ -184,6 +185,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 52f5714e4d12dc54d8d8e2f99c5fdcf5, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  ignoreScale: 0
 --- !u!1 &7125115978298190037
 GameObject:
   m_ObjectHideFlags: 0
@@ -255,7 +257,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _maxHealth: 2
-  _maxSpeed: 6.5
+  _maxSpeed: 8.5
   _acceleration: 50
   _aggroDistance: 10
   _meleeDamage: 5
@@ -422,6 +424,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 52f5714e4d12dc54d8d8e2f99c5fdcf5, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  ignoreScale: 0
 --- !u!114 &4219749322955614124
 MonoBehaviour:
   m_ObjectHideFlags: 0

@@ -92,6 +92,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 52f5714e4d12dc54d8d8e2f99c5fdcf5, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  ignoreScale: 0
 --- !u!1 &6299448941655325229
 GameObject:
   m_ObjectHideFlags: 0
@@ -184,6 +185,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 52f5714e4d12dc54d8d8e2f99c5fdcf5, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  ignoreScale: 0
 --- !u!1 &7125115978298190037
 GameObject:
   m_ObjectHideFlags: 0
@@ -297,7 +299,7 @@ MonoBehaviour:
   _minimapIcon: {fileID: 6063395773892339257}
   _lives: 2
   _minResurrectionTime: 1
-  _maxResurrectionTime: 5
+  _maxResurrectionTime: 3
   _resurrectedMaxSpeed: 8
   _resurrectedMaxHealth: 1
   _visual: {fileID: 8890291396755585749}
@@ -428,6 +430,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 52f5714e4d12dc54d8d8e2f99c5fdcf5, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  ignoreScale: 0
 --- !u!114 &4219749322955614124
 MonoBehaviour:
   m_ObjectHideFlags: 0
