@@ -185,7 +185,7 @@ public class MapGenerator : MonoBehaviour
             for (int i = 0; i < spawnableTypeCount; i++)
             {
                 float density = Mathf.Lerp(highestBelow.spawnableObjects[i].density, lowestAbove.spawnableObjects[i].density, scaledLevel);
-                int spawnableCount = Mathf.RoundToInt(density * Mathf.Max(room.Cell.Area(), avgArea) * (1.5f - room.SeclusionFactor));
+                int spawnableCount = Mathf.RoundToInt(density * room.Cell.Area() * (1.5f - room.SeclusionFactor));
 
                 for (int j = 0; j < spawnableCount; j++)
                 {
