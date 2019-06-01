@@ -385,7 +385,7 @@ GameObject:
   - component: {fileID: 8156365822726571197}
   - component: {fileID: 6305079821149535870}
   - component: {fileID: 1479210966132672544}
-  m_Layer: 0
+  m_Layer: 11
   m_Name: Shadow
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -537,8 +537,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _maxHealth: 3
-  _maxSpeed: 3
-  _acceleration: 15
+  _maxSpeed: 5
+  _acceleration: 25
   _aggroDistance: 10
   _meleeDamage: 5
   _rigidbody: {fileID: 7125115978298190024}
@@ -551,7 +551,7 @@ MonoBehaviour:
   _minimapIcon: {fileID: 6063395773892339257}
   _humanoidFormGameObject: {fileID: 4407426537756196130}
   _batFormGameObject: {fileID: 5022286688611378651}
-  _batFormMaxSpeed: 10
+  _batFormMaxSpeed: 12
 --- !u!114 &-4954869916265498941
 MonoBehaviour:
   m_ObjectHideFlags: 0

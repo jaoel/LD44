@@ -282,8 +282,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3d6f7f526734572489841ae0c4d45781, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _maxHealth: 3
-  _maxSpeed: 3
+  _maxHealth: 2
+  _maxSpeed: 5
   _acceleration: 150
   _aggroDistance: 10
   _meleeDamage: 5
@@ -298,8 +298,8 @@ MonoBehaviour:
   _lives: 2
   _minResurrectionTime: 1
   _maxResurrectionTime: 5
-  _resurrectedMaxSpeed: 8
-  _resurrectedMaxHealth: 2
+  _resurrectedMaxSpeed: 12
+  _resurrectedMaxHealth: 1
   _visual: {fileID: 8890291396755585749}
 --- !u!1 &8747686840831202790
 GameObject:

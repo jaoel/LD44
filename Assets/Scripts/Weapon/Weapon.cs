@@ -77,6 +77,7 @@ public class Weapon : MonoBehaviour
 
     private Color _reloadGoalColor = Color.green;
     private Color _chargeGoalColor = Color.cyan;
+    private Color _clearColor = Utility.RGBAColor(0, 0, 0, 1.0f);
 
     protected virtual void Awake()
     {
@@ -143,7 +144,7 @@ public class Weapon : MonoBehaviour
     {
         if (_isPlayerOwned)
         {
-            UIManager.Instance.playerUI.SetChargeMeterColor(Color.clear);
+            UIManager.Instance.playerUI.SetChargeMeterColor(_clearColor);
             UIManager.Instance.playerUI.chargeMeter.value = 0.0f;
         }
       
@@ -166,7 +167,7 @@ public class Weapon : MonoBehaviour
         {
             if (_isPlayerOwned)
             {
-                UIManager.Instance.playerUI.SetChargeMeterColor(Color.clear, _reloadGoalColor, timePassed / _reloadTime);
+                UIManager.Instance.playerUI.SetChargeMeterColor(_clearColor, _reloadGoalColor, timePassed / _reloadTime);
                 UIManager.Instance.playerUI.chargeMeter.value = Mathf.Lerp(0.0f, 1.0f, timePassed / _reloadTime);
             }
 
@@ -182,7 +183,7 @@ public class Weapon : MonoBehaviour
 
         if (_isPlayerOwned)
         {
-            UIManager.Instance.playerUI.SetChargeMeterColor(Color.clear);
+            UIManager.Instance.playerUI.SetChargeMeterColor(_clearColor);
             UIManager.Instance.playerUI.chargeMeter.value = 0.0f;
         }
        
@@ -201,9 +202,9 @@ public class Weapon : MonoBehaviour
             _charging = true;
             _currentChargeTime += Time.deltaTime;
 
-            if (_isPlayerOwned)
+            if (_isPlayerOwned && _chargeTime > 0.0f)
             {
-                UIManager.Instance.playerUI.SetChargeMeterColor(Color.clear, _chargeGoalColor, _currentChargeTime / _chargeTime);
+                UIManager.Instance.playerUI.SetChargeMeterColor(_clearColor, _chargeGoalColor, _currentChargeTime / _chargeTime);
                 UIManager.Instance.playerUI.chargeMeter.value = _currentChargeTime / _chargeTime;
             }
 
@@ -228,7 +229,7 @@ public class Weapon : MonoBehaviour
 
                     if (_isPlayerOwned)
                     {
-                        UIManager.Instance.playerUI.SetChargeMeterColor(Color.clear);
+                        UIManager.Instance.playerUI.SetChargeMeterColor(_clearColor);
                         UIManager.Instance.playerUI.chargeMeter.value = 0.0f;
                     }
                 }
@@ -266,14 +267,14 @@ public class Weapon : MonoBehaviour
     {
         _currentCooldown += Time.deltaTime;
 
-        if (!_charging && _currentChargeTime > 0.0f)
+        if (!_charging && _currentChargeTime > 0.0f && _chargeTime > 0.0f)
         {
             _currentChargeTime -= Time.deltaTime;
             _currentChargeTime = Mathf.Max(0.0f, _currentChargeTime);
 
             if (_isPlayerOwned)
             {
-                UIManager.Instance.playerUI.SetChargeMeterColor(_chargeGoalColor, Color.clear, _currentChargeTime / _chargeTime);
+                UIManager.Instance.playerUI.SetChargeMeterColor(_chargeGoalColor, _clearColor, _currentChargeTime / _chargeTime);
                 UIManager.Instance.playerUI.chargeMeter.value = _currentChargeTime / _chargeTime;
             }
         }

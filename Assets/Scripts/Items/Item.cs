@@ -15,22 +15,26 @@ public abstract class Item : MonoBehaviour
     public virtual void Apply(GameObject owner)
     {
         Player player = owner.GetComponent<Player>();
-        if (isShopItem)
-        {
-            player.MaxHealth -= Description.HealthCost;
-        }
-        if (player.Health > 0)
-        {
-            ApplyEffect(owner);
-        }
 
-        if (player.Health <= 0)
+        if (player != null)
         {
-            SoundManager.Instance.PlayPlayerDeath(UnityEngine.Random.Range(0.0f, 1.0f) < 0.1f);
-        }
+            if (isShopItem)
+            {
+                player.MaxHealth -= Description.HealthCost;
+            }
+            if (player.Health > 0)
+            {
+                ApplyEffect(owner);
+            }
 
-        SoundManager.Instance.PlayItemPickup();
-        Destroy(gameObject);
+            if (player.Health <= 0)
+            {
+                SoundManager.Instance.PlayPlayerDeath(UnityEngine.Random.Range(0.0f, 1.0f) < 0.1f);
+            }
+
+            SoundManager.Instance.PlayItemPickup();
+            Destroy(gameObject);
+        }
     }
 
     public abstract void ApplyEffect(GameObject owner);

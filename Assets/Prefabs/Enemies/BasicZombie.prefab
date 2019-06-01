@@ -254,9 +254,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2b93318ac224793439849f1944fe9475, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _maxHealth: 3
-  _maxSpeed: 3
-  _acceleration: 15
+  _maxHealth: 2
+  _maxSpeed: 8
+  _acceleration: 50
   _aggroDistance: 10
   _meleeDamage: 5
   _rigidbody: {fileID: 7125115978298190024}
