@@ -174,24 +174,27 @@ public class Enemy : MonoBehaviour
 
     public virtual void ApplyDamage(int damage, Vector2 velocity)
     {
-        SoundManager.Instance.PlayMonsterPainSound();
-        
-        ParticleSystem bloodSpray = Instantiate(_particleSystemContainer.bloodSpray, transform.position, Quaternion.identity);
-        
-        Vector3 dir = new Vector3(velocity.normalized.x, velocity.normalized.y, 0);
-        bloodSpray.transform.DOLookAt(transform.position + dir, 0.0f);
-        bloodSpray.gameObject.SetActive(true);
-        bloodSpray.Play();
-        
-        _currentHealth -= damage;
-        if (_currentHealth <= 0)
+        if (IsAlive)
         {
-            Die(velocity);
-        }
+            SoundManager.Instance.PlayMonsterPainSound();
 
-        if (!_hasAggro)
-        {
-            AggroPlayer();
+            ParticleSystem bloodSpray = Instantiate(_particleSystemContainer.bloodSpray, transform.position, Quaternion.identity);
+
+            Vector3 dir = new Vector3(velocity.normalized.x, velocity.normalized.y, 0);
+            bloodSpray.transform.DOLookAt(transform.position + dir, 0.0f);
+            bloodSpray.gameObject.SetActive(true);
+            bloodSpray.Play();
+
+            _currentHealth -= damage;
+            if (!IsAlive)
+            {
+                Die(velocity);
+            }
+
+            if (!_hasAggro)
+            {
+                AggroPlayer();
+            }
         }
     }
 

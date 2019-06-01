@@ -47,14 +47,14 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   uiImage: {fileID: -3993855566539492532, guid: 42bd3ffc034dd23409edab32966f490e,
     type: 3}
-  _cooldown: 1
+  _cooldown: 0.75
   _chargeTime: 0
   _resetChargeOnShot: 0
   _magazineSize: 5
-  _reloadTime: 2
-  _bulletsPerShot: 3
+  _reloadTime: 2.5
+  _bulletsPerShot: 5
   _burstInterval: 0
-  _knockback: 0
+  _knockback: 1000
   _firingArc: 60
   _randomizePattern: 0
   _bulletDescription: {fileID: 11400000, guid: b85b6f222e986484bb7ce58010cb1724, type: 2}

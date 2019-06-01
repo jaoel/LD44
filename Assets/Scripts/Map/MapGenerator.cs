@@ -160,6 +160,12 @@ public class MapGenerator : MonoBehaviour
     {
         SpawnableKeyframe lowestAbove = spawnKeyframes.keyframes.Where(x => x.keyframeIndex >= level).FirstOrDefault();
         SpawnableKeyframe highestBelow = spawnKeyframes.keyframes.OrderByDescending(x => x.keyframeIndex).Where(x => x.keyframeIndex < level).FirstOrDefault();
+
+        if (level >= spawnKeyframes.keyframes.Count)
+        {
+            lowestAbove = spawnKeyframes.keyframes.Last();
+        }
+
         float scaledLevel = Utility.ConvertRange(highestBelow.keyframeIndex, lowestAbove.keyframeIndex, 0.0f, 1.0f, level);
 
         int spawnableTypeCount = lowestAbove.spawnableObjects.Count;
