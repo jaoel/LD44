@@ -115,15 +115,20 @@ public class MapGenerator : MonoBehaviour
         GenerateDoors(ref map, startAndGoal.Item1, startAndGoal.Item2, generationParameters);
         PostProcessTiles(map, generationParameters);
         SpawnSpawnables(map, level, startAndGoal);
-        PlaceTraps(map, player);
+        PlaceTraps(map, startAndGoal.Item1, player);
     }
 
-    private void PlaceTraps(Map map, Player player)
+    private void PlaceTraps(Map map, MapNode spawnRoom, Player player)
     {
         List<GameObject> traps = new List<GameObject>();
         Bounds playerBounds = new Bounds(player.transform.position, new Vector3(1, 1));
         foreach (MapNode room in map.Cells)
         {
+            if (room == spawnRoom)
+            {
+                continue;
+            }
+
             int trapCount = Mathf.RoundToInt(room.Cell.Area() * _random.Range(0.0f, 0.02f));
             for (int i = 0; i < trapCount; i++)
             {
@@ -1474,6 +1479,7 @@ public class MapGenerator : MonoBehaviour
 
         return null;
     }
+
     private void PostProcessTiles(in Map map, in MapGeneratorParameters parameters)
     {
         for (int x = map.Bounds.xMin; x < map.Bounds.xMax; x++)
