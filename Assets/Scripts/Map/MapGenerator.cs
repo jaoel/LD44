@@ -184,16 +184,16 @@ public class MapGenerator : MonoBehaviour
 
                 for (int j = 0; j < spawnableCount; j++)
                 {
-                    Spawn(map, lowestAbove, room, i);
+                    Spawn(map, lowestAbove.spawnableObjects[i].spawnablePrefab, room);
                 }
             }
         }
     }
 
-    private void Spawn(Map map, SpawnableKeyframe lowestAbove, MapNode room, int i)
+    private void Spawn(Map map, GameObject prefab, MapNode room)
     {
         Vector3 spawnPos = map.GetRandomPositionInRoom(1, 1, room).ToVector3();
-        map.AddEnemy(GameObject.Instantiate(lowestAbove.spawnableObjects[i].spawnablePrefab, new Vector3(spawnPos.x, spawnPos.y, 0.0f), Quaternion.identity));
+        map.AddEnemy(GameObject.Instantiate(prefab, new Vector3(spawnPos.x, spawnPos.y, 0.0f), Quaternion.identity));
         map.Enemies[map.Enemies.Count - 1].SetActive(false);
     }
 
@@ -229,7 +229,14 @@ public class MapGenerator : MonoBehaviour
         index = 0;
         foreach (float dist in distances)
         {
-            map.Cells[index].SeclusionFactor = Utility.ConvertRange(minDist, maxDist, 0.0f, 1.0f, dist);
+            if (maxDist == minDist)
+            {
+                map.Cells[index].SeclusionFactor = minDist;
+            }
+            else
+            {
+                map.Cells[index].SeclusionFactor = Utility.ConvertRange(minDist, maxDist, 0.0f, 1.0f, dist);
+            }
             index++;
         }
 

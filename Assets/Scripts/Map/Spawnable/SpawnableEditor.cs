@@ -50,7 +50,7 @@ public class SpawnableInspector : Editor
             }
         }
 
-        serializedObject.Update();
+        //serializedObject.Update();
         EditorGUILayout.LabelField("Spawnable keyframe data");
         EditorGUILayout.LabelField("Number of keyframes: " + _keyframes.arraySize);
         DrawUILine(Color.gray);
@@ -154,8 +154,14 @@ public class SpawnableKeyframeDrawer : PropertyDrawer
                     densityRect.x += densityRect.width;
                     densityRect.width /= 2.0f;
                     densityRect = EditorGUI.IndentedRect(densityRect);
-                    density.floatValue = EditorGUI.FloatField(densityRect, density.floatValue);
-            
+                    float newDensity = EditorGUI.FloatField(densityRect, density.floatValue);
+
+                    if (newDensity != density.floatValue)
+                    {
+                        density.floatValue = newDensity;
+                        spawnable.serializedObject.ApplyModifiedProperties();
+                    }
+
                     densityRect.x += densityRect.width;
                     if (GUI.Button(densityRect, "Del"))
                     {
@@ -178,7 +184,6 @@ public class SpawnableKeyframeDrawer : PropertyDrawer
                 spawnables.InsertArrayElementAtIndex(spawnables.arraySize);
             }
         }
-
         
         property.serializedObject.ApplyModifiedProperties();
         EditorGUI.EndProperty();

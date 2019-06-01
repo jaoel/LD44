@@ -255,7 +255,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _maxHealth: 2
-  _maxSpeed: 7.5
+  _maxSpeed: 6.5
   _acceleration: 50
   _aggroDistance: 10
   _meleeDamage: 5

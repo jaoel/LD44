@@ -298,7 +298,7 @@ MonoBehaviour:
   _lives: 2
   _minResurrectionTime: 1
   _maxResurrectionTime: 5
-  _resurrectedMaxSpeed: 8.5
+  _resurrectedMaxSpeed: 8
   _resurrectedMaxHealth: 1
   _visual: {fileID: 8890291396755585749}
 --- !u!1 &8747686840831202790
