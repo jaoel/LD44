@@ -27,7 +27,7 @@ public class GrenadeBulletBehaviour : BulletBehaviour
         _lastPosition = bullet.transform.position;
     }
 
-    public override void BeforeDestroyed(GameObject hitTarget)
+    public override void BeforeDestroyed(GameObject hitTarget, Vector2 velocity = new Vector2())
     {
         SoundManager.Instance.PlayExplosionSound();
         CameraManager.Instance.ShakeCamera(0.6f, 0.25f, 1.25f);

@@ -9,7 +9,7 @@ public class BulletBehaviour : MonoBehaviour
         bullet.transform.position += (Vector3)bullet.velocity * Time.deltaTime;
     }
 
-    public virtual void BeforeDestroyed(GameObject hitTarget)
+    public virtual void BeforeDestroyed(GameObject hitTarget, Vector2 velocity = new Vector2())
     {
     }
 }

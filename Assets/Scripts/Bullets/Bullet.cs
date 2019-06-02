@@ -72,7 +72,7 @@ public class Bullet : MonoBehaviour
 
         if (collision.gameObject.layer == Layers.Map)
         {
-            _bulletBehaviour.BeforeDestroyed(null);
+            _bulletBehaviour.BeforeDestroyed(null, _velocity);
         }
         else if (collision.gameObject.layer == Layers.Enemy || collision.gameObject.layer == Layers.FlyingEnemy)
         {
@@ -80,7 +80,7 @@ public class Bullet : MonoBehaviour
             if (enemy.IsAlive)
             {
                 collision.gameObject.GetComponent<Enemy>().ApplyDamage(Description.damage, _velocity);
-                _bulletBehaviour.BeforeDestroyed(collision.gameObject);
+                _bulletBehaviour.BeforeDestroyed(collision.gameObject, _velocity);
                 CameraManager.Instance.ShakeCamera(0.15f, 0.1f, 0.1f, 30);
             }
             else
