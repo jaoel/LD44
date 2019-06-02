@@ -541,7 +541,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _maxHealth: 2
-  _maxSpeed: 8
+  _maxSpeed: 5
   _acceleration: 35
   _aggroDistance: 10
   _meleeDamage: 5
@@ -556,6 +556,7 @@ MonoBehaviour:
   _humanoidFormGameObject: {fileID: 4407426537756196130}
   _batFormGameObject: {fileID: 5022286688611378651}
   _batFormMaxSpeed: 12
+  _batFormAcceleration: 50
 --- !u!114 &-4954869916265498941
 MonoBehaviour:
   m_ObjectHideFlags: 0

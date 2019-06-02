@@ -5,7 +5,9 @@ public class VampireEnemy : Enemy
     [SerializeField] private GameObject _humanoidFormGameObject;
     [SerializeField] private GameObject _batFormGameObject;
     [SerializeField] private float _batFormMaxSpeed;
+    [SerializeField] private float _batFormAcceleration;
     private Form _currentForm = Form.Humanoid;
+    private float switchFormTimestamp = 0f;
 
     enum Form
     {
@@ -23,14 +25,6 @@ public class VampireEnemy : Enemy
         SwitchForm(Form.Humanoid);
     }
 
-    private void Update()
-    {
-        if (Input.GetKeyDown(KeyCode.P))
-        {
-            SwitchForm(_currentForm == Form.Bat ? Form.Humanoid : Form.Bat);
-        }
-    }
-
     private void SwitchForm(Form toForm)
     {
         if (toForm == Form.Bat)
@@ -38,14 +32,18 @@ public class VampireEnemy : Enemy
             _humanoidFormGameObject.SetActive(false);
             _batFormGameObject.SetActive(true);
             _navigation.SetMaxSpeed(_batFormMaxSpeed);
+            _navigation.SetAcceleration(_batFormAcceleration);
             gameObject.layer = Layers.FlyingEnemy;
+            switchFormTimestamp = Time.time + Random.Range(5f, 10f);
         }
         else
         {
             _humanoidFormGameObject.SetActive(true);
             _batFormGameObject.SetActive(false);
             _navigation.SetMaxSpeed(_maxSpeed);
+            _navigation.SetAcceleration(_acceleration);
             gameObject.layer = Layers.Enemy;
+            switchFormTimestamp = Time.time + Random.Range(5f, 10f);
         }
         _currentForm = toForm;
     }
@@ -63,11 +61,11 @@ public class VampireEnemy : Enemy
         if (_target != null)
         {
             float distanceToPlayer = Vector2.Distance(_target.transform.position.ToVector2(), transform.position.ToVector2());
-            if (distanceToPlayer > 8f && _currentForm == Form.Humanoid)
+            if ((distanceToPlayer > 8f || switchFormTimestamp < Time.time) && _currentForm == Form.Humanoid)
             {
                 SwitchForm(Form.Bat);
             }
-            else if (distanceToPlayer < 1.5f && _currentForm == Form.Bat)
+            else if ((switchFormTimestamp < Time.time) && _currentForm == Form.Bat)
             {
                 SwitchForm(Form.Humanoid);
             }
@@ -89,5 +87,27 @@ public class VampireEnemy : Enemy
         SwitchForm(Form.Humanoid);
         _dieDirection = Random.rotation * Vector2.up;
         base.Die(velocity);
+    }
+
+    protected override void OnCollisionStay2D(Collision2D collision)
+    {
+        if (IsAlive && collision.gameObject.layer == Layers.Player)
+        {
+            if(_currentForm == Form.Bat)
+            {
+                if (_player.ReceiveDamage(_meleeDamage, -collision.contacts[0].normal, true))
+                {
+                    _rigidbody.velocity = Vector2.zero;
+                }
+                SwitchForm(Form.Humanoid);
+            }
+            else
+            {
+                if (_player.ReceiveDamage(_meleeDamage, -collision.contacts[0].normal))
+                {
+                    _rigidbody.velocity = Vector2.zero;
+                }
+            }
+        }
     }
 }

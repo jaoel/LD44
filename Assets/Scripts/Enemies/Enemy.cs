@@ -230,7 +230,7 @@ public class Enemy : MonoBehaviour
         }
     }
 
-    private void OnCollisionStay2D(Collision2D collision)
+    protected virtual void OnCollisionStay2D(Collision2D collision)
     {
         if (IsAlive && collision.gameObject.layer == Layers.Player)
         {

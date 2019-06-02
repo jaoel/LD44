@@ -314,7 +314,7 @@ public class Player : MonoBehaviour, IWeaponOwner
         _slowTimer = slowTimer;
     }
 
-    public bool ReceiveDamage(float damage, Vector2 direction)
+    public bool ReceiveDamage(float damage, Vector2 direction, bool maxHealth = false)
     {
         if (_invulnTimer >= invulnTime)
         {
@@ -336,6 +336,10 @@ public class Player : MonoBehaviour, IWeaponOwner
 
             _invulnTimer = 0;
             Health -= (int)damage;
+            if (maxHealth)
+            {
+                MaxHealth -= (int)damage;
+            }
 
             if (Health <= 0)
             {

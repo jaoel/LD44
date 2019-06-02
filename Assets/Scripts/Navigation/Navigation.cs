@@ -35,6 +35,11 @@ public class Navigation : MonoBehaviour
         _maxSpeed = Mathf.Max(0f, maxSpeed);
     }
 
+    public void SetAcceleration(float acceleration)
+    {
+        _acceleration = Mathf.Max(0.1f, acceleration);
+    }
+
     public void MoveTo(GameObject target, bool targetIsVisible)
     {
         MoveTo(target.transform.position.ToVector2(), targetIsVisible);
