@@ -18,8 +18,10 @@ public class MapNode
     public List<Delaunay.Edge<MapNode>> Corridors { get; set; }
     public List<BoundsInt> Chokepoints { get; set; }
     public bool Lockable { get; set; }
+    public bool Locked { get; set; }
+    public bool ContainsStairs { get; set; }
+    public List<GameObject> Keys { get; set; }
     public float SeclusionFactor { get; set; }
-
     public bool HasEntryPoint => EntryPoints.Count > 0;
 
     public MapNode(int id, Vector2Int position, Vector2Int size, bool useDefaultEntryPoint = true)
@@ -29,6 +31,7 @@ public class MapNode
         EntryPoints = new List<Vector2Int>();
         Corridors = new List<Delaunay.Edge<MapNode>>();
         Chokepoints = new List<BoundsInt>();
+        Keys = new List<GameObject>();
     }
 
     public Vector2Int GetClosestEntryPoint(Vector2 position)

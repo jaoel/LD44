@@ -27,6 +27,7 @@ public class Door : MonoBehaviour
     public void Open(bool unlock)
     {
         collider.enabled = false;
+        Main.Instance.CurrentMap.UpdateCollisionMap(Bounds, 0);
 
         if (unlock)
         {
@@ -38,6 +39,7 @@ public class Door : MonoBehaviour
     public void Close(bool lockDoor)
     {
         collider.enabled = true;
+        Main.Instance.CurrentMap.UpdateCollisionMap(Bounds, 1);
 
         if (lockDoor)
         {

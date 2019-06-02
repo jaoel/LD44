@@ -76,7 +76,6 @@ public class Main : MonoBehaviour
         shopInstance.ClearItems();
         shopInstance.gameObject.SetActive(false);
 
-
         MapGeneratorParameters parameters = new MapGeneratorParameters();
         parameters.GenerationRadius = 20;
 

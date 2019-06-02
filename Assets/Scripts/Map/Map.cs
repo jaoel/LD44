@@ -39,8 +39,8 @@ public class Map
         _drawDelaunay = false;
         _drawGabriel = false;
         _drawEMST = false;
-        _drawCorridors = false;
-        _drawLayout = true;
+        _drawCorridors = true;
+        _drawLayout = false;
         _drawBounds = false;
 
         _floors = floors;
@@ -273,7 +273,7 @@ public class Map
         {
             LayoutGraph.ForEach(x =>
             {
-                //GizmoUtility.DrawLine(x, Color.magenta);
+                GizmoUtility.DrawLine(x, Color.magenta);
             });
 
             if (StartToGoalPath != null)
@@ -287,9 +287,17 @@ public class Map
 
         if (_drawCorridors && CorridorGraph != null)
         {
-            CorridorGraph.ForEach(x =>
+            //CorridorGraph.ForEach(x =>
+            //{
+            //    GizmoUtility.DrawLine(x, Color.red);
+            //});
+
+            Cells.ForEach(x =>
             {
-                GizmoUtility.DrawLine(x, Color.red);
+                x.Corridors.ForEach(y =>
+                {
+                    GizmoUtility.DrawLine(y, new Color(159 / 255.0f, 90 / 255.0f, 253 / 255.0f, 1));
+                });
             });
         }
     }
