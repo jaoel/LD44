@@ -119,7 +119,7 @@ public class Weapon : MonoBehaviour
                 rotation = Quaternion.Euler(0.0f, 0.0f, -_halfAngle + (_degPerBullet * i));
             }
 
-            float charge = _chargeTime > 0.0f ? Utility.ConvertRange(0.0f, _chargeTime, 0.0f, 1.0f, _currentChargeTime) : 1.0f;
+            float charge = _chargeTime > 0.0f ? _currentChargeTime / _chargeTime : 1.0f;
 
             BulletManager.Instance.SpawnBullet(_bulletDescription, _owner.GetBulletOrigin(),
                rotation * _owner.GetAimVector() * _bulletDescription.speed, _owner.GetGameObject(), charge);
