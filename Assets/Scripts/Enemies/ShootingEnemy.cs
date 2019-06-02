@@ -34,7 +34,14 @@ public class ShootingEnemy : Enemy, IWeaponOwner
         if (distance <= _aggroDistance && playerVisible)
         {
             _weapon.Shoot();
-            _characterAnimation.UpdateAnimation(CharacterAnimation.AnimationType.Attack, AimVector);
+            if (_rigidbody.velocity.magnitude > 0.1f)
+            {
+                _characterAnimation.UpdateAnimation(CharacterAnimation.AnimationType.Run, AimVector);
+            }
+            else
+            {
+                _characterAnimation.UpdateAnimation(CharacterAnimation.AnimationType.Attack, AimVector);
+            }
 
             if (_overshootPosition == Vector2.zero || (_overshootPosition - _target.transform.position.ToVector2()).magnitude > _aggroDistance / 2.0f)
             {
