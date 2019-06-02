@@ -212,7 +212,7 @@ public class Weapon : MonoBehaviour
                 UIManager.Instance.playerUI.chargeMeter.value = _currentChargeTime / _chargeTime;
             }
 
-            if (_currentChargeTime >= _chargeTime)
+            if ((_currentChargeTime >= _chargeTime && !_resetChargeOnShot) ||_chargeTime == 0.0f)
             {
                 Fire();
             }
@@ -231,6 +231,8 @@ public class Weapon : MonoBehaviour
             _bulletsLeft--;
         }
         _firingSequence = StartCoroutine(FireBullets());
+
+        _currentChargeTime = Mathf.Min(_currentChargeTime, _chargeTime);
 
         UpdatePlayerUI();
 
