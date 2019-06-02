@@ -92,6 +92,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 52f5714e4d12dc54d8d8e2f99c5fdcf5, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  ignoreScale: 0
 --- !u!1 &2542483224136131310
 GameObject:
   m_ObjectHideFlags: 0
@@ -144,7 +145,7 @@ SpriteRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 10754, guid: 0000000000000000f000000000000000, type: 0}
+  - {fileID: 2100000, guid: 944fb0c6bc916854dac248be8be6c1fd, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -219,6 +220,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 52f5714e4d12dc54d8d8e2f99c5fdcf5, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  ignoreScale: 0
 --- !u!114 &5528711890604417083
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -323,6 +325,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 52f5714e4d12dc54d8d8e2f99c5fdcf5, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  ignoreScale: 0
 --- !u!1 &7125115978298190037
 GameObject:
   m_ObjectHideFlags: 0
@@ -336,6 +339,7 @@ GameObject:
   - component: {fileID: -4542972093779504658}
   - component: {fileID: -9151048666015389989}
   - component: {fileID: 8769894314319764578}
+  - component: {fileID: 1768362483131233184}
   m_Layer: 11
   m_Name: ShootingZombie
   m_TagString: Untagged
@@ -437,6 +441,20 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 453c0420e8936d94a961925af78d60a9, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!114 &1768362483131233184
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7125115978298190037}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 33f6c8f210224f14e9093c48a594945f, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _spriteRenderers:
+  - {fileID: 4113775893578024077}
 --- !u!1001 &4386765140679732775
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -444,11 +462,6 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 7125115978298190027}
     m_Modifications:
-    - target: {fileID: 5074516897226881580, guid: c48e83424999fe948bce12ddead82f60,
-        type: 3}
-      propertyPath: m_Name
-      value: EnemyAssaultRifle
-      objectReference: {fileID: 0}
     - target: {fileID: 6991887799652691561, guid: c48e83424999fe948bce12ddead82f60,
         type: 3}
       propertyPath: m_LocalPosition.x
@@ -503,6 +516,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5074516897226881580, guid: c48e83424999fe948bce12ddead82f60,
+        type: 3}
+      propertyPath: m_Name
+      value: EnemyAssaultRifle
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: c48e83424999fe948bce12ddead82f60, type: 3}

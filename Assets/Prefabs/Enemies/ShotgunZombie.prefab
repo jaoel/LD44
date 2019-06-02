@@ -92,6 +92,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 52f5714e4d12dc54d8d8e2f99c5fdcf5, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  ignoreScale: 0
 --- !u!1 &2542483224136131310
 GameObject:
   m_ObjectHideFlags: 0
@@ -144,7 +145,7 @@ SpriteRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 10754, guid: 0000000000000000f000000000000000, type: 0}
+  - {fileID: 2100000, guid: 944fb0c6bc916854dac248be8be6c1fd, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -219,6 +220,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 52f5714e4d12dc54d8d8e2f99c5fdcf5, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  ignoreScale: 0
 --- !u!114 &4272743286994264714
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -244,6 +246,7 @@ GameObject:
   - component: {fileID: 648366751132934943}
   - component: {fileID: 3068365453926617708}
   - component: {fileID: 2392549683151496016}
+  - component: {fileID: 2567111565721575112}
   m_Layer: 11
   m_Name: ShotgunZombie
   m_TagString: Untagged
@@ -345,6 +348,20 @@ MonoBehaviour:
   _minimapIcon: {fileID: 8895688368199392711}
   _weapon: {fileID: 1661388442627420320}
   _stoppingDistance: 5
+--- !u!114 &2567111565721575112
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7125115978298190037}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 33f6c8f210224f14e9093c48a594945f, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _spriteRenderers:
+  - {fileID: 4113775893578024077}
 --- !u!1 &8895688368199392711
 GameObject:
   m_ObjectHideFlags: 0
@@ -437,6 +454,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 52f5714e4d12dc54d8d8e2f99c5fdcf5, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  ignoreScale: 0
 --- !u!1001 &1599646084049352248
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -444,11 +462,6 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 7125115978298190027}
     m_Modifications:
-    - target: {fileID: 5074516897226881580, guid: 8d1fd76a3147ad64aa6edbeb70ba8861,
-        type: 3}
-      propertyPath: m_Name
-      value: EnemyShotgun
-      objectReference: {fileID: 0}
     - target: {fileID: 6991887799652691561, guid: 8d1fd76a3147ad64aa6edbeb70ba8861,
         type: 3}
       propertyPath: m_LocalPosition.x
@@ -503,6 +516,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5074516897226881580, guid: 8d1fd76a3147ad64aa6edbeb70ba8861,
+        type: 3}
+      propertyPath: m_Name
+      value: EnemyShotgun
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 8d1fd76a3147ad64aa6edbeb70ba8861, type: 3}

@@ -49,6 +49,8 @@ public class Enemy : MonoBehaviour
     protected Vector2 _spawnPosition;
 
     protected Vector2 _dieDirection = Vector2.down;
+    protected HurtBlink _colorController;
+
     private static int _killsSinceLastDrop = 0;
 
     protected virtual void Awake()
@@ -58,6 +60,7 @@ public class Enemy : MonoBehaviour
         _player = GameObject.Find("Player").GetComponent<Player>();
         _navigation.Initialize(_rigidbody, _maxSpeed, _acceleration);
         _spawnPosition = transform.position.ToVector2();
+        _colorController = GetComponent<HurtBlink>();
     }
 
     protected virtual void FixedUpdate()
@@ -184,6 +187,8 @@ public class Enemy : MonoBehaviour
             bloodSpray.transform.DOLookAt(transform.position + dir, 0.0f);
             bloodSpray.gameObject.SetActive(true);
             bloodSpray.Play();
+
+            _colorController.Blink(new Color(1f, 1f, 1f, 0.5f), 0.25f);
 
             _currentHealth -= damage;
             if (!IsAlive)
