@@ -21,7 +21,7 @@ public class GrenadeBulletBehaviour : BulletBehaviour
         Vector3 velocity = bullet.velocity;
         velocity.z = 0f;
         float speed = Mathf.Clamp(bullet.lifetime - 1f, 0f, 1f);
-        bullet.transform.position += velocity * speed * speed * Time.deltaTime;
+        bullet.transform.position += velocity * speed * speed * Time.deltaTime * bullet.charge;
         _rotation += 300f * (0.01f + speed) * Time.deltaTime;
         bullet.transform.rotation = Quaternion.Euler(0f, 0f, _rotation);
         _lastPosition = bullet.transform.position;

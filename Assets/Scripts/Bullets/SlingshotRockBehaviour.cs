@@ -12,7 +12,8 @@ public class SlingshotRockBehaviour : BulletBehaviour
 
     public override void UpdateBullet(BulletInstance bullet)
     {
-        base.UpdateBullet(bullet);
+        bullet.transform.position += (Vector3)bullet.velocity * Time.deltaTime * bullet.charge;
+
         _rotation += 300f * Time.deltaTime;
         visualTransform.rotation = Quaternion.Euler(0f, 0f, _rotation);
     }

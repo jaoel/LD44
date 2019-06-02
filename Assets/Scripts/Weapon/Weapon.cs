@@ -66,6 +66,7 @@ public class Weapon : MonoBehaviour
     private IWeaponOwner _owner;
     private bool _isPlayerOwned;
 
+    private float _adjustedCooldown;
     private float _currentCooldown;
     private float _currentChargeTime;
     private float _bulletsLeft;
@@ -82,6 +83,7 @@ public class Weapon : MonoBehaviour
     protected virtual void Awake()
     {
         _currentCooldown = _cooldown;
+        _adjustedCooldown = _cooldown;
         _currentChargeTime = 0.0f;
         _bulletsLeft = _magazineSize;
         _charging = false;
@@ -117,8 +119,10 @@ public class Weapon : MonoBehaviour
                 rotation = Quaternion.Euler(0.0f, 0.0f, -_halfAngle + (_degPerBullet * i));
             }
 
+            float charge = _chargeTime > 0.0f ? Utility.ConvertRange(0.0f, _chargeTime, 0.0f, 1.0f, _currentChargeTime) : 1.0f;
+
             BulletManager.Instance.SpawnBullet(_bulletDescription, _owner.GetBulletOrigin(),
-               rotation * _owner.GetAimVector() * _bulletDescription.speed, _owner.GetGameObject());
+               rotation * _owner.GetAimVector() * _bulletDescription.speed, _owner.GetGameObject(), charge);
 
             if (_burstInterval > 0)
             {
@@ -197,7 +201,7 @@ public class Weapon : MonoBehaviour
             return;
         }
 
-        if (_currentCooldown >= _cooldown)
+        if (_currentCooldown >= _adjustedCooldown)
         {
             _charging = true;
             _currentChargeTime += Time.deltaTime;
@@ -210,32 +214,49 @@ public class Weapon : MonoBehaviour
 
             if (_currentChargeTime >= _chargeTime)
             {
-                if (_firingSequence != null)
-                {
-                    StopCoroutine(_firingSequence);
-                }
-
-                if (_magazineSize > 0)
-                {
-                    _bulletsLeft--;
-                }
-                _firingSequence = StartCoroutine(FireBullets());
-
-                UpdatePlayerUI();
-
-                if (_resetChargeOnShot)
-                {
-                    _currentChargeTime = 0.0f;
-
-                    if (_isPlayerOwned)
-                    {
-                        UIManager.Instance.playerUI.SetChargeMeterColor(_clearColor);
-                        UIManager.Instance.playerUI.chargeMeter.value = 0.0f;
-                    }
-                }
-                _currentCooldown = 0.0f;
+                Fire();
             }
         }
+    }
+
+    private void Fire()
+    {
+        if (_firingSequence != null)
+        {
+            StopCoroutine(_firingSequence);
+        }
+
+        if (_magazineSize > 0)
+        {
+            _bulletsLeft--;
+        }
+        _firingSequence = StartCoroutine(FireBullets());
+
+        UpdatePlayerUI();
+
+        if (_chargeTime > 0)
+        {
+            if (_currentChargeTime < _chargeTime)
+            {
+                _adjustedCooldown = _cooldown + _chargeTime - _currentChargeTime;
+            }
+            else
+            {
+                _adjustedCooldown = _cooldown;
+            }
+        }
+
+        if (_resetChargeOnShot)
+        {
+            _currentChargeTime = 0.0f;
+
+            if (_isPlayerOwned)
+            {
+                UIManager.Instance.playerUI.SetChargeMeterColor(_clearColor);
+                UIManager.Instance.playerUI.chargeMeter.value = 0.0f;
+            }
+        }
+        _currentCooldown = 0.0f;
     }
 
     private void UpdatePlayerUI()
@@ -260,6 +281,13 @@ public class Weapon : MonoBehaviour
 
     public virtual void StoppedShooting()
     {
+        if (_currentChargeTime > 0 && _chargeTime > 0)
+        {
+
+
+            Fire();
+        }
+
         _charging = false;
     }
 

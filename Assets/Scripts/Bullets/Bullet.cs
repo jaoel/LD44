@@ -5,12 +5,12 @@ public class Bullet : MonoBehaviour
 {
     public SpriteRenderer spriteRenderer;
 
-    private Color _originalColor;
-    private Vector3 _originalSize;
+    protected Color _originalColor;
+    protected Vector3 _originalSize;
 
     public BulletDescription Description { get; set; }
-    private GameObject _owner;
-    private Vector2 _velocity;
+    protected GameObject _owner;
+    protected Vector2 _velocity;
 
     private BulletBehaviour _bulletBehaviour = null;
 
