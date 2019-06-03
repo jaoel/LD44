@@ -220,6 +220,14 @@ public class Weapon : MonoBehaviour
         }
     }
 
+    public virtual void StopShooting()
+    {
+        if (_firingSequence != null)
+        {
+            StopCoroutine(_firingSequence);
+        }
+    }
+
     private void Fire()
     {
         if (_firingSequence != null)

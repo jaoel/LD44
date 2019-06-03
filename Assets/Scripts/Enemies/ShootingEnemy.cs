@@ -74,6 +74,12 @@ public class ShootingEnemy : Enemy, IWeaponOwner
         return Vector2.Distance(_target.transform.position.ToVector2(), transform.position.ToVector2()) < _stoppingDistance;
     }
 
+    protected override void Die(Vector2 velocity)
+    {
+        _weapon.StopShooting();
+        base.Die(velocity);
+    }
+
     Vector2 IWeaponOwner.GetAimVector()
     {
         return AimVector;
