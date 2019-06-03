@@ -51,6 +51,11 @@ public class Navigation : MonoBehaviour
         _targetIsVisible = targetIsVisible;
     }
 
+    public bool AtDestination(float stoppingDistance = 1.0f)
+    {
+        return (_target.ToVector3() - transform.position).magnitude <= stoppingDistance;
+    }
+
     public void Stop()
     {
         _target = Vector2.zero;

@@ -79,6 +79,7 @@ public class Enemy : MonoBehaviour
             {
                 _hasAggro = false;
                 _navigation.MoveTo(_spawnPosition, false);
+
                 return;
             }
 
@@ -86,17 +87,25 @@ public class Enemy : MonoBehaviour
         }
         else
         {
-            CheckAggro();
+            if (!CheckAggro())
+            {
+                if (_navigation.AtDestination())
+                {
+                    _navigation.Stop();
+                }
+            }
         }
     }
 
-    protected virtual void CheckAggro()
+    protected virtual bool CheckAggro()
     {
         float distance = Vector3.Distance(transform.position, _player.transform.position);
         if (distance < _aggroDistance && PlayerIsVisible())
         {
             AggroPlayer();
         }
+
+        return _hasAggro;
     }
 
     private void AggroPlayer()
