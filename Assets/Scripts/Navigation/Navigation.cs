@@ -95,8 +95,8 @@ public class Navigation : MonoBehaviour
                 }
             }
 
-            CalculateVelocity();
             FollowPath();
+            CalculateVelocity();
         }
         else
         {
@@ -130,7 +130,7 @@ public class Navigation : MonoBehaviour
 
     private void FollowPath()
     {
-        if (_path != null && _path.Count > 0 && (_destination - transform.position.ToVector2()).magnitude <= 1.0f)
+        if (_path != null && _path.Count > 0 && (_destination - Main.Instance.CurrentMap.WorldToCell(transform.position.ToVector2())).magnitude <= 1.0f)
         {
             SetPathTarget();
         }

@@ -90,22 +90,16 @@ public class NavigationManager : MonoBehaviour
         {
             distance += node.FScore;
             result.Add(node.Data);
-
-            if (node.Parent == null)
-            {
-                break;
-            }
-
             node = node.Parent;
         }
 
         return result;
     }
 
-    public List<Vector2Int> AStar(Vector2 origin, Vector2 destination, out float distance)
+    public List<Vector2Int> AStar(Vector2Int origin, Vector2Int destination, out float distance)
     {
-        Vector2Int start = new Vector2Int(Mathf.RoundToInt(origin.x), Mathf.RoundToInt(origin.y));
-        Vector2Int target = new Vector2Int(Mathf.RoundToInt(destination.x), Mathf.RoundToInt(destination.y));
+        Vector2Int start = origin;
+        Vector2Int target = destination;
 
         distance = 0.0f;
         if (start == target)
@@ -159,7 +153,7 @@ public class NavigationManager : MonoBehaviour
     {
         distance = 0.0f;
         List<Vector2Int> result = new List<Vector2Int>();
-        while (node != null && node.Parent != null)
+        while (node != null)
         {
             distance += node.GScore;
             result.Add(node.Data);

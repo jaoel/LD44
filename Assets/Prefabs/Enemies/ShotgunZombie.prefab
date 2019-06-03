@@ -243,10 +243,10 @@ GameObject:
   m_Component:
   - component: {fileID: 7125115978298190027}
   - component: {fileID: 7125115978298190024}
-  - component: {fileID: 648366751132934943}
   - component: {fileID: 3068365453926617708}
   - component: {fileID: 2392549683151496016}
   - component: {fileID: 2567111565721575112}
+  - component: {fileID: 8849134739866492433}
   m_Layer: 11
   m_Name: ShotgunZombie
   m_TagString: Untagged
@@ -293,22 +293,6 @@ Rigidbody2D:
   m_SleepingMode: 1
   m_CollisionDetection: 1
   m_Constraints: 4
---- !u!70 &648366751132934943
-CapsuleCollider2D:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 7125115978298190037}
-  m_Enabled: 1
-  m_Density: 1
-  m_Material: {fileID: 0}
-  m_IsTrigger: 0
-  m_UsedByEffector: 0
-  m_UsedByComposite: 0
-  m_Offset: {x: 0, y: -0.1}
-  m_Size: {x: 0.5, y: 1.1}
-  m_Direction: 0
 --- !u!114 &3068365453926617708
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -339,7 +323,7 @@ MonoBehaviour:
   _aggroDistance: 15
   _meleeDamage: 1
   _rigidbody: {fileID: 7125115978298190024}
-  _collider: {fileID: 648366751132934943}
+  _collider: {fileID: 8849134739866492433}
   _navigation: {fileID: 3068365453926617708}
   _characterAnimation: {fileID: 1912241600459982146}
   _particleSystemContainer: {fileID: 11400000, guid: 16ab9ed0ce6842c4b9a9e52558b0b55d,
@@ -362,6 +346,22 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _spriteRenderers:
   - {fileID: 4113775893578024077}
+--- !u!58 &8849134739866492433
+CircleCollider2D:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7125115978298190037}
+  m_Enabled: 1
+  m_Density: 1
+  m_Material: {fileID: 6200000, guid: 34958a0c2c655d74492f79d3f107236f, type: 2}
+  m_IsTrigger: 0
+  m_UsedByEffector: 0
+  m_UsedByComposite: 0
+  m_Offset: {x: 0, y: -0.1}
+  serializedVersion: 2
+  m_Radius: 0.4
 --- !u!1 &8895688368199392711
 GameObject:
   m_ObjectHideFlags: 0
@@ -462,6 +462,11 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 7125115978298190027}
     m_Modifications:
+    - target: {fileID: 5074516897226881580, guid: 8d1fd76a3147ad64aa6edbeb70ba8861,
+        type: 3}
+      propertyPath: m_Name
+      value: EnemyShotgun
+      objectReference: {fileID: 0}
     - target: {fileID: 6991887799652691561, guid: 8d1fd76a3147ad64aa6edbeb70ba8861,
         type: 3}
       propertyPath: m_LocalPosition.x
@@ -516,11 +521,6 @@ PrefabInstance:
         type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 5074516897226881580, guid: 8d1fd76a3147ad64aa6edbeb70ba8861,
-        type: 3}
-      propertyPath: m_Name
-      value: EnemyShotgun
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 8d1fd76a3147ad64aa6edbeb70ba8861, type: 3}

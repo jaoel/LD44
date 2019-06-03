@@ -304,10 +304,23 @@ public class Map
 
     public void DrawPath(List<Vector2Int> path)
     {
+        int index = 0; 
         path.ForEach(x =>
         {
             _floors.SetTileFlags(x.ToVector3Int(), TileFlags.None);
-            _floors.SetColor(x.ToVector3Int(), Color.blue);
+
+            Color tileColor = Color.blue;
+            if (index == 0)
+            {
+                tileColor = Color.red;
+            }
+            else if (index == path.Count - 1)
+            {
+                tileColor = Color.yellow;
+            }
+
+            _floors.SetColor(x.ToVector3Int(), tileColor);
+            index++;
         });
     }
 
@@ -380,6 +393,12 @@ public class Map
     {
         Vector3Int wtc = _floors.WorldToCell(worldPos.ToVector3());
         return new Vector2Int(wtc.x, wtc.y);
+    }
+
+    public Vector2 CellToWorld(Vector2Int cellPos)
+    {
+        Vector3 ctW = _floors.CellToWorld(cellPos.ToVector3Int());
+        return ctW.ToVector2();
     }
 
     private void DestroyAllInteractiveObjects()

@@ -25,7 +25,7 @@ public class Enemy : MonoBehaviour
     protected Rigidbody2D _rigidbody;
 
     [SerializeField]
-    protected CapsuleCollider2D _collider;
+    protected Collider2D _collider;
 
     [SerializeField]
     protected Navigation _navigation;
@@ -225,7 +225,6 @@ public class Enemy : MonoBehaviour
         _rigidbody.velocity = _dieDirection.normalized * 2.5f;
         _minimapIcon.SetActive(false);
 
-        _collider.size = new Vector2(0.6f, 0.6f);
         _collider.offset = new Vector2(_collider.offset.x, -0.3f);
 
         DropItem();
