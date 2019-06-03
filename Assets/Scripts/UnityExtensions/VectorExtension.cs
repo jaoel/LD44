@@ -17,6 +17,11 @@ public static class VectorExtension
         return new Vector3Int(a.x, a.y, z);
     }
 
+    public static Vector3Int ToVector3Int(this Vector3 a)
+    {
+        return new Vector3Int(Mathf.RoundToInt(a.x), Mathf.RoundToInt(a.y), Mathf.RoundToInt(a.z));
+    }
+
     public static Vector2 ToVector2(this Vector2Int a)
     {
         return new Vector2(a.x, a.y);

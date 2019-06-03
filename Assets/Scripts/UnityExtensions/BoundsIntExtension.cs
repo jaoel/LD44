@@ -20,6 +20,15 @@ public static class BoundsIntExtension
         return false;
     }
 
+    public static bool Overlaps(this BoundsInt a, Bounds b)
+    {
+        if (a.x < b.min.x + b.size.x && a.x + a.size.x > b.min.x && a.y < b.min.y + b.size.y && a.y + a.size.y > b.min.y)
+        {
+            return true;
+        }
+        return false;
+    }
+
     public static bool Contains(this BoundsInt a, RectInt b)
     {
         if (a.xMin <= b.xMin && a.xMax >= b.xMax && a.yMin <= b.yMin && a.yMax >= b.yMax)

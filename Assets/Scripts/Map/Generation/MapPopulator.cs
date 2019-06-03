@@ -341,6 +341,13 @@ public class MapPopulator : MonoBehaviour
 
     private void PlaceTraps(Map map, MapNode spawnRoom, Player player)
     {
+        List<BoundsInt> chokepoints = new List<BoundsInt>(map.ChokePoints);
+
+        for (int i = 0; i < map.ChokePoints.Count; i++)
+        {
+            chokepoints[i] = new BoundsInt(map.ChokePoints[i].position - new Vector3Int(1, 1, 0), map.ChokePoints[i].size + new Vector3Int(2, 2, 0));
+        }
+
         List<GameObject> traps = new List<GameObject>();
         Bounds playerBounds = new Bounds(player.transform.position, new Vector3(1, 1));
         foreach (MapNode room in map.Cells)
@@ -354,12 +361,27 @@ public class MapPopulator : MonoBehaviour
             for (int i = 0; i < trapCount; i++)
             {
                 GameObject trapType = _trapContainer.GetRandomTrap();
-                Vector2 position = map.GetRandomPositionInRoom(2, 2, room);
+                Vector2 position = map.GetRandomPositionInRoom(3, 3, room);
 
-                Bounds bounds = new Bounds(position, new Vector3(2, 2));
+                Bounds bounds = new Bounds(position, new Vector3(3, 3));
                 bool intersects = false;
 
                 if (bounds.Intersects(playerBounds))
+                {
+                    continue;
+                }
+
+                bool trashMe = false;
+                for(int j = 0; j < chokepoints.Count; j++)
+                {
+                    if (chokepoints[j].Overlaps(bounds))
+                    {
+                        trashMe = true;
+                        break;
+                    }
+                }
+
+                if (trashMe)
                 {
                     continue;
                 }
