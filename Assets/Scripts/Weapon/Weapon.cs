@@ -119,6 +119,7 @@ public class Weapon : MonoBehaviour
                 rotation = Quaternion.Euler(0.0f, 0.0f, -_halfAngle + (_degPerBullet * i));
             }
 
+            _currentChargeTime = Mathf.Min(_currentChargeTime, _chargeTime);
             float charge = _chargeTime > 0.0f ? _currentChargeTime / _chargeTime : 1.0f;
 
             BulletManager.Instance.SpawnBullet(_bulletDescription, _owner.GetBulletOrigin(),
@@ -232,8 +233,6 @@ public class Weapon : MonoBehaviour
         }
         _firingSequence = StartCoroutine(FireBullets());
 
-        _currentChargeTime = Mathf.Min(_currentChargeTime, _chargeTime);
-
         UpdatePlayerUI();
 
         if (_chargeTime > 0)
@@ -251,6 +250,7 @@ public class Weapon : MonoBehaviour
         if (_resetChargeOnShot)
         {
             _currentChargeTime = 0.0f;
+            _charging = false;
 
             if (_isPlayerOwned)
             {
@@ -285,8 +285,6 @@ public class Weapon : MonoBehaviour
     {
         if (_currentChargeTime > 0 && _chargeTime > 0)
         {
-
-
             Fire();
         }
 
