@@ -275,7 +275,7 @@ MonoBehaviour:
   _aggroDistance: 10
   _meleeDamage: 5
   _rigidbody: {fileID: 7125115978298190024}
-  _collider: {fileID: 0}
+  _collider: {fileID: 2199748806774920108}
   _navigation: {fileID: -4954869916265498941}
   _characterAnimation: {fileID: 9194530984371537756}
   _particleSystemContainer: {fileID: 11400000, guid: 16ab9ed0ce6842c4b9a9e52558b0b55d,

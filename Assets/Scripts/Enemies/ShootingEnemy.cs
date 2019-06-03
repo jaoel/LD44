@@ -50,9 +50,10 @@ public class ShootingEnemy : Enemy, IWeaponOwner
             _navigation.MoveTo(_overshootPosition, true);
         }
 
-        if (!playerVisible)
+        if (!playerVisible && _hasAggro)
         {
             _overshootPosition = Vector2.zero;
+            _navigation.MoveTo(_target, playerVisible);
         }
 
         if (_overshootPosition != Vector2.zero)
