@@ -16,7 +16,7 @@ public class Main : MonoBehaviour
     private ShopRoom shopInstance;
     public GameObject blackOverlay;
 
-    public int CurrentLevel;// { get; private set; } = 0;
+    public int CurrentLevel;
     public Map CurrentMap => _currentMap;
     public bool Paused { get; private set; } = false;
 
@@ -79,10 +79,10 @@ public class Main : MonoBehaviour
         MapGeneratorParameters parameters = new MapGeneratorParameters();
         parameters.GenerationRadius = 20;
 
-        parameters.MinCellSize = 3;
+        parameters.MinCellSize = 4;
         parameters.MaxCellSize = 20;
 
-        parameters.MinCellCount = 20;
+        parameters.MinCellCount = 75;
         parameters.MaxCellCount = 150;
 
         parameters.RoomThresholdMultiplier = 1.25f;
@@ -96,6 +96,7 @@ public class Main : MonoBehaviour
         parameters.LockFactor = 0.2f;
 
         _currentMap = MapGenerator.Instance.GenerateMap(DateTime.Now.Ticks, parameters, CurrentLevel);
+
         MapGenerator.Instance.PopulateMap(ref _currentMap, ref player, parameters, CurrentLevel);
         _currentMap.ActivateObjects();
     }

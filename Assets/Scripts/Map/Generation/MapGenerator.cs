@@ -166,8 +166,9 @@ public class MapGenerator : MonoBehaviour
                     }
 
                     RectInt overSizeNode = node.Cell;
-                    overSizeNode.width += parameters.MinRoomDistance;
-                    overSizeNode.height += parameters.MinRoomDistance;
+                    overSizeNode.position -= new Vector2Int(parameters.MinRoomDistance, parameters.MinRoomDistance);
+                    overSizeNode.width += parameters.MinRoomDistance * 2;
+                    overSizeNode.height += parameters.MinRoomDistance * 2;
 
                     if (!overSizeNode.Overlaps(other.Cell))
                     {
@@ -183,7 +184,7 @@ public class MapGenerator : MonoBehaviour
                     movement *= -1.0f;
                     movement = movement.normalized;
                     RectInt newRect = node.Cell;
-                    newRect.position += new Vector2Int(Mathf.RoundToInt(movement.x), Mathf.RoundToInt(movement.y));
+                    newRect.position += new Vector2Int(Mathf.RoundToInt(movement.x), Mathf.RoundToInt(movement.y)) * (1 + parameters.MinRoomDistance);
 
                     if (newRect.position != node.Cell.position || movement.magnitude > 0.0f)
                     {
