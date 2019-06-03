@@ -83,7 +83,14 @@ public class Enemy : MonoBehaviour
                 return;
             }
 
-            _navigation.MoveTo(_target, PlayerIsVisible());
+            bool playerVisible = PlayerIsVisible();
+
+            _navigation.MoveTo(_target, playerVisible);       
+
+            if (!playerVisible && !_navigation.HasPath)
+            {
+                _navigation.Stop();
+            }
         }
         else
         {

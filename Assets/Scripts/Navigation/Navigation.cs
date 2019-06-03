@@ -16,6 +16,9 @@ public class Navigation : MonoBehaviour
     private float _currentPathAge;
     private List<Vector2Int> _path;
 
+    public bool HasPath => (_path != null && _path.Count > 0) || (_currentPathAge >= _minPathAge);
+    public List<Vector2Int> Path => _path;
+
     public void Initialize(Rigidbody2D rigidbody, float maxSpeed, float acceleration)
     {
         _rigidbody = rigidbody;
