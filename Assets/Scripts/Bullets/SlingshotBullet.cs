@@ -6,6 +6,10 @@ public class SlingshotBullet : Bullet
 {
     [SerializeField]
     private Transform _visualTransform;
+
+    [SerializeField]
+    private Transform _shadowTransform;
+
     private float _rotation = 0f;
 
     protected override void Start()
@@ -20,6 +24,11 @@ public class SlingshotBullet : Bullet
         _charge = Mathf.Max(_charge, 0.5f);
         _currentLifetime *= _charge;
         _rotation = UnityEngine.Random.Range(0.0f, 360.0f);
+        _visualTransform.localPosition = new Vector3(_visualTransform.localPosition.x, 0.0f, _visualTransform.localPosition.z);
+        _shadowTransform.localScale = new Vector3(1.0f, 1.0f, 1.0f);
+        _visualTransform.DOLocalMoveY(-0.5f, _currentLifetime).SetEase(Ease.OutBounce);
+        _visualTransform.DOScale(new Vector3(0.0f, 0.0f, 0.0f), _currentLifetime).SetEase(Ease.InCirc);
+        _shadowTransform.DOScale(new Vector3(0.0f, 0.0f, 0.0f), _currentLifetime).SetEase(Ease.InCirc);
     }
 
     public override void UpdateBullet()
