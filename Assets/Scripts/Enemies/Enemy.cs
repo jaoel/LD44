@@ -5,6 +5,7 @@ using DG.Tweening;
 public class Enemy : MonoBehaviour
 {
     public bool IsAlive => _currentHealth > 0;
+    public bool HasAggro => _hasAggro;
 
     [SerializeField]
     protected float _maxHealth;
@@ -83,7 +84,7 @@ public class Enemy : MonoBehaviour
                 return;
             }
 
-            bool playerVisible = PlayerIsVisible();
+            bool playerVisible = PlayerIsVisible(_aggroDistance);
 
             _navigation.MoveTo(_target, playerVisible);       
 
@@ -107,45 +108,65 @@ public class Enemy : MonoBehaviour
     protected virtual bool CheckAggro()
     {
         float distance = Vector3.Distance(transform.position, _player.transform.position);
-        if (distance < _aggroDistance && PlayerIsVisible())
+        if (distance < _aggroDistance && PlayerIsVisible(_aggroDistance))
         {
-            AggroPlayer();
+            AggroPlayer(true, 1);
         }
 
         return _hasAggro;
     }
 
-    private void AggroPlayer()
+    private void AggroPlayer(bool aggroSurrounding, int recursions = 0)
     {
         _hasAggro = true;
         _target = _player.gameObject;
-
         SoundManager.Instance.PlayMonsterAggro();
+
+        if (aggroSurrounding)
+        {
+            List<Enemy> enemies = Main.Instance.CurrentMap.GetEnemiesInCircle(transform.position, _aggroDistance);
+            int layerMask = Layers.CombinedLayerMask(Layers.Map, Layers.Enemy, Layers.FlyingEnemy);
+            int rec = recursions - 1;
+            enemies.ForEach(x =>
+            {
+                if (!x.HasAggro)
+                {
+                    if (IsVisible(_aggroDistance * 3.0f, x.transform.position.ToVector2(), layerMask,
+                     new List<int>() { Layers.Enemy, Layers.FlyingEnemy }))
+                    {
+                        x.AggroPlayer(recursions > 0, rec);
+                    }
+                }
+            });
+        }
     }
 
-    protected virtual bool PlayerIsVisible()
+    protected bool IsVisible(float viewDistance, Vector2 target, int layerMask, List<int> layers)
     {
         Vector2 origin = transform.position.ToVector2();
-        Vector2 target = _player.transform.position.ToVector2();
-
-        float viewDistance = _aggroDistance;
-        if (_hasAggro)
-        {
-            viewDistance *= 3.0f;
-        }
 
         if ((target - origin).magnitude <= viewDistance)
         {
-            int layerMask = Layers.CombinedLayerMask(Layers.Map, Layers.Player);
             RaycastHit2D hit = Physics2D.Raycast(origin, (target - origin).normalized, viewDistance, layerMask);
 
-            if (hit.collider?.gameObject.layer == Layers.Player)
+            if(hit.collider != null && layers.Contains(hit.collider.gameObject.layer))
             {
                 return true;
             }
         }
 
         return false;
+    }
+
+    public virtual bool PlayerIsVisible(float viewDistance)
+    {
+        if (_hasAggro)
+        {
+            viewDistance *= 3.0f;
+        }
+
+        return IsVisible(viewDistance, _player.transform.position.ToVector2(), Layers.CombinedLayerMask(Layers.Map, Layers.Player),
+            new List<int>() { Layers.Player });
     }
 
     protected virtual bool PlayAttackAnimation()
@@ -214,7 +235,7 @@ public class Enemy : MonoBehaviour
 
             if (!_hasAggro)
             {
-                AggroPlayer();
+                AggroPlayer(true);
             }
         }
     }

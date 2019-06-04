@@ -30,7 +30,7 @@ public class ShootingEnemy : Enemy, IWeaponOwner
         }
 
         float distance = Vector3.Distance(transform.position, _player.transform.position);
-        bool playerVisible = PlayerIsVisible();
+        bool playerVisible = PlayerIsVisible(_aggroDistance);
         if (distance <= _aggroDistance && playerVisible)
         {
             _weapon.Shoot();
