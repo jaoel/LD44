@@ -4,7 +4,7 @@ using UnityEngine;
 
 [CreateAssetMenu]
 [Serializable]
-public class SpawnableContainer : ScriptableObject
+public class SpawnableContainer : MonoBehaviour
 {
     [SerializeField]
     public List<SpawnableKeyframe> keyframes = new List<SpawnableKeyframe>();

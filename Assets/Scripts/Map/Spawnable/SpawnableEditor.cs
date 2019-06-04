@@ -91,7 +91,14 @@ public class SpawnableInspector : Editor
             if (container.keyframes.Count > 0)
             {
                 newKeyframe.keyframeIndex = container.keyframes.Last().keyframeIndex + 1;
-                newKeyframe.spawnableObjects = new List<Spawnable>(container.keyframes.Last().spawnableObjects);
+                newKeyframe.spawnableObjects = new List<Spawnable>();
+                container.keyframes.Last().spawnableObjects.ForEach(x =>
+                {
+                    Spawnable newSpawnable = new Spawnable();
+                    newSpawnable.spawnablePrefab = x.spawnablePrefab;
+                    newSpawnable.density = x.density;
+                    newKeyframe.spawnableObjects.Add(newSpawnable);
+                });
             }
 
             container.keyframes.Add(newKeyframe);
