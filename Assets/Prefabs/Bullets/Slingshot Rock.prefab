@@ -92,6 +92,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 52f5714e4d12dc54d8d8e2f99c5fdcf5, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  ignoreScale: 0
 --- !u!1 &7212268974970604102
 GameObject:
   m_ObjectHideFlags: 0
@@ -101,10 +102,9 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 7212268974970604101}
-  - component: {fileID: 218029869677474905}
   - component: {fileID: -5089695432794804344}
   - component: {fileID: 1022070507353309843}
-  - component: {fileID: 199125403586793020}
+  - component: {fileID: 1322879831930639400}
   m_Layer: 10
   m_Name: Slingshot Rock
   m_TagString: Untagged
@@ -128,19 +128,6 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &218029869677474905
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 7212268974970604102}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: ce35caa967c8aef46b58e8154d77c846, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  spriteRenderer: {fileID: 9148656470891143727}
 --- !u!58 &-5089695432794804344
 CircleCollider2D:
   m_ObjectHideFlags: 0
@@ -178,7 +165,7 @@ Rigidbody2D:
   m_SleepingMode: 1
   m_CollisionDetection: 1
   m_Constraints: 0
---- !u!114 &199125403586793020
+--- !u!114 &1322879831930639400
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -187,10 +174,16 @@ MonoBehaviour:
   m_GameObject: {fileID: 7212268974970604102}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: ef8e238fa071709409a11dfeb4c4a4fb, type: 3}
+  m_Script: {fileID: 11500000, guid: b5591938c417e3f498eaa5f2f72956d5, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  visualTransform: {fileID: 7480851900034803971}
+  _lifetime: 1
+  _speed: 10
+  _size: {x: 1, y: 1}
+  _damage: 1
+  _tint: {r: 0.21568628, g: 0.21568628, b: 0.21568628, a: 1}
+  _spriteRenderer: {fileID: 9148656470891143727}
+  _visualTransform: {fileID: 7480851900034803971}
 --- !u!1 &8677906720541102056
 GameObject:
   m_ObjectHideFlags: 0
@@ -284,3 +277,4 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 52f5714e4d12dc54d8d8e2f99c5fdcf5, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  ignoreScale: 0

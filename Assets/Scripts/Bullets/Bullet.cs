@@ -3,42 +3,57 @@ using System.Collections;
 
 public class Bullet : MonoBehaviour
 {
-    public SpriteRenderer spriteRenderer;
+    [SerializeField]
+    protected float _lifetime;
 
-    protected Color _originalColor;
-    protected Vector3 _originalSize;
+    [SerializeField]
+    protected float _speed;
 
-    public BulletDescription Description { get; set; }
+    [SerializeField]
+    protected Vector2 _size;
+
+    [SerializeField]
+    protected float _damage;
+
+    [SerializeField]
+    protected Color _tint;
+
+    [SerializeField]
+    protected SpriteRenderer _spriteRenderer;
+
     protected GameObject _owner;
-    protected Vector2 _velocity;
+    protected Vector2 _direction;
+    protected float _currentLifetime;
+    protected float _charge;
 
-    private BulletBehaviour _bulletBehaviour = null;
-
-    private void Awake()
+    protected virtual void Awake()
     {
-        _originalColor = spriteRenderer.color;
-        _originalSize = spriteRenderer.transform.localScale;
-        _bulletBehaviour = GetComponent<BulletBehaviour>();
-        if (_bulletBehaviour == null)
-        {
-            _bulletBehaviour = gameObject.AddComponent<BulletBehaviour>();
-        }
+
     }
 
-    public void Reset()
+    protected virtual void Start()
     {
-        SetTint(_originalColor);
-        SetSize(_originalSize);
+
+    }
+
+    public void Initialize(float charge, Vector2 direction, GameObject owner)
+    {
+        _currentLifetime = 0.0f;
+        _charge = charge;
+        SetTint(_tint);
+        SetSize(_size);
+        SetDirection(direction);
+        SetOwner(owner);
     }
 
     public void SetTint(Color color)
     {
-        spriteRenderer.color = color;
+        _spriteRenderer.color = color;
     }
 
     public void SetSize(Vector2 size)
     {
-        spriteRenderer.transform.localScale = new Vector3(size.x, size.y, 1f);
+        _spriteRenderer.transform.localScale = new Vector3(size.x, size.y, 1f);
     }
 
     public void SetOwner(GameObject owner)
@@ -46,19 +61,24 @@ public class Bullet : MonoBehaviour
         _owner = owner;
     }
 
-    public void SetVelocity(Vector2 velocity)
+    public void SetDirection(Vector2 direction)
     {
-        _velocity = velocity;
+        _direction = direction;
     }
 
-    public void UpdateBullet(BulletInstance bullet)
+    public virtual bool UpdateLifetime()
     {
-        _bulletBehaviour.UpdateBullet(bullet);
+        _currentLifetime += Time.deltaTime;
+        return _currentLifetime < _lifetime;
     }
 
-    public void BeforeDestroyed()
+    public virtual void UpdateBullet()
     {
-        _bulletBehaviour.BeforeDestroyed(null);
+        transform.position += _direction.ToVector3() * _speed * Time.deltaTime;
+    }
+
+    public virtual void BeforeDestroyed()
+    {
     }
 
     public void OnTriggerEnter2D(Collider2D collision)
@@ -72,15 +92,15 @@ public class Bullet : MonoBehaviour
 
         if (collision.gameObject.layer == Layers.Map)
         {
-            _bulletBehaviour.BeforeDestroyed(null, _velocity);
+            BeforeDestroyed();
         }
         else if (collision.gameObject.layer == Layers.Enemy || collision.gameObject.layer == Layers.FlyingEnemy)
         {
             Enemy enemy = collision.gameObject.GetComponent<Enemy>();
             if (enemy.IsAlive)
             {
-                collision.gameObject.GetComponent<Enemy>().ApplyDamage(Description.damage, _velocity);
-                _bulletBehaviour.BeforeDestroyed(collision.gameObject, _velocity);
+                collision.gameObject.GetComponent<Enemy>().ApplyDamage((int)_damage, _direction);
+                BeforeDestroyed();
                 CameraManager.Instance.ShakeCamera(0.15f, 0.1f, 0.1f, 30);
             }
             else
@@ -90,8 +110,8 @@ public class Bullet : MonoBehaviour
         }
         else if (collision.gameObject.layer == Layers.Player)
         {
-            collision.gameObject.GetComponent<Player>().ReceiveDamage(Description.damage, _velocity);
-            _bulletBehaviour.BeforeDestroyed(collision.gameObject);
+            collision.gameObject.GetComponent<Player>().ReceiveDamage((int)_damage, _direction);
+            BeforeDestroyed();
         }
 
         gameObject.SetActive(active);

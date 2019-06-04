@@ -9,10 +9,9 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 7212268974970604101}
-  - component: {fileID: 218029869677474905}
   - component: {fileID: -5089695432794804344}
   - component: {fileID: 1022070507353309843}
-  - component: {fileID: 5616725890836328802}
+  - component: {fileID: -3827084654663179403}
   m_Layer: 10
   m_Name: Grenade Bullet
   m_TagString: Untagged
@@ -35,19 +34,6 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &218029869677474905
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 7212268974970604102}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: ce35caa967c8aef46b58e8154d77c846, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  spriteRenderer: {fileID: 9148656470891143727}
 --- !u!58 &-5089695432794804344
 CircleCollider2D:
   m_ObjectHideFlags: 0
@@ -85,7 +71,7 @@ Rigidbody2D:
   m_SleepingMode: 1
   m_CollisionDetection: 1
   m_Constraints: 0
---- !u!114 &5616725890836328802
+--- !u!114 &-3827084654663179403
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -94,11 +80,19 @@ MonoBehaviour:
   m_GameObject: {fileID: 7212268974970604102}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: a6f355405b476084ab320f6d27160e84, type: 3}
+  m_Script: {fileID: 11500000, guid: 92fd12692f79bd24b95e0f6223a7dc46, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  explosionPrefab: {fileID: 895976179499023227, guid: 0c721c7fa8181604ba893146488470a2,
+  _lifetime: 2.5
+  _speed: 10
+  _size: {x: 1, y: 1}
+  _damage: 10
+  _tint: {r: 0.19607843, g: 0.24705882, b: 0, a: 1}
+  _spriteRenderer: {fileID: 9148656470891143727}
+  _explosionPrefab: {fileID: 895976179499023227, guid: 0c721c7fa8181604ba893146488470a2,
     type: 3}
+  _explosionRadius: 2
+  _explosionDamage: 10
 --- !u!1 &8677906720541102056
 GameObject:
   m_ObjectHideFlags: 0
@@ -192,3 +186,4 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 52f5714e4d12dc54d8d8e2f99c5fdcf5, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  ignoreScale: 0

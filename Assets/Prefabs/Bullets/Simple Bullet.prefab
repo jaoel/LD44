@@ -92,6 +92,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 52f5714e4d12dc54d8d8e2f99c5fdcf5, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  ignoreScale: 0
 --- !u!1 &7212268974970604102
 GameObject:
   m_ObjectHideFlags: 0
@@ -139,7 +140,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ce35caa967c8aef46b58e8154d77c846, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  spriteRenderer: {fileID: 9148656470891143727}
+  _lifetime: 0.5
+  _speed: 15
+  _size: {x: 1, y: 1}
+  _damage: 1
+  _tint: {r: 1, g: 1, b: 1, a: 1}
+  _spriteRenderer: {fileID: 9148656470891143727}
 --- !u!58 &-5089695432794804344
 CircleCollider2D:
   m_ObjectHideFlags: 0
@@ -269,3 +275,4 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 52f5714e4d12dc54d8d8e2f99c5fdcf5, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  ignoreScale: 0

@@ -57,6 +57,8 @@ MonoBehaviour:
   _firingArc: 15
   _randomizePattern: 1
   _bulletDescription: {fileID: 11400000, guid: d525ad8c5eef3bd4d92afcb751072538, type: 2}
+  _bulletPrefab: {fileID: 1322879831930639400, guid: 01d33d4390ba07c458cec9d95579c344,
+    type: 3}
   _shotSound: {fileID: 7246573145497593685}
   _reloadSound: {fileID: -5912559479772928181}
 --- !u!82 &7246573145497593685

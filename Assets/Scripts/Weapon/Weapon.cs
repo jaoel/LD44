@@ -50,9 +50,8 @@ public class Weapon : MonoBehaviour
     private bool _randomizePattern;
 
     //all bullet related information
-    //bullet speed should be moved here, don't understand why it's not yet
     [SerializeField]
-    private BulletDescription _bulletDescription;
+    private Bullet _bulletPrefab;
 
     //Sound that should be played when shooting
     [SerializeField]
@@ -121,9 +120,7 @@ public class Weapon : MonoBehaviour
 
             _currentChargeTime = Mathf.Min(_currentChargeTime, _chargeTime);
             float charge = _chargeTime > 0.0f ? _currentChargeTime / _chargeTime : 1.0f;
-
-            BulletManager.Instance.SpawnBullet(_bulletDescription, _owner.GetBulletOrigin(),
-               rotation * _owner.GetAimVector() * _bulletDescription.speed, _owner.GetGameObject(), charge);
+            BulletManager.Instance.SpawnBullet(_bulletPrefab, _owner.GetBulletOrigin(), rotation * _owner.GetAimVector(), charge, _owner.GetGameObject());
 
             if (_burstInterval > 0)
             {

@@ -45,8 +45,7 @@ public class BulletManager : MonoBehaviour
 
                 if (bullet.active)
                 {
-                    bullet.lifetime -= Time.deltaTime;
-                    if (bullet.lifetime <= 0f)
+                    if (!bullet.instance.UpdateLifetime())
                     {
                         bullet.instance.BeforeDestroyed();
                         bullet.instance.gameObject.SetActive(false);
@@ -54,7 +53,7 @@ public class BulletManager : MonoBehaviour
                     }
                     else
                     {
-                        bullet.instance.UpdateBullet(bullet);
+                        bullet.instance.UpdateBullet();
                     }
                 }
             }
@@ -68,29 +67,21 @@ public class BulletManager : MonoBehaviour
         _instance = null;
     }
 
-    public void SpawnBullet(BulletDescription description, Vector2 position, Vector2 velocity, GameObject owner, float charge)
+    public void SpawnBullet(Bullet prefab, Vector2 position, Vector2 direction, float charge, GameObject owner)
     {
-        PreAllocateBullets(description);
-        BulletInstance availableBullet = FindAvailableBulletInstance(description);
+        PreAllocateBullets(prefab);
+        BulletInstance availableBullet = FindAvailableBulletInstance(prefab);
+        availableBullet.active = true;
 
         Bullet bullet = availableBullet.instance;
         bullet.gameObject.SetActive(true);
         bullet.transform.position = new Vector3(position.x, position.y, 0.0f);
-        bullet.SetSize(description.size);
-        bullet.SetTint(description.tint);
-        bullet.SetOwner(owner);
-        bullet.SetVelocity(velocity);
-        bullet.Description = description;
-
-        availableBullet.velocity = velocity;
-        availableBullet.charge = charge;
-        availableBullet.lifetime = description.lifetime;
-        availableBullet.active = true;
+        bullet.Initialize(charge, direction, owner);
     }
 
-    private BulletInstance FindAvailableBulletInstance(BulletDescription description)
+    private BulletInstance FindAvailableBulletInstance(Bullet prefab)
     {
-        List<BulletInstance> bulletInstances = _bulletList[description.bulletPrefab];
+        List<BulletInstance> bulletInstances = _bulletList[prefab];
         for (int i = 0; i < bulletInstances.Count; i++)
         {
             BulletInstance bulletInstance = bulletInstances[i];
@@ -100,7 +91,7 @@ public class BulletManager : MonoBehaviour
             }
         }
 
-        BulletInstance newInstance = InstantiateBullet(description, true);
+        BulletInstance newInstance = InstantiateBullet(prefab, true);
         bulletInstances.Add(newInstance);
 
         return newInstance;
@@ -113,9 +104,9 @@ public class BulletManager : MonoBehaviour
         Start();
     }
 
-    private void PreAllocateBullets(BulletDescription description)
+    private void PreAllocateBullets(Bullet prefab)
     {
-        if (_bulletList.ContainsKey(description.bulletPrefab))
+        if (_bulletList.ContainsKey(prefab))
         {
             return;
         }
@@ -123,22 +114,19 @@ public class BulletManager : MonoBehaviour
         List<BulletInstance> bullets = new List<BulletInstance>();
         for (int i = 0; i < _preAllocateCount; i++)
         {
-            bullets.Add(InstantiateBullet(description, false));
+            bullets.Add(InstantiateBullet(prefab, false));
         }
-        _bulletList[description.bulletPrefab] = bullets;
+        _bulletList[prefab.GetComponent<Bullet>()] = bullets;
     }
 
-    private BulletInstance InstantiateBullet(BulletDescription description, bool active)
+    private BulletInstance InstantiateBullet(Bullet prefab, bool active)
     {
-        Bullet instantiatedBullet = Instantiate<Bullet>(description.bulletPrefab, _bulletPoolWrapper.transform);
-        instantiatedBullet.gameObject.SetActive(active);
+        Bullet bullet = Instantiate<Bullet>(prefab, _bulletPoolWrapper.transform);
+        bullet.gameObject.SetActive(active);
         BulletInstance instance = new BulletInstance
         {
             active = active,
-            description = description,
-            instance = instantiatedBullet,
-            lifetime = 0f,
-            velocity = Vector2.zero,
+            instance = bullet
         };
         return instance;
     }
