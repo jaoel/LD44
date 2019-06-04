@@ -1,4 +1,5 @@
 ﻿using System;
+using DG.Tweening;
 using UnityEngine;
 
 public class SlingshotBullet : Bullet
@@ -9,8 +10,16 @@ public class SlingshotBullet : Bullet
 
     protected override void Start()
     {
-        _rotation = UnityEngine.Random.Range(0.0f, 360.0f);
         base.Start();
+    }
+
+    public override void Initialize(float charge, Vector2 direction, GameObject owner)
+    {
+        base.Initialize(charge, direction, owner);
+
+        _charge = Mathf.Max(_charge, 0.5f);
+        _currentLifetime *= _charge;
+        _rotation = UnityEngine.Random.Range(0.0f, 360.0f);
     }
 
     public override void UpdateBullet()
@@ -18,6 +27,33 @@ public class SlingshotBullet : Bullet
         _rotation += 300.0f * Time.deltaTime;
         _visualTransform.rotation = Quaternion.Euler(0.0f, 0.0f, _rotation);
 
-        base.UpdateBullet();
+        transform.position += _direction.ToVector3() * _speed * Time.deltaTime * _charge;
+    }
+
+    protected override void OnTriggerEnter2D(Collider2D collision)
+    {
+        if (collision.gameObject == _owner)
+        {
+            return;
+        }
+
+        bool active = false;
+
+        if (collision.gameObject.layer == Layers.Enemy || collision.gameObject.layer == Layers.FlyingEnemy)
+        {
+            Enemy enemy = collision.gameObject.GetComponent<Enemy>();
+            if (enemy.IsAlive)
+            {
+                collision.gameObject.GetComponent<Enemy>().ApplyDamage((int)(_damage * _charge), _direction);
+                BeforeDestroyed();
+                CameraManager.Instance.ShakeCamera(0.15f, 0.1f, 0.1f, 30);
+            }
+            else
+            {
+                active = true;
+            }
+        }
+
+        gameObject.SetActive(active);
     }
 }

@@ -46,7 +46,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   uiImage: {fileID: -854259281838472014, guid: 42bd3ffc034dd23409edab32966f490e, type: 3}
-  _cooldown: 0.2
+  _cooldown: 0
   _chargeTime: 1
   _resetChargeOnShot: 1
   _magazineSize: 0
@@ -56,7 +56,6 @@ MonoBehaviour:
   _knockback: 0
   _firingArc: 15
   _randomizePattern: 1
-  _bulletDescription: {fileID: 11400000, guid: d525ad8c5eef3bd4d92afcb751072538, type: 2}
   _bulletPrefab: {fileID: 1322879831930639400, guid: 01d33d4390ba07c458cec9d95579c344,
     type: 3}
   _shotSound: {fileID: 7246573145497593685}

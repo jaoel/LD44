@@ -27,7 +27,7 @@ public class GrenadeBullet : Bullet
 
     public override void UpdateBullet()
     {
-        float acceleration = Mathf.Clamp(1.0f - _currentLifetime, 0.0f, 1.0f);
+        float acceleration = Mathf.Clamp(_currentLifetime - 1.0f, 0.0f, 1.0f);
         transform.position += _direction.ToVector3() * _speed * acceleration * acceleration * Time.deltaTime * _charge;
 
         _rotation += 300.0f * (0.01f + acceleration) * Time.deltaTime;

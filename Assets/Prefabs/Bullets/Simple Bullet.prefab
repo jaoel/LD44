@@ -143,7 +143,7 @@ MonoBehaviour:
   _lifetime: 0.5
   _speed: 15
   _size: {x: 1, y: 1}
-  _damage: 1
+  _damage: 100
   _tint: {r: 1, g: 1, b: 1, a: 1}
   _spriteRenderer: {fileID: 9148656470891143727}
 --- !u!58 &-5089695432794804344

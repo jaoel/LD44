@@ -180,7 +180,7 @@ MonoBehaviour:
   _lifetime: 1
   _speed: 10
   _size: {x: 1, y: 1}
-  _damage: 1
+  _damage: 100
   _tint: {r: 0.21568628, g: 0.21568628, b: 0.21568628, a: 1}
   _spriteRenderer: {fileID: 9148656470891143727}
   _visualTransform: {fileID: 7480851900034803971}
@@ -272,9 +272,9 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 8677906720541102056}
-  m_Enabled: 1
+  m_Enabled: 0
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 52f5714e4d12dc54d8d8e2f99c5fdcf5, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  ignoreScale: 0
+  ignoreScale: 1

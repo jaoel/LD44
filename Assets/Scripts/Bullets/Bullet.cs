@@ -36,9 +36,9 @@ public class Bullet : MonoBehaviour
 
     }
 
-    public void Initialize(float charge, Vector2 direction, GameObject owner)
+    public virtual void Initialize(float charge, Vector2 direction, GameObject owner)
     {
-        _currentLifetime = 0.0f;
+        _currentLifetime = _lifetime;
         _charge = charge;
         SetTint(_tint);
         SetSize(_size);
@@ -68,8 +68,8 @@ public class Bullet : MonoBehaviour
 
     public virtual bool UpdateLifetime()
     {
-        _currentLifetime += Time.deltaTime;
-        return _currentLifetime < _lifetime;
+        _currentLifetime -= Time.deltaTime;
+        return _currentLifetime >= 0.0f;
     }
 
     public virtual void UpdateBullet()
@@ -81,7 +81,7 @@ public class Bullet : MonoBehaviour
     {
     }
 
-    public void OnTriggerEnter2D(Collider2D collision)
+    protected virtual void OnTriggerEnter2D(Collider2D collision)
     {
         if (collision.gameObject == _owner)
         {

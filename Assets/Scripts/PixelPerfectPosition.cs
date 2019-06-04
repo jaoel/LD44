@@ -16,6 +16,7 @@ public class PixelPerfectPosition : MonoBehaviour
         {
             pixelsPerUnit *= PixelPerfectCamera.pixelScale;
         }
+
         Vector3 position = transform.localPosition;
 
         position.x = (Mathf.Round(transform.parent.position.x * pixelsPerUnit) / pixelsPerUnit) - transform.parent.position.x;
