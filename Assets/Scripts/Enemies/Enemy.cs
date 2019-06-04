@@ -247,6 +247,11 @@ public class Enemy : MonoBehaviour
         _minimapIcon.SetActive(false);
 
         _collider.offset = new Vector2(_collider.offset.x, -0.3f);
+        
+        if (_collider is CircleCollider2D)
+        {
+            ((CircleCollider2D)_collider).radius *= 0.5f;
+        }
 
         DropItem();
     }
