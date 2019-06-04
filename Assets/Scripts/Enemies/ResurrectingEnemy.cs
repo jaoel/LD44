@@ -13,13 +13,13 @@ public class ResurrectingEnemy : Enemy
     [SerializeField]
     protected float _maxResurrectionTime;
 
-    private int _livesLeft;
+    protected int _livesLeft;
 
     protected override void Awake()
     {
-        base.Awake();
-
         _livesLeft = _lives;
+
+        base.Awake();
     }
 
     protected override void Die(Vector2 velocity)
