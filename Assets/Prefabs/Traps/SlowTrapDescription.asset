@@ -18,9 +18,9 @@ MonoBehaviour:
     type: 3}
   triggerSound: {fileID: 8300000, guid: 4c2c1b4438f673947b880f6bb9795e74, type: 3}
   resetSound: {fileID: 8300000, guid: 4c2c1b4438f673947b880f6bb9795e74, type: 3}
-  resetOnExit: 1
+  resetOnExit: 0
   triggerOnInvulnerable: 1
   resetTime: 2
   damage: 0
   slowFactor: 0.8
-  slowDuration: 5
+  slowDuration: 3
