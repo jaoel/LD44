@@ -463,10 +463,11 @@ public class MapPopulator : MonoBehaviour
             for (int i = 0; i < dropCount; i++)
             {
                 int iterations = 3;
+                int roomIndex = 0;
+                int offset = 0;
+
                 while (true)
                 {
-                    int roomIndex = 0;
-                    int offset = 0;
                     Enemy enemy = null;
                     while(enemy == null)
                     {
