@@ -163,3 +163,14 @@ MonoBehaviour:
     - spawnablePrefab: {fileID: 7125115978298190037, guid: 288ccb1b219cbb84ca27d3c84ad5537a,
         type: 3}
       density: 0.0015
+  drops:
+  - item: {fileID: 11400000, guid: 9dff1c61f0a906b499275c70aadfdc72, type: 2}
+    droprate: 0.05
+    minDropCount: 2
+    maxDropCount: 10
+    useSeclusionFactor: 1
+  - item: {fileID: 11400000, guid: 07e877227b6619240a2cccb59f4a5df7, type: 2}
+    droprate: 0.1
+    minDropCount: 1
+    maxDropCount: 100
+    useSeclusionFactor: 0

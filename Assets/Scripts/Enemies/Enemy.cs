@@ -6,6 +6,7 @@ public class Enemy : MonoBehaviour
 {
     public bool IsAlive => _currentHealth > 0;
     public bool HasAggro => _hasAggro;
+    public bool HasDrop => _itemDrops?.Count > 0;
 
     [SerializeField]
     protected float _maxHealth;
@@ -52,7 +53,7 @@ public class Enemy : MonoBehaviour
     protected Vector2 _dieDirection = Vector2.down;
     protected HurtBlink _colorController;
 
-    private static int _killsSinceLastDrop = 0;
+    protected List<ItemDescription> _itemDrops;
 
     protected virtual void Awake()
     {
@@ -62,6 +63,7 @@ public class Enemy : MonoBehaviour
         _navigation.Initialize(_rigidbody, _maxSpeed, _acceleration);
         _spawnPosition = transform.position.ToVector2();
         _colorController = GetComponent<HurtBlink>();
+        _itemDrops = new List<ItemDescription>();
     }
 
     protected virtual void FixedUpdate()
@@ -260,24 +262,21 @@ public class Enemy : MonoBehaviour
         DropItem();
     }
 
+    public void SetDrop(ItemDescription item)
+    {
+        _itemDrops.Add(item);
+    }
+
     public virtual void DropItem()
     {
-        float killsForGuaranteedDrop = 5.0f + Main.Instance.CurrentLevel;
-        float probability = Mathf.Lerp(0.1f, 1.0f, _killsSinceLastDrop / killsForGuaranteedDrop);
-        
-        if (Random.Range(0.0f, 1.0f) < probability)
+        _itemDrops.ForEach(x =>
         {
-            _killsSinceLastDrop = 0;
-            Item drop = Instantiate(_itemContainer.GetEnemyDrop().itemPrefab, transform.position, Quaternion.identity);
+            Item drop = Instantiate(x.itemPrefab, transform.position, Quaternion.identity);
             drop.transform.localScale = new Vector3(0.5f, 0.5f, 0.5f);
             drop.gameObject.SetActive(true);
-        
+
             Main.Instance.AddInteractiveObject(drop.gameObject);
-        }
-        else
-        {
-            _killsSinceLastDrop++;
-        }
+        });
     }
 
     protected virtual void OnCollisionStay2D(Collision2D collision)

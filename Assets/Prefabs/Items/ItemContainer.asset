@@ -12,6 +12,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 053b670930677464eae966da2ef435a1, type: 3}
   m_Name: ItemContainer
   m_EditorClassIdentifier: 
+  droppableItems:
+    _values:
+    - {fileID: 11400000, guid: 9dff1c61f0a906b499275c70aadfdc72, type: 2}
+    - {fileID: 11400000, guid: 07e877227b6619240a2cccb59f4a5df7, type: 2}
+    - {fileID: 0}
+    _priorities: 050000000a00000055000000
+    _totalPriority: 100
   Shotgun: {fileID: 11400000, guid: 7b7b35105a18b0946aad950135169d3a, type: 2}
   Pistol: {fileID: 11400000, guid: c7dd06da505c48e49b8f631f168771db, type: 2}
   AK47: {fileID: 11400000, guid: 33cfe110ba187b54c8f4562be87bee63, type: 2}
@@ -21,5 +28,3 @@ MonoBehaviour:
   MaxHealth: {fileID: 11400000, guid: 9dff1c61f0a906b499275c70aadfdc72, type: 2}
   WeakHealthGlobe: {fileID: 11400000, guid: 07e877227b6619240a2cccb59f4a5df7, type: 2}
   FiringRateUpgrade: {fileID: 11400000, guid: df96087daafff4040b8ddf44eacbf055, type: 2}
-  SlowTrap: {fileID: 11400000, guid: 5ced745bcaf1a0745a468694b43eb9a4, type: 2}
-  SpikeTrap: {fileID: 11400000, guid: 7d6cc3c05224ff84ebb0c98c63265917, type: 2}

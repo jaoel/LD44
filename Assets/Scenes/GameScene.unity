@@ -652,10 +652,6 @@ PrefabInstance:
       propertyPath: blackOverlay
       value: 
       objectReference: {fileID: 5502668721478803623}
-    - target: {fileID: 997353019, guid: fb3c90fd7da4a7e42b329cb2e0d69797, type: 3}
-      propertyPath: CurrentLevel
-      value: 0
-      objectReference: {fileID: 0}
     - target: {fileID: 6622311546324206256, guid: fb3c90fd7da4a7e42b329cb2e0d69797,
         type: 3}
       propertyPath: floors

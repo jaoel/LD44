@@ -10,11 +10,13 @@ public class SpawnableInspector : Editor
 {
     public static SpawnableContainer targetContainer;
     private SerializedProperty _keyframes;
+    private SerializedProperty _droppableItems;
     private float _lineHeight = EditorGUIUtility.singleLineHeight + EditorGUIUtility.standardVerticalSpacing;
 
     private void OnEnable()
     {
         _keyframes = serializedObject.FindProperty("keyframes");
+        _droppableItems = serializedObject.FindProperty("drops");
     }
 
     public static void DrawUILine(Color color, int thickness = 2, int padding = 10)
@@ -51,9 +53,18 @@ public class SpawnableInspector : Editor
         }
 
         //serializedObject.Update();
+        EditorGUILayout.LabelField("Droppable Item data");
+        EditorGUILayout.PropertyField(_droppableItems, true);
+
+        EditorGUILayout.Space();
+        DrawUILine(Color.gray);
+        EditorGUILayout.Space();
+
         EditorGUILayout.LabelField("Spawnable keyframe data");
         EditorGUILayout.LabelField("Number of keyframes: " + _keyframes.arraySize);
-        DrawUILine(Color.gray);
+
+        EditorGUILayout.Space();
+        EditorGUILayout.Space();
 
         for (int i = 0; i < _keyframes.arraySize; i++)
         {

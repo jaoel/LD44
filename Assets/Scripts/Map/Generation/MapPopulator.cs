@@ -47,6 +47,7 @@ public class MapPopulator : MonoBehaviour
         _mapPainter.PostProcessTiles(map, generationParameters);
         SpawnSpawnables(map, level, startAndGoal);
         PlaceTraps(map, startAndGoal.Item1, player);
+        SpawnDrops(map);
     }
 
     private void CalculateSeclusionFactor(Map map, Tuple<MapNode, MapNode> startAndGoal, List<MapNode> path)
@@ -441,7 +442,54 @@ public class MapPopulator : MonoBehaviour
     private void Spawn(Map map, GameObject prefab, MapNode room)
     {
         Vector3 spawnPos = map.GetRandomPositionInRoom(1, 1, room).ToVector3();
-        map.AddEnemy(GameObject.Instantiate(prefab, new Vector3(spawnPos.x, spawnPos.y, 0.0f), Quaternion.identity));
+        GameObject enemy = Instantiate(prefab, new Vector3(spawnPos.x, spawnPos.y, 0.0f), Quaternion.identity);
+        map.AddEnemy(enemy);
+        room.Enemies.Add(enemy);
         map.Enemies[map.Enemies.Count - 1].SetActive(false);
+    }
+
+    private void SpawnDrops(Map map)
+    {
+        if (map.Enemies.Count == 0)
+        {
+            return;
+        }
+
+        List<MapNode> rooms = map.Cells.OrderByDescending(x => x.SeclusionFactor).ToList();
+        _spawnKeyframes.drops.ForEach(x =>
+        {
+            int dropCount = Mathf.Min(Mathf.Max(x.minDropCount, Mathf.RoundToInt(x.droprate * map.Enemies.Count)), x.maxDropCount);
+
+            for (int i = 0; i < dropCount; i++)
+            {
+                int iterations = 3;
+                while (true)
+                {
+                    int roomIndex = 0;
+                    int offset = 0;
+                    Enemy enemy = null;
+                    while(enemy == null)
+                    {
+                        roomIndex = x.useSeclusionFactor ? (i + offset) % map.Cells.Count : _random.Range(0, map.Cells.Count);
+
+                        if (map.Cells[roomIndex].Enemies?.Count > 0)
+                        {
+                            enemy = map.Cells[roomIndex].Enemies[_random.Range(0, map.Cells[roomIndex].Enemies.Count)]?.GetComponent<Enemy>();
+                        }
+
+                        offset++;
+                    }
+
+                    if (enemy.HasDrop && iterations > 0)
+                    {
+                        iterations--;
+                        continue;
+                    }
+
+                    enemy.SetDrop(x.item);
+                    break;
+                }
+            }
+        });
     }
 }

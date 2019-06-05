@@ -122,5 +122,6 @@ MonoBehaviour:
   trapContainer: {fileID: 11400000, guid: 7029a12395ce5594db25f5753c6cb57a, type: 2}
   spawnKeyframes: {fileID: 74418008763189589, guid: 80a701ded236f464a8ea58c11d72400b,
     type: 3}
+  itemContainer: {fileID: 11400000, guid: 74287dc484f187343ab501050ebd52a6, type: 2}
   floors: {fileID: 0}
   walls: {fileID: 0}
