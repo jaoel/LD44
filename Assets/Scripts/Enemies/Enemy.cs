@@ -262,7 +262,7 @@ public class Enemy : MonoBehaviour
         DropItem();
     }
 
-    public void SetDrop(ItemDescription item)
+    public void AddDrop(ItemDescription item)
     {
         _itemDrops.Add(item);
     }

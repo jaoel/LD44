@@ -455,7 +455,7 @@ public class MapPopulator : MonoBehaviour
             return;
         }
 
-        List<MapNode> rooms = map.Cells.OrderByDescending(x => x.SeclusionFactor).ToList();
+        List<MapNode> rooms = map.Cells.Where(x => x.Enemies.Count > 0).OrderByDescending(x => x.SeclusionFactor).ToList();
         _spawnKeyframes.drops.ForEach(x =>
         {
             int dropCount = Mathf.Min(Mathf.Max(x.minDropCount, Mathf.RoundToInt(x.droprate * map.Enemies.Count)), x.maxDropCount);
@@ -463,22 +463,15 @@ public class MapPopulator : MonoBehaviour
             for (int i = 0; i < dropCount; i++)
             {
                 int iterations = 3;
-                int roomIndex = 0;
-                int offset = 0;
 
                 while (true)
                 {
+                    int roomIndex = 0;
                     Enemy enemy = null;
                     while(enemy == null)
                     {
-                        roomIndex = x.useSeclusionFactor ? (i + offset) % map.Cells.Count : _random.Range(0, map.Cells.Count);
-
-                        if (map.Cells[roomIndex].Enemies?.Count > 0)
-                        {
-                            enemy = map.Cells[roomIndex].Enemies[_random.Range(0, map.Cells[roomIndex].Enemies.Count)]?.GetComponent<Enemy>();
-                        }
-
-                        offset++;
+                        roomIndex = x.useSeclusionFactor ? i % rooms.Count : _random.Range(0, rooms.Count);
+                        enemy = rooms[roomIndex].Enemies[_random.Range(0, rooms[roomIndex].Enemies.Count)].GetComponent<Enemy>();
                     }
 
                     if (enemy.HasDrop && iterations > 0)
@@ -487,7 +480,7 @@ public class MapPopulator : MonoBehaviour
                         continue;
                     }
 
-                    enemy.SetDrop(x.item);
+                    enemy.AddDrop(x.item);
                     break;
                 }
             }
