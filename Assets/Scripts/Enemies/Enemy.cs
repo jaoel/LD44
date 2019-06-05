@@ -127,17 +127,21 @@ public class Enemy : MonoBehaviour
             List<Enemy> enemies = Main.Instance.CurrentMap.GetEnemiesInCircle(transform.position, _aggroDistance);
             int layerMask = Layers.CombinedLayerMask(Layers.Map, Layers.Enemy, Layers.FlyingEnemy);
             int rec = recursions - 1;
+            _collider.enabled = false;
+
             enemies.ForEach(x =>
             {
                 if (!x.HasAggro)
                 {
                     if (IsVisible(_aggroDistance * 3.0f, x.transform.position.ToVector2(), layerMask,
-                     new List<int>() { Layers.Enemy, Layers.FlyingEnemy }))
+                        new List<int>() { Layers.Enemy, Layers.FlyingEnemy }))
                     {
                         x.AggroPlayer(recursions > 0, rec);
                     }
                 }
             });
+
+            _collider.enabled = true;
         }
     }
 
