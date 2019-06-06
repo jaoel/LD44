@@ -101,9 +101,10 @@ public class NavigationManager : MonoBehaviour
         Vector2Int start = origin;
         Vector2Int target = destination;
 
-        distance = 0.0f;
+        distance = float.NegativeInfinity;
         if (start == target)
         {
+            distance = 0.0f;
             return new List<Vector2Int>();
         }
 

@@ -40,7 +40,7 @@ public class Map
         _drawGabriel = false;
         _drawEMST = false;
         _drawCorridors = true;
-        _drawLayout = false;
+        _drawLayout = true;
         _drawBounds = false;
 
         _floors = floors;
@@ -287,17 +287,9 @@ public class Map
 
         if (_drawCorridors && CorridorGraph != null)
         {
-            //CorridorGraph.ForEach(x =>
-            //{
-            //    GizmoUtility.DrawLine(x, Color.red);
-            //});
-
-            Cells.ForEach(x =>
+            CorridorGraph.ForEach(x =>
             {
-                x.Corridors.ForEach(y =>
-                {
-                    GizmoUtility.DrawLine(y, new Color(159 / 255.0f, 90 / 255.0f, 253 / 255.0f, 1));
-                });
+                GizmoUtility.DrawLine(x, Color.red);
             });
         }
     }

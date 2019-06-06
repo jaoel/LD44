@@ -32,5 +32,10 @@ public static class VectorExtension
         return new Vector2(a.x, a.y);
     }
 
+    public static Vector2Int ToVector2Int(this Vector2 a)
+    {
+        return new Vector2Int(Mathf.RoundToInt(a.x), Mathf.RoundToInt(a.y));
+    }
+
 }
 

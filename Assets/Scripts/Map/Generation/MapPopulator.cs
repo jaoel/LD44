@@ -230,7 +230,7 @@ public class MapPopulator
         return false;
     }
     
-    private MapNode FindKeyRoom(MapNode spawnRoom, MapNode target, List<MapNode> rooms)
+    private MapNode FindKeyRoom(MapNode spawnRoom, MapNode target, List<MapNode> rooms, Map map = null)
     {
         List<Tuple<MapNode, float>> distances = new List<Tuple<MapNode, float>>();
 
@@ -258,8 +258,37 @@ public class MapPopulator
             distances.RemoveAt(0);
 
             if (path != null)
-            {
-                result = candidate;
+            { 
+                if (map != null)
+                {
+                    if (candidate.Locked)
+                    {
+                        candidate.Chokepoints.ForEach(x =>
+                        {
+                            map.UpdateCollisionMap(x.ToRectInt(), 0);
+                        });
+                    }
+
+                    List<Vector2Int> check = NavigationManager.Instance.AStar(spawnRoom.Cell.center.ToVector2Int(),
+                        candidate.Cell.center.ToVector2Int(), out distance);
+
+                    if (check.Count >= 0 && distance != float.NegativeInfinity)
+                    {
+                        result = candidate;
+                    }
+
+                    if (candidate.Locked)
+                    {
+                        candidate.Chokepoints.ForEach(x =>
+                        {
+                            map.UpdateCollisionMap(x.ToRectInt(), 1);
+                        });
+                    }
+                }
+                else
+                {
+                    result = candidate;
+                }
             }
         }
 
@@ -270,6 +299,7 @@ public class MapPopulator
     {
         List<MapNode> rooms = new List<MapNode>();
         MapNode keyRoom = null;
+        List<MapNode> result = new List<MapNode>();
         while (true)
         {
             foreach (MapNode mapNode in map.Cells)
@@ -293,7 +323,7 @@ public class MapPopulator
                 }
 
                 List<MapNode> path = NavigationManager.Instance.AStar(spawnRoom, room, out float distance);
-
+                
                 if (path.Where(x => x.Locked).Count() == 1)
                 {
                     lockedRooms.Add(room);
@@ -320,7 +350,7 @@ public class MapPopulator
 
             foreach (MapNode lockedRoom in lockedRooms)
             {
-                keyRoom = FindKeyRoom(spawnRoom, lockedRoom, rooms);
+                keyRoom = FindKeyRoom(spawnRoom, lockedRoom, rooms, map);
 
                 Key newKey = GameObject.Instantiate(_interactiveObjectContainer.skeletonKey, map.GetRandomPositionInRoom(1, 1, keyRoom).ToVector3(),
                     Quaternion.identity).GetComponent<Key>();
@@ -329,6 +359,12 @@ public class MapPopulator
                 lockedRoom.Keys.Add(newKey.gameObject);
                 lockedRoom.Locked = false;
 
+                lockedRoom.Chokepoints.ForEach(x =>
+                {
+                    map.UpdateCollisionMap(x.ToRectInt(), 0);
+                });
+
+                result.Add(lockedRoom);
                 if (rooms.Count > 1)
                 {
                     foreach (MapNode room in rooms)
@@ -338,6 +374,14 @@ public class MapPopulator
                 }
             }
         }
+
+        result.ForEach(x =>
+        {
+            x.Chokepoints.ForEach(y =>
+            {
+                map.UpdateCollisionMap(y.ToRectInt(), 1);
+            });
+        });
     }
 
     private void PlaceTraps(Map map, MapNode spawnRoom, Player player)

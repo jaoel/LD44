@@ -96,7 +96,7 @@ public class Main : MonoBehaviour
         parameters.LockFactor = 0.2f;
 
         _currentMap = MapGenerator.Instance.GenerateMap(DateTime.Now.Ticks, parameters, CurrentLevel);
-
+        
         MapGenerator.Instance.PopulateMap(ref _currentMap, ref player, parameters, CurrentLevel);
         _currentMap.ActivateObjects();
     }
