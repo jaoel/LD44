@@ -16,6 +16,17 @@ public class FlareBullet : Bullet
     [SerializeField]
     private GameObject _signalFlarePrefab;
 
+    [SerializeField]
+    private AudioSource _trailSound;
+
+    public override void Initialize(float charge, Vector2 direction, GameObject owner)
+    {
+        _trailSound.volume = SettingsManager.Instance.SFXVolume;
+        _trailSound.Play();
+
+        base.Initialize(charge, direction, owner);
+    }
+
     public override void UpdateBullet()
     {
         _visualTransform.rotation = Quaternion.LookRotation(Vector3.forward, _direction);

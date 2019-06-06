@@ -41,7 +41,7 @@ public class SignalFlare : MonoBehaviour
 
         Main.Instance.DamageAllEnemiesInCircle(transform.position.ToVector2(), _explosionRadius, _explosionDamage, true);
         CameraManager.Instance.ShakeCamera(0.6f, 0.25f, 1.25f);
-        //SoundManager.Instance.PlayExplosionSound();
+
         _flameAudioSource.volume = SettingsManager.Instance.SFXVolume;
         _flameAudioSource.Play();
 
