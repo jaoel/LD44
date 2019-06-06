@@ -3,6 +3,7 @@
 	Properties
 	{
         _MainTex ("Texture", 2D) = "white" {}
+        _DarknessColor ("Darkness Color", Color) = (0, 0, 0, 1)
 	}
     SubShader
     {
@@ -47,6 +48,7 @@
 			
             sampler2D _BackgroundTexture;
             sampler2D _MainTex;
+			float4 _DarknessColor;
 
             half4 frag(v2f i) : SV_Target
             {
@@ -57,7 +59,7 @@
 				float desaturation = color.r;
 				float darkness = color.g * 0.5 + color.r * 0.5;
 
-				half3 result = lerp(lum.xxx * darkness, bgcolor.rgb * darkness, desaturation);
+				half3 result = lerp(_DarknessColor.rgb, lerp(lum.xxx, bgcolor.rgb, desaturation), darkness);
 
                 return half4(result, 1.0);
             }

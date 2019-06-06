@@ -12,6 +12,7 @@ public class FogOfWar : MonoBehaviour
     private Texture2D _fowTexture;
     private MaterialPropertyBlock _mpb;
     private int _textureID;
+    private bool _enabled = true;
 
     public void GenerateTexture()
     {
@@ -21,7 +22,6 @@ public class FogOfWar : MonoBehaviour
 
         Vector3Int size = new Vector3Int(Mathf.Max(floors.size.x, walls.size.x), Mathf.Max(floors.size.y, walls.size.y), 0);
         _fowTexture = new Texture2D(size.x, size.y, TextureFormat.RGBA32, false, true);
-        //_fowTexture.filterMode = FilterMode.Point;
         Color32 resetColor = new Color32(0, 0, 0, 0);
         Color32[] resetColorArray = _fowTexture.GetPixels32();
 
@@ -39,22 +39,21 @@ public class FogOfWar : MonoBehaviour
         Sprite sprite = Sprite.Create(_fowTexture, new Rect(Vector2.zero, new Vector2(size.x, size.y)), Vector2.zero, 1f);
         fogOfWarRenderer.sprite = sprite;
 
-        //foreach (Vector3Int position in floors.cellBounds.allPositionsWithin)
-        //{
-        //    Vector3Int pos = position - floors.origin;
-        //    TileBase tile = floors.GetTile(position);
-        //    if (tile != null)
-        //    {
-        //        _fowTexture.SetPixel(pos.x, pos.y, Color.red);
-        //    }
-        //}
-
         SetTexture();
+    }
+
+    public void SetEnabled(bool enabled)
+    {
+        _enabled = enabled;
+        fogOfWarRenderer.enabled = enabled;
     }
 
     private void Update()
     {
-        UpdateFogOfWar(Main.Instance.player.transform.position);
+        if (_enabled)
+        {
+            UpdateFogOfWar(Main.Instance.player.transform.position);
+        }
     }
 
     public void UpdateFogOfWar(Vector3 playerPosition)
@@ -68,7 +67,6 @@ public class FogOfWar : MonoBehaviour
             for(int y = fowBounds.yMin; y < fowBounds.yMax; y++)
             {
                 Vector3Int position = new Vector3Int(x, y, 0);
-                if(floors.HasTile(position))
                 {
                     Vector3Int pos = position - floors.origin;
                     float distance = Vector3.Distance(playerPosition, floors.CellToWorld(position));
@@ -92,31 +90,6 @@ public class FogOfWar : MonoBehaviour
                     }
 
                     pixelColor = targetColor;
-
-                    //if (distance <= _viewRange)
-                    //{
-                    //    float frac = _viewRange - distance;
-                    //    if (pixelColor.r < frac)
-                    //    {
-                    //        pixelColor.r = Mathf.Min(frac, pixelColor.r + Time.deltaTime * 2f);
-                    //    }
-                    //    else if (pixelColor.r > frac)
-                    //    {
-                    //        pixelColor.r = Mathf.Min(frac, pixelColor.r - Time.deltaTime * 2f);
-                    //    }
-
-                    //    if(pixelColor.g < frac)
-                    //    {
-                    //        pixelColor.g = Mathf.Min(frac, pixelColor.g + Time.deltaTime * 2f);
-                    //    }
-                    //}
-                    //else
-                    //{
-                    //    if (pixelColor.r > 0f)
-                    //    {
-                    //        pixelColor.r = Mathf.Max(0f, pixelColor.r - Time.deltaTime * 2f);
-                    //    }
-                    //}
                     _fowTexture.SetPixel(pos.x, pos.y, pixelColor);
                 }
             }

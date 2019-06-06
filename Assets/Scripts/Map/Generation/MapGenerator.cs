@@ -103,6 +103,7 @@ public class MapGenerator : MonoBehaviour
         FogOfWar fogOfWar = GetComponent<FogOfWar>();
         if (fogOfWar)
         {
+            fogOfWar.SetEnabled(true);
             fogOfWar.GenerateTexture();
         }
     }

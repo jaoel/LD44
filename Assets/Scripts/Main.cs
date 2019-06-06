@@ -115,6 +115,12 @@ public class Main : MonoBehaviour
             MusicController.Instance.PlayMusic("Shop");
         }
 
+        FogOfWar fogOfWar = GetComponent<FogOfWar>();
+        if (fogOfWar)
+        {
+            fogOfWar.SetEnabled(false);
+        }
+
         shopInstance.gameObject.SetActive(true);
         shopInstance.GenerateRandomItems(CurrentLevel, player);
         shopInstance.MovePlayerToSpawn(player);
