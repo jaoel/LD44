@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 using UnityEngine;
 using UnityEngine.Tilemaps;
 
-public class MapPopulator : MonoBehaviour
+public class MapPopulator
 {
     private LCG _random;
     private InteractiveDungeonObject _interactiveObjectContainer;
@@ -39,7 +39,7 @@ public class MapPopulator : MonoBehaviour
         player.transform.position = map.GetRandomPositionInRoom(1, 1, startAndGoal.Item1).ToVector3();
         CameraManager.Instance.SetCameraPosition(player.transform.position);
 
-        map.AddInteractiveObject(Instantiate(_interactiveObjectContainer.Stairs,
+        map.AddInteractiveObject(GameObject.Instantiate(_interactiveObjectContainer.Stairs,
             map.GetRandomPositionInRoom(2, 2, startAndGoal.Item2).ToVector3(), Quaternion.identity));
         startAndGoal.Item2.ContainsStairs = true;
 
@@ -135,20 +135,20 @@ public class MapPopulator : MonoBehaviour
             {
                 if (chokepoint.size.x == 3)
                 {
-                    door = Instantiate(_interactiveObjectContainer.horizontalDoor, chokepoint.center,
+                    door = GameObject.Instantiate(_interactiveObjectContainer.horizontalDoor, chokepoint.center,
                         Quaternion.identity).GetComponent<Door>();
                     door.Bounds = new RectInt(chokepoint.xMin + 1, chokepoint.yMin, 1, 1);
                 }
                 else if (chokepoint.size.x == 4)
                 {
-                    door = Instantiate(_interactiveObjectContainer.horizontalDoor, chokepoint.center,
+                    door = GameObject.Instantiate(_interactiveObjectContainer.horizontalDoor, chokepoint.center,
                         Quaternion.identity).GetComponent<Door>();
                     door.Bounds = new RectInt(chokepoint.xMin + 1, chokepoint.yMin, 2, 1);
                 }
                 else
                 {
 
-                    door = Instantiate(_interactiveObjectContainer.horizontalDoor, new Vector3(chokepoint.xMin + 2, chokepoint.center.y),
+                    door = GameObject.Instantiate(_interactiveObjectContainer.horizontalDoor, new Vector3(chokepoint.xMin + 2, chokepoint.center.y),
                         Quaternion.identity).GetComponent<Door>();
                     _mapPainter.BuildHorizontalDoorWalls(map, target, chokepoint);
                     door.Bounds = new RectInt(chokepoint.xMin + 1, chokepoint.yMin, 2, 1);
@@ -158,17 +158,17 @@ public class MapPopulator : MonoBehaviour
             {
                 if (chokepoint.size.y == 3)
                 {
-                    door = Instantiate(_interactiveObjectContainer.verticalDoor, chokepoint.center, Quaternion.identity).GetComponent<Door>();
+                    door = GameObject.Instantiate(_interactiveObjectContainer.verticalDoor, chokepoint.center, Quaternion.identity).GetComponent<Door>();
                     door.Bounds = new RectInt(chokepoint.x, chokepoint.yMin + 1, 1, 1);
                 }
                 else if (chokepoint.size.y == 4)
                 {
-                    door = Instantiate(_interactiveObjectContainer.verticalDoor, chokepoint.center, Quaternion.identity).GetComponent<Door>();
+                    door = GameObject.Instantiate(_interactiveObjectContainer.verticalDoor, chokepoint.center, Quaternion.identity).GetComponent<Door>();
                     door.Bounds = new RectInt(chokepoint.x, chokepoint.yMin + 1, 1, 2);
                 }
                 else
                 {
-                    door = Instantiate(_interactiveObjectContainer.verticalDoor, new Vector3(chokepoint.center.x, chokepoint.yMin + 2),
+                    door = GameObject.Instantiate(_interactiveObjectContainer.verticalDoor, new Vector3(chokepoint.center.x, chokepoint.yMin + 2),
                         Quaternion.identity).GetComponent<Door>();
                     door.Bounds = new RectInt(chokepoint.x, chokepoint.yMin + 1, 1, 2);
                     _mapPainter.BuildVerticalDoorWalls(map, target, chokepoint);
@@ -212,7 +212,7 @@ public class MapPopulator : MonoBehaviour
             Key newKey = null;
             if (goldKey)
             {
-                newKey = Instantiate(_interactiveObjectContainer.goldKey, map.GetRandomPositionInRoom(1, 1, keyRoom).ToVector3(),
+                newKey = GameObject.Instantiate(_interactiveObjectContainer.goldKey, map.GetRandomPositionInRoom(1, 1, keyRoom).ToVector3(),
                     Quaternion.identity).GetComponent<Key>();
 
                 map.AddInteractiveObject(newKey.gameObject);
@@ -322,7 +322,7 @@ public class MapPopulator : MonoBehaviour
             {
                 keyRoom = FindKeyRoom(spawnRoom, lockedRoom, rooms);
 
-                Key newKey = Instantiate(_interactiveObjectContainer.skeletonKey, map.GetRandomPositionInRoom(1, 1, keyRoom).ToVector3(),
+                Key newKey = GameObject.Instantiate(_interactiveObjectContainer.skeletonKey, map.GetRandomPositionInRoom(1, 1, keyRoom).ToVector3(),
                     Quaternion.identity).GetComponent<Key>();
 
                 map.AddInteractiveObject(newKey.gameObject);
@@ -442,7 +442,7 @@ public class MapPopulator : MonoBehaviour
     private void Spawn(Map map, GameObject prefab, MapNode room)
     {
         Vector3 spawnPos = map.GetRandomPositionInRoom(1, 1, room).ToVector3();
-        GameObject enemy = Instantiate(prefab, new Vector3(spawnPos.x, spawnPos.y, 0.0f), Quaternion.identity);
+        GameObject enemy = GameObject.Instantiate(prefab, new Vector3(spawnPos.x, spawnPos.y, 0.0f), Quaternion.identity);
         map.AddEnemy(enemy);
         room.Enemies.Add(enemy);
         map.Enemies[map.Enemies.Count - 1].SetActive(false);
