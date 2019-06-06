@@ -12,18 +12,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 053b670930677464eae966da2ef435a1, type: 3}
   m_Name: ItemContainer
   m_EditorClassIdentifier: 
-  droppableItems:
-    _values:
-    - {fileID: 11400000, guid: 9dff1c61f0a906b499275c70aadfdc72, type: 2}
-    - {fileID: 11400000, guid: 07e877227b6619240a2cccb59f4a5df7, type: 2}
-    - {fileID: 0}
-    _priorities: 050000000a00000055000000
-    _totalPriority: 100
   Shotgun: {fileID: 11400000, guid: 7b7b35105a18b0946aad950135169d3a, type: 2}
   Pistol: {fileID: 11400000, guid: c7dd06da505c48e49b8f631f168771db, type: 2}
   AK47: {fileID: 11400000, guid: 33cfe110ba187b54c8f4562be87bee63, type: 2}
   Slingshot: {fileID: 11400000, guid: 2b18e66dc2627664c856cbad75a7e8c1, type: 2}
   Grenade: {fileID: 11400000, guid: 6e4f009bf25fe6844b18fd0f13946c79, type: 2}
+  FlareGun: {fileID: 11400000, guid: 28800f658a677e2449d3084d1d193690, type: 2}
   HealthGlobe: {fileID: 11400000, guid: 8e3b8384140229f40a2ae0b895e25ec4, type: 2}
   MaxHealth: {fileID: 11400000, guid: 9dff1c61f0a906b499275c70aadfdc72, type: 2}
   WeakHealthGlobe: {fileID: 11400000, guid: 07e877227b6619240a2cccb59f4a5df7, type: 2}

@@ -9,25 +9,14 @@ public class ItemContainer : ScriptableObject
     public ItemDescription AK47;
     public ItemDescription Slingshot;
     public ItemDescription Grenade;
+    public ItemDescription FlareGun;
     public ItemDescription HealthGlobe;
     public ItemDescription MaxHealth;
     public ItemDescription WeakHealthGlobe;
     public ItemDescription FiringRateUpgrade;
 
     [System.NonSerialized]
-    int numItems = 7; // INCREMENT THIS WHEN ADDING ITEMS
-
-    public ItemDescription GetEnemyDrop()
-    {
-        List<ItemDescription> drops = new List<ItemDescription>() { MaxHealth, WeakHealthGlobe, WeakHealthGlobe };
-
-        return drops[Random.Range(0, drops.Count)];
-    }
-
-    public ItemDescription GetRandomItem()
-    {
-        return GetItemByIndex(Random.Range(0, numItems));
-    }
+    int numItems = 8; // INCREMENT THIS WHEN ADDING ITEMS
 
     public List<ItemDescription> GetRareItems()
     {
@@ -35,6 +24,7 @@ public class ItemContainer : ScriptableObject
         items.Add(Shotgun);
         items.Add(AK47);
         items.Add(Grenade);
+        items.Add(FlareGun);
 
         return items;
     }
@@ -80,6 +70,10 @@ public class ItemContainer : ScriptableObject
             case 6:
                 {
                     return FiringRateUpgrade;
+                }
+            case 7:
+                {
+                    return FlareGun;
                 }
             default:
                 {
