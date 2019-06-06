@@ -2,7 +2,7 @@
 using UnityEngine;
 using DG.Tweening;
 
-public class Enemy : MonoBehaviour
+public class Enemy : MonoBehaviour, IBuffable 
 {
     public bool IsAlive => _currentHealth > 0;
     public bool HasAggro => _hasAggro;
@@ -21,13 +21,16 @@ public class Enemy : MonoBehaviour
     protected float _aggroDistance;
 
     [SerializeField]
-    protected float _meleeDamage;
+    protected int _meleeDamage;
 
     [SerializeField]
     protected Rigidbody2D _rigidbody;
 
     [SerializeField]
     protected Collider2D _collider;
+
+    [SerializeField]
+    protected SpriteRenderer _visual;
 
     [SerializeField]
     protected Navigation _navigation;
@@ -37,9 +40,6 @@ public class Enemy : MonoBehaviour
 
     [SerializeField]
     protected ParticleSystemContainer _particleSystemContainer;
-
-    [SerializeField]
-    protected ItemContainer _itemContainer;
 
     [SerializeField]
     protected GameObject _minimapIcon;
@@ -218,34 +218,6 @@ public class Enemy : MonoBehaviour
         _characterAnimation.UpdateAnimation(type, direction);
     }
 
-    public virtual void ApplyDamage(int damage, Vector2 velocity)
-    {
-        if (IsAlive)
-        {
-            SoundManager.Instance.PlayMonsterPainSound();
-
-            ParticleSystem bloodSpray = Instantiate(_particleSystemContainer.bloodSpray, transform.position, Quaternion.identity);
-
-            Vector3 dir = new Vector3(velocity.normalized.x, velocity.normalized.y, 0);
-            bloodSpray.transform.DOLookAt(transform.position + dir, 0.0f);
-            bloodSpray.gameObject.SetActive(true);
-            bloodSpray.Play();
-
-            _colorController.Blink(new Color(1f, 1f, 1f, 0.5f), 0.25f);
-
-            _currentHealth -= damage;
-            if (!IsAlive)
-            {
-                Die(velocity);
-            }
-
-            if (!_hasAggro)
-            {
-                AggroPlayer(true);
-            }
-        }
-    }
-
     protected virtual void Die(Vector2 velocity)
     {
         _dieDirection = velocity;
@@ -283,10 +255,49 @@ public class Enemy : MonoBehaviour
     {
         if (IsAlive && collision.gameObject.layer == Layers.Player)
         {
-            if(_player.ReceiveDamage(_meleeDamage, -collision.contacts[0].normal))
+            if(_player.ReceiveDamage((int)_meleeDamage, -collision.contacts[0].normal))
             {
                 _rigidbody.velocity = Vector2.zero;
             }
         }
+    }
+
+    public bool ReceiveDamage(int damage, Vector2 velocity, bool maxHealth = false, bool spawnBloodSpray = true)
+    {
+        if (IsAlive)
+        {
+            SoundManager.Instance.PlayMonsterPainSound();
+
+            if (spawnBloodSpray)
+            {
+                ParticleSystem bloodSpray = Instantiate(_particleSystemContainer.bloodSpray, transform.position, Quaternion.identity);
+
+                Vector3 dir = new Vector3(velocity.normalized.x, velocity.normalized.y, 0);
+                bloodSpray.transform.DOLookAt(transform.position + dir, 0.0f);
+                bloodSpray.gameObject.SetActive(true);
+                bloodSpray.Play();
+            }
+           
+            _colorController.Blink(new Color(1f, 1f, 1f, 0.5f), 0.25f);
+
+            _currentHealth -= damage;
+            if (!IsAlive)
+            {
+                Die(velocity);
+                return true;
+            }
+
+            if (!_hasAggro)
+            {
+                AggroPlayer(true);
+            }
+        }
+
+        return false;
+    }
+
+    public virtual SpriteRenderer GetSpriteRenderer()
+    {
+        return _visual;
     }
 }

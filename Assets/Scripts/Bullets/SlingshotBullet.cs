@@ -53,8 +53,8 @@ public class SlingshotBullet : Bullet
             Enemy enemy = collision.gameObject.GetComponent<Enemy>();
             if (enemy.IsAlive)
             {
-                collision.gameObject.GetComponent<Enemy>().ApplyDamage((int)(_damage * _charge), _direction);
-                BeforeDestroyed();
+                collision.gameObject.GetComponent<Enemy>().ReceiveDamage((int)(_damage * _charge), _direction);
+                BeforeDestroyed(collision.gameObject);
                 CameraManager.Instance.ShakeCamera(0.15f, 0.1f, 0.1f, 30);
             }
             else

@@ -77,7 +77,7 @@ public class Bullet : MonoBehaviour
         transform.position += _direction.ToVector3() * _speed * Time.deltaTime;
     }
 
-    public virtual void BeforeDestroyed()
+    public virtual void BeforeDestroyed(GameObject hitTarget)
     {
     }
 
@@ -92,15 +92,15 @@ public class Bullet : MonoBehaviour
 
         if (collision.gameObject.layer == Layers.Map)
         {
-            BeforeDestroyed();
+            BeforeDestroyed(null);
         }
         else if (collision.gameObject.layer == Layers.Enemy || collision.gameObject.layer == Layers.FlyingEnemy)
         {
             Enemy enemy = collision.gameObject.GetComponent<Enemy>();
             if (enemy.IsAlive)
             {
-                collision.gameObject.GetComponent<Enemy>().ApplyDamage((int)_damage, _direction);
-                BeforeDestroyed();
+                collision.gameObject.GetComponent<Enemy>().ReceiveDamage((int)_damage, _direction);
+                BeforeDestroyed(collision.gameObject);
                 CameraManager.Instance.ShakeCamera(0.15f, 0.1f, 0.1f, 30);
             }
             else
@@ -111,7 +111,7 @@ public class Bullet : MonoBehaviour
         else if (collision.gameObject.layer == Layers.Player)
         {
             collision.gameObject.GetComponent<Player>().ReceiveDamage((int)_damage, _direction);
-            BeforeDestroyed();
+            BeforeDestroyed(collision.gameObject);
         }
 
         gameObject.SetActive(active);

@@ -80,6 +80,7 @@ MonoBehaviour:
   invulnTime: 1
   characterAnimation: {fileID: 6271302632493112618}
   CurrentWeapon: {fileID: 3587542285098777446}
+  visual: {fileID: 3515325667913201493}
   startHealth: 30
   firingRateModifier: 1
 --- !u!58 &138352305
@@ -206,6 +207,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 52f5714e4d12dc54d8d8e2f99c5fdcf5, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  ignoreScale: 0
 --- !u!1 &6820148234107622664
 GameObject:
   m_ObjectHideFlags: 0
@@ -333,6 +335,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 52f5714e4d12dc54d8d8e2f99c5fdcf5, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  ignoreScale: 0
 --- !u!114 &4422364048382054496
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -437,6 +440,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 52f5714e4d12dc54d8d8e2f99c5fdcf5, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  ignoreScale: 0
 --- !u!1001 &3527718101886270974
 PrefabInstance:
   m_ObjectHideFlags: 0

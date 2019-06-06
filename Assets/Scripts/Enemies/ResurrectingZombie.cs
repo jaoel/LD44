@@ -12,10 +12,6 @@ public class ResurrectingZombie : ResurrectingEnemy
     [SerializeField]
     protected int _resurrectedDamage;
 
-    [SerializeField]
-    protected SpriteRenderer _visual;
-
-
     protected override void Awake()
     {
         base.Awake();

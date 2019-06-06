@@ -2,7 +2,7 @@
 using DG.Tweening;
 using System.Collections.Generic;
 
-public class Player : MonoBehaviour, IWeaponOwner
+public class Player : MonoBehaviour, IWeaponOwner, IBuffable
 {
     private Key _goldKey;
     private Queue<Key> _skeletonKeys;
@@ -17,6 +17,7 @@ public class Player : MonoBehaviour, IWeaponOwner
 
     public CharacterAnimation characterAnimation;
     public Weapon CurrentWeapon;
+    public SpriteRenderer visual;
 
     public int startHealth = 100;
 
@@ -314,7 +315,7 @@ public class Player : MonoBehaviour, IWeaponOwner
         _slowTimer = slowTimer;
     }
 
-    public bool ReceiveDamage(float damage, Vector2 direction, bool maxHealth = false)
+    public bool ReceiveDamage(int damage, Vector2 velocity, bool maxHealth = false, bool spawnBloodSpray = true)
     {
         if (_invulnTimer >= invulnTime)
         {
@@ -329,7 +330,7 @@ public class Player : MonoBehaviour, IWeaponOwner
 
             ParticleSystem bloodSpray = Instantiate(particleSystemContainer.bloodSpray, transform.position, Quaternion.identity);
 
-            Vector3 dir = new Vector3(direction.normalized.x, direction.normalized.y, 0);
+            Vector3 dir = new Vector3(velocity.normalized.x, velocity.normalized.y, 0);
             bloodSpray.transform.DOLookAt(transform.position + dir, 0.0f);
             bloodSpray.gameObject.SetActive(true);
             bloodSpray.Play();
@@ -372,6 +373,16 @@ public class Player : MonoBehaviour, IWeaponOwner
     }
 
     GameObject IWeaponOwner.GetGameObject()
+    {
+        return gameObject;
+    }
+
+    public virtual SpriteRenderer GetSpriteRenderer()
+    {
+        return visual;
+    }
+
+    public GameObject GetGameObject()
     {
         return gameObject;
     }

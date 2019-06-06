@@ -405,11 +405,11 @@ MonoBehaviour:
   _meleeDamage: 1
   _rigidbody: {fileID: 7125115978298190024}
   _collider: {fileID: -7577216706044577198}
+  _visual: {fileID: 4113775893578024077}
   _navigation: {fileID: 8769894314319764578}
   _characterAnimation: {fileID: 1912241600459982146}
   _particleSystemContainer: {fileID: 11400000, guid: 16ab9ed0ce6842c4b9a9e52558b0b55d,
     type: 2}
-  _itemContainer: {fileID: 11400000, guid: 74287dc484f187343ab501050ebd52a6, type: 2}
   _minimapIcon: {fileID: 3108735184653868525}
   _weapon: {fileID: 78208757508395007}
   _stoppingDistance: 5

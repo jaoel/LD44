@@ -47,7 +47,7 @@ public class BulletManager : MonoBehaviour
                 {
                     if (!bullet.instance.UpdateLifetime())
                     {
-                        bullet.instance.BeforeDestroyed();
+                        bullet.instance.BeforeDestroyed(null);
                         bullet.instance.gameObject.SetActive(false);
                         bullet.active = false;
                     }

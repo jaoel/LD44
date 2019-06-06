@@ -548,11 +548,11 @@ MonoBehaviour:
   _meleeDamage: 5
   _rigidbody: {fileID: 7125115978298190024}
   _collider: {fileID: 6209824298704698349}
+  _visual: {fileID: 8890291396755585749}
   _navigation: {fileID: -4954869916265498941}
   _characterAnimation: {fileID: 9194530984371537756}
   _particleSystemContainer: {fileID: 11400000, guid: 16ab9ed0ce6842c4b9a9e52558b0b55d,
     type: 2}
-  _itemContainer: {fileID: 11400000, guid: 74287dc484f187343ab501050ebd52a6, type: 2}
   _minimapIcon: {fileID: 6063395773892339257}
   _humanoidFormGameObject: {fileID: 4407426537756196130}
   _batFormGameObject: {fileID: 5022286688611378651}

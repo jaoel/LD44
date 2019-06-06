@@ -127,7 +127,7 @@ public class Main : MonoBehaviour
         foreach (Enemy enemy in enemies)
         {
             Vector2 dir = new Vector2(enemy.transform.position.x, enemy.transform.position.y) - position;
-            enemy.ApplyDamage(damage, dir);
+            enemy.ReceiveDamage(damage, dir);
         }
 
         if (damagePlayer && Vector2.Distance(new Vector2(player.transform.position.x, player.transform.position.y), position) <= radius)
