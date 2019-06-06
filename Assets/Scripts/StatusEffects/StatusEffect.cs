@@ -33,12 +33,11 @@ public class StatusEffect : MonoBehaviour
         if (_currentLifetime <= 0.0f)
         {
             BeforeDestroyed();
-            Destroy(this);
         }
     }
 
     protected virtual void BeforeDestroyed()
     {
-
+        Destroy(this);
     }
 }

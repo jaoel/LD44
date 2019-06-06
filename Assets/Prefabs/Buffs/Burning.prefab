@@ -44,8 +44,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _lifetime: 3
-  _overrideNavigation: 0
+  _overrideNavigation: 1
   _damagePerTick: 50
-  _tickIntervals: 0.5
+  _tickInterval: 0.5
   _fireParticleSystemPrefab: {fileID: 6185306892051281309, guid: c2bff3fab3efce2438b0f446040cc2ed,
     type: 3}

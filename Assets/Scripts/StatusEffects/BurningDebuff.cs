@@ -6,7 +6,7 @@ public class BurningDebuff : StatusEffect
     protected int _damagePerTick;
 
     [SerializeField]
-    protected float _tickIntervals;
+    protected float _tickInterval;
 
     [SerializeField]
     private GameObject _fireParticleSystemPrefab;
@@ -29,22 +29,27 @@ public class BurningDebuff : StatusEffect
         ParticleSystem.ShapeModule shape = _fireParticleInstance.shape;
         shape.spriteRenderer = ownerRenderer;
 
-        _timePassed = _tickIntervals;
+        _timePassed = _tickInterval;
     }
 
-    protected override void FixedUpdate()
+    private void Update()
     {
         _timePassed += Time.deltaTime;
-        if (_timePassed >= _tickIntervals)
+        if (_timePassed >= _tickInterval)
         {
             _timePassed = 0.0f;
-            if (_owner.ReceiveDamage(_damagePerTick, Vector2.zero, false, false))
+
+            int damagePerTick = _damagePerTick;
+            if (_owner is Player)
+            {
+                damagePerTick /= 10;
+            }
+
+            if (_owner.ReceiveDamage(damagePerTick, Vector2.zero, false, false))
             {
                 BeforeDestroyed();
             }
         }
-
-        base.FixedUpdate();
     }
 
     protected override void BeforeDestroyed()

@@ -50,7 +50,7 @@ MonoBehaviour:
     type: 3}
   _timer: 1
   _explosionRadius: 2
-  _explosionDamage: 50
+  _explosionDamage: 0
   _explosionPrefab: {fileID: 895976179499023227, guid: 0c721c7fa8181604ba893146488470a2,
     type: 3}
   _flameAudioSource: {fileID: -4952850011850356266}
