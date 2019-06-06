@@ -8,7 +8,6 @@ public class Player : MonoBehaviour, IWeaponOwner, IBuffable
     private Queue<Key> _skeletonKeys;
 
     public ParticleSystemContainer particleSystemContainer;
-    public ParticleSystem dustTrail;
 
     public float maxSpeed = 8f;
     public float acceleration = 25f;
