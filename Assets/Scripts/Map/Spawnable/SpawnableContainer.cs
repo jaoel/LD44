@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-[CreateAssetMenu]
 [Serializable]
 public class SpawnableContainer : MonoBehaviour
 {

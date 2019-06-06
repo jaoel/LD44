@@ -100,6 +100,11 @@ public class MapGenerator : MonoBehaviour
     public void PopulateMap(ref Map map, ref Player player, in MapGeneratorParameters generationParameters, int level)
     {
         _mapPopulator.PopulateMap(ref map, ref player, generationParameters, level);
+        FogOfWar fogOfWar = GetComponent<FogOfWar>();
+        if (fogOfWar)
+        {
+            fogOfWar.GenerateTexture();
+        }
     }
 
     private void GenerateCells(ref Map map, in MapGeneratorParameters parameters)

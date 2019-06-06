@@ -43,7 +43,10 @@ public class Main : MonoBehaviour
     void Awake()
     {
         DOTween.Init();
+    }
 
+    private void Start()
+    {
         shopInstance = Instantiate(shopRoomPrefab);
         Time.timeScale = 1.0f;
         LoadLevel();
@@ -99,6 +102,7 @@ public class Main : MonoBehaviour
         
         MapGenerator.Instance.PopulateMap(ref _currentMap, ref player, parameters, CurrentLevel);
         _currentMap.ActivateObjects();
+
     }
 
     public void GenerateShop()
