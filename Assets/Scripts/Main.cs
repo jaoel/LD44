@@ -137,7 +137,7 @@ public class Main : MonoBehaviour
         if (damagePlayer && Vector2.Distance(new Vector2(player.transform.position.x, player.transform.position.y), position) <= radius)
         {
             Vector2 dir = new Vector2(player.transform.position.x, player.transform.position.y) - position;
-            player.ReceiveDamage(damage, dir);
+            player.ReceiveDamage(damage / 10, dir);
         }
     }
 
