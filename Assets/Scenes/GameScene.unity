@@ -456,6 +456,18 @@ MonoBehaviour:
   m_InstancedGameObject: {fileID: 0}
   m_Flags: 3
   m_ColliderType: 1
+--- !u!114 &609267304 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 3587542285098777446, guid: e6ff596c348b15841b93cc6f5790e643,
+    type: 3}
+  m_PrefabInstance: {fileID: 2023222967}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e605ba8327503dd439d8b68dba8bd368, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1001 &736877604
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -3124,6 +3136,11 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 3597447601227234659, guid: e6ff596c348b15841b93cc6f5790e643,
+        type: 3}
+      propertyPath: CurrentWeapon
+      value: 
+      objectReference: {fileID: 609267304}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: e6ff596c348b15841b93cc6f5790e643, type: 3}
 --- !u!4 &2023222968 stripped
