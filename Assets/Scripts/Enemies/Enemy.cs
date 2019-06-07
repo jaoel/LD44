@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using UnityEngine;
 using DG.Tweening;
+using System.Linq;
 
 public class Enemy : MonoBehaviour, IBuffable 
 {
@@ -55,6 +56,8 @@ public class Enemy : MonoBehaviour, IBuffable
 
     protected List<ItemDescription> _itemDrops;
 
+    protected List<StatusEffect> _statusEffects;
+
     protected virtual void Awake()
     {
         _currentHealth = _maxHealth;
@@ -64,10 +67,12 @@ public class Enemy : MonoBehaviour, IBuffable
         _spawnPosition = transform.position.ToVector2();
         _colorController = GetComponent<HurtBlink>();
         _itemDrops = new List<ItemDescription>();
+        _statusEffects = new List<StatusEffect>();
     }
 
     protected virtual void FixedUpdate()
     {
+        HandleStatusEffects();
         CalculateAnimation();
 
         if (!_player.IsAlive || !IsAlive)
@@ -76,32 +81,42 @@ public class Enemy : MonoBehaviour, IBuffable
             return;
         }
 
-        if (_hasAggro)
+        if (_statusEffects.Any(x => x.OverrideNavigation))
         {
-            if ((_target.transform.position.ToVector2() - transform.position.ToVector2()).magnitude > _aggroDistance * 2.0f)
+            _statusEffects.ForEach(x =>
             {
-                _hasAggro = false;
-                _navigation.MoveTo(_spawnPosition, false);
-
-                return;
-            }
-
-            bool playerVisible = PlayerIsVisible(_aggroDistance);
-
-            _navigation.MoveTo(_target, playerVisible);       
-
-            if (!playerVisible && !_navigation.HasPath)
-            {
-                _navigation.Stop();
-            }
+                x.Navigation();
+            });
         }
         else
         {
-            if (!CheckAggro())
+            if (_hasAggro)
             {
-                if (_navigation.AtDestination())
+                if ((_target.transform.position.ToVector2() - transform.position.ToVector2()).magnitude > _aggroDistance * 2.0f)
+                {
+                    _hasAggro = false;
+                    _navigation.MoveTo(_spawnPosition, false);
+
+                    return;
+                }
+
+                bool playerVisible = PlayerIsVisible(_aggroDistance);
+
+                _navigation.MoveTo(_target, playerVisible);
+
+                if (!playerVisible && !_navigation.HasPath)
                 {
                     _navigation.Stop();
+                }
+            }
+            else
+            {
+                if (!CheckAggro())
+                {
+                    if (_navigation.AtDestination())
+                    {
+                        _navigation.Stop();
+                    }
                 }
             }
         }
@@ -299,5 +314,16 @@ public class Enemy : MonoBehaviour, IBuffable
     public virtual SpriteRenderer GetSpriteRenderer()
     {
         return _visual;
+    }
+
+    public virtual void AddStatusEffect(StatusEffect effect)
+    {
+        effect.OnApply(this, gameObject, _visual, _navigation);
+        _statusEffects.Add(effect);
+    }
+
+    public virtual void HandleStatusEffects()
+    {
+        _statusEffects.RemoveAll(x => x == null);
     }
 }

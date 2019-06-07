@@ -36,6 +36,8 @@ public class Player : MonoBehaviour, IWeaponOwner, IBuffable
     private float _slowTimer = float.MinValue;
     private float _slowFactor = float.MaxValue;
 
+    private List<StatusEffect> _statusEffects;
+
     public bool IsInvulnerable => _invulnTimer < invulnTime;
 
     public int Health
@@ -84,6 +86,7 @@ public class Player : MonoBehaviour, IWeaponOwner, IBuffable
         velocity = Vector3.zero;
         inputVector = Vector3.zero;
         _skeletonKeys = new Queue<Key>();
+        _statusEffects = new List<StatusEffect>();
 
         CurrentWeapon.SetOwner(this, true);
 
@@ -162,6 +165,8 @@ public class Player : MonoBehaviour, IWeaponOwner, IBuffable
         {
             return;
         }
+
+        HandleStatusEffects();
 
         if (!IsAlive)
         {
@@ -379,6 +384,17 @@ public class Player : MonoBehaviour, IWeaponOwner, IBuffable
     public virtual SpriteRenderer GetSpriteRenderer()
     {
         return visual;
+    }
+
+    public virtual void AddStatusEffect(StatusEffect effect)
+    {
+        effect.OnApply(this, this.gameObject, visual);
+        _statusEffects.Add(effect);
+    }
+
+    public virtual void HandleStatusEffects()
+    {
+        _statusEffects.RemoveAll(x => x == null);
     }
 
     public GameObject GetGameObject()

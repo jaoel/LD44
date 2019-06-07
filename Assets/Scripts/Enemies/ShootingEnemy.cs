@@ -1,4 +1,5 @@
-﻿using UnityEngine;
+﻿using System.Linq;
+using UnityEngine;
 
 public class ShootingEnemy : Enemy, IWeaponOwner
 {
@@ -29,38 +30,48 @@ public class ShootingEnemy : Enemy, IWeaponOwner
             return;
         }
 
-        float distance = Vector3.Distance(transform.position, _player.transform.position);
-        bool playerVisible = PlayerIsVisible(_aggroDistance);
-        if (distance <= _aggroDistance && playerVisible)
+        if (_statusEffects.Any(x => x.OverrideNavigation))
         {
-            _weapon.Shoot();
-            if (_rigidbody.velocity.magnitude > 0.1f)
+            _statusEffects.ForEach(x =>
             {
-                _characterAnimation.UpdateAnimation(CharacterAnimation.AnimationType.Run, AimVector);
-            }
-            else
-            {
-                _characterAnimation.UpdateAnimation(CharacterAnimation.AnimationType.Attack, AimVector);
-            }
-
-            if (_overshootPosition == Vector2.zero || (_overshootPosition - _target.transform.position.ToVector2()).magnitude > _aggroDistance / 2.0f)
-            {
-                _overshootPosition = Utility.RandomPointOnCircleEdge(_aggroDistance) + _target.transform.position.ToVector2();
-            }
-            _navigation.MoveTo(_overshootPosition, true);
+                x.Navigation();
+            });
         }
-
-        if (!playerVisible && _hasAggro)
+        else
         {
-            _overshootPosition = Vector2.zero;
-            _navigation.MoveTo(_target, playerVisible);
-        }
+            float distance = Vector3.Distance(transform.position, _player.transform.position);
+            bool playerVisible = PlayerIsVisible(_aggroDistance);
+            if (distance <= _aggroDistance && playerVisible)
+            {
+                _weapon.Shoot();
+                if (_rigidbody.velocity.magnitude > 0.1f)
+                {
+                    _characterAnimation.UpdateAnimation(CharacterAnimation.AnimationType.Run, AimVector);
+                }
+                else
+                {
+                    _characterAnimation.UpdateAnimation(CharacterAnimation.AnimationType.Attack, AimVector);
+                }
 
-        if (_overshootPosition != Vector2.zero)
-        {
-            if ((_overshootPosition - transform.position.ToVector2()).magnitude < 1.0f)
+                if (_overshootPosition == Vector2.zero || (_overshootPosition - _target.transform.position.ToVector2()).magnitude > _aggroDistance / 2.0f)
+                {
+                    _overshootPosition = Utility.RandomPointOnCircleEdge(_aggroDistance) + _target.transform.position.ToVector2();
+                }
+                _navigation.MoveTo(_overshootPosition, true);
+            }
+
+            if (!playerVisible && _hasAggro)
             {
                 _overshootPosition = Vector2.zero;
+                _navigation.MoveTo(_target, playerVisible);
+            }
+
+            if (_overshootPosition != Vector2.zero)
+            {
+                if ((_overshootPosition - transform.position.ToVector2()).magnitude < 1.0f)
+                {
+                    _overshootPosition = Vector2.zero;
+                }
             }
         }
     }
