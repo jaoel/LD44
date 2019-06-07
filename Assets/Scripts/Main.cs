@@ -60,6 +60,15 @@ public class Main : MonoBehaviour
 
     public void GenerateMap()
     {
+        GenerateMapWithSeed(DateTime.Now.Ticks);
+    }
+
+    public void GenerateMapWithSeed(long seed)
+    {
+        if (_currentMap != null)
+        {
+            _currentMap.ClearMap();
+        }
         BulletManager.Instance.Clear();
         Cursor.visible = false;
 
@@ -98,7 +107,7 @@ public class Main : MonoBehaviour
         parameters.MinRoomDistance = 0;
         parameters.LockFactor = 0.2f;
 
-        _currentMap = MapGenerator.Instance.GenerateMap(DateTime.Now.Ticks, parameters, CurrentLevel);
+        _currentMap = MapGenerator.Instance.GenerateMap(seed, parameters, CurrentLevel);
         
         MapGenerator.Instance.PopulateMap(ref _currentMap, ref player, parameters, CurrentLevel);
         _currentMap.ActivateObjects();

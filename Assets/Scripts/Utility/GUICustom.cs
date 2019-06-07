@@ -4,6 +4,8 @@ using UnityEngine;
 
 public static class GUICustom
 {
+    private static Texture2D _pixelTexture = null;
+
     public static bool Dropdown(Rect controlRect, string label, bool expanded, List<string> items, ref int selectedItem)
     {
         bool closeOnClickOutside = true;
@@ -44,5 +46,27 @@ public static class GUICustom
         }
 
         return expanded;
+    }
+
+    public static void Separator(Rect controlRect)
+    {
+        GUIStyle guiStyle = new GUIStyle();
+        guiStyle.normal.background = PixelTexture();
+
+        Rect separatorRect = controlRect;
+        separatorRect.y = controlRect.y + controlRect.height / 2 + 3;
+        separatorRect.height = 1;
+        GUI.Box(separatorRect, "", guiStyle);
+    }
+
+    private static Texture2D PixelTexture()
+    {
+        if(_pixelTexture == null)
+        {
+            _pixelTexture = new Texture2D(1, 1);
+            _pixelTexture.SetPixel(0, 0, Color.white);
+            _pixelTexture.Apply();
+        }
+        return _pixelTexture;
     }
 }

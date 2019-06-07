@@ -4,11 +4,14 @@ using UnityEngine;
 
 public class DebugUI : MonoBehaviour
 {
+    private bool _wasPaused = false;
     private bool _show = false;
     private int _lastLine = 50;
     private int _line = 50;
     private int _controlWidth = 150;
     private bool _giveItemDropdownExpanded = false;
+    private string _currentSeed = "";
+    private string _currentLevel = "0";
 
     private void DrawGUI()
     {
@@ -18,6 +21,12 @@ public class DebugUI : MonoBehaviour
         DrawGiveItemDropdown();
         DrawGodModeCheckbox();
         DrawHealButton();
+
+        GUICustom.Separator(NextControlRect(10));
+
+        DrawLevelGeneratorSetSeed();
+
+        GUICustom.Separator(NextControlRect(10));
     }
 
     private void DrawTeleportToStairsButton()
@@ -86,6 +95,34 @@ public class DebugUI : MonoBehaviour
         }
     }
 
+    private void DrawLevelGeneratorSetSeed()
+    {
+        GUI.Label(NextControlRect(), "Seed");
+        _currentSeed = GUI.TextField(NextControlRect(), _currentSeed);
+        GUI.Label(NextControlRect(), "Level");
+        _currentLevel = GUI.TextField(NextControlRect(), _currentLevel);
+        if (GUI.Button(NextControlRect(), "Restart with Seed"))
+        {
+            if(long.TryParse(_currentSeed, out long newSeed))
+            {
+                if(int.TryParse(_currentLevel, out int currentLevel))
+                {
+                    Main.Instance.CurrentLevel = Mathf.Max(0, currentLevel);
+                }
+                else
+                {
+                    _currentLevel = (Main.Instance.CurrentLevel - 1).ToString();
+                }
+                Main.Instance.GenerateMapWithSeed(newSeed);
+            }
+            else
+            {
+                Debug.LogWarning(_currentSeed + " is not a valid seed.");
+                _currentSeed = MapGenerator.Instance.GetCurrentSeed().ToString();
+            }
+        }
+    }
+
     private Rect NextControlRect(int height = 20)
     {
         Rect rect = new Rect(20, _line, _controlWidth, height);
@@ -107,9 +144,10 @@ public class DebugUI : MonoBehaviour
         _show = PlayerPrefs.GetInt(PlayerPrefsStrings.ShowDebugMenu, 0) != 0 ? true : false;
     }
 
-    private void Start()
+    private void OnShow()
     {
-        
+        _currentSeed = MapGenerator.Instance.GetCurrentSeed().ToString();
+        _currentLevel = (Main.Instance.CurrentLevel - 1).ToString();
     }
 
     private void OnGUI()
@@ -117,6 +155,11 @@ public class DebugUI : MonoBehaviour
         Main main = Main.Instance;
         if (main.Paused)
         {
+            if (!_wasPaused)
+            {
+                OnShow();
+            }
+
             DrawToggleDebugMenuButton();
             _line = 50;
             if (_show)
@@ -125,5 +168,6 @@ public class DebugUI : MonoBehaviour
             }
             _lastLine = _line;
         }
+        _wasPaused = main.Paused;
     }
 }

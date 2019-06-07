@@ -56,9 +56,14 @@ public class MapGenerator : MonoBehaviour
     {
         if (Input.GetKey(KeyCode.O))
         {
-            Debug.Log("Seed " + _random.GetStartingSeed() + " copied to clipboard");
-            GUIUtility.systemCopyBuffer = _random.GetStartingSeed().ToString();
+            Debug.Log("Seed " + GetCurrentSeed() + " copied to clipboard");
+            GUIUtility.systemCopyBuffer = GetCurrentSeed().ToString();
         }
+    }
+
+    public long GetCurrentSeed()
+    {
+        return _random.GetStartingSeed();
     }
 
     public Map GenerateMap(long seed, in MapGeneratorParameters parameters, int level)
