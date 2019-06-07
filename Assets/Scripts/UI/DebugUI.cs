@@ -17,6 +17,7 @@ public class DebugUI : MonoBehaviour
         DrawTeleportToStairsButton();
         DrawGiveItemDropdown();
         DrawGodModeCheckbox();
+        DrawHealButton();
     }
 
     private void DrawTeleportToStairsButton()
@@ -69,6 +70,18 @@ public class DebugUI : MonoBehaviour
             else
             {
                 player.GodMode = false;
+            }
+        }
+    }
+
+    private void DrawHealButton()
+    {
+        Player player = Main.Instance.player;
+        if (player)
+        {
+            if (GUI.Button(NextControlRect(), "Heal Player"))
+            {
+                player.Health = player.MaxHealth;
             }
         }
     }
