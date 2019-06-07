@@ -68,6 +68,9 @@ public class MapGenerator : MonoBehaviour
 
     public Map GenerateMap(long seed, in MapGeneratorParameters parameters, int level)
     {
+        Debug.Log("Generating new map");
+        Debug.Log(seed);
+
         _timer.Start();
         Map result = new Map(floors, walls, _random);
 

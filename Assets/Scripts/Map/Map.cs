@@ -373,7 +373,7 @@ public class Map
         int i = x - Bounds.xMin;
         int j = y - Bounds.yMin;
 
-        if (i < 0 || i > CollisionMap.GetLength(0) || j < 0 || j > CollisionMap.GetLength(1))
+        if (i < 0 || i >= CollisionMap.GetLength(0) || j < 0 || j >= CollisionMap.GetLength(1))
         {
             return -1;
         }
