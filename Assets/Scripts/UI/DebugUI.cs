@@ -27,6 +27,8 @@ public class DebugUI : MonoBehaviour
         DrawLevelGeneratorSetSeed();
 
         GUICustom.Separator(NextControlRect(10));
+
+        DrawToggleDoors();
     }
 
     private void DrawTeleportToStairsButton()
@@ -119,6 +121,27 @@ public class DebugUI : MonoBehaviour
             {
                 Debug.LogWarning(_currentSeed + " is not a valid seed.");
                 _currentSeed = MapGenerator.Instance.GetCurrentSeed().ToString();
+            }
+        }
+    }
+
+    private void DrawToggleDoors()
+    {
+        if (GUI.Button(NextControlRect(), "Open All Doors"))
+        {
+            Door[] doors = FindObjectsOfType<Door>();
+            foreach(Door door in doors)
+            {
+                door.ToggleClosed(false);
+            }
+        }
+
+        if (GUI.Button(NextControlRect(), "Close All Doors"))
+        {
+            Door[] doors = FindObjectsOfType<Door>();
+            foreach (Door door in doors)
+            {
+                door.ToggleClosed(true);
             }
         }
     }
