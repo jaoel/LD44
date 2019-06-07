@@ -1,4 +1,4 @@
-﻿using System.Linq;
+using System.Linq;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -109,11 +109,11 @@ public class DebugUI : MonoBehaviour
             {
                 if(int.TryParse(_currentLevel, out int currentLevel))
                 {
-                    Main.Instance.CurrentLevel = Mathf.Max(0, currentLevel);
+                    Main.Instance.CurrentLevel = Mathf.Max(0, currentLevel - 1);
                 }
                 else
                 {
-                    _currentLevel = (Main.Instance.CurrentLevel - 1).ToString();
+                    _currentLevel = Main.Instance.CurrentLevel.ToString();
                 }
                 Main.Instance.GenerateMapWithSeed(newSeed);
             }
@@ -170,7 +170,7 @@ public class DebugUI : MonoBehaviour
     private void OnShow()
     {
         _currentSeed = MapGenerator.Instance.GetCurrentSeed().ToString();
-        _currentLevel = (Main.Instance.CurrentLevel - 1).ToString();
+        _currentLevel = Main.Instance.CurrentLevel.ToString();
     }
 
     private void OnGUI()
