@@ -7,7 +7,7 @@ public class ItemManager : MonoBehaviour, IEnumerable<Item>, IEnumerator<Item>
 {
     [SerializeField]
     private Item[] items = new Item[0];
-    private int _position = 0;
+    private int _position = -1;
 
     private static ItemManager _instance = null;
     public static ItemManager Instance
@@ -31,9 +31,9 @@ public class ItemManager : MonoBehaviour, IEnumerable<Item>, IEnumerator<Item>
 
     public Item FindItemOfType<T>() where T : Item
     {
-        for(int i = 0; i < items.Length; i++)
+        for (int i = 0; i < items.Length; i++)
         {
-            if(items[i] is T)
+            if (items[i] is T)
             {
                 return items[i];
             }
@@ -63,10 +63,11 @@ public class ItemManager : MonoBehaviour, IEnumerable<Item>, IEnumerator<Item>
 
     void IEnumerator.Reset()
     {
-        _position = 0;
+        _position = -1;
     }
 
     void IDisposable.Dispose()
     {
+        _position = -1;
     }
 }
