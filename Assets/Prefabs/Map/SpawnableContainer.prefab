@@ -164,12 +164,12 @@ MonoBehaviour:
         type: 3}
       density: 0.0015
   drops:
-  - item: {fileID: 11400000, guid: 9dff1c61f0a906b499275c70aadfdc72, type: 2}
+  - item: {fileID: -7318547953542084501, guid: c642fc709c9199141b5eedb0612a10c6, type: 3}
     droprate: 0.05
     minDropCount: 2
     maxDropCount: 10
     useSeclusionFactor: 1
-  - item: {fileID: 11400000, guid: 07e877227b6619240a2cccb59f4a5df7, type: 2}
+  - item: {fileID: -1033136326330471242, guid: 2726af8d63d29044480a80225c75c7c1, type: 3}
     droprate: 0.1
     minDropCount: 1
     maxDropCount: 100
