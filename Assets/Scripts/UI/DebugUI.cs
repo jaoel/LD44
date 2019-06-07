@@ -1,5 +1,6 @@
-﻿using UnityEngine;
-using System.Collections;
+﻿using System.Linq;
+using System.Collections.Generic;
+using UnityEngine;
 
 public class DebugUI : MonoBehaviour
 {
@@ -7,12 +8,14 @@ public class DebugUI : MonoBehaviour
     private int _lastLine = 50;
     private int _line = 50;
     private int _controlWidth = 150;
+    private bool _giveItemDropdownExpanded = false;
 
     private void DrawGUI()
     {
         GUI.Box(new Rect(10, 30, _controlWidth + 20, _lastLine), "");
 
         DrawTeleportToStairsButton();
+        DrawGiveItemDropdown();
     }
 
     private void DrawTeleportToStairsButton()
@@ -36,6 +39,24 @@ public class DebugUI : MonoBehaviour
         }
     }
 
+    private void DrawGiveItemDropdown()
+    {
+        List<Item> itemPrefabs = ItemManager.Instance.ToList();
+        List<string> itemNames = itemPrefabs.Select(item => item.name).ToList();
+        int selectedItem = -1;
+        _giveItemDropdownExpanded = GUICustom.Dropdown(NextControlRect(), "Give Item", _giveItemDropdownExpanded, itemNames, ref selectedItem);
+        if(selectedItem != -1)
+        {
+            Item item = Instantiate(itemPrefabs[selectedItem]);
+            Player player = Main.Instance.player;
+            if(item && player)
+            {
+                item.Apply(player.gameObject);
+            }
+            _giveItemDropdownExpanded = true;
+        }
+    }
+
     private Rect NextControlRect(int height = 20)
     {
         Rect rect = new Rect(20, _line, _controlWidth, height);
@@ -55,6 +76,11 @@ public class DebugUI : MonoBehaviour
     private void Awake()
     {
         _show = PlayerPrefs.GetInt(PlayerPrefsStrings.ShowDebugMenu, 0) != 0 ? true : false;
+    }
+
+    private void Start()
+    {
+        
     }
 
     private void OnGUI()
