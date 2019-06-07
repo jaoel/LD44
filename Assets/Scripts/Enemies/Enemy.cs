@@ -54,7 +54,7 @@ public class Enemy : MonoBehaviour, IBuffable
     protected Vector2 _dieDirection = Vector2.down;
     protected HurtBlink _colorController;
 
-    protected List<ItemDescription> _itemDrops;
+    protected List<Item> _itemDrops;
 
     protected List<StatusEffect> _statusEffects;
 
@@ -66,7 +66,7 @@ public class Enemy : MonoBehaviour, IBuffable
         _navigation.Initialize(_rigidbody, _maxSpeed, _acceleration);
         _spawnPosition = transform.position.ToVector2();
         _colorController = GetComponent<HurtBlink>();
-        _itemDrops = new List<ItemDescription>();
+        _itemDrops = new List<Item>();
         _statusEffects = new List<StatusEffect>();
     }
 
@@ -249,7 +249,7 @@ public class Enemy : MonoBehaviour, IBuffable
         DropItem();
     }
 
-    public void AddDrop(ItemDescription item)
+    public void AddDrop(Item item)
     {
         _itemDrops.Add(item);
     }
@@ -258,7 +258,7 @@ public class Enemy : MonoBehaviour, IBuffable
     {
         _itemDrops.ForEach(x =>
         {
-            Item drop = Instantiate(x.itemPrefab, transform.position, Quaternion.identity);
+            Item drop = Instantiate(x, transform.position, Quaternion.identity);
             drop.transform.localScale = new Vector3(0.5f, 0.5f, 0.5f);
             drop.gameObject.SetActive(true);
 

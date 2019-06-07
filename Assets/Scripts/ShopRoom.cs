@@ -7,7 +7,6 @@ public class ShopRoom : MonoBehaviour
 {
     public Transform spawnPoint;
     public ShopItem[] shopItems;
-    public ItemContainer ItemContainer;
 
     public GameObject shopUI;
     public GameObject itemsParent;
@@ -22,12 +21,11 @@ public class ShopRoom : MonoBehaviour
     public void GenerateRandomItems(int currentLevel, Player player)
     {
         bool healthGlobeAdded = false;
-        List<ItemDescription> shuffledShopItems = GetShuffledShopItems();
-        List<ItemDescription> rareItems = GetRareItems();
+        List<Item> shuffledShopItems = ItemManager.Instance.ToList().Shuffle();
 
-        shuffledShopItems = shuffledShopItems.Where(itemDesc =>
+        shuffledShopItems = shuffledShopItems.Where(itemPrefab =>
         {
-            if (itemDesc.itemPrefab is WeaponPickup weaponPickup)
+            if (itemPrefab is WeaponPickup weaponPickup)
             {
                 return weaponPickup.weaponPrefab.GetComponent<Weapon>().uiImage != player.CurrentWeapon.uiImage;
             }
@@ -37,42 +35,28 @@ public class ShopRoom : MonoBehaviour
             }
         }).ToList();
 
-        if (currentLevel < 5)
-        {
-            rareItems.ForEach(x => shuffledShopItems.Remove(x));
-        }
-
         for (int i = 0; i < shopItems.Length; i++)
         {
 
             if (Random.Range(0.0f, 1.0f) < healthGlobeDroprate && !healthGlobeAdded)
             {
-                shopItems[i].description = ItemContainer.HealthGlobe;
+                shopItems[i].itemPrefab = ItemManager.Instance.FindItemOfType<HealthGlobePickup>();
                 shopItems[i].InstantiateItem(itemsParent.transform);
             }
             else
             {
-                float chance = (float)((20 + System.Math.Pow(currentLevel, 2)) / 100.0f);
-                if (Random.Range(0.0f, 1.0f) < chance)
-                {
-                    shopItems[i].description = rareItems[i % rareItems.Count];
-                    shopItems[i].InstantiateItem(itemsParent.transform);
-                }
-                else
-                {
-                    shopItems[i].description = shuffledShopItems[i % shuffledShopItems.Count];
-                    shopItems[i].InstantiateItem(itemsParent.transform);
-                }
+                shopItems[i].itemPrefab = shuffledShopItems[i % shuffledShopItems.Count];
+                shopItems[i].InstantiateItem(itemsParent.transform);
 
             }
 
-            if (shopItems[i].description == ItemContainer.HealthGlobe)
+            if (shopItems[i].itemPrefab is HealthGlobePickup)
             {
-                shuffledShopItems.Remove(ItemContainer.HealthGlobe);
+                shuffledShopItems.Remove(ItemManager.Instance.FindItemOfType<HealthGlobePickup>());
                 healthGlobeAdded = true;
             }
 
-            GameObject.Find("Item" + i).GetComponent<TextMeshProUGUI>().text = shopItems[i].description.HealthCost.ToString();
+            GameObject.Find("Item" + i).GetComponent<TextMeshProUGUI>().text = shopItems[i].itemPrefab.healthCost.ToString();
         }
     }
 
@@ -82,40 +66,6 @@ public class ShopRoom : MonoBehaviour
         {
             Destroy(child.gameObject);
         }
-    }
-
-    private List<ItemDescription> GetRareItems()
-    {
-        List<ItemDescription> shuffled = ItemContainer.GetRareItems();
-
-        int n = shuffled.Count;
-        while (n > 1)
-        {
-            n--;
-            int k = Random.Range(0, n + 1);
-            ItemDescription value = shuffled[k];
-            shuffled[k] = shuffled[n];
-            shuffled[n] = value;
-        }
-
-        return shuffled;
-    }
-
-    private List<ItemDescription> GetShuffledShopItems()
-    {
-        List<ItemDescription> shuffled = ItemContainer.GetAllItems();
-
-        int n = shuffled.Count;
-        while (n > 1)
-        {
-            n--;
-            int k = Random.Range(0, n + 1);
-            ItemDescription value = shuffled[k];
-            shuffled[k] = shuffled[n];
-            shuffled[n] = value;
-        }
-
-        return shuffled;
     }
 
     private void Update()

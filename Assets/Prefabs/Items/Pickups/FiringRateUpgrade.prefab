@@ -9,11 +9,11 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 8826916283942404864}
-  - component: {fileID: 8826916283942404865}
   - component: {fileID: 7979725692751591465}
   - component: {fileID: 1652132710952191853}
+  - component: {fileID: -1826384165116061182}
   m_Layer: 0
-  m_Name: SlingshotPickup
+  m_Name: FiringRateUpgrade
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -33,22 +33,6 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &8826916283942404865
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 8826916283942404870}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 7959ae297e381864b9726be7771d9827, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  Description: {fileID: 11400000, guid: 2b18e66dc2627664c856cbad75a7e8c1, type: 2}
-  isShopItem: 0
-  weaponPrefab: {fileID: 5074516897226881580, guid: fe8980b87054e1e4794848ff451c8fc9,
-    type: 3}
 --- !u!61 &7979725692751591465
 BoxCollider2D:
   m_ObjectHideFlags: 0
@@ -112,7 +96,7 @@ SpriteRenderer:
   m_SortingLayerID: -1470884651
   m_SortingLayer: 2
   m_SortingOrder: 1
-  m_Sprite: {fileID: -854259281838472014, guid: 42bd3ffc034dd23409edab32966f490e,
+  m_Sprite: {fileID: -9188421406288508534, guid: 42bd3ffc034dd23409edab32966f490e,
     type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
@@ -124,3 +108,18 @@ SpriteRenderer:
   m_WasSpriteAssigned: 1
   m_MaskInteraction: 0
   m_SpriteSortPoint: 0
+--- !u!114 &-1826384165116061182
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8826916283942404870}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 0b0f43fe1573e4f4188a6e68a2299ba0, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  healthCost: 10
+  isShopItem: 0
+  firingRateChange: 0.2

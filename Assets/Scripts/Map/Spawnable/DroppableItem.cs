@@ -1,14 +1,10 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 
 [Serializable]
 public class DroppableItem
 {
-    public ItemDescription item;
+    public Item item;
     public float droprate;
     public int minDropCount;
     public int maxDropCount;

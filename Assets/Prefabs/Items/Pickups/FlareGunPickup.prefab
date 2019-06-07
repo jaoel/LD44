@@ -45,7 +45,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7959ae297e381864b9726be7771d9827, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  Description: {fileID: 11400000, guid: 28800f658a677e2449d3084d1d193690, type: 2}
+  healthCost: 40
   isShopItem: 0
   weaponPrefab: {fileID: 5074516897226881580, guid: 8a132f18a4896a94ca21f5c0e918e8b1,
     type: 3}

@@ -1,13 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using UnityEngine;
+﻿using UnityEngine;
 
 public abstract class Item : MonoBehaviour
 {
-    public ItemDescription Description;
+    public int healthCost;
 
     public bool isShopItem = false;
     protected bool _triggered = false;
@@ -20,7 +15,7 @@ public abstract class Item : MonoBehaviour
         {
             if (isShopItem)
             {
-                player.MaxHealth -= Description.HealthCost;
+                player.MaxHealth -= healthCost;
             }
             if (player.Health > 0)
             {
