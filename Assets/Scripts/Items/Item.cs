@@ -13,7 +13,7 @@ public abstract class Item : MonoBehaviour
 
         if (player != null)
         {
-            if (isShopItem)
+            if (isShopItem && !player.GodMode)
             {
                 player.MaxHealth -= healthCost;
             }

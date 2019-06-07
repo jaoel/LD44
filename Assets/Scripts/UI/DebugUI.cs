@@ -16,6 +16,7 @@ public class DebugUI : MonoBehaviour
 
         DrawTeleportToStairsButton();
         DrawGiveItemDropdown();
+        DrawGodModeCheckbox();
     }
 
     private void DrawTeleportToStairsButton()
@@ -54,6 +55,21 @@ public class DebugUI : MonoBehaviour
                 item.Apply(player.gameObject);
             }
             _giveItemDropdownExpanded = true;
+        }
+    }
+
+    private void DrawGodModeCheckbox()
+    {
+        Player player = Main.Instance.player;
+        if (player) {
+            if(GUI.Toggle(NextControlRect(), player.GodMode, "God Mode"))
+            {
+                player.GodMode = true;
+            }
+            else
+            {
+                player.GodMode = false;
+            }
         }
     }
 

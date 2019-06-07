@@ -38,6 +38,7 @@ public class Player : MonoBehaviour, IWeaponOwner, IBuffable
 
     private List<StatusEffect> _statusEffects;
 
+    public bool GodMode { get; set; } = false;
     public bool IsInvulnerable => _invulnTimer < invulnTime;
 
     public int Health
@@ -310,7 +311,7 @@ public class Player : MonoBehaviour, IWeaponOwner, IBuffable
 
     public void SetSlow(float slowFactor, float slowTimer)
     {
-        if (slowFactor > _slowFactor && _slowTimer > 0.0f)
+        if (GodMode || (slowFactor > _slowFactor && _slowTimer > 0.0f))
         {
             return;
         }
@@ -321,7 +322,7 @@ public class Player : MonoBehaviour, IWeaponOwner, IBuffable
 
     public bool ReceiveDamage(int damage, Vector2 velocity, bool maxHealth = false, bool spawnBloodSpray = true)
     {
-        if (_invulnTimer >= invulnTime)
+        if (_invulnTimer >= invulnTime && !GodMode)
         {
             CameraManager.Instance.ShakeCamera(1.0f, 0.3f, 1.0f);
 
