@@ -1,4 +1,4 @@
-using System.Linq;
+﻿using System.Linq;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -12,6 +12,7 @@ public class DebugUI : MonoBehaviour
     private bool _giveItemDropdownExpanded = false;
     private string _currentSeed = "";
     private string _currentLevel = "0";
+    private bool _showFogOfWar = true;
 
     private void DrawGUI()
     {
@@ -29,6 +30,7 @@ public class DebugUI : MonoBehaviour
         GUICustom.Separator(NextControlRect(10));
 
         DrawToggleDoors();
+        DrawShowFogOfWarCheckbox();
     }
 
     private void DrawTeleportToStairsButton()
@@ -143,6 +145,17 @@ public class DebugUI : MonoBehaviour
             {
                 door.ToggleClosed(true);
             }
+        }
+    }
+
+    private void DrawShowFogOfWarCheckbox()
+    {
+        bool prev = _showFogOfWar;
+        _showFogOfWar = GUI.Toggle(NextControlRect(), _showFogOfWar, "Show Fog of War");
+        
+        if(prev != _showFogOfWar)
+        {
+            Main.Instance.ToggleFogOfWarEnabled(_showFogOfWar);
         }
     }
 

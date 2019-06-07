@@ -15,6 +15,8 @@ public class Main : MonoBehaviour
     public bool gameOver;
     private ShopRoom shopInstance;
     public GameObject blackOverlay;
+    private bool _fogOfWarVisible = true;
+    private bool _fogOfWarEnabled = true;
 
     public int CurrentLevel;
     public Map CurrentMap => _currentMap;
@@ -56,6 +58,30 @@ public class Main : MonoBehaviour
     {
         player.ResetPlayer();
         GenerateMap();
+    }
+
+    public void ToggleFogOfWarEnabled(bool toggle)
+    {
+        _fogOfWarEnabled = toggle;
+        ShowFogOfWar(_fogOfWarEnabled);
+    }
+
+    private void GenerateFogOfWar()
+    {
+        FogOfWar fogOfWar = GetComponent<FogOfWar>();
+        if (fogOfWar)
+        {
+            fogOfWar.GenerateTexture();
+        }
+    }
+
+    private void ShowFogOfWar(bool show)
+    {
+        FogOfWar fogOfWar = GetComponent<FogOfWar>();
+        if (fogOfWar)
+        {
+            fogOfWar.SetEnabled(show ? (_fogOfWarEnabled && _fogOfWarVisible) : false);
+        }
     }
 
     public void GenerateMap()
@@ -112,6 +138,10 @@ public class Main : MonoBehaviour
         MapGenerator.Instance.PopulateMap(ref _currentMap, ref player, parameters, CurrentLevel);
         _currentMap.ActivateObjects();
 
+        GenerateFogOfWar();
+        _fogOfWarVisible = true;
+        ShowFogOfWar(_fogOfWarEnabled);
+
     }
 
     public void GenerateShop()
@@ -124,11 +154,8 @@ public class Main : MonoBehaviour
             MusicController.Instance.PlayMusic("Shop");
         }
 
-        FogOfWar fogOfWar = GetComponent<FogOfWar>();
-        if (fogOfWar)
-        {
-            fogOfWar.SetEnabled(false);
-        }
+        _fogOfWarVisible = false;
+        ShowFogOfWar(false);
 
         shopInstance.gameObject.SetActive(true);
         shopInstance.GenerateRandomItems(CurrentLevel, player);
