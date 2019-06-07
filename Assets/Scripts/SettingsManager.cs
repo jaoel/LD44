@@ -5,6 +5,7 @@ public static class PlayerPrefsStrings
     public static readonly string MusicVolume = "settings_music_volume";
     public static readonly string SfxVolume = "settings_sfx_volume";
     public static readonly string ScreenShakeScale = "settings_screen_shake_scale";
+    public static readonly string ShowDebugMenu = "settings_show_debug_menu";
 }
 
 public class SettingsManager

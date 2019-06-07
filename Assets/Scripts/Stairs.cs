@@ -1,23 +1,20 @@
 ﻿using UnityEngine;
 
-namespace Assets.Scripts
+public class Stairs : MonoBehaviour
 {
-    public class Stairs : MonoBehaviour
-    {
-        public bool isShop = true;
+    public bool isShop = true;
 
-        public void OnTriggerEnter2D(Collider2D collision)
+    public void OnTriggerEnter2D(Collider2D collision)
+    {
+        if (collision.gameObject.layer == Layers.Player)
         {
-            if (collision.gameObject.layer == Layers.Player)
+            if (isShop)
             {
-                if (isShop)
-                {
-                    Main.Instance.GenerateShop();
-                }
-                else
-                {
-                    Main.Instance.GenerateMap();
-                }
+                Main.Instance.GenerateShop();
+            }
+            else
+            {
+                Main.Instance.GenerateMap();
             }
         }
     }
