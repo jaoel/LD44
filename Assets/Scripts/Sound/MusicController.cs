@@ -21,6 +21,7 @@ public class MusicController : MonoBehaviour
     private float _lastTime;
 
     private Queue<IEnumerator> _queuedCoroutines;
+    private bool _playingGameplayMusic;
 
     private static MusicController _instance = null;
     public static MusicController Instance
@@ -85,6 +86,10 @@ public class MusicController : MonoBehaviour
 
     private void FixedUpdate()
     {
+        if(_playingGameplayMusic && !_fadingMusic && !_audioSource.isPlaying && _queuedCoroutines.Count == 0)
+        {
+            PlayMusic("RandomGameplay", false, 1.0f);
+        }
     }
 
     public void PlayMusic(string key, bool loop = true, float fadeTime = 0.2f)
@@ -96,7 +101,7 @@ public class MusicController : MonoBehaviour
         else if (key == "RandomGameplay")
         {
             _queuedCoroutines.Enqueue(PlayMusicFade(_audioSource, gameMusic[UnityEngine.Random.Range(0, gameMusic.Count)],
-                loop, fadeTime));
+                loop, fadeTime, 0.0f, true));
         }
         else if (key == "Defeat")
         {
@@ -111,12 +116,13 @@ public class MusicController : MonoBehaviour
         }
         else if (key == "ResumeGameplay")
         {
-            _queuedCoroutines.Enqueue(PlayMusicFade(_audioSource, _lastClip, loop, fadeTime, _lastTime));
+            _queuedCoroutines.Enqueue(PlayMusicFade(_audioSource, _lastClip, loop, fadeTime, _lastTime, true));
         }
     }
 
-    private IEnumerator PlayMusicFade(AudioSource source, AudioClip clip, bool loop, float fadeTime, float time = 0.0f)
+    private IEnumerator PlayMusicFade(AudioSource source, AudioClip clip, bool loop, float fadeTime, float time = 0.0f, bool gameplayMusic = false)
     {
+        _playingGameplayMusic = gameplayMusic;
         _fadingMusic = true;
         float fadeHalfTime = fadeTime / 2.0f;
 

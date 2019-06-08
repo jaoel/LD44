@@ -14,10 +14,13 @@ public class MapPopulator
     private TrapContainer _trapContainer;
 
     private MapPainter _mapPainter;
+    private Timer _timer;
+
 
     public void Initialize(LCG random, InteractiveDungeonObject interactiveObjectContainer, SpawnableContainer spawnKeyframes,
         TrapContainer trapContainer, MapPainter mapPainter)
     {
+        _timer = new Timer();
         _random = random;
         _interactiveObjectContainer = interactiveObjectContainer;
         _spawnKeyframes = spawnKeyframes;
@@ -27,6 +30,7 @@ public class MapPopulator
 
     public void PopulateMap(ref Map map, ref Player player, in MapGeneratorParameters generationParameters, int level)
     {
+        _timer.Start();
         Tuple<MapNode, MapNode> startAndGoal = map.GetRoomsFurthestApart(true, out List<MapNode> path);
 
         CalculateSeclusionFactor(map, startAndGoal, path);
@@ -48,6 +52,8 @@ public class MapPopulator
         SpawnSpawnables(map, level, startAndGoal);
         PlaceTraps(map, startAndGoal.Item1, player);
         SpawnDrops(map);
+        _timer.Stop();
+        _timer.Print("MapPopulator.PopulateMap");
     }
 
     private void CalculateSeclusionFactor(Map map, Tuple<MapNode, MapNode> startAndGoal, List<MapNode> path)
