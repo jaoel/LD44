@@ -31,8 +31,9 @@
                 float2 uv : TEXCOORD1;
                 float4 pos : SV_POSITION;
             };
-
+			
 			float4 _MainTex_ST; 
+			float4 _MainTex_TexelSize; 
 
             v2f vert(appdata_base v) {
                 v2f o;
@@ -50,14 +51,23 @@
             sampler2D _MainTex;
 			float4 _DarknessColor;
 
+			float fuzz(float value)
+			{
+				return clamp(64.0 * (value - 0.5), 0.0, 1.0);
+			}
+
             half4 frag(v2f i) : SV_Target
             {
+				float pixelSize = 16.0;
+				float2 pointUV = (floor(i.uv * _MainTex_TexelSize.zw * pixelSize) + 0.5) * _MainTex_TexelSize.xy / pixelSize;
+				half4 color = tex2Dlod(_MainTex, float4(pointUV, 0, 0));
+
                 half4 bgcolor = tex2Dproj(_BackgroundTexture, i.grabPos);
-                half4 color = tex2D(_MainTex, i.uv);
+
 				half lum = Luminance(bgcolor.rgb);
 
-				float desaturation = color.r;
-				float darkness = color.g * 0.5 + color.r * 0.5;
+				float desaturation = fuzz(color.r);
+				float darkness = fuzz(color.g) * 0.5 + fuzz(color.r) * 0.5;
 
 				half3 result = lerp(_DarknessColor.rgb, lerp(lum.xxx, bgcolor.rgb, desaturation), darkness);
 

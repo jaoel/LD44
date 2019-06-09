@@ -69,7 +69,7 @@ public class FogOfWar : MonoBehaviour
                 Vector3Int position = new Vector3Int(x, y, 0);
                 {
                     Vector3Int pos = position - floors.origin;
-                    float distance = Vector3.Distance(playerPosition, floors.CellToWorld(position));
+                    float distance = Vector3.Distance(playerPosition, floors.CellToWorld(position) + new Vector3(0.5f, 0.5f, 0f));
                     Color pixelColor = _fowTexture.GetPixel(pos.x, pos.y);
                     Color targetColor = pixelColor;
                     float fuzzRange = 6f;
