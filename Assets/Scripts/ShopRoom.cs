@@ -73,7 +73,7 @@ public class ShopRoom : MonoBehaviour
         if (Input.GetKeyDown(KeyCode.X))
         {
             ClearItems();
-            Main.Instance.GenerateShop();
+            MapManager.Instance.GenerateShop();
         }
     }
 

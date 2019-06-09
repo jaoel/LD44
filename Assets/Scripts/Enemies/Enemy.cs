@@ -141,7 +141,7 @@ public class Enemy : MonoBehaviour, IBuffable
 
         if (aggroSurrounding)
         {
-            List<Enemy> enemies = Main.Instance.CurrentMap.GetEnemiesInCircle(transform.position, _aggroDistance);
+            List<Enemy> enemies = MapManager.Instance.CurrentMap.GetEnemiesInCircle(transform.position, _aggroDistance);
             int layerMask = Layers.CombinedLayerMask(Layers.Map, Layers.Enemy, Layers.FlyingEnemy);
             int rec = recursions - 1;
             _collider.enabled = false;
@@ -262,7 +262,7 @@ public class Enemy : MonoBehaviour, IBuffable
             drop.transform.localScale = new Vector3(0.5f, 0.5f, 0.5f);
             drop.gameObject.SetActive(true);
 
-            Main.Instance.AddInteractiveObject(drop.gameObject);
+            MapManager.Instance.AddInteractiveObject(drop.gameObject);
         });
     }
 

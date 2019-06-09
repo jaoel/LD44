@@ -8,7 +8,7 @@ public class GameOverMenu : Menu
     public override void OnEnter()
     {
         base.OnEnter();
-        gameOverLevelText.text = Main.Instance.CurrentLevel.ToString();
+        gameOverLevelText.text = MapManager.Instance.CurrentLevel.ToString();
         Cursor.visible = true;
         MusicController.Instance.PlayMusic("Defeat", false);
     }

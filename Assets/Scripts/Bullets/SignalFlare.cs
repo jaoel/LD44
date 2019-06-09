@@ -31,7 +31,7 @@ public class SignalFlare : MonoBehaviour
     {
         yield return new WaitForSeconds(_timer);
 
-        List<Enemy> enemies = Main.Instance.CurrentMap.GetEnemiesInCircle(transform.position.ToVector2(), _explosionRadius);
+        List<Enemy> enemies = MapManager.Instance.CurrentMap.GetEnemiesInCircle(transform.position.ToVector2(), _explosionRadius);
         enemies.ForEach(x =>
         {
             x.AddStatusEffect(Instantiate(_burningDebuff.gameObject, x.transform).GetComponent<BurningDebuff>());
@@ -43,7 +43,7 @@ public class SignalFlare : MonoBehaviour
                 .GetComponent<BurningDebuff>());
         }
 
-        Main.Instance.DamageAllEnemiesInCircle(transform.position.ToVector2(), _explosionRadius, _explosionDamage, true);
+        MapManager.Instance.DamageAllEnemiesInCircle(transform.position.ToVector2(), _explosionRadius, _explosionDamage, true);
         CameraManager.Instance.ShakeCamera(0.6f, 0.25f, 1.25f);
 
         _flameAudioSource.volume = SettingsManager.Instance.SFXVolume;

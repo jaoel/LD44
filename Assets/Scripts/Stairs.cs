@@ -10,11 +10,11 @@ public class Stairs : MonoBehaviour
         {
             if (isShop)
             {
-                Main.Instance.GenerateShop();
+                MapManager.Instance.GenerateShop();
             }
             else
             {
-                Main.Instance.GenerateMap();
+                MapManager.Instance.GenerateMap();
             }
         }
     }

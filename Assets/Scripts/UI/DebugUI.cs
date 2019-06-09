@@ -111,13 +111,13 @@ public class DebugUI : MonoBehaviour
             {
                 if(int.TryParse(_currentLevel, out int currentLevel))
                 {
-                    Main.Instance.CurrentLevel = Mathf.Max(0, currentLevel - 1);
+                    MapManager.Instance.CurrentLevel = Mathf.Max(0, currentLevel - 1);
                 }
                 else
                 {
-                    _currentLevel = Main.Instance.CurrentLevel.ToString();
+                    _currentLevel = MapManager.Instance.CurrentLevel.ToString();
                 }
-                Main.Instance.GenerateMapWithSeed(newSeed);
+                MapManager.Instance.GenerateMapWithSeed(newSeed);
             }
             else
             {
@@ -155,7 +155,7 @@ public class DebugUI : MonoBehaviour
         
         if(prev != _showFogOfWar)
         {
-            Main.Instance.ToggleFogOfWarEnabled(_showFogOfWar);
+            MapManager.Instance.ToggleFogOfWarEnabled(_showFogOfWar);
         }
     }
 
@@ -183,7 +183,7 @@ public class DebugUI : MonoBehaviour
     private void OnShow()
     {
         _currentSeed = MapGenerator.Instance.GetCurrentSeed().ToString();
-        _currentLevel = Main.Instance.CurrentLevel.ToString();
+        _currentLevel = MapManager.Instance.CurrentLevel.ToString();
     }
 
     private void OnGUI()

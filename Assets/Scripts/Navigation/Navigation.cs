@@ -79,8 +79,8 @@ public class Navigation : MonoBehaviour
             {
                 if (_currentPathAge >= _minPathAge)
                 {
-                    _path = NavigationManager.Instance.AStar(Main.Instance.CurrentMap.WorldToCell(transform.position.ToVector2()),
-                        Main.Instance.CurrentMap.WorldToCell(_target), out float distance);
+                    _path = NavigationManager.Instance.AStar(MapManager.Instance.CurrentMap.WorldToCell(transform.position.ToVector2()),
+                        MapManager.Instance.CurrentMap.WorldToCell(_target), out float distance);
 
                     _currentPathAge = 0.0f;
 
@@ -130,7 +130,8 @@ public class Navigation : MonoBehaviour
 
     private void FollowPath()
     {
-        if (_path != null && _path.Count > 0 && (_destination - Main.Instance.CurrentMap.WorldToCell(transform.position.ToVector2())).magnitude <= 1.0f)
+        if (_path != null && _path.Count > 0 
+            && (_destination - MapManager.Instance.CurrentMap.WorldToCell(transform.position.ToVector2())).magnitude <= 1.0f)
         {
             SetPathTarget();
         }
