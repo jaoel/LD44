@@ -24,6 +24,9 @@
             #pragma vertex vert
             #pragma fragment frag
             #include "UnityCG.cginc"
+			
+			static const float FOG_PIXEL_SIZE = 16.0;
+			static const float FOG_EDGE_SHARPNESS = 128.0;
 
             struct v2f
             {
@@ -53,13 +56,12 @@
 
 			float fuzz(float value)
 			{
-				return clamp(64.0 * (value - 0.5), 0.0, 1.0);
+				return clamp(FOG_EDGE_SHARPNESS * (value - 0.5), 0.0, 1.0);
 			}
 
             half4 frag(v2f i) : SV_Target
             {
-				float pixelSize = 16.0;
-				float2 pointUV = (floor(i.uv * _MainTex_TexelSize.zw * pixelSize) + 0.5) * _MainTex_TexelSize.xy / pixelSize;
+				float2 pointUV = (floor(i.uv * _MainTex_TexelSize.zw * FOG_PIXEL_SIZE) + 0.5) * _MainTex_TexelSize.xy / FOG_PIXEL_SIZE;
 				half4 color = tex2Dlod(_MainTex, float4(pointUV, 0, 0));
 
                 half4 bgcolor = tex2Dproj(_BackgroundTexture, i.grabPos);
@@ -70,6 +72,7 @@
 				float darkness = fuzz(color.g) * 0.5 + fuzz(color.r) * 0.5;
 
 				half3 result = lerp(_DarknessColor.rgb, lerp(lum.xxx, bgcolor.rgb, desaturation), darkness);
+				result = lerp(result, half3(0.0, 0.0, 1.0), color.b);
 
                 return half4(result, 1.0);
             }

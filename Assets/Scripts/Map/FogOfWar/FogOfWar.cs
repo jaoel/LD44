@@ -3,6 +3,14 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Tilemaps;
 
+[System.Flags]
+public enum TileType
+{
+    None = 0,
+    Floor = 1,
+    Wall = 2,
+}
+
 [RequireComponent(typeof(MapGenerator))]
 public class FogOfWar : MonoBehaviour
 {
@@ -13,15 +21,39 @@ public class FogOfWar : MonoBehaviour
     private MaterialPropertyBlock _mpb;
     private int _textureID;
     private bool _enabled = true;
+    private TileType[,] _tiles = new TileType[0, 0];
+    private Vector3Int _size;
+    private Vector3Int _origin;
 
     public void GenerateTexture()
     {
         Tilemap floors = _mapGenerator.floors;
         Tilemap walls = _mapGenerator.walls;
 
+        _size = new Vector3Int(Mathf.Max(floors.size.x, walls.size.x), Mathf.Max(floors.size.y, walls.size.y), 0);
+        _origin = new Vector3Int(Mathf.Min(floors.origin.x, walls.origin.x), Mathf.Min(floors.origin.y, walls.origin.y), 0);
+        _fowTexture = new Texture2D(_size.x, _size.y, TextureFormat.RGBA32, false, true);
 
-        Vector3Int size = new Vector3Int(Mathf.Max(floors.size.x, walls.size.x), Mathf.Max(floors.size.y, walls.size.y), 0);
-        _fowTexture = new Texture2D(size.x, size.y, TextureFormat.RGBA32, false, true);
+        _tiles = new TileType[_size.x, _size.y];
+        for(int y = 0; y < _size.y; y++)
+        {
+            for (int x = 0; x < _size.x; x++)
+            {
+                Vector3Int position = new Vector3Int(x, y, 0);
+                _tiles[x, y] = TileType.None;
+
+                if (floors.HasTile(position + floors.origin))
+                {
+                    _tiles[x, y] |= TileType.Floor;
+                }
+
+                if (walls.HasTile(position + walls.origin))
+                {
+                    _tiles[x, y] |= TileType.Wall;
+                }
+            }
+        }
+
         Color32 resetColor = new Color32(0, 0, 0, 0);
         Color32[] resetColorArray = _fowTexture.GetPixels32();
 
@@ -34,9 +66,9 @@ public class FogOfWar : MonoBehaviour
 
 
         fogOfWarRenderer.transform.localScale = Vector3.one;
-        fogOfWarRenderer.transform.position = new Vector3(floors.origin.x, floors.origin.y, 0f);
+        fogOfWarRenderer.transform.position = _origin;
 
-        Sprite sprite = Sprite.Create(_fowTexture, new Rect(Vector2.zero, new Vector2(size.x, size.y)), Vector2.zero, 1f);
+        Sprite sprite = Sprite.Create(_fowTexture, new Rect(Vector2.zero, new Vector2(_size.x, _size.y)), Vector2.zero, 1f);
         fogOfWarRenderer.sprite = sprite;
 
         SetTexture();
@@ -56,44 +88,83 @@ public class FogOfWar : MonoBehaviour
         }
     }
 
+    private Vector3Int WorldToTile(Vector3 worldPos)
+    {
+        return worldPos.ToVector3Int() - _origin;
+    }
+
+    private Vector3 TileToWorld(Vector3Int tilePos)
+    {
+        return tilePos + _origin;
+    }
+
     public void UpdateFogOfWar(Vector3 playerPosition)
     {
-        Tilemap floors = _mapGenerator.floors;
-        Vector3Int tilePosition = floors.WorldToCell(playerPosition);
-        int intViewRange = (int)_viewRange + 5;
-        BoundsInt fowBounds = new BoundsInt(tilePosition - new Vector3Int(intViewRange, intViewRange, 0), new Vector3Int(2 * intViewRange, 2 * intViewRange, 0));
-        for(int x = fowBounds.xMin; x < fowBounds.xMax; x++)
-        {
-            for(int y = fowBounds.yMin; y < fowBounds.yMax; y++)
-            {
-                Vector3Int position = new Vector3Int(x, y, 0);
-                {
-                    Vector3Int pos = position - floors.origin;
-                    float distance = Vector3.Distance(playerPosition, floors.CellToWorld(position) + new Vector3(0.5f, 0.5f, 0f));
-                    Color pixelColor = _fowTexture.GetPixel(pos.x, pos.y);
-                    Color targetColor = pixelColor;
-                    float fuzzRange = 6f;
-                    if(distance < _viewRange - fuzzRange)
-                    {
-                        targetColor.r = 1f;
-                        targetColor.g = 1f;
-                    }
-                    else if(distance > _viewRange)
-                    {
-                        targetColor.r = 0f;
-                    }
-                    else
-                    {
-                        float frac = (_viewRange - distance) / fuzzRange;
-                        targetColor.r = frac;
-                        targetColor.g = Mathf.Max(targetColor.g, frac);
-                    }
+        // Center should be middle of the player
+        playerPosition -= new Vector3(0.5f, 0.5f, 0f);
 
-                    pixelColor = targetColor;
-                    _fowTexture.SetPixel(pos.x, pos.y, pixelColor);
+        Vector3Int tilePosition = WorldToTile(playerPosition);
+        int intViewRange = (int)_viewRange + 1;
+        BoundsInt fowBounds = new BoundsInt(tilePosition - new Vector3Int(intViewRange, intViewRange, 0), new Vector3Int(2 * intViewRange, 2 * intViewRange, 0));
+
+
+
+        float[,] visibility = new float[fowBounds.size.x, fowBounds.size.y];
+        ShadowCast.CalculateVisibility(playerPosition - _origin, fowBounds, _tiles, visibility);
+
+        for (int x = fowBounds.xMin; x < fowBounds.xMax; x++)
+        {
+            if (x < 0 || x >= _size.x)
+            {
+                continue;
+            }
+
+            for (int y = fowBounds.yMin; y < fowBounds.yMax; y++)
+            {
+                if (y < 0 || y >= _size.y)
+                {
+                    continue;
                 }
+
+                Vector3Int pos = new Vector3Int(x, y, 0);
+                TileType tileType = _tiles[x, y];
+
+                float distance = Vector3.Distance(playerPosition, TileToWorld(pos));
+                Color pixelColor = _fowTexture.GetPixel(pos.x, pos.y);
+                float fuzzRange = 6f;
+                if (distance < _viewRange - fuzzRange)
+                {
+                    pixelColor.r = 1f;
+                    pixelColor.g = 1f;
+
+                    if (tileType.HasFlag(TileType.Wall))
+                    {
+                        pixelColor.b = 1f;
+                    }
+                }
+                else if (distance > _viewRange)
+                {
+                    pixelColor.r = 0f;
+                }
+                else
+                {
+                    float frac = (_viewRange - distance) / fuzzRange;
+                    pixelColor.r = frac;
+                    pixelColor.g = Mathf.Max(pixelColor.g, frac);
+
+                    if (tileType.HasFlag(TileType.Wall) && frac > 0.5f)
+                    {
+                        pixelColor.b = 1f;
+                    }
+                }
+
+                pixelColor.b = visibility[x - fowBounds.xMin, y - fowBounds.yMin] * 0.5f;
+
+                _fowTexture.SetPixel(pos.x, pos.y, pixelColor);
             }
         }
+
+
         SetTexture();
     }
 
