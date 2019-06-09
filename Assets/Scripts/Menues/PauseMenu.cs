@@ -12,6 +12,15 @@ public class PauseMenu : Menu
         base.OnEnter();
         Cursor.visible = true;
         Time.timeScale = 0f;
+
+        if (Main.Instance.gameState != GameState.Gameplay)
+        {
+            GameObject.Find("Restart").SetActive(false);
+            GameObject.Find("Hubworld").SetActive(false);
+
+            RectTransform space = GameObject.Find("Space").GetComponent<RectTransform>();
+            space.sizeDelta = new Vector2(space.sizeDelta.x, 48);
+        }
     }
 
     public override void OnExit()
@@ -38,6 +47,13 @@ public class PauseMenu : Menu
     {
         SoundManager.Instance.PlayUIButtonClick();
         MenuManager.Instance.PushMenu<OptionsMenu>();
+    }
+
+    public void OnHubworldClick()
+    {
+        SoundManager.Instance.PlayUIButtonClick();
+        Main.Instance.LoadHubworld();
+        MenuManager.Instance.PopMenu();
     }
 
     public void OnMainMenuClick()

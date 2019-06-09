@@ -79,9 +79,19 @@ public class Main : MonoBehaviour
         }
     }
 
+    public void LoadDungeon()
+    {
+        SceneManager.LoadScene("GameScene", LoadSceneMode.Single);
+    }
+
     public void RestartGame()
     {
         SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex, LoadSceneMode.Single);
+    }
+
+    public void LoadHubworld()
+    {
+        SceneManager.LoadScene("HubworldScene", LoadSceneMode.Single);
     }
 
     public void QuitToMenu()

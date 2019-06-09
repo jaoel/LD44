@@ -40,7 +40,7 @@ public class MainMenu : Menu
     public void OnStartClick()
     {
         SoundManager.Instance.PlayUIButtonClick();
-        SceneManager.LoadScene("GameScene", LoadSceneMode.Single);
+        SceneManager.LoadScene("HubworldScene", LoadSceneMode.Single);
     }
 
 

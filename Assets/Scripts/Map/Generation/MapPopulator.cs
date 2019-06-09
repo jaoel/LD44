@@ -35,6 +35,9 @@ public class MapPopulator
 
         CalculateSeclusionFactor(map, startAndGoal, path);
 
+        _timer.Stop();
+        _timer.Print("MapPopulator.CalculateSeclusionFactor");
+
         if (_random.NextFloat() < 0.5f)
         {
             startAndGoal = new Tuple<MapNode, MapNode>(startAndGoal.Item2, startAndGoal.Item1);
@@ -47,13 +50,36 @@ public class MapPopulator
             map.GetRandomPositionInRoom(2, 2, startAndGoal.Item2).ToVector3(), Quaternion.identity));
         startAndGoal.Item2.ContainsStairs = true;
 
+        _timer.Start();
+
         GenerateDoors(ref map, startAndGoal.Item1, startAndGoal.Item2, generationParameters);
-        _mapPainter.PostProcessTiles(map, generationParameters);
-        SpawnSpawnables(map, level, startAndGoal);
-        PlaceTraps(map, startAndGoal.Item1, player);
-        SpawnDrops(map);
+
         _timer.Stop();
-        _timer.Print("MapPopulator.PopulateMap");
+        _timer.Print("MapPopulator.GenerateDoors");
+
+        _mapPainter.PostProcessTiles(map, generationParameters);
+
+        _timer.Start();
+
+        SpawnSpawnables(map, level, startAndGoal);
+
+        _timer.Stop();
+        _timer.Print("MapPopulator.SpawnSpawnables");
+
+        _timer.Start();
+
+        PlaceTraps(map, startAndGoal.Item1, player);
+
+        _timer.Stop();
+        _timer.Print("MapPopulator.PlaceTraps");
+
+        _timer.Start();
+
+        SpawnDrops(map);
+
+        _timer.Stop();
+        _timer.Print("MapPopulator.SpawnDrops");
+
     }
 
     private void CalculateSeclusionFactor(Map map, Tuple<MapNode, MapNode> startAndGoal, List<MapNode> path)
