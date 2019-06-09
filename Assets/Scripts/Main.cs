@@ -9,9 +9,9 @@ public enum GameState
 {
     MainMenu,
     Hubworld,
+    Shop,
+    Graveyard,
     Gameplay,
-    Paused,
-    GameOver,
     Count
 }
 
@@ -81,7 +81,7 @@ public class Main : MonoBehaviour
 
     public void RestartGame()
     {
-        SceneManager.LoadScene("GameScene", LoadSceneMode.Single);
+        SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex, LoadSceneMode.Single);
     }
 
     public void QuitToMenu()

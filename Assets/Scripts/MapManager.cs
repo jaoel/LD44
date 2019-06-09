@@ -46,8 +46,16 @@ public class MapManager : MonoBehaviour
 
     private void Start()
     {
-        _shopInstance = Instantiate(_shopRoomPrefab);
-        LoadLevel();
+        if (Main.Instance.gameState == GameState.Gameplay)
+        {
+            _shopInstance = Instantiate(_shopRoomPrefab);
+            LoadLevel();
+        }
+        else
+        {
+            GenerateFogOfWar();
+            ToggleFogOfWarEnabled(false);
+        }
     }
 
     private void OnDrawGizmos()
@@ -55,6 +63,21 @@ public class MapManager : MonoBehaviour
         if (_currentMap != null)
         {
             _currentMap.DrawDebug();
+        }
+    }
+
+    public string GetLevelName()
+    {
+        switch(Main.Instance.gameState)
+        {
+            case GameState.Hubworld:
+                return "The Hub";
+            case GameState.Shop:
+                return "Shop";
+            case GameState.Graveyard:
+                return "Graveyard";
+            default:
+                return "STATE MISSING";
         }
     }
 
@@ -95,6 +118,11 @@ public class MapManager : MonoBehaviour
 
     public void GenerateMapWithSeed(long seed)
     {
+        if (Main.Instance.gameState != GameState.Gameplay)
+        {
+            return;
+        }
+
         if (_currentMap != null)
         {
             _currentMap.ClearMap();
@@ -172,15 +200,17 @@ public class MapManager : MonoBehaviour
 
     public void DamageAllEnemiesInCircle(Vector2 position, float radius, int damage, bool damagePlayer)
     {
-        List<Enemy> enemies = _currentMap.GetEnemiesInCircle(position, radius);
-        foreach (Enemy enemy in enemies)
+        if (_currentMap != null)
         {
-            Vector2 dir = new Vector2(enemy.transform.position.x, enemy.transform.position.y) - position;
-            enemy.ReceiveDamage(damage, dir);
+            List<Enemy> enemies = _currentMap.GetEnemiesInCircle(position, radius);
+            foreach (Enemy enemy in enemies)
+            {
+                Vector2 dir = new Vector2(enemy.transform.position.x, enemy.transform.position.y) - position;
+                enemy.ReceiveDamage(damage, dir);
+            }
         }
 
-        if (damagePlayer && Vector2.Distance(
-            new Vector2(_player.transform.position.x, _player.transform.position.y), position) <= radius)
+        if (damagePlayer && Vector2.Distance(new Vector2(_player.transform.position.x, _player.transform.position.y), position) <= radius)
         {
             Vector2 dir = new Vector2(_player.transform.position.x, _player.transform.position.y) - position;
             _player.ReceiveDamage(damage / 10, dir);

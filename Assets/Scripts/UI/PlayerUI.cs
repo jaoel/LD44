@@ -105,10 +105,20 @@ public class PlayerUI : MonoBehaviour
             healthBarObject.anchoredPosition = _originalPosition;
         }
 
-        if(MapManager.Instance.CurrentLevel != _currentLevel)
+        if (Main.Instance.gameState == GameState.Gameplay)
         {
-            _currentLevel = MapManager.Instance.CurrentLevel;
-            currentLevelText.text = "Level " + _currentLevel.ToString();
+            if (MapManager.Instance.CurrentLevel != _currentLevel)
+            {
+                _currentLevel = MapManager.Instance.CurrentLevel;
+                currentLevelText.text = "Level " + _currentLevel.ToString();
+            }
+        }
+        else
+        {
+            if (currentLevelText.text != MapManager.Instance.GetLevelName())
+            {
+                currentLevelText.text = MapManager.Instance.GetLevelName();
+            }
         }
     }
 
