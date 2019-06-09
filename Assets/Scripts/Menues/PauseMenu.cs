@@ -2,6 +2,15 @@
 
 public class PauseMenu : Menu
 {
+    [SerializeField]
+    private GameObject _restart;
+
+    [SerializeField]
+    private GameObject _hubworld;
+
+    [SerializeField]
+    private RectTransform _space;
+
     public override void OnPressedEscape()
     {
         OnContinueClick();
@@ -15,11 +24,9 @@ public class PauseMenu : Menu
 
         if (Main.Instance.gameState != GameState.Gameplay)
         {
-            GameObject.Find("Restart").SetActive(false);
-            GameObject.Find("Hubworld").SetActive(false);
-
-            RectTransform space = GameObject.Find("Space").GetComponent<RectTransform>();
-            space.sizeDelta = new Vector2(space.sizeDelta.x, 48);
+            _restart.SetActive(false);
+            _hubworld.SetActive(false);
+            _space.sizeDelta = new Vector2(_space.sizeDelta.x, 48);
         }
     }
 
