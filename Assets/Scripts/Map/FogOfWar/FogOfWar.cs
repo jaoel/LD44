@@ -100,14 +100,9 @@ public class FogOfWar : MonoBehaviour
 
     public void UpdateFogOfWar(Vector3 playerPosition)
     {
-        // Center should be middle of the player
-        playerPosition -= new Vector3(0.5f, 0.5f, 0f);
-
-        Vector3Int tilePosition = WorldToTile(playerPosition);
+        Vector3Int tilePosition = WorldToTile(playerPosition - new Vector3(0.5f, 0.5f, 0f));
         int intViewRange = (int)_viewRange + 1;
-        BoundsInt fowBounds = new BoundsInt(tilePosition - new Vector3Int(intViewRange, intViewRange, 0), new Vector3Int(2 * intViewRange, 2 * intViewRange, 0));
-
-
+        BoundsInt fowBounds = new BoundsInt(tilePosition - new Vector3Int(intViewRange, intViewRange, 0), new Vector3Int(2 * intViewRange + 1, 2 * intViewRange + 1, 0));
 
         float[,] visibility = new float[fowBounds.size.x, fowBounds.size.y];
         ShadowCast.CalculateVisibility(playerPosition - _origin, fowBounds, _tiles, visibility);
@@ -129,38 +124,40 @@ public class FogOfWar : MonoBehaviour
                 Vector3Int pos = new Vector3Int(x, y, 0);
                 TileType tileType = _tiles[x, y];
 
-                float distance = Vector3.Distance(playerPosition, TileToWorld(pos));
+                float distance = Vector3.Distance(playerPosition - new Vector3(0.5f, 0.5f, 0f), TileToWorld(pos));
                 Color pixelColor = _fowTexture.GetPixel(pos.x, pos.y);
-                float fuzzRange = 6f;
+                Color targetColor = pixelColor;
+                float fuzzRange = 2f;
+                float vis = visibility[x - fowBounds.xMin, y - fowBounds.yMin];
                 if (distance < _viewRange - fuzzRange)
                 {
-                    pixelColor.r = 1f;
-                    pixelColor.g = 1f;
+                    targetColor.r = 1f;
+                    //targetColor.g = 1f;
 
                     if (tileType.HasFlag(TileType.Wall))
                     {
-                        pixelColor.b = 1f;
+                        targetColor.b = 1f;
                     }
                 }
                 else if (distance > _viewRange)
                 {
-                    pixelColor.r = 0f;
+                    targetColor.r = 0f;
                 }
                 else
                 {
                     float frac = (_viewRange - distance) / fuzzRange;
-                    pixelColor.r = frac;
-                    pixelColor.g = Mathf.Max(pixelColor.g, frac);
+                    targetColor.r = frac;
+                    //targetColor.g = Mathf.Max(pixelColor.g, frac);
 
                     if (tileType.HasFlag(TileType.Wall) && frac > 0.5f)
                     {
-                        pixelColor.b = 1f;
+                        targetColor.b = 1f;
                     }
                 }
+                targetColor.r *= vis;
+                targetColor.g = Mathf.Max(targetColor.r, targetColor.g);
 
-                pixelColor.b = visibility[x - fowBounds.xMin, y - fowBounds.yMin] * 0.5f;
-
-                _fowTexture.SetPixel(pos.x, pos.y, pixelColor);
+                _fowTexture.SetPixel(pos.x, pos.y, targetColor);
             }
         }
 

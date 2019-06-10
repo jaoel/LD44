@@ -26,7 +26,7 @@
             #include "UnityCG.cginc"
 			
 			static const float FOG_PIXEL_SIZE = 16.0;
-			static const float FOG_EDGE_SHARPNESS = 128.0;
+			static const float FOG_EDGE_SHARPNESS = 32.0;
 
             struct v2f
             {
@@ -72,7 +72,10 @@
 				float darkness = fuzz(color.g) * 0.5 + fuzz(color.r) * 0.5;
 
 				half3 result = lerp(_DarknessColor.rgb, lerp(lum.xxx, bgcolor.rgb, desaturation), darkness);
-				result = lerp(result, half3(0.0, 0.0, 1.0), color.b);
+				//result = lerp(result, half3(0.0, 0.0, 1.0), color.b);
+				//result = color.rgb;
+				//result.r = color.r;
+				//result.b = color.b;
 
                 return half4(result, 1.0);
             }
