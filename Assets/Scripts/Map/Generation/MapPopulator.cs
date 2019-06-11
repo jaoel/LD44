@@ -332,6 +332,7 @@ public class MapPopulator
         List<MapNode> rooms = new List<MapNode>();
         MapNode keyRoom = null;
         List<MapNode> result = new List<MapNode>();
+
         while (true)
         {
             foreach (MapNode mapNode in map.Cells)
@@ -367,11 +368,11 @@ public class MapPopulator
                 break;
             }
 
-            foreach (MapNode room in rooms)
+            for (int i = 0; i < rooms.Count; i++)
             {
                 foreach (MapNode lockedRoom in lockedRooms)
                 {
-                    room.Corridors.RemoveAll(x => x.ContainsVertex(new Delaunay.Vertex<MapNode>(lockedRoom.Cell.center, lockedRoom)));
+                    rooms[i].Corridors.RemoveAll(x => x.ContainsVertex(new Delaunay.Vertex<MapNode>(lockedRoom.Cell.center, lockedRoom)));
                 }
             }
 

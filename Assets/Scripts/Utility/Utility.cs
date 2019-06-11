@@ -35,4 +35,9 @@ public static class Utility
     {
         return Random.insideUnitCircle.normalized * radius;
     }
+
+    public static int ManhattanDistance(Vector2Int a, Vector2Int b)
+    {
+        return Mathf.Abs(a.x - b.x) + Mathf.Abs(a.y - b.y);
+    }
 } 

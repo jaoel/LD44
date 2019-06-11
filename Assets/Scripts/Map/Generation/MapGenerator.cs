@@ -162,28 +162,32 @@ public class MapGenerator : MonoBehaviour
         while (!regionsSeparated && iterations < 2 * map.Cells.Count)
         {
             regionsSeparated = true;
-            foreach (MapNode node in map.Cells)
+            for (int i = 0; i < map.Cells.Count; i++)
             {
                 Vector2 movement = Vector2.zero;
                 int separationCount = 0;
-                foreach (MapNode other in map.Cells)
+                for (int j = 0; j < map.Cells.Count; j++)
                 {
-                    if (node.Equals(other))
+                    if (i == j)
                     {
                         continue;
                     }
 
-                    RectInt overSizeNode = node.Cell;
-                    overSizeNode.position -= new Vector2Int(parameters.MinRoomDistance, parameters.MinRoomDistance);
-                    overSizeNode.width += parameters.MinRoomDistance * 2;
-                    overSizeNode.height += parameters.MinRoomDistance * 2;
+                    RectInt overSizeNode = map.Cells[i].Cell;
 
-                    if (!overSizeNode.Overlaps(other.Cell))
+                    if (parameters.MinRoomDistance > 0)
+                    {
+                        overSizeNode.position -= new Vector2Int(parameters.MinRoomDistance, parameters.MinRoomDistance);
+                        overSizeNode.width += parameters.MinRoomDistance * 2;
+                        overSizeNode.height += parameters.MinRoomDistance * 2;
+                    }
+
+                    if (!overSizeNode.Overlaps(map.Cells[j].Cell))
                     {
                         continue;
                     }
 
-                    movement += other.Cell.center - overSizeNode.center;
+                    movement += map.Cells[j].Cell.center - overSizeNode.center;
                     separationCount++;
                 }
 
@@ -191,12 +195,12 @@ public class MapGenerator : MonoBehaviour
                 {
                     movement *= -1.0f;
                     movement = movement.normalized;
-                    RectInt newRect = node.Cell;
+                    RectInt newRect = map.Cells[i].Cell;
                     newRect.position += new Vector2Int(Mathf.RoundToInt(movement.x), Mathf.RoundToInt(movement.y)) * (1 + parameters.MinRoomDistance);
 
-                    if (newRect.position != node.Cell.position || movement.magnitude > 0.0f)
+                    if (newRect.position != map.Cells[i].Cell.position || movement.magnitude > 0.0f)
                     {
-                        node.Cell = newRect;
+                        map.Cells[i].Cell = newRect;
                         regionsSeparated = false;
                     }
 
@@ -226,18 +230,23 @@ public class MapGenerator : MonoBehaviour
         
         if (!regionsSeparated)
         {
-            foreach(MapNode node in map.Cells)
+            for(int i = 0; i < map.Cells.Count; i++)
             {
-                foreach(MapNode other in map.Cells)
+                if (map.Cells[i].Type == MapNodeType.None)
                 {
-                    if (node.Equals(other) || node.Type == MapNodeType.None || other.Type == MapNodeType.None)
+                    continue;
+                }
+
+                for(int j = i + 1; j < map.Cells.Count; j++)
+                {
+                    if (map.Cells[j].Type == MapNodeType.None)
                     {
                         continue;
                     }
 
-                    if (node.Cell.Overlaps(other.Cell))
+                    if (map.Cells[i].Cell.Overlaps(map.Cells[j].Cell))
                     {
-                        other.Type = MapNodeType.None;
+                        map.Cells[j].Type = MapNodeType.None;
                     }
                 }
             }
