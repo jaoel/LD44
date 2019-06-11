@@ -72,10 +72,6 @@
 				float darkness = fuzz(color.g) * 0.5 + fuzz(color.r) * 0.5;
 
 				half3 result = lerp(_DarknessColor.rgb, lerp(lum.xxx, bgcolor.rgb, desaturation), darkness);
-				//result = lerp(result, half3(0.0, 0.0, 1.0), color.b);
-				//result = color.rgb;
-				//result.r = color.r;
-				//result.b = color.b;
 
                 return half4(result, 1.0);
             }

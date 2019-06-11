@@ -17,13 +17,34 @@ public class FogOfWar : MonoBehaviour
     public SpriteRenderer fogOfWarRenderer;
     private float _viewRange = 15f;
     private MapGenerator _mapGenerator;
-    private Texture2D _fowTexture;
     private MaterialPropertyBlock _mpb;
     private int _textureID;
     private bool _enabled = true;
     private TileType[,] _tiles = new TileType[0, 0];
     private Vector3Int _size;
     private Vector3Int _origin;
+
+    public Texture2D FoWTexture { get; private set; }
+
+    private static FogOfWar _instance = null;
+    public static FogOfWar Instance
+    {
+        get
+        {
+            if (_instance != null)
+            {
+                return _instance;
+            }
+
+            _instance = FindObjectOfType<FogOfWar>();
+
+            if (_instance == null || _instance.Equals(null))
+            {
+                Debug.LogError("The scene needs a FogOfWar component");
+            }
+            return _instance;
+        }
+    }
 
     public void GenerateTexture()
     {
@@ -32,7 +53,7 @@ public class FogOfWar : MonoBehaviour
 
         _size = new Vector3Int(Mathf.Max(floors.size.x, walls.size.x), Mathf.Max(floors.size.y, walls.size.y), 0);
         _origin = new Vector3Int(Mathf.Min(floors.origin.x, walls.origin.x), Mathf.Min(floors.origin.y, walls.origin.y), 0);
-        _fowTexture = new Texture2D(_size.x, _size.y, TextureFormat.RGBA32, false, true);
+        FoWTexture = new Texture2D(_size.x, _size.y, TextureFormat.RGBA32, false, true);
 
         _tiles = new TileType[_size.x, _size.y];
         for(int y = 0; y < _size.y; y++)
@@ -42,12 +63,12 @@ public class FogOfWar : MonoBehaviour
                 Vector3Int position = new Vector3Int(x, y, 0);
                 _tiles[x, y] = TileType.None;
 
-                if (floors.HasTile(position + floors.origin))
+                if (floors.HasTile(position + _origin))
                 {
                     _tiles[x, y] |= TileType.Floor;
                 }
 
-                if (walls.HasTile(position + walls.origin))
+                if (walls.HasTile(position + _origin))
                 {
                     _tiles[x, y] |= TileType.Wall;
                 }
@@ -55,20 +76,20 @@ public class FogOfWar : MonoBehaviour
         }
 
         Color32 resetColor = new Color32(0, 0, 0, 0);
-        Color32[] resetColorArray = _fowTexture.GetPixels32();
+        Color32[] resetColorArray = FoWTexture.GetPixels32();
 
         for (int i = 0; i < resetColorArray.Length; i++)
         {
             resetColorArray[i] = resetColor;
         }
 
-        _fowTexture.SetPixels32(resetColorArray);
+        FoWTexture.SetPixels32(resetColorArray);
 
 
         fogOfWarRenderer.transform.localScale = Vector3.one;
         fogOfWarRenderer.transform.position = _origin;
 
-        Sprite sprite = Sprite.Create(_fowTexture, new Rect(Vector2.zero, new Vector2(_size.x, _size.y)), Vector2.zero, 1f);
+        Sprite sprite = Sprite.Create(FoWTexture, new Rect(Vector2.zero, new Vector2(_size.x, _size.y)), Vector2.zero, 1f);
         fogOfWarRenderer.sprite = sprite;
 
         SetTexture();
@@ -125,7 +146,7 @@ public class FogOfWar : MonoBehaviour
                 TileType tileType = _tiles[x, y];
 
                 float distance = Vector3.Distance(playerPosition - new Vector3(0.5f, 0.5f, 0f), TileToWorld(pos));
-                Color pixelColor = _fowTexture.GetPixel(pos.x, pos.y);
+                Color pixelColor = FoWTexture.GetPixel(pos.x, pos.y);
                 Color targetColor = pixelColor;
                 float fuzzRange = 2f;
                 float vis = visibility[x - fowBounds.xMin, y - fowBounds.yMin];
@@ -133,11 +154,6 @@ public class FogOfWar : MonoBehaviour
                 {
                     targetColor.r = 1f;
                     //targetColor.g = 1f;
-
-                    if (tileType.HasFlag(TileType.Wall))
-                    {
-                        targetColor.b = 1f;
-                    }
                 }
                 else if (distance > _viewRange)
                 {
@@ -148,16 +164,28 @@ public class FogOfWar : MonoBehaviour
                     float frac = (_viewRange - distance) / fuzzRange;
                     targetColor.r = frac;
                     //targetColor.g = Mathf.Max(pixelColor.g, frac);
+                }
 
-                    if (tileType.HasFlag(TileType.Wall) && frac > 0.5f)
+                targetColor.r *= vis;
+                targetColor.g = Mathf.Max(targetColor.g, targetColor.r);
+
+                if (targetColor.r > 0f)
+                {
+                    if(x == tilePosition.x && y == tilePosition.y)
                     {
-                        targetColor.b = 1f;
+                        targetColor.b = 1.0f;
+                    }
+                    else if (tileType.HasFlag(TileType.Wall))
+                    {
+                        targetColor.b = 0.75f;
+                    }
+                    else if (tileType.HasFlag(TileType.Floor))
+                    {
+                        targetColor.b = 0.5f;
                     }
                 }
-                targetColor.r *= vis;
-                targetColor.g = Mathf.Max(targetColor.r, targetColor.g);
 
-                _fowTexture.SetPixel(pos.x, pos.y, targetColor);
+                FoWTexture.SetPixel(pos.x, pos.y, targetColor);
             }
         }
 
@@ -174,9 +202,9 @@ public class FogOfWar : MonoBehaviour
 
     private void SetTexture()
     {
-        _fowTexture.Apply();
+        FoWTexture.Apply();
         fogOfWarRenderer.GetPropertyBlock(_mpb);
-        _mpb.SetTexture(_textureID, _fowTexture);
+        _mpb.SetTexture(_textureID, FoWTexture);
         fogOfWarRenderer.SetPropertyBlock(_mpb);
     }
 }

@@ -20,6 +20,7 @@ public class PlayerUI : MonoBehaviour
     public Image currentHealthImage;
     public RectTransform healthMarkersObject;
     public RectTransform healthBarObject;
+    public RawImage minimapObject;
 
     public int healthPerPixel = 2;
 
@@ -46,6 +47,14 @@ public class PlayerUI : MonoBehaviour
     private void Start()
     {
         _originalPosition = healthBarObject.anchoredPosition;
+    }
+
+    private void Update()
+    {
+        if(minimapObject.texture != FogOfWar.Instance.FoWTexture)
+        {
+            minimapObject.texture = FogOfWar.Instance.FoWTexture;
+        }
     }
 
     private void FixedUpdate()
