@@ -92,7 +92,7 @@ MonoBehaviour:
   _explosionPrefab: {fileID: 895976179499023227, guid: 0c721c7fa8181604ba893146488470a2,
     type: 3}
   _explosionRadius: 2
-  _explosionDamage: 100
+  _explosionDamage: 300
 --- !u!1 &8677906720541102056
 GameObject:
   m_ObjectHideFlags: 0
