@@ -55,6 +55,16 @@ public class PlayerUI : MonoBehaviour
         {
             minimapObject.texture = FogOfWar.Instance.FoWTexture;
         }
+
+        Rect uvRect = minimapObject.uvRect;
+        uvRect.width = minimapObject.rectTransform.sizeDelta.x / minimapObject.texture.width;
+        uvRect.height = minimapObject.rectTransform.sizeDelta.y / minimapObject.texture.height;
+        Vector3Int playerTilePosition = FogOfWar.Instance.WorldToTile(Main.Instance.player.transform.position);
+        uvRect.x = playerTilePosition.x / (float)minimapObject.texture.width - uvRect.width / 2f;
+        uvRect.y = playerTilePosition.y / (float)minimapObject.texture.height - uvRect.height / 2f;
+
+        minimapObject.uvRect = uvRect;
+
     }
 
     private void FixedUpdate()

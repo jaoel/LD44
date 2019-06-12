@@ -109,12 +109,12 @@ public class FogOfWar : MonoBehaviour
         }
     }
 
-    private Vector3Int WorldToTile(Vector3 worldPos)
+    public Vector3Int WorldToTile(Vector3 worldPos)
     {
         return worldPos.ToVector3Int() - _origin;
     }
 
-    private Vector3 TileToWorld(Vector3Int tilePos)
+    public Vector3 TileToWorld(Vector3Int tilePos)
     {
         return tilePos + _origin;
     }
