@@ -79,13 +79,17 @@ public class PlayerUI : MonoBehaviour
         if (Keybindings.UIExpandMinimap)
         {
             minimapExpanded = !minimapExpanded;
-            if (!minimapExpanded)
+            if (minimapExpanded)
             {
-                DOTween.To(() => minimapExpandedAmount, x => minimapExpandedAmount = x, 0f, minimapExpandDuration).OnUpdate(OnTweenUpdate).SetEase(Ease.InOutSine);
+                Keybindings.DeactivateInputMode(Keybindings.InputMode.Player);
+                Keybindings.ActivateInputMode(Keybindings.InputMode.Minimap);
+                DOTween.To(() => minimapExpandedAmount, x => minimapExpandedAmount = x, 1f, minimapExpandDuration).OnUpdate(OnTweenUpdate).SetEase(Ease.InOutSine);
             }
             else
             {
-                DOTween.To(() => minimapExpandedAmount, x => minimapExpandedAmount = x, 1f, minimapExpandDuration).OnUpdate(OnTweenUpdate).SetEase(Ease.InOutSine);
+                Keybindings.DeactivateInputMode(Keybindings.InputMode.Minimap);
+                Keybindings.ActivateInputMode(Keybindings.InputMode.Player);
+                DOTween.To(() => minimapExpandedAmount, x => minimapExpandedAmount = x, 0f, minimapExpandDuration).OnUpdate(OnTweenUpdate).SetEase(Ease.InOutSine);
             }
         }
 
