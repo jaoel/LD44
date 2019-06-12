@@ -97,7 +97,6 @@ public class PlayerUI : MonoBehaviour
         {
             minimapObject.texture = FogOfWar.Instance.FoWTexture;
         }
-        Debug.Log(minimapExpandedAmount);
 
         Rect uvRect = minimapObject.uvRect;
         uvRect.width = minimapObject.rectTransform.rect.width / minimapObject.texture.width;
