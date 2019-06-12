@@ -21,6 +21,8 @@ public class PlayerUI : MonoBehaviour
     public RectTransform healthMarkersObject;
     public RectTransform healthBarObject;
     public RawImage minimapObject;
+    public RectTransform minimapMinimizedObject;
+    public RectTransform minimapExpandedObject;
 
     public int healthPerPixel = 2;
 
@@ -37,16 +39,35 @@ public class PlayerUI : MonoBehaviour
 
     private int _currentLevel = -1;
 
+    private bool minimapExpanded = false;
+    private float minimapExpandedAmount = 0f;
+    private float minimapExpandDuration = 0.25f;
+
     private void Awake()
     {
         _scaler = GetComponent<CanvasScaler>();
         _chargeMeterFill = chargeMeter.GetComponentInChildren<Image>();
     }
 
+    private void CopyRectTransform(RectTransform target, RectTransform from, RectTransform to, float amount = 1f)
+    {
+        target.anchoredPosition = Vector2.Lerp(from.anchoredPosition, to.anchoredPosition, amount);
+        target.anchorMin = Vector2.Lerp(from.anchorMin, to.anchorMin, amount);
+        target.anchorMax = Vector2.Lerp(from.anchorMax, to.anchorMax, amount);
+        target.offsetMin = Vector2.Lerp(from.offsetMin, to.offsetMin, amount);
+        target.offsetMax = Vector2.Lerp(from.offsetMax, to.offsetMax, amount);
+        target.pivot = Vector2.Lerp(from.pivot, to.pivot, amount);
+        target.sizeDelta = Vector2.Lerp(from.sizeDelta, to.sizeDelta, amount);
+    }
 
     private void Start()
     {
         _originalPosition = healthBarObject.anchoredPosition;
+    }
+
+    private void OnTweenUpdate()
+    {
+        CopyRectTransform(minimapObject.rectTransform, minimapMinimizedObject, minimapExpandedObject, minimapExpandedAmount);
     }
 
     private void Update()
@@ -55,15 +76,28 @@ public class PlayerUI : MonoBehaviour
         {
             return;
         }
+        if (Keybindings.UIExpandMinimap)
+        {
+            minimapExpanded = !minimapExpanded;
+            if (!minimapExpanded)
+            {
+                DOTween.To(() => minimapExpandedAmount, x => minimapExpandedAmount = x, 0f, minimapExpandDuration).OnUpdate(OnTweenUpdate).SetEase(Ease.InOutSine);
+            }
+            else
+            {
+                DOTween.To(() => minimapExpandedAmount, x => minimapExpandedAmount = x, 1f, minimapExpandDuration).OnUpdate(OnTweenUpdate).SetEase(Ease.InOutSine);
+            }
+        }
 
-        if(minimapObject.texture != FogOfWar.Instance.FoWTexture)
+        if (minimapObject.texture != FogOfWar.Instance.FoWTexture)
         {
             minimapObject.texture = FogOfWar.Instance.FoWTexture;
         }
+        Debug.Log(minimapExpandedAmount);
 
         Rect uvRect = minimapObject.uvRect;
-        uvRect.width = minimapObject.rectTransform.sizeDelta.x / minimapObject.texture.width;
-        uvRect.height = minimapObject.rectTransform.sizeDelta.y / minimapObject.texture.height;
+        uvRect.width = minimapObject.rectTransform.rect.width / minimapObject.texture.width;
+        uvRect.height = minimapObject.rectTransform.rect.height / minimapObject.texture.height;
         Vector3Int playerTilePosition = FogOfWar.Instance.WorldToTile(Main.Instance.player.transform.position);
         uvRect.x = playerTilePosition.x / (float)minimapObject.texture.width - uvRect.width / 2f;
         uvRect.y = playerTilePosition.y / (float)minimapObject.texture.height - uvRect.height / 2f;

@@ -54,6 +54,7 @@ public class FogOfWar : MonoBehaviour
         _size = new Vector3Int(Mathf.Max(floors.size.x, walls.size.x), Mathf.Max(floors.size.y, walls.size.y), 0);
         _origin = new Vector3Int(Mathf.Min(floors.origin.x, walls.origin.x), Mathf.Min(floors.origin.y, walls.origin.y), 0);
         FoWTexture = new Texture2D(_size.x, _size.y, TextureFormat.RGBA32, false, true);
+        FoWTexture.wrapMode = TextureWrapMode.Clamp;
 
         _tiles = new TileType[_size.x, _size.y];
         for(int y = 0; y < _size.y; y++)

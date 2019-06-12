@@ -10,4 +10,6 @@ class Keybindings {
     public static bool Use => Input.GetKey(KeyCode.E);
 
     public static Vector3 MousePosition => Input.mousePosition;
+
+    public static bool UIExpandMinimap => Input.GetKeyDown(KeyCode.Tab) || Input.GetKeyDown(KeyCode.M);
 }
