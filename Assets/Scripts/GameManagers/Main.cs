@@ -52,6 +52,11 @@ public class Main : MonoBehaviour
 
     private void Start()
     {
+    }
+
+    public void Initialize()
+    {
+        gameOver = false;
         Time.timeScale = 1.0f;
     }
 
@@ -77,25 +82,5 @@ public class Main : MonoBehaviour
             SoundManager.Instance.PlayUIButtonClick();
             MenuManager.Instance.PushMenu<PauseMenu>();
         }
-    }
-
-    public void LoadDungeon()
-    {
-        SceneManager.LoadScene("GameScene", LoadSceneMode.Single);
-    }
-
-    public void RestartGame()
-    {
-        SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex, LoadSceneMode.Single);
-    }
-
-    public void LoadHubworld()
-    {
-        SceneManager.LoadScene("HubworldScene", LoadSceneMode.Single);
-    }
-
-    public void QuitToMenu()
-    {
-        SceneManager.LoadScene("MainMenuScene", LoadSceneMode.Single);
     }
 }

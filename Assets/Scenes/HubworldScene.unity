@@ -240,7 +240,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0ce216f750ad8fe4e8f1c05d30defceb, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _playerContainer: {fileID: 302776924}
   _hubContainer: {fileID: 153639543}
   _dungeonMap: {fileID: 773814602}
 --- !u!1 &153639543
@@ -656,11 +655,6 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
-    - target: {fileID: 4262441227352632454, guid: 96a42674104d36e45b322d7ec5de295e,
-        type: 3}
-      propertyPath: gameState
-      value: 1
-      objectReference: {fileID: 0}
     - target: {fileID: 6971597466667337741, guid: 96a42674104d36e45b322d7ec5de295e,
         type: 3}
       propertyPath: walls
@@ -856,14 +850,13 @@ PrefabInstance:
       propertyPath: m_AnchorMax.y
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 4262441227352632454, guid: 96a42674104d36e45b322d7ec5de295e,
+        type: 3}
+      propertyPath: gameState
+      value: 1
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 96a42674104d36e45b322d7ec5de295e, type: 3}
---- !u!1 &302776924 stripped
-GameObject:
-  m_CorrespondingSourceObject: {fileID: 7810900122008608197, guid: 96a42674104d36e45b322d7ec5de295e,
-    type: 3}
-  m_PrefabInstance: {fileID: 302776923}
-  m_PrefabAsset: {fileID: 0}
 --- !u!114 &710610882 stripped
 MonoBehaviour:
   m_CorrespondingSourceObject: {fileID: 731663016239170735, guid: db99a6011e4d8214f81479290332dc10,
@@ -982,7 +975,7 @@ GameObject:
   - component: {fileID: 763035080}
   - component: {fileID: 763035079}
   m_Layer: 13
-  m_Name: Floors
+  m_Name: Floor
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -10815,7 +10808,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _dungeonMap: {fileID: 773814602}
   _hubContainer: {fileID: 153639543}
-  _playerContainer: {fileID: 302776924}
   _dungeons:
   - {fileID: 1507619939}
   _levelText: {fileID: 710610882}

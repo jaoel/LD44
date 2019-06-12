@@ -11,13 +11,13 @@ EditorBuildSettings:
   - enabled: 1
     path: Assets/Scenes/GameScene.unity
     guid: 0b6333697954fc94287c51ddd872e890
-  - enabled: 1
+  - enabled: 0
     path: Assets/Scenes/GraveyardScene.unity
     guid: eed2a9d86a59de541ae8a10d31493a82
-  - enabled: 1
+  - enabled: 0
     path: Assets/Scenes/HomeScene.unity
     guid: dfbfb7ca5de5bb847a69f9d1044c2b2c
-  - enabled: 1
+  - enabled: 0
     path: Assets/Scenes/ShopScene.unity
     guid: e81c2b7b2a8c677478f47c1c9afce2a4
   - enabled: 1

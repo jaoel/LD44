@@ -15,9 +15,6 @@ public class WorldMap : MonoBehaviour
     private GameObject _hubContainer;
 
     [SerializeField]
-    private GameObject _playerContainer;
-
-    [SerializeField]
     private List<OverworldDungeon> _dungeons;
 
     [SerializeField]
@@ -53,7 +50,7 @@ public class WorldMap : MonoBehaviour
 
             if (Input.GetMouseButton(0))
             {
-                SceneManager.LoadScene("GameScene", LoadSceneMode.Single);
+                GameSceneManager.Instance.LoadGameplayScene();
             }
         }
 
@@ -65,8 +62,8 @@ public class WorldMap : MonoBehaviour
 
     public void Return()
     {
+        GameSceneManager.Instance.TogglePlayerContainer(true);
         _hubContainer.SetActive(true);
-        _playerContainer.SetActive(true);
         _dungeonMap.SetActive(false);
 
         Cursor.visible = false;

@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class MapManager : MonoBehaviour 
 {
@@ -46,16 +47,29 @@ public class MapManager : MonoBehaviour
 
     private void Start()
     {
+    }
+
+    public void Initialize()
+    {
+        _player.ResetPlayer();
+
         if (Main.Instance.gameState == GameState.Gameplay)
         {
             _shopInstance = Instantiate(_shopRoomPrefab);
             LoadLevel();
+            ToggleFogOfWarEnabled(true);
         }
         else
         {
             GenerateFogOfWar();
             ToggleFogOfWarEnabled(false);
         }
+    }
+
+    public void Reset()
+    {
+        CurrentLevel = 0;
+        _currentMap = null;
     }
 
     private void OnDrawGizmos()
@@ -95,10 +109,13 @@ public class MapManager : MonoBehaviour
 
     private void GenerateFogOfWar()
     {
-        FogOfWar fogOfWar = GetComponent<FogOfWar>();
-        if (fogOfWar)
+        if (Main.Instance.gameState != GameState.MainMenu)
         {
-            fogOfWar.GenerateTexture();
+            FogOfWar fogOfWar = GetComponent<FogOfWar>();
+            if (fogOfWar)
+            {
+                fogOfWar.GenerateTexture();
+            }
         }
     }
 

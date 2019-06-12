@@ -21,9 +21,9 @@ public class GameOverMenu : Menu
 
     public void OnMainMenuClick()
     {
-        Main.Instance.QuitToMenu();
         SoundManager.Instance.PlayUIButtonClick();
         MenuManager.Instance.PopMenu();
+        GameSceneManager.Instance.LoadMainMenuScene();
     }
 
     public override void OnPressedEscape()
@@ -32,8 +32,8 @@ public class GameOverMenu : Menu
 
     public void OnRestartClick()
     {
-        Main.Instance.RestartGame();
         SoundManager.Instance.PlayUIButtonClick();
         MenuManager.Instance.PopMenu();
+        GameSceneManager.Instance.LoadGameplayScene();
     }
 }

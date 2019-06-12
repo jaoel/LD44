@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 using UnityEngine.Tilemaps;
 
 public class MapGenerator : MonoBehaviour
@@ -36,13 +37,20 @@ public class MapGenerator : MonoBehaviour
                 Debug.LogError("The scene needs a MapGenerator");
             }
 
-            _instance.Initialize();
             return _instance;
         }
     }
 
-    private void Initialize()
+    private void Awake()
     {
+
+    }
+
+    public void Initialize()
+    {
+        floors = GameObject.Find("Floor")?.GetComponent<Tilemap>();
+        walls = GameObject.Find("Walls")?.GetComponent<Tilemap>();
+
         _random = new MillerParkLCG();
         _timer = new Timer();
         _mapPainter = new MapPainter();

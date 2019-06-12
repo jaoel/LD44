@@ -34,7 +34,7 @@ public class PauseMenu : Menu
     {
         base.OnExit();
         Cursor.visible = false;
-        Time.timeScale = 1f;
+        Time.timeScale = 1.0f;
     }
 
     public void OnContinueClick()
@@ -46,8 +46,8 @@ public class PauseMenu : Menu
     public void OnRestartClick()
     {
         SoundManager.Instance.PlayUIButtonClick();
-        Main.Instance.RestartGame();
         MenuManager.Instance.PopMenu();
+        GameSceneManager.Instance.LoadGameplayScene();
     }
 
     public void OnOptionsClick()
@@ -59,14 +59,14 @@ public class PauseMenu : Menu
     public void OnHubworldClick()
     {
         SoundManager.Instance.PlayUIButtonClick();
-        Main.Instance.LoadHubworld();
+        GameSceneManager.Instance.LoadHubScene();
         MenuManager.Instance.PopMenu();
     }
 
     public void OnMainMenuClick()
     {
         SoundManager.Instance.PlayUIButtonClick();
-        Main.Instance.QuitToMenu();
         MenuManager.Instance.PopMenu();
+        GameSceneManager.Instance.LoadMainMenuScene();
     }
 }

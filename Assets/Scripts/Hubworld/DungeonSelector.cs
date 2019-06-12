@@ -9,9 +9,6 @@ using UnityEngine.SceneManagement;
 public class DungeonSelector : InteractiveObject
 {
     [SerializeField]
-    private GameObject _playerContainer;
-
-    [SerializeField]
     private GameObject _hubContainer;
 
     [SerializeField]
@@ -23,7 +20,8 @@ public class DungeonSelector : InteractiveObject
 
         Cursor.visible = true;
         
-        _playerContainer.SetActive(false);
+        GameSceneManager.Instance.TogglePlayerContainer(false);
+
         _hubContainer.SetActive(false);
         _dungeonMap.SetActive(true);
 

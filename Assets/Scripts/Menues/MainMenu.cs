@@ -40,7 +40,8 @@ public class MainMenu : Menu
     public void OnStartClick()
     {
         SoundManager.Instance.PlayUIButtonClick();
-        SceneManager.LoadScene("HubworldScene", LoadSceneMode.Single);
+        MenuManager.Instance.PopMenu();
+        GameSceneManager.Instance.LoadHubScene();
     }
 
 
