@@ -51,6 +51,11 @@ public class PlayerUI : MonoBehaviour
 
     private void Update()
     {
+        if (FogOfWar.Instance.FoWTexture == null)
+        {
+            return;
+        }
+
         if(minimapObject.texture != FogOfWar.Instance.FoWTexture)
         {
             minimapObject.texture = FogOfWar.Instance.FoWTexture;

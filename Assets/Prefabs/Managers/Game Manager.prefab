@@ -102,7 +102,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7751212de6c89dd47bcef8b860031f73, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  gameState: 2
+  gameState: 0
   player: {fileID: 0}
   gameOver: 0
   blackOverlay: {fileID: 0}

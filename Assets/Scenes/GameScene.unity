@@ -2322,5 +2322,15 @@ PrefabInstance:
       propertyPath: m_IsActive
       value: 1
       objectReference: {fileID: 0}
+    - target: {fileID: 4262441227352632454, guid: 96a42674104d36e45b322d7ec5de295e,
+        type: 3}
+      propertyPath: gameState
+      value: 4
+      objectReference: {fileID: 0}
+    - target: {fileID: 4950904004052259533, guid: 96a42674104d36e45b322d7ec5de295e,
+        type: 3}
+      propertyPath: initialMenu
+      value: 
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 96a42674104d36e45b322d7ec5de295e, type: 3}

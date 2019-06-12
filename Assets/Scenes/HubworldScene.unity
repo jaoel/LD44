@@ -855,6 +855,11 @@ PrefabInstance:
       propertyPath: gameState
       value: 1
       objectReference: {fileID: 0}
+    - target: {fileID: 4950904004052259533, guid: 96a42674104d36e45b322d7ec5de295e,
+        type: 3}
+      propertyPath: initialMenu
+      value: 
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 96a42674104d36e45b322d7ec5de295e, type: 3}
 --- !u!114 &710610882 stripped
