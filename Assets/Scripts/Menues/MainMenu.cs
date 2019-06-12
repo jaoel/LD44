@@ -41,6 +41,7 @@ public class MainMenu : Menu
     {
         SoundManager.Instance.PlayUIButtonClick();
         MenuManager.Instance.PopMenu();
+        Main.Instance.sessionData.LoadData();
         GameSceneManager.Instance.LoadHubScene();
     }
 

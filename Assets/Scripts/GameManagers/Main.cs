@@ -17,6 +17,7 @@ public enum GameState
 
 public class Main : MonoBehaviour
 {
+    public GameSessionData sessionData;
     public GameState gameState;
     public Player player;
     
@@ -47,6 +48,7 @@ public class Main : MonoBehaviour
 
     void Awake()
     {
+        sessionData = new GameSessionData();
         DOTween.Init();
     }
 
@@ -68,7 +70,7 @@ public class Main : MonoBehaviour
             return;
         }
 
-        if (!player.IsAlive)
+        if (!player.IsAlive && gameState != GameState.MainMenu)
         {
             MenuManager.Instance.PushMenu<GameOverMenu>();
         }
