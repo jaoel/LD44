@@ -488,7 +488,7 @@ public class MapGenerator : MonoBehaviour
 
             if (corridorBounds.Intersects(room.Cell, out RectInt area))
             {
-                if (area.width > 1 && area.height > 1)
+                if (area.width > 2 && area.height > 2)
                 {
                     room.Type = MapNodeType.Corridor;
                     _mapPainter.PaintRoom(room.Cell, _random.NextFloat() < parameters.CorridorRoomConnectionFactor);
