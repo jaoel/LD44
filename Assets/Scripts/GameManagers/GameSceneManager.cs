@@ -63,6 +63,11 @@ public class GameSceneManager : MonoBehaviour
 
     private void OnSceneLoaded(Scene scene, LoadSceneMode mode)
     {
+        if (Main.Instance.sessionData.PlayerMaxHealth == 0)
+        {
+            Main.Instance.sessionData.LoadData();
+        }
+
         MapManager.Instance.Reset();
 
         MapGenerator.Instance.Initialize();
@@ -92,6 +97,7 @@ public class GameSceneManager : MonoBehaviour
     {
         GameSceneManager.Instance.TogglePlayerContainer(true);
         Main.Instance.gameState = GameState.Hubworld;
+        Main.Instance.player.transform.position = Vector3.zero;
         Main.Instance.player.ResetPlayer();
         MapManager.Instance.ToggleFogOfWarEnabled(false);
         SceneManager.LoadScene("HubworldScene", LoadSceneMode.Single);
