@@ -176,8 +176,8 @@ public class MapManager : MonoBehaviour
         parameters.CorridorRoomConnectionFactor = 0.5f;
         parameters.MazeFactor = 0.15f;
 
-        parameters.MinCorridorWidth = 4;
-        parameters.MaxCorridorWidth = 5;
+        parameters.MinCorridorWidth = 5;
+        parameters.MaxCorridorWidth = 7;
 
         parameters.MinRoomDistance = 0;
         parameters.LockFactor = 0.2f;
