@@ -108,6 +108,7 @@ public class GameSceneManager : MonoBehaviour
         GameSceneManager.Instance.TogglePlayerContainer(false);
         MapManager.Instance.ToggleFogOfWarEnabled(false);
         Main.Instance.player.ResetPlayer();
+        Main.Instance.player.ClearWeapons();
         Main.Instance.gameState = GameState.MainMenu;
         MenuManager.Instance.PushMenu<MainMenu>();
         SceneManager.LoadScene("MainMenuScene", LoadSceneMode.Single);

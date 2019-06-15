@@ -16,9 +16,9 @@ public class Player : MonoBehaviour, IWeaponOwner, IBuffable
 
     public CharacterAnimation characterAnimation;
     public Weapon CurrentWeapon;
+    public int MaxWeaponCount;
+    private List<Weapon> _weapons = new List<Weapon>();
     public SpriteRenderer visual;
-
-    public int startHealth = 100;
 
     private int currentHealth;
     private int maxHealth;
@@ -132,6 +132,34 @@ public class Player : MonoBehaviour, IWeaponOwner, IBuffable
         return false;
     }
 
+    private void SwapWeapon()
+    {
+        Weapon newWeapon = null;
+        if (Keybindings.WeaponSlot1)
+        {
+            newWeapon = _weapons[0];
+        }
+
+        if (Keybindings.WeaponSlot2 && _weapons.Count > 1)
+        {
+            newWeapon = _weapons[1];
+        }
+
+        if (newWeapon != null)
+        {
+            CurrentWeapon.StopShooting();
+            CurrentWeapon = newWeapon;
+
+            if (CurrentWeapon.BulletsLeft == 0)
+            {
+                CurrentWeapon.TriggerReload();
+            }
+
+            CurrentWeapon.UpdatePlayerUI();
+            UIManager.Instance.playerUI.weaponImage.sprite = CurrentWeapon.uiImage;
+        }
+    }
+
     private void Update()
     {
         CalculateAnimation();
@@ -160,6 +188,8 @@ public class Player : MonoBehaviour, IWeaponOwner, IBuffable
         {
             CurrentWeapon?.TriggerReload();
         }
+
+        SwapWeapon();
     }
 
     void FixedUpdate()
@@ -377,6 +407,52 @@ public class Player : MonoBehaviour, IWeaponOwner, IBuffable
     void IWeaponOwner.Knockback(Vector2 direction, float force)
     {
         rigidbody.AddForce(direction.normalized * force);
+    }
+
+    public void AddWeapon(GameObject weaponPrefab)
+    {
+        if (_weapons == null)
+        {
+            _weapons = new List<Weapon>();
+        }
+
+        Weapon newWeapon = GameObject.Instantiate(weaponPrefab, transform).GetComponent<Weapon>();
+        newWeapon.SetOwner(this, true);
+
+        CurrentWeapon?.StopShooting();
+
+        if (_weapons.Count < MaxWeaponCount)
+        {
+            _weapons.Add(newWeapon);
+
+            CurrentWeapon = _weapons[_weapons.Count - 1];
+            Main.Instance.sessionData.Weapons.Add(weaponPrefab);
+        }
+        else
+        {
+            int index = _weapons.IndexOf(CurrentWeapon);
+
+            GameObject oldWeapon = _weapons[index].gameObject;
+            oldWeapon.SetActive(false);
+            Destroy(oldWeapon);
+
+            _weapons[index] = newWeapon;
+            CurrentWeapon = _weapons[index];
+
+            Main.Instance.sessionData.Weapons[index] = weaponPrefab;
+        }
+
+        UIManager.Instance.playerUI.weaponImage.sprite = CurrentWeapon.uiImage;
+    }
+
+    public void ClearWeapons()
+    {
+        _weapons.ForEach(x =>
+        {
+            Destroy(x.gameObject);
+        });
+
+        _weapons.Clear();
     }
 
     GameObject IWeaponOwner.GetGameObject()

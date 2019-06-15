@@ -8,6 +8,9 @@ class Keybindings {
     public static bool Attack => InputModes.HasFlag(InputMode.Player) && Input.GetMouseButton(0);
     public static bool Reload => InputModes.HasFlag(InputMode.Player) && Input.GetKey(KeyCode.R);
     public static bool Use => InputModes.HasFlag(InputMode.Player) && Input.GetKey(KeyCode.E);
+    public static bool WeaponSlot1 => InputModes.HasFlag(InputMode.Player) && Input.GetKey(KeyCode.Alpha1);
+    public static bool WeaponSlot2 => InputModes.HasFlag(InputMode.Player) && Input.GetKey(KeyCode.Alpha2);
+
     public static Vector3 MousePosition => Input.mousePosition;
     public static bool UIExpandMinimap => (Input.GetKeyDown(KeyCode.Tab) || Input.GetKeyDown(KeyCode.M));
 

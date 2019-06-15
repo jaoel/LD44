@@ -78,8 +78,8 @@ MonoBehaviour:
   invulnTime: 1
   characterAnimation: {fileID: 6271302632493112618}
   CurrentWeapon: {fileID: 0}
+  MaxWeaponCount: 2
   visual: {fileID: 3515325667913201493}
-  startHealth: 30
   firingRateModifier: 1
 --- !u!58 &138352305
 CircleCollider2D:

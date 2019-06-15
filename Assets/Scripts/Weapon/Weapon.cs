@@ -6,6 +6,7 @@ using DG.Tweening;
 public class Weapon : MonoBehaviour
 {
     public Sprite uiImage;
+    public int BulletsLeft => _bulletsLeft;
 
     //how long before weapon can shoot again
     [SerializeField]
@@ -68,12 +69,13 @@ public class Weapon : MonoBehaviour
     private float _adjustedCooldown;
     private float _currentCooldown;
     private float _currentChargeTime;
-    private float _bulletsLeft;
+    private int _bulletsLeft;
     private float _halfAngle;
     private float _degPerBullet;
     private bool _reloading;
     private bool _charging;
     private Coroutine _firingSequence;
+    private Coroutine _reloadSequence;
 
     private Color _reloadGoalColor = Color.green;
     private Color _chargeGoalColor = Color.cyan;
@@ -225,6 +227,15 @@ public class Weapon : MonoBehaviour
         {
             StopCoroutine(_firingSequence);
         }
+
+        if (_reloadSequence != null)
+        {
+            _reloading = false;
+            StopCoroutine(_reloadSequence);
+        }
+
+        UIManager.Instance.playerUI.SetChargeMeterColor(_clearColor);
+        UIManager.Instance.playerUI.chargeMeter.value = 0.0f;
     }
 
     private void Fire()
@@ -268,7 +279,7 @@ public class Weapon : MonoBehaviour
         _currentCooldown = 0.0f;
     }
 
-    private void UpdatePlayerUI()
+    public void UpdatePlayerUI()
     {
         if (_isPlayerOwned)
         {
@@ -285,7 +296,7 @@ public class Weapon : MonoBehaviour
             return;
         }
 
-        StartCoroutine(Reload());
+        _reloadSequence = StartCoroutine(Reload());
     }
 
     public virtual void StoppedShooting()

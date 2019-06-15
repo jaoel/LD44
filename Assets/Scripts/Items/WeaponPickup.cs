@@ -11,12 +11,6 @@ public class WeaponPickup : Item
 
     public override void ApplyEffect(GameObject owner)
     {
-        GameObject oldWeapon = owner.GetComponent<Player>().CurrentWeapon?.gameObject;
-        oldWeapon.SetActive(false);
-        Destroy(oldWeapon);
-
-        owner.GetComponent<Player>().CurrentWeapon = GameObject.Instantiate(weaponPrefab, owner.transform).GetComponent<Weapon>();
-        owner.GetComponent<Player>().CurrentWeapon.SetOwner(owner.GetComponent<Player>(), true);
-        UIManager.Instance.playerUI.weaponImage.sprite = owner.GetComponent<Player>().CurrentWeapon.uiImage;
+        owner.GetComponent<Player>().AddWeapon(weaponPrefab);
     }
 }

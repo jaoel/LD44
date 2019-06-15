@@ -9,27 +9,20 @@ using UnityEngine;
 public class GameSessionData
 {
     [SerializeField]
-    public Weapon defaultWeapon;
+    public GameObject defaultWeapon;
 
     [SerializeField]
     public int playerMaxHealth;
 
+    public List<GameObject> Weapons = new List<GameObject>();
+
 
     public void AddWeapons(Player player)
     {
-        if (player.CurrentWeapon == null)
+        if (Weapons.Count == 0)
         {
-            player.CurrentWeapon = GameObject.Instantiate(defaultWeapon, player.transform).GetComponent<Weapon>();
-            player.CurrentWeapon.SetOwner(player, true);
-            UIManager.Instance.playerUI.weaponImage.sprite = player.CurrentWeapon.uiImage;
+            player.AddWeapon(defaultWeapon);
         }
-
-        //if (player.CurrentWeapon != null)
-        //{
-        //    GameObject oldWeapon = player.CurrentWeapon?.gameObject;
-        //    oldWeapon.SetActive(false);
-        //    GameObject.Destroy(oldWeapon);
-        //}    
     }
 
     public void LoadData()
@@ -44,6 +37,6 @@ public class GameSessionData
 
     private void SetDefaultData()
     {
-        //playerMaxHealth = 30;
+        Weapons = new List<GameObject>();
     }
 }

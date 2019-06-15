@@ -940,7 +940,7 @@ PrefabInstance:
     - target: {fileID: 997353019, guid: fb3c90fd7da4a7e42b329cb2e0d69797, type: 3}
       propertyPath: sessionData.defaultWeapon
       value: 
-      objectReference: {fileID: -9134009920081623400, guid: 8ee9cd93c4e78ab4d882cd735fe33c4c,
+      objectReference: {fileID: 5074516897226881580, guid: fe8980b87054e1e4794848ff451c8fc9,
         type: 3}
     - target: {fileID: 515992213878927342, guid: fb3c90fd7da4a7e42b329cb2e0d69797,
         type: 3}

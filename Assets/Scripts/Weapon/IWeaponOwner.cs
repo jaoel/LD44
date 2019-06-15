@@ -11,4 +11,6 @@ public interface IWeaponOwner
     Vector2 GetBulletOrigin();
     void Knockback(Vector2 direction, float force);
     GameObject GetGameObject();
+
+    void AddWeapon(GameObject weaponPrefab);
 }
