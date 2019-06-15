@@ -34,6 +34,15 @@ public class GameOverMenu : Menu
     {
         SoundManager.Instance.PlayUIButtonClick();
         MenuManager.Instance.PopMenu();
-        GameSceneManager.Instance.LoadGameplayScene();
+
+        switch (Main.Instance.gameState)
+        {
+            case GameState.Hubworld:
+                GameSceneManager.Instance.LoadHubScene();
+                break;
+            case GameState.Gameplay:
+                GameSceneManager.Instance.LoadGameplayScene();
+                break;
+        }
     }
 }
