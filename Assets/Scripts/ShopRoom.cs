@@ -27,7 +27,7 @@ public class ShopRoom : MonoBehaviour
         {
             if (itemPrefab is WeaponPickup weaponPickup)
             {
-                return weaponPickup.weaponPrefab.GetComponent<Weapon>().uiImage != player.CurrentWeapon.uiImage;
+                return weaponPickup.weaponPrefab.GetComponent<Weapon>()?.uiImage != player.CurrentWeapon.uiImage;
             }
             else
             {

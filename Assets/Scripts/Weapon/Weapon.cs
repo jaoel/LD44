@@ -89,6 +89,8 @@ public class Weapon : MonoBehaviour
         _reloading = false;
         _halfAngle = _firingArc / 2.0f;
         _degPerBullet = _firingArc / _bulletsPerShot;
+
+        UpdatePlayerUI();
     }
 
     public void SetOwner(IWeaponOwner owner, bool isPlayerOwned = false)

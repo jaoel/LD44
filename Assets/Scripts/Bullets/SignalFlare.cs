@@ -31,11 +31,16 @@ public class SignalFlare : MonoBehaviour
     {
         yield return new WaitForSeconds(_timer);
 
-        List<Enemy> enemies = MapManager.Instance.CurrentMap.GetEnemiesInCircle(transform.position.ToVector2(), _explosionRadius);
-        enemies.ForEach(x =>
+        if (MapManager.Instance.CurrentMap != null)
         {
-            x.AddStatusEffect(Instantiate(_burningDebuff.gameObject, x.transform).GetComponent<BurningDebuff>());
-        });
+
+            List<Enemy> enemies = MapManager.Instance.CurrentMap.GetEnemiesInCircle(transform.position.ToVector2(), _explosionRadius);
+            enemies.ForEach(x =>
+            {
+                x.AddStatusEffect(Instantiate(_burningDebuff.gameObject, x.transform).GetComponent<BurningDebuff>());
+            });
+        }
+
 
         if ((transform.position - Main.Instance.player.transform.position).magnitude <= _explosionRadius)
         {

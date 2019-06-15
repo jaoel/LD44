@@ -11,7 +11,7 @@ public class WeaponPickup : Item
 
     public override void ApplyEffect(GameObject owner)
     {
-        GameObject oldWeapon = owner.GetComponent<Player>().CurrentWeapon.gameObject;
+        GameObject oldWeapon = owner.GetComponent<Player>().CurrentWeapon?.gameObject;
         oldWeapon.SetActive(false);
         Destroy(oldWeapon);
 

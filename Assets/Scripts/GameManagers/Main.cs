@@ -17,7 +17,7 @@ public enum GameState
 
 public class Main : MonoBehaviour
 {
-    public GameSessionData sessionData;
+    public GameSessionData sessionData = new GameSessionData();
     public GameState gameState;
     public Player player;
     
@@ -48,7 +48,6 @@ public class Main : MonoBehaviour
 
     void Awake()
     {
-        sessionData = new GameSessionData();
         DOTween.Init();
     }
 

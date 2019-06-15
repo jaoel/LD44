@@ -63,7 +63,7 @@ public class GameSceneManager : MonoBehaviour
 
     private void OnSceneLoaded(Scene scene, LoadSceneMode mode)
     {
-        if (Main.Instance.sessionData.PlayerMaxHealth == 0)
+        if (Main.Instance.sessionData.playerMaxHealth == 0)
         {
             Main.Instance.sessionData.LoadData();
         }

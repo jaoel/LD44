@@ -81,7 +81,9 @@ public class Player : MonoBehaviour, IWeaponOwner, IBuffable
 
     public void ResetPlayer()
     {
-        MaxHealth = Main.Instance.sessionData.PlayerMaxHealth;
+        MaxHealth = Main.Instance.sessionData.playerMaxHealth;
+        Main.Instance.sessionData.AddWeapons(this);
+
         Health = MaxHealth;
         _invulnTimer = float.MaxValue;
         velocity = Vector3.zero;
@@ -89,9 +91,9 @@ public class Player : MonoBehaviour, IWeaponOwner, IBuffable
         _skeletonKeys = new Queue<Key>();
         _statusEffects = new List<StatusEffect>();
 
-        CurrentWeapon.SetOwner(this, true);
-
-        UIManager.Instance.playerUI.weaponImage.sprite = CurrentWeapon.uiImage;
+        //CurrentWeapon.SetOwner(this, true);
+        //
+        //UIManager.Instance.playerUI.weaponImage.sprite = CurrentWeapon?.uiImage;
         UIManager.Instance.playerUI.SetGoldKey(false);
         UIManager.Instance.playerUI.RemoveSkeletonKey(_skeletonKeys.Count);
         UIManager.Instance.playerUI.chargeMeter.value = 0.0f;
@@ -139,7 +141,7 @@ public class Player : MonoBehaviour, IWeaponOwner, IBuffable
 
         if (!IsAlive || Main.Instance.Paused)
         {
-            CurrentWeapon.StoppedShooting();
+            CurrentWeapon?.StoppedShooting();
             return;
         }
 
@@ -147,16 +149,16 @@ public class Player : MonoBehaviour, IWeaponOwner, IBuffable
 
         if (Keybindings.Attack)
         {
-            CurrentWeapon.Shoot();
+            CurrentWeapon?.Shoot();
         }
         else if (!Keybindings.Attack)
         {
-            CurrentWeapon.StoppedShooting();
+            CurrentWeapon?.StoppedShooting();
         }
 
         if (Keybindings.Reload)
         {
-            CurrentWeapon.TriggerReload();
+            CurrentWeapon?.TriggerReload();
         }
     }
 
