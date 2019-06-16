@@ -41,17 +41,11 @@ TagManager:
   - name: Default
     uniqueID: 0
     locked: 0
-  - name: Map
+  - name: Background
     uniqueID: 1693365561
     locked: 0
-  - name: Object
+  - name: Foreground
     uniqueID: 2824082645
-    locked: 0
-  - name: Character
-    uniqueID: 3787768391
-    locked: 0
-  - name: Particles
-    uniqueID: 2234822735
     locked: 0
   - name: Overlay
     uniqueID: 1899000863

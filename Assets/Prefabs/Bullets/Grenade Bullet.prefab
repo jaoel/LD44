@@ -12,6 +12,7 @@ GameObject:
   - component: {fileID: -5089695432794804344}
   - component: {fileID: 1022070507353309843}
   - component: {fileID: -3827084654663179403}
+  - component: {fileID: 6582238156588532355}
   m_Layer: 10
   m_Name: Grenade Bullet
   m_TagString: Untagged
@@ -93,6 +94,17 @@ MonoBehaviour:
     type: 3}
   _explosionRadius: 2
   _explosionDamage: 300
+--- !u!210 &6582238156588532355
+SortingGroup:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7212268974970604102}
+  m_Enabled: 1
+  m_SortingLayerID: -1470884651
+  m_SortingLayer: 2
+  m_SortingOrder: 0
 --- !u!1 &8677906720541102056
 GameObject:
   m_ObjectHideFlags: 0
@@ -159,9 +171,9 @@ SpriteRenderer:
   m_AutoUVMaxDistance: 0.5
   m_AutoUVMaxAngle: 89
   m_LightmapParameters: {fileID: 0}
-  m_SortingLayerID: -507198905
-  m_SortingLayer: 3
-  m_SortingOrder: 2
+  m_SortingLayerID: 0
+  m_SortingLayer: 0
+  m_SortingOrder: 0
   m_Sprite: {fileID: -702417484383542198, guid: c8938335947156648b32e22257ccda21,
     type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}

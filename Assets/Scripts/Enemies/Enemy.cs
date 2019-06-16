@@ -42,9 +42,6 @@ public class Enemy : MonoBehaviour, IBuffable
     [SerializeField]
     protected ParticleSystemContainer _particleSystemContainer;
 
-    [SerializeField]
-    protected GameObject _minimapIcon;
-
     protected float _currentHealth;
     protected bool _hasAggro;
     protected Player _player;
@@ -237,7 +234,6 @@ public class Enemy : MonoBehaviour, IBuffable
     {
         _dieDirection = velocity;
         _rigidbody.velocity = _dieDirection.normalized * 2.5f;
-        _minimapIcon.SetActive(false);
 
         _collider.offset = new Vector2(_collider.offset.x, -0.3f);
         

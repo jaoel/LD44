@@ -30,7 +30,6 @@ public class ResurrectingEnemy : Enemy
         {
             _dieDirection = velocity;
             _rigidbody.velocity = _dieDirection.normalized * 2.5f;
-            _minimapIcon.SetActive(false);
 
             StartCoroutine(Resurrect());
         }
@@ -49,7 +48,6 @@ public class ResurrectingEnemy : Enemy
 
     protected virtual void Resurrection()
     {
-        _minimapIcon.SetActive(true);
         _currentHealth = _maxHealth;
         SoundManager.Instance.PlayMonsterAggro();
     }

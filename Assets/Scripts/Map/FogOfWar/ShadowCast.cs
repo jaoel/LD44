@@ -90,7 +90,7 @@ public static class ShadowCast
                 visibility[x, y] = visibilityTarget[x, y];
             }
         }
-        for (int y = 0; y < visibility.GetLength(1); y++)
+        for (int y = visibility.GetLength(1) - 1; y >= 0; y--)
         {
             if (bounds.y + y < 0 || bounds.y + y >= tiles.GetLength(1))
             {
@@ -107,6 +107,10 @@ public static class ShadowCast
                 if (visibility[x, y] > 0.4f && tiles[bounds.x + x, bounds.y + y].HasFlag(TileType.Wall))
                 {
                     visibility[x, y] = 1f;
+                    if(y + 1 < visibility.GetLength(1))
+                    {
+                        visibility[x, y + 1] = 1f;
+                    }
                 }
             }
         }
