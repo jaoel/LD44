@@ -14,13 +14,12 @@ public class GameSessionData
     [SerializeField]
     public int playerMaxHealth;
 
-    public List<GameObject> Weapons = new List<GameObject>();
     public List<int> shopTiers = new List<int>();
 
 
     public void AddWeapons(Player player)
     {
-        if (Weapons.Count == 0)
+        if (player.CurrentWeapon == null)
         {
             player.AddWeapon(defaultWeapon);
         }
@@ -38,7 +37,6 @@ public class GameSessionData
 
     private void SetDefaultData()
     {
-        Weapons = new List<GameObject>();
         shopTiers = new List<int>();
     }
 }

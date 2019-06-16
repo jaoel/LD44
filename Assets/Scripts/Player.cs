@@ -91,9 +91,6 @@ public class Player : MonoBehaviour, IWeaponOwner, IBuffable
         _skeletonKeys = new Queue<Key>();
         _statusEffects = new List<StatusEffect>();
 
-        //CurrentWeapon.SetOwner(this, true);
-        //
-        //UIManager.Instance.playerUI.weaponImage.sprite = CurrentWeapon?.uiImage;
         UIManager.Instance.playerUI.SetGoldKey(false);
         UIManager.Instance.playerUI.RemoveSkeletonKey(_skeletonKeys.Count);
         UIManager.Instance.playerUI.chargeMeter.value = 0.0f;
@@ -137,11 +134,19 @@ public class Player : MonoBehaviour, IWeaponOwner, IBuffable
         Weapon newWeapon = null;
         if (Keybindings.WeaponSlot1)
         {
+            if (_weapons.IndexOf(CurrentWeapon) == 0)
+            {
+                return;
+            }
             newWeapon = _weapons[0];
         }
 
         if (Keybindings.WeaponSlot2 && _weapons.Count > 1)
         {
+            if (_weapons.IndexOf(CurrentWeapon) == 1)
+            {
+                return;
+            }
             newWeapon = _weapons[1];
         }
 
@@ -426,7 +431,6 @@ public class Player : MonoBehaviour, IWeaponOwner, IBuffable
             _weapons.Add(newWeapon);
 
             CurrentWeapon = _weapons[_weapons.Count - 1];
-            Main.Instance.sessionData.Weapons.Add(weaponPrefab);
         }
         else
         {
@@ -438,8 +442,6 @@ public class Player : MonoBehaviour, IWeaponOwner, IBuffable
 
             _weapons[index] = newWeapon;
             CurrentWeapon = _weapons[index];
-
-            Main.Instance.sessionData.Weapons[index] = weaponPrefab;
         }
 
         UIManager.Instance.playerUI.weaponImage.sprite = CurrentWeapon.uiImage;
