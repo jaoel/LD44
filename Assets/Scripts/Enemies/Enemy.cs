@@ -235,7 +235,7 @@ public class Enemy : MonoBehaviour, IBuffable
         _dieDirection = velocity;
         _rigidbody.velocity = _dieDirection.normalized * 2.5f;
 
-        _collider.offset = new Vector2(_collider.offset.x, -0.3f);
+        _collider.offset = new Vector2(_collider.offset.x, 0.3f);
         
         if (_collider is CircleCollider2D)
         {
