@@ -3298,7 +3298,7 @@ TilemapRenderer:
   m_SortOrder: 2
   m_Mode: 1
   m_DetectChunkCullingBounds: 0
-  m_MaskInteraction: 0
+  m_MaskInteraction: 2
 --- !u!1001 &2508741444579282509
 PrefabInstance:
   m_ObjectHideFlags: 0
