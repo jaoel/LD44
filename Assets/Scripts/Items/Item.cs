@@ -1,7 +1,9 @@
-﻿using UnityEngine;
+﻿using System.Collections.Generic;
+using UnityEngine;
 
 public abstract class Item : MonoBehaviour
 {
+    public List<string> shopkeeperDescription = new List<string>(); 
     public int healthCost;
 
     public bool isShopItem = false;
@@ -16,11 +18,11 @@ public abstract class Item : MonoBehaviour
             if (isShopItem && !player.GodMode)
             {
                 player.MaxHealth -= healthCost;
-                Main.Instance.sessionData.UpdateSessionData(player);
             }
             if (player.Health > 0)
             {
                 ApplyEffect(owner);
+                Main.Instance.sessionData.UpdateSessionData(player);
             }
 
             if (player.Health <= 0)
@@ -40,6 +42,19 @@ public abstract class Item : MonoBehaviour
         if (collision.gameObject)
         {
             Apply(collision.gameObject);
+        }
+    }
+
+    public string GetShopkeeperDescription()
+    {
+        if (shopkeeperDescription.Count == 0)
+        {
+            return healthCost.ToString() + " blood";
+        }
+        else
+        {
+            string result = shopkeeperDescription[UnityEngine.Random.Range(0, shopkeeperDescription.Count)];
+            return result.Replace("%COST%", healthCost.ToString());
         }
     }
 }

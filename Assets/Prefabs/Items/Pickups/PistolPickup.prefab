@@ -45,6 +45,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7959ae297e381864b9726be7771d9827, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  shopkeeperDescription:
+  - Want to bust a cap in someones ass? %COST% blood, humie.
   healthCost: 10
   isShopItem: 0
   categoryIndex: -1

@@ -33,14 +33,14 @@ public class Shop : MonoBehaviour
                 if (weaponPickup != null)
                 {
                     weaponSlots[i].itemPrefab = weaponPickup;
-                    weaponSlots[i].InstantiateItem(itemContainer.transform);
+                    weaponSlots[i].GetComponentInChildren<ShopTrigger>().item = weaponSlots[i].InstantiateItem(itemContainer.transform);
                 }
             }
         }
         else
         {
             weaponSlots[1].itemPrefab = pistolPickup;
-            weaponSlots[1].InstantiateItem(itemContainer.transform);
+            weaponSlots[1].GetComponentInChildren<ShopTrigger>().item = weaponSlots[1].InstantiateItem(itemContainer.transform);
         }
     }
 }
