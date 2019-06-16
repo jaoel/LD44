@@ -16,6 +16,7 @@ public abstract class Item : MonoBehaviour
             if (isShopItem && !player.GodMode)
             {
                 player.MaxHealth -= healthCost;
+                Main.Instance.sessionData.UpdateSessionData(player);
             }
             if (player.Health > 0)
             {

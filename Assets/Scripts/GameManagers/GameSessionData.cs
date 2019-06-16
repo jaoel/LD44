@@ -15,6 +15,7 @@ public class GameSessionData
     public int playerMaxHealth;
 
     public List<GameObject> Weapons = new List<GameObject>();
+    public List<int> shopTiers = new List<int>();
 
 
     public void AddWeapons(Player player)
@@ -38,5 +39,6 @@ public class GameSessionData
     private void SetDefaultData()
     {
         Weapons = new List<GameObject>();
+        shopTiers = new List<int>();
     }
 }

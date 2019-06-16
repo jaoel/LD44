@@ -47,6 +47,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   healthCost: 30
   isShopItem: 0
+  categoryIndex: 2
+  tierIndex: 0
   weaponPrefab: {fileID: 5074516897226881580, guid: 8ee9cd93c4e78ab4d882cd735fe33c4c,
     type: 3}
 --- !u!61 &7979725692751591465

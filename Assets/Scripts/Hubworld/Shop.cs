@@ -8,7 +8,9 @@ using UnityEngine;
 
 public class Shop : MonoBehaviour
 {
-    public List<ShopItem> shopItems;
+    public Item pistolPickup;
+    public List<WeaponPickup> weaponShopItems = new List<WeaponPickup>();
+    public List<ShopItem> weaponSlots;
     public GameObject itemContainer;
 
     private void Awake()
@@ -23,12 +25,22 @@ public class Shop : MonoBehaviour
 
     private void SpawnShopItems()
     {
-        List<Item> shuffledShopItems = ItemManager.Instance.ToList().Shuffle();
-
-        for (int i = 0; i < shopItems.Count; i++)
+        if (Main.Instance.sessionData.shopTiers.Count > 0)
         {
-            shopItems[i].itemPrefab = shuffledShopItems[i % shuffledShopItems.Count];
-            shopItems[i].InstantiateItem(itemContainer.transform);
+            for(int i = 0; i < 3; i++)
+            {
+                WeaponPickup weaponPickup = weaponShopItems.SingleOrDefault(x => x.categoryIndex == i && x.tierIndex == Main.Instance.sessionData.shopTiers[i]);
+                if (weaponPickup != null)
+                {
+                    weaponSlots[i].itemPrefab = weaponPickup;
+                    weaponSlots[i].InstantiateItem(itemContainer.transform);
+                }
+            }
+        }
+        else
+        {
+            weaponSlots[1].itemPrefab = pistolPickup;
+            weaponSlots[1].InstantiateItem(itemContainer.transform);
         }
     }
 }
