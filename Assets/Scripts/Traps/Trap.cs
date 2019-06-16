@@ -5,7 +5,6 @@ public abstract class Trap : MonoBehaviour
     public TrapDescription description;
     public AudioSource audioSource;
     public SpriteRenderer spriteRenderer;
-    public GameObject minimapIcon;
 
     protected bool _triggered;
     protected float _triggerTimer;
@@ -28,7 +27,6 @@ public abstract class Trap : MonoBehaviour
         if (player != null && (!player.IsInvulnerable || description.triggerOnInvulnerable))
         {
             ApplyEffect(player, playerGO);
-            minimapIcon.SetActive(false);
         }
     }
 
@@ -51,7 +49,6 @@ public abstract class Trap : MonoBehaviour
     {
         audioSource.PlayOneShot(description.resetSound);
         spriteRenderer.sprite = description.nonTriggeredSprite;
-        minimapIcon.SetActive(true);
     }
 
     public void OnTriggerEnter2D(Collider2D collision)
