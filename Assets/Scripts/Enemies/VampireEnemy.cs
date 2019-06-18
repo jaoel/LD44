@@ -1,4 +1,5 @@
-﻿using UnityEngine;
+﻿using System.Collections.Generic;
+using UnityEngine;
 
 public class VampireEnemy : Enemy
 {
@@ -70,6 +71,22 @@ public class VampireEnemy : Enemy
                 SwitchForm(Form.Humanoid);
             }
         }
+    }
+
+    public override bool PlayerIsVisible(float viewDistance)
+    {
+        int layerMask = 0;
+        if (_hasAggro && _currentForm == Form.Humanoid)
+        {
+            layerMask = Layers.CombinedLayerMask(Layers.Map, Layers.Pits, Layers.Player);
+            viewDistance *= 3.0f;
+        }
+        else
+        {
+            layerMask = Layers.CombinedLayerMask(Layers.Map, Layers.Player);
+        }
+
+        return IsVisible(viewDistance, _player.transform.position.ToVector2(), layerMask, new List<int>() { Layers.Player });
     }
 
     protected override bool PlayAttackAnimation()
