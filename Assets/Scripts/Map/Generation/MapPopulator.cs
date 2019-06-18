@@ -529,8 +529,13 @@ public class MapPopulator
 
     private void Spawn(Map map, GameObject prefab, MapNode room)
     {
-        Vector3 spawnPos = map.GetRandomPositionInRoom(1, 1, room).ToVector3();
-        GameObject enemy = GameObject.Instantiate(prefab, new Vector3(spawnPos.x, spawnPos.y, 0.0f), Quaternion.identity);
+        Vector2 spawnPos = map.GetRandomPositionInRoom(1, 1, room).ToVector3();
+        if (spawnPos == Vector2.zero)
+        {
+            return;
+        }
+
+        GameObject enemy = GameObject.Instantiate(prefab, spawnPos, Quaternion.identity);
         map.AddEnemy(enemy);
         room.Enemies.Add(enemy);
         map.Enemies[map.Enemies.Count - 1].SetActive(false);
