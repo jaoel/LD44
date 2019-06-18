@@ -65,6 +65,8 @@ public class Enemy : MonoBehaviour, IBuffable
         _colorController = GetComponent<HurtBlink>();
         _itemDrops = new List<Item>();
         _statusEffects = new List<StatusEffect>();
+
+        _navigation.MoveTo(transform.position.ToVector2() + Utility.RandomPointOnCircleEdge(1.0f), true);
     }
 
     protected virtual void FixedUpdate()
