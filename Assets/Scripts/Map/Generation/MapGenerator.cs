@@ -195,7 +195,7 @@ public class MapGenerator : MonoBehaviour
                         overSizeNode.height += parameters.MinRoomDistance * 2;
                     }
 
-                    if (!overSizeNode.Intersects(map.Cells[j].Cell, out RectInt area))
+                    if (!overSizeNode.Overlaps(map.Cells[j].Cell))
                     {
                         continue;
                     }
@@ -241,31 +241,29 @@ public class MapGenerator : MonoBehaviour
         map.Bounds = new BoundsInt(xMin - 1, yMin - 1, 0, Mathf.Abs(xMax - xMin) + 1, Mathf.Abs(yMax - yMin) + 1, 0);
         map.CollisionMap = new int[map.Bounds.size.x, map.Bounds.size.y];
         
-        if (!regionsSeparated)
+       
+        for(int i = 0; i < map.Cells.Count; i++)
         {
-            for(int i = 0; i < map.Cells.Count; i++)
+            if (map.Cells[i].Type == MapNodeType.None)
             {
-                if (map.Cells[i].Type == MapNodeType.None)
+                continue;
+            }
+
+            for(int j = i + 1; j < map.Cells.Count; j++)
+            {
+                if (i == j)
                 {
                     continue;
                 }
 
-                for(int j = 0; j < map.Cells.Count; j++)
+                if (map.Cells[j].Type == MapNodeType.None)
                 {
-                    if (i == j)
-                    {
-                        continue;
-                    }
+                    continue;
+                }
 
-                    if (map.Cells[j].Type == MapNodeType.None)
-                    {
-                        continue;
-                    }
-
-                    if (map.Cells[i].Cell.Overlaps(map.Cells[j].Cell))
-                    {
-                        map.Cells[j].Type = MapNodeType.None;
-                    }
+                if (map.Cells[i].Cell.Overlaps(map.Cells[j].Cell))
+                {
+                    map.Cells[j].Type = MapNodeType.None;
                 }
             }
         }
@@ -738,6 +736,59 @@ public class MapGenerator : MonoBehaviour
         pits.SetTile(walls.cellBounds.max - new Vector3Int(1, 1, 1), null);
 
         List<BoundsInt> chokepoints = new List<BoundsInt>(map.ChokePoints);
+        List<RectInt> rooms = new List<RectInt>();
+
+        foreach(MapNode room in map.Cells)
+        {
+           if (_random.NextFloat() < parameters.PitFrequency)
+            {
+                rooms.Add(room.Cell);
+            }
+        }
+
+
+        for (int i = 0; i < map.ChokePoints.Count; i++)
+        {
+            chokepoints[i] = new BoundsInt(map.ChokePoints[i].position - new Vector3Int(1, 1, 0), map.ChokePoints[i].size + new Vector3Int(2, 2, 0));
+        }
+
+        float scale = 25.0f;
+        for(int x = walls.cellBounds.xMin; x < walls.cellBounds.xMax; x += 2)
+        {
+            for(int y = walls.cellBounds.yMin; y < walls.cellBounds.yMax; y += 2)
+            {
+                BoundsInt bounds = new BoundsInt(x, y, 0, 2, 2, 1);
+                BoundsInt wallCheck = new BoundsInt(x - 1, y - 1, 0, 4, 4, 1);
+                if (walls.GetTilesBlock(wallCheck).Any(wall => wall != null))
+                {
+                    continue;
+                }
+
+                if (!rooms.Any(cell => cell.Contains(new Vector2Int(x, y))))
+                {
+                    continue;
+                }
+
+                if (chokepoints.Any(choke => choke.Overlaps(bounds)))
+                {
+                    continue;
+                }
+
+                float xCoord = walls.cellBounds.xMin + x / (float)walls.cellBounds.size.x * scale;
+                float yCoord = walls.cellBounds.yMin + y / (float)walls.cellBounds.size.y * scale;
+
+                if (Mathf.PerlinNoise(xCoord, yCoord) < 0.5f)
+                {
+                    _mapPainter.PaintPit(bounds.ToRectInt(), false);
+                    map.UpdateCollisionMap(bounds.ToRectInt(), 2, false);
+                }
+            }
+        }
+
+        return;
+
+        /*
+        List<BoundsInt> chokepoints = new List<BoundsInt>(map.ChokePoints);
 
         for (int i = 0; i < map.ChokePoints.Count; i++)
         {
@@ -833,22 +884,22 @@ public class MapGenerator : MonoBehaviour
 
                 rectangles.Add(newRect);
 
-                if (rectangles[rectangles.Count - 1].xMin - 3 > map.Cells[i].Cell.xMin)
+                //if (rectangles[rectangles.Count - 1].xMin - 3 > map.Cells[i].Cell.xMin && edge.Item2 != left)
                 {
                     edges.Add(new Tuple<Vector2Int, int>(new Vector2Int(rectangles[rectangles.Count - 1].xMin, rectangles[rectangles.Count - 1].yMin), left));
                 }
 
-                if (rectangles[rectangles.Count - 1].yMin - 3 > map.Cells[i].Cell.yMin)
+                //if (rectangles[rectangles.Count - 1].yMin - 3 > map.Cells[i].Cell.yMin)
                 {
                     edges.Add(new Tuple<Vector2Int, int>(new Vector2Int(rectangles[rectangles.Count - 1].xMin, rectangles[rectangles.Count - 1].yMin), down));
                 }
 
-                if (rectangles[rectangles.Count - 1].xMax + 3 < map.Cells[i].Cell.xMax)
+                // (rectangles[rectangles.Count - 1].xMax + 3 < map.Cells[i].Cell.xMax)
                 {
                     edges.Add(new Tuple<Vector2Int, int>(new Vector2Int(rectangles[rectangles.Count - 1].xMax, rectangles[rectangles.Count - 1].yMin), right));
                 }
 
-                if (rectangles[rectangles.Count - 1].yMax + 3 > map.Cells[i].Cell.yMax)
+                //if (rectangles[rectangles.Count - 1].yMax + 3 > map.Cells[i].Cell.yMax)
                 {
                     edges.Add(new Tuple<Vector2Int, int>(new Vector2Int(rectangles[rectangles.Count - 1].xMin, rectangles[rectangles.Count - 1].yMax), up));
                 }
@@ -860,6 +911,7 @@ public class MapGenerator : MonoBehaviour
                 map.UpdateCollisionMap(bounds.ToRectInt(), 2, false);
             }
         }
+        */
     }
   
     private Vector2Int GenerateRandomSize(in MapGeneratorParameters parameters)

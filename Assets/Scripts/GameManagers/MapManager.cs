@@ -181,7 +181,7 @@ public class MapManager : MonoBehaviour
 
         parameters.MinRoomDistance = 0;
         parameters.LockFactor = 0.2f;
-        parameters.PitFrequency = 0.75f;
+        parameters.PitFrequency = 0.33f;
 
         _currentMap = MapGenerator.Instance.GenerateMap(seed, parameters, CurrentLevel);
 

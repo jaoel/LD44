@@ -85,6 +85,16 @@ public class MapPainter
 
     public void PaintPit(RectInt cell, bool paintWalls)
     {
+        BoundsInt floorCheck = cell.ToBoundsInt();
+        floorCheck.size += new Vector3Int(2, 2, 0);
+        floorCheck.position -= new Vector3Int(1, 1, 0);
+
+        TileBase[] floorTiles = _floors.GetTilesBlock(floorCheck);
+        if (floorTiles.Any(x => x == null))
+        {
+            return;
+        }
+
         Vector3Int pos = new Vector3Int(cell.xMin, cell.yMin, 0);
         Vector3Int size = new Vector3Int(cell.width, cell.height, 1);
 

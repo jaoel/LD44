@@ -68,7 +68,7 @@ public class MapPopulator
 
         _timer.Start();
 
-        //PlaceTraps(map, startAndGoal.Item1, player);
+        PlaceTraps(map, startAndGoal.Item1, player);
 
         _timer.Stop();
         _timer.Print("MapPopulator.PlaceTraps");
@@ -440,6 +440,11 @@ public class MapPopulator
             {
                 GameObject trapType = _trapContainer.GetRandomTrap();
                 Vector2 position = map.GetRandomPositionInRoom(3, 3, room);
+
+                if (position == Vector2.zero)
+                {
+                    continue;
+                }
 
                 Bounds bounds = new Bounds(position, new Vector3(3, 3));
                 bool intersects = false;

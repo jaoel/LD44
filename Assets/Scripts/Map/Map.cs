@@ -191,15 +191,41 @@ public class Map
         return room;
     }
 
-    public Vector2Int GetRandomPositionInRoom(int widthInTiles, int heightInTiles, MapNode room)
+    public Vector2Int GetRandomPositionInRoom(int widthInTiles, int heightInTiles, MapNode room, int attempts = 10)
     {
-        int halfWidth = (int)Mathf.Ceil(widthInTiles / 2.0f) + 1;
-        int halfHeight = (int)Mathf.Ceil(heightInTiles / 2.0f + 1);
+        while(attempts >= 0)
+        {
+            attempts--;
+            int halfWidth = (int)Mathf.Ceil(widthInTiles / 2.0f) + 1;
+            int halfHeight = (int)Mathf.Ceil(heightInTiles / 2.0f + 1);
 
-        int x = _random.Range(room.Cell.xMin + halfWidth, room.Cell.xMax - halfWidth);
-        int y = _random.Range(room.Cell.yMin + halfHeight, room.Cell.yMax - halfHeight);
+            int x = _random.Range(room.Cell.xMin + halfWidth, room.Cell.xMax - halfWidth);
+            int y = _random.Range(room.Cell.yMin + halfHeight, room.Cell.yMax - halfHeight);
 
-        return new Vector2Int(x, y);
+            BoundsInt bounds = new BoundsInt(x - halfWidth, y - halfHeight, 0, halfWidth * 2, halfHeight * 2, 0);
+            bool inCollision = false;
+            for (int i = 0; i < bounds.size.x; i++)
+            {
+                for (int j = 0; j < bounds.size.y; j++)
+                {
+                    if (CollisionMap[bounds.xMin - Bounds.xMin + i, bounds.yMin - Bounds.yMin + j] > 0)
+                    {
+                        inCollision = true;
+                        break;
+                    }
+                }
+
+                if (inCollision)
+                    break;
+            }
+
+            if (inCollision)
+                continue;
+
+            return new Vector2Int(x, y);
+        }
+
+        return new Vector2Int(0, 0);
     }
 
     public void DrawDebug()
