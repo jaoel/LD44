@@ -193,8 +193,8 @@ public class Map
 
     public Vector2 GetRandomPositionInRoom(int widthInTiles, int heightInTiles, MapNode room, int attempts = 10)
     {
-        int halfWidth = Mathf.Max(Mathf.RoundToInt(widthInTiles / 2.0f), 1);// + 1;
-        int halfHeight = Mathf.Max(Mathf.RoundToInt(heightInTiles / 2.0f), 1);// + 1);
+        int halfWidth = Mathf.Max(Mathf.RoundToInt(widthInTiles / 2.0f), 1);
+        int halfHeight = Mathf.Max(Mathf.RoundToInt(heightInTiles / 2.0f), 1);
         
         int startingPosX = _random.Range(room.Cell.xMin + halfWidth, room.Cell.xMax - halfWidth);
         int startingPosY = _random.Range(room.Cell.yMin + halfHeight, room.Cell.yMax - halfHeight);
@@ -203,7 +203,7 @@ public class Map
         int spawnY = startingPosY;
         while (true)
         {
-            BoundsInt bounds = new BoundsInt(spawnX - halfWidth, spawnY - halfHeight, 0, widthInTiles, heightInTiles, 0);
+            BoundsInt bounds = new BoundsInt(spawnX - halfWidth, spawnY - halfHeight, 0, halfWidth * 2, halfHeight * 2, 0);
         
             if (!HasCollisionIndex(bounds))
             {
@@ -213,15 +213,15 @@ public class Map
             {
                 spawnY += heightInTiles;
 
-                if (spawnY >= room.Cell.yMax)
+                if (spawnY >= room.Cell.yMax - halfHeight)
                 {
-                    spawnY = room.Cell.yMin;
+                    spawnY = room.Cell.yMin + halfHeight;
                     spawnX += widthInTiles;
                 }
 
-                if (spawnX >= room.Cell.xMax)
+                if (spawnX >= room.Cell.xMax - halfWidth)
                 {
-                    spawnX = room.Cell.xMin;
+                    spawnX = room.Cell.xMin + halfWidth;
                 }
 
                 float dist = (new Vector2(spawnX, spawnY) - new Vector2(startingPosX, startingPosY)).sqrMagnitude;
