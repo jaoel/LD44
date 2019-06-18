@@ -98,14 +98,14 @@ public class Map
         return closeEnemies;
     }
 
-    public Vector2Int GetPositionInMap(int widthInTiles, int heightInTiles, bool includeCorridorRooms, out MapNode room,
+    public Vector2 GetPositionInMap(int widthInTiles, int heightInTiles, bool includeCorridorRooms, out MapNode room,
         List<MapNode> excludedRooms = null)
     {
         room = GetRandomRoom(widthInTiles, heightInTiles, includeCorridorRooms, excludedRooms);
         return GetRandomPositionInRoom(widthInTiles, heightInTiles, room);
     }
 
-    public Vector2Int GetPositionInMap(int widthInTiles, int heightInTiles, bool includeCorridorRooms, 
+    public Vector2 GetPositionInMap(int widthInTiles, int heightInTiles, bool includeCorridorRooms, 
         List<MapNode> excludedRooms = null)
     {
         return GetRandomPositionInRoom(widthInTiles, heightInTiles, 
@@ -191,41 +191,47 @@ public class Map
         return room;
     }
 
-    public Vector2Int GetRandomPositionInRoom(int widthInTiles, int heightInTiles, MapNode room, int attempts = 10)
+    public Vector2 GetRandomPositionInRoom(int widthInTiles, int heightInTiles, MapNode room, int attempts = 10)
     {
-        while(attempts >= 0)
+        int halfWidth = Mathf.Max(Mathf.RoundToInt(widthInTiles / 2.0f), 1);// + 1;
+        int halfHeight = Mathf.Max(Mathf.RoundToInt(heightInTiles / 2.0f), 1);// + 1);
+        
+        int startingPosX = _random.Range(room.Cell.xMin + halfWidth, room.Cell.xMax - halfWidth);
+        int startingPosY = _random.Range(room.Cell.yMin + halfHeight, room.Cell.yMax - halfHeight);
+
+        int spawnX = startingPosX;
+        int spawnY = startingPosY;
+        while (true)
         {
-            attempts--;
-            int halfWidth = (int)Mathf.Ceil(widthInTiles / 2.0f) + 1;
-            int halfHeight = (int)Mathf.Ceil(heightInTiles / 2.0f + 1);
-
-            int x = _random.Range(room.Cell.xMin + halfWidth, room.Cell.xMax - halfWidth);
-            int y = _random.Range(room.Cell.yMin + halfHeight, room.Cell.yMax - halfHeight);
-
-            BoundsInt bounds = new BoundsInt(x - halfWidth, y - halfHeight, 0, halfWidth * 2, halfHeight * 2, 0);
-            bool inCollision = false;
-            for (int i = 0; i < bounds.size.x; i++)
+            BoundsInt bounds = new BoundsInt(spawnX - halfWidth, spawnY - halfHeight, 0, widthInTiles, heightInTiles, 0);
+        
+            if (!HasCollisionIndex(bounds))
             {
-                for (int j = 0; j < bounds.size.y; j++)
+                return new Vector2(spawnX, spawnY);
+            }
+            else
+            {
+                spawnY += heightInTiles;
+
+                if (spawnY >= room.Cell.yMax)
                 {
-                    if (CollisionMap[bounds.xMin - Bounds.xMin + i, bounds.yMin - Bounds.yMin + j] > 0)
-                    {
-                        inCollision = true;
-                        break;
-                    }
+                    spawnY = room.Cell.yMin;
+                    spawnX += widthInTiles;
                 }
 
-                if (inCollision)
-                    break;
+                if (spawnX >= room.Cell.xMax)
+                {
+                    spawnX = room.Cell.xMin;
+                }
+
+                float dist = (new Vector2(spawnX, spawnY) - new Vector2(startingPosX, startingPosY)).sqrMagnitude;
+                float range = widthInTiles - 0.5f;
+                if (dist < range * range)
+                {
+                    return Vector2.zero;
+                }
             }
-
-            if (inCollision)
-                continue;
-
-            return new Vector2Int(x, y);
         }
-
-        return new Vector2Int(0, 0);
     }
 
     public void DrawDebug()
@@ -396,6 +402,22 @@ public class Map
         }
 
         UpdateCollisionMapDebug(walls);
+    }
+
+    public bool HasCollisionIndex(BoundsInt bounds)
+    {
+        for (int i = 0; i < bounds.size.x; i++)
+        {
+            for (int j = 0; j < bounds.size.y; j++)
+            {
+                if(CollisionMap[bounds.xMin - Bounds.xMin + i, bounds.yMin - Bounds.yMin + j] > 0)
+                {
+                    return true;
+                }
+            }
+        }
+
+        return false;
     }
 
     public int GetCollisionIndex(int x, int y)

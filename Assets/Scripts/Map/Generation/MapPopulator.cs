@@ -239,12 +239,12 @@ public class MapPopulator
             });
 
             rooms.RemoveAll(x => x.Equals(target));
-            keyRoom = FindKeyRoom(spawnRoom, target, rooms);
+            keyRoom = FindKeyRoom(spawnRoom, target, rooms, map);
 
             Key newKey = null;
             if (goldKey)
             {
-                newKey = GameObject.Instantiate(_interactiveObjectContainer.goldKey, map.GetRandomPositionInRoom(1, 1, keyRoom).ToVector3(),
+                newKey = GameObject.Instantiate(_interactiveObjectContainer.goldKey, map.GetRandomPositionInRoom(1, 1, keyRoom, 100).ToVector3(),
                     Quaternion.identity).GetComponent<Key>();
 
                 map.AddInteractiveObject(newKey.gameObject);
@@ -262,7 +262,7 @@ public class MapPopulator
         return false;
     }
     
-    private MapNode FindKeyRoom(MapNode spawnRoom, MapNode target, List<MapNode> rooms, Map map = null)
+    private MapNode FindKeyRoom(MapNode spawnRoom, MapNode target, List<MapNode> rooms, Map map = null, bool doAstar= false)
     {
         List<Tuple<MapNode, float>> distances = new List<Tuple<MapNode, float>>();
 
@@ -289,9 +289,15 @@ public class MapPopulator
             List<MapNode> path = NavigationManager.Instance.AStar(spawnRoom, candidate, out float distance);
             distances.RemoveAt(0);
 
+            Vector2 pos = map.GetRandomPositionInRoom(1, 1, candidate);
+            if (pos == Vector2.zero)
+            {
+                continue;
+            }
+
             if (path != null)
             { 
-                if (map != null)
+                if (map != null && doAstar)
                 {
                     if (candidate.Locked)
                     {
@@ -383,7 +389,7 @@ public class MapPopulator
 
             foreach (MapNode lockedRoom in lockedRooms)
             {
-                keyRoom = FindKeyRoom(spawnRoom, lockedRoom, rooms, map);
+                keyRoom = FindKeyRoom(spawnRoom, lockedRoom, rooms, map, true);
 
                 Key newKey = GameObject.Instantiate(_interactiveObjectContainer.skeletonKey, map.GetRandomPositionInRoom(1, 1, keyRoom).ToVector3(),
                     Quaternion.identity).GetComponent<Key>();
