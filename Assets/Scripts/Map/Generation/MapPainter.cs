@@ -8,15 +8,19 @@ using UnityEngine.Tilemaps;
 
 public class MapPainter
 {
-    private TileContainer tileContainer;
-    private Tilemap floors;
-    private Tilemap walls;
+    private TileContainer _wallContainer;
+    private TileContainer _pitContainer;
+    private Tilemap _floors;
+    private Tilemap _walls;
+    private Tilemap _pits;
 
-    public void Initialize(TileContainer tileContainer_, Tilemap floors_, Tilemap walls_)
+    public void Initialize(TileContainer wallContainer, TileContainer pitContainer, Tilemap floors, Tilemap walls, Tilemap pits)
     {
-        tileContainer = tileContainer_;
-        floors = floors_;
-        walls = walls_;
+        _wallContainer = wallContainer;
+        _pitContainer = pitContainer;
+        _floors = floors;
+        _walls = walls;
+        _pits = pits;
     }
 
     public void PaintRoom(RectInt cell, bool paintWalls)
@@ -27,10 +31,10 @@ public class MapPainter
         TileBase[] tiles = new TileBase[size.x * size.y];
         for (int i = 0; i < size.x * size.y; i++)
         {
-            tiles[i] = tileContainer.FloorTiles[0];
+            tiles[i] = _wallContainer.FloorTiles[0];
         }
 
-        floors.SetTilesBlock(new BoundsInt(pos, size), tiles);
+        _floors.SetTilesBlock(new BoundsInt(pos, size), tiles);
 
         if (paintWalls)
         {
@@ -43,39 +47,99 @@ public class MapPainter
 
                 if (x == pos.x && y == pos.y)
                 {
-                    tiles[i] = tileContainer.BottomLeft;
+                    tiles[i] = _wallContainer.BottomLeft;
                 }
                 else if (x == pos.x && y == cell.yMax - 1)
                 {
-                    tiles[i] = tileContainer.TopLeft;
+                    tiles[i] = _wallContainer.TopLeft;
                 }
                 else if (x == cell.xMax - 1 && y == pos.y)
                 {
-                    tiles[i] = tileContainer.BottomRight;
+                    tiles[i] = _wallContainer.BottomRight;
                 }
                 else if (x == cell.xMax - 1 && y == cell.yMax - 1)
                 {
-                    tiles[i] = tileContainer.TopRight;
+                    tiles[i] = _wallContainer.TopRight;
                 }
                 else if (y == cell.yMax - 1)
                 {
-                    tiles[i] = tileContainer.TopMiddle;
+                    tiles[i] = _wallContainer.TopMiddle;
                 }
                 else if (y == pos.y)
                 {
-                    tiles[i] = tileContainer.BottomMiddle;
+                    tiles[i] = _wallContainer.BottomMiddle;
                 }
                 else if (x == cell.xMax - 1)
                 {
-                    tiles[i] = tileContainer.MiddleRight;
+                    tiles[i] = _wallContainer.MiddleRight;
                 }
                 else if (x == pos.x)
                 {
-                    tiles[i] = tileContainer.MiddleLeft;
+                    tiles[i] = _wallContainer.MiddleLeft;
                 }
             }
 
-            walls.SetTilesBlock(new BoundsInt(pos, size), tiles);
+            _walls.SetTilesBlock(new BoundsInt(pos, size), tiles);
+        }
+    }
+
+    public void PaintPit(RectInt cell, bool paintWalls)
+    {
+        Vector3Int pos = new Vector3Int(cell.xMin, cell.yMin, 0);
+        Vector3Int size = new Vector3Int(cell.width, cell.height, 1);
+
+        TileBase[] tiles = new TileBase[size.x * size.y];
+        for (int i = 0; i < size.x * size.y; i++)
+        {
+            tiles[i] = _pitContainer.FloorTiles[0];
+        }
+
+        _pits.SetTilesBlock(new BoundsInt(pos, size), tiles);
+
+        if (paintWalls)
+        {
+            for (int i = 0; i < size.x * size.y; i++)
+            {
+                tiles[i] = null;
+
+                int x = i % size.x + pos.x;
+                int y = i / size.x + pos.y;
+
+                if (x == pos.x && y == pos.y)
+                {
+                    tiles[i] = _pitContainer.BottomLeft;
+                }
+                else if (x == pos.x && y == cell.yMax - 1)
+                {
+                    tiles[i] = _pitContainer.TopLeft;
+                }
+                else if (x == cell.xMax - 1 && y == pos.y)
+                {
+                    tiles[i] = _pitContainer.BottomRight;
+                }
+                else if (x == cell.xMax - 1 && y == cell.yMax - 1)
+                {
+                    tiles[i] = _pitContainer.TopRight;
+                }
+                else if (y == cell.yMax - 1)
+                {
+                    tiles[i] = _pitContainer.TopMiddle;
+                }
+                else if (y == pos.y)
+                {
+                    tiles[i] = _pitContainer.BottomMiddle;
+                }
+                else if (x == cell.xMax - 1)
+                {
+                    tiles[i] = _pitContainer.MiddleRight;
+                }
+                else if (x == pos.x)
+                {
+                    tiles[i] = _pitContainer.MiddleLeft;
+                }
+            }
+
+            _pits.SetTilesBlock(new BoundsInt(pos, size), tiles);
         }
     }
 
@@ -96,7 +160,7 @@ public class MapPainter
                 }
 
                 map.CollisionMap[i, j] = 1;
-                walls.SetTile(new Vector3Int(x, y, 0), tile);
+                _walls.SetTile(new Vector3Int(x, y, 0), tile);
             }
         }
     }
@@ -105,25 +169,25 @@ public class MapPainter
     {
         Vector3Int pos = new Vector3Int(x, y, 0);
 
-        Tile middleRightWall = (Tile)walls.GetTile(pos + new Vector3Int(1, 0, 0));
-        Tile middleLeftWall = (Tile)walls.GetTile(pos - new Vector3Int(1, 0, 0));
-        Tile middleTopWall = (Tile)walls.GetTile(pos + new Vector3Int(0, 1, 0));
-        Tile middleBottomWall = (Tile)walls.GetTile(pos - new Vector3Int(0, 1, 0));
+        Tile middleRightWall = (Tile)_walls.GetTile(pos + new Vector3Int(1, 0, 0));
+        Tile middleLeftWall = (Tile)_walls.GetTile(pos - new Vector3Int(1, 0, 0));
+        Tile middleTopWall = (Tile)_walls.GetTile(pos + new Vector3Int(0, 1, 0));
+        Tile middleBottomWall = (Tile)_walls.GetTile(pos - new Vector3Int(0, 1, 0));
 
-        Tile middleLeftFloor = (Tile)floors.GetTile(pos - new Vector3Int(1, 0, 0));
-        Tile middleRightFloor = (Tile)floors.GetTile(pos + new Vector3Int(1, 0, 0));
-        Tile middleTopFloor = (Tile)floors.GetTile(pos + new Vector3Int(0, 1, 0));
-        Tile middleBottomFloor = (Tile)floors.GetTile(pos - new Vector3Int(0, 1, 0));
+        Tile middleLeftFloor = (Tile)_floors.GetTile(pos - new Vector3Int(1, 0, 0));
+        Tile middleRightFloor = (Tile)_floors.GetTile(pos + new Vector3Int(1, 0, 0));
+        Tile middleTopFloor = (Tile)_floors.GetTile(pos + new Vector3Int(0, 1, 0));
+        Tile middleBottomFloor = (Tile)_floors.GetTile(pos - new Vector3Int(0, 1, 0));
 
         if (middleLeftFloor != null && middleRightFloor != null && middleRightWall == null && middleLeftWall == null)
         {
-            walls.SetTile(pos, null);
+            _walls.SetTile(pos, null);
             return true;
         }
 
         if (middleTopFloor != null && middleBottomFloor != null && middleTopWall == null && middleBottomWall == null)
         {
-            walls.SetTile(pos, null);
+            _walls.SetTile(pos, null);
             return true;
         }
 
@@ -132,8 +196,8 @@ public class MapPainter
 
     private Tile GetTileByNeighbours(int x, int y, bool recursive = false, bool ignoreCurrent = false)
     {
-        TileBase currentFloorTile = floors.GetTile(new Vector3Int(x, y, 0));
-        Tile currentWallTile = (Tile)walls.GetTile(new Vector3Int(x, y, 0));
+        TileBase currentFloorTile = _floors.GetTile(new Vector3Int(x, y, 0));
+        Tile currentWallTile = (Tile)_walls.GetTile(new Vector3Int(x, y, 0));
 
         if (currentFloorTile == null)
         {
@@ -146,8 +210,8 @@ public class MapPainter
         }
 
         BoundsInt blockBounds = new BoundsInt(x - 1, y - 1, 0, 3, 3, 1);
-        TileBase[] wallBlock = walls.GetTilesBlock(blockBounds);
-        TileBase[] floorBlock = floors.GetTilesBlock(blockBounds);
+        TileBase[] wallBlock = _walls.GetTilesBlock(blockBounds);
+        TileBase[] floorBlock = _floors.GetTilesBlock(blockBounds);
 
         Tile floorBottomLeft = (Tile)floorBlock[0];
         Tile floorBottomMiddle = (Tile)floorBlock[1];
@@ -171,12 +235,12 @@ public class MapPainter
         {
             if (floorMiddleLeft == null)
             {
-                return tileContainer.MiddleLeft;
+                return _wallContainer.MiddleLeft;
             }
 
             if (floorMiddleRight == null)
             {
-                return tileContainer.MiddleRight;
+                return _wallContainer.MiddleRight;
 
             }
         }
@@ -185,60 +249,60 @@ public class MapPainter
         {
             if (floorBottomMiddle == null && floorTopMiddle != null)
             {
-                return tileContainer.BottomMiddle;
+                return _wallContainer.BottomMiddle;
             }
 
             if (floorTopMiddle == null && floorBottomMiddle != null)
             {
-                return tileContainer.TopMiddle;
+                return _wallContainer.TopMiddle;
             }
         }
 
         if (wallMiddleLeft != null)
         {
-            if (wallMiddleLeft == tileContainer.BottomMiddle || wallMiddleLeft == tileContainer.TopLeftOuter)
+            if (wallMiddleLeft == _wallContainer.BottomMiddle || wallMiddleLeft == _wallContainer.TopLeftOuter)
             {
-                if (wallBottomMiddle == tileContainer.MiddleLeft)
+                if (wallBottomMiddle == _wallContainer.MiddleLeft)
                 {
-                    return tileContainer.TopRightOuter;
+                    return _wallContainer.TopRightOuter;
                 }
 
                 if (floorMiddleRight == null && floorTopRight != null)
                 {
-                    return tileContainer.BottomRight;
+                    return _wallContainer.BottomRight;
                 }
             }
 
             if (wallBottomMiddle != null && floorTopMiddle == null && floorMiddleRight == null)
             {
-                return tileContainer.TopRight;
+                return _wallContainer.TopRight;
             }
 
             if (floorTopLeft == null && floorTopMiddle == null && floorTopRight == null && floorMiddleRight == null
                 && floorBottomMiddle != null && wallBottomLeft == null)
             {
-                return tileContainer.FloorTiles[3];
+                return _wallContainer.FloorTiles[3];
             }
 
             if (floorBottomLeft == null && wallTopMiddle == null && wallTopRight == null && wallBottomMiddle != null)
             {
-                return tileContainer.TopRightOuter;
+                return _wallContainer.TopRightOuter;
             }
         }
 
         if (wallBottomMiddle != null)
         {
-            if (wallBottomMiddle == tileContainer.MiddleRight)
+            if (wallBottomMiddle == _wallContainer.MiddleRight)
             {
                 if (wallTopLeft != null && floorMiddleRight == null)
                 {
-                    return tileContainer.TopRight;
+                    return _wallContainer.TopRight;
                 }
             }
 
             if (floorBottomRight == null && wallMiddleLeft == null && wallBottomLeft == null)
             {
-                return tileContainer.TopLeftOuter;
+                return _wallContainer.TopLeftOuter;
             }
         }
 
@@ -248,17 +312,17 @@ public class MapPainter
             {
                 if (wallBottomRight != null)
                 {
-                    return tileContainer.BottomRightOuter;
+                    return _wallContainer.BottomRightOuter;
                 }
 
                 if (wallBottomLeft == null && wallBottomRight == null && wallTopMiddle == null)
                 {
-                    return tileContainer.BottomRightOuter;
+                    return _wallContainer.BottomRightOuter;
                 }
 
                 if (wallBottomLeft == null && wallBottomRight == null && wallTopMiddle != null)
                 {
-                    return tileContainer.BottomRightOuter;
+                    return _wallContainer.BottomRightOuter;
                 }
             }
         }
@@ -272,19 +336,19 @@ public class MapPainter
         {
             if (GetTileByNeighbours(x + 1, y, true) != null && floorBottomRight == null)
             {
-                return tileContainer.TopLeftOuter;
+                return _wallContainer.TopLeftOuter;
             }
 
-            if (GetTileByNeighbours(x + 1, y, true) != null && (wallBottomMiddle == tileContainer.MiddleRight
-                || (wallBottomMiddle == tileContainer.BottomRight && floorBottomRight == null)))
+            if (GetTileByNeighbours(x + 1, y, true) != null && (wallBottomMiddle == _wallContainer.MiddleRight
+                || (wallBottomMiddle == _wallContainer.BottomRight && floorBottomRight == null)))
             {
-                return tileContainer.TopLeftOuter;
+                return _wallContainer.TopLeftOuter;
             }
 
-            if (wallBottomMiddle == null && wallTopRight != tileContainer.TopMiddle && GetTileByNeighbours(x - 1, y + 1) == null
+            if (wallBottomMiddle == null && wallTopRight != _wallContainer.TopMiddle && GetTileByNeighbours(x - 1, y + 1) == null
                 && GetTileByNeighbours(x + 1, y, true) != null && GetTileByNeighbours(x, y + 1, true) != null && floorTopRight == null)
             {
-                return tileContainer.BottomRightOuter;
+                return _wallContainer.BottomRightOuter;
             }
         }
 
@@ -292,29 +356,29 @@ public class MapPainter
         {
             if (wallBottomMiddle == null)
             {
-                if ((GetTileByNeighbours(x, y + 1, true) == tileContainer.MiddleLeft || GetTileByNeighbours(x, y + 1, true) == tileContainer.MiddleRight))
+                if ((GetTileByNeighbours(x, y + 1, true) == _wallContainer.MiddleLeft || GetTileByNeighbours(x, y + 1, true) == _wallContainer.MiddleRight))
                 {
                     if (floorBottomMiddle == null)
                     {
-                        return tileContainer.BottomRight;
+                        return _wallContainer.BottomRight;
                     }
                     else
                     {
-                        return tileContainer.BottomLeftOuter;
+                        return _wallContainer.BottomLeftOuter;
                     }
                 }
 
                 if (floorTopLeft == null && wallMiddleRight == null && GetTileByNeighbours(x, y + 1, true) != null)
                 {
-                    return tileContainer.BottomLeftOuter;
+                    return _wallContainer.BottomLeftOuter;
                 }
             }
 
-            if ((wallMiddleLeft == tileContainer.BottomMiddle || wallMiddleLeft == tileContainer.BottomRight)
-                && wallBottomMiddle == tileContainer.BottomLeft && GetTileByNeighbours(x + 1, y, true) == null
+            if ((wallMiddleLeft == _wallContainer.BottomMiddle || wallMiddleLeft == _wallContainer.BottomRight)
+                && wallBottomMiddle == _wallContainer.BottomLeft && GetTileByNeighbours(x + 1, y, true) == null
                 && GetTileByNeighbours(x, y + 1, true) == null)
             {
-                return tileContainer.TopRightOuter;
+                return _wallContainer.TopRightOuter;
             }
         }
 
@@ -327,19 +391,23 @@ public class MapPainter
         {
             for (int y = map.Bounds.yMin; y < map.Bounds.yMax; y++)
             {
+                bool paintWalls = true;
                 if (RemoveThinWalls(x, y))
+                {
+                    paintWalls = true;
+                }
+
+                Vector3Int pos = new Vector3Int(x, y, 0);
+                Tile currentWallTile = (Tile)_walls.GetTile(pos);
+                Tile currentPitTile = (Tile)_pits.GetTile(pos);
+
+                if (!paintWalls && currentPitTile == null)
                 {
                     continue;
                 }
 
-                Vector3Int pos = new Vector3Int(x, y, 0);
-                Tile currentWallTile = (Tile)walls.GetTile(pos);
-
-                Tile result = null;
-
                 BoundsInt blockBounds = new BoundsInt(x - 1, y - 1, 0, 3, 3, 1);
-                TileBase[] wallBlock = walls.GetTilesBlock(blockBounds);
-                TileBase[] floorBlock = floors.GetTilesBlock(blockBounds);
+                TileBase[] floorBlock = _floors.GetTilesBlock(blockBounds);
 
                 Tile floorBottomLeft = (Tile)floorBlock[0];
                 Tile floorBottomMid = (Tile)floorBlock[1];
@@ -350,176 +418,278 @@ public class MapPainter
                 Tile floorTopMid = (Tile)floorBlock[7];
                 Tile floorTopRight = (Tile)floorBlock[8];
 
-                Tile wallBottomLeft = (Tile)wallBlock[0];
-                Tile wallBottomMid = (Tile)wallBlock[1];
-                Tile wallBottomRight = (Tile)wallBlock[2];
-                Tile wallMiddleLeft = (Tile)wallBlock[3];
-                Tile wallMiddleRight = (Tile)wallBlock[5];
-                Tile wallTopLeft = (Tile)wallBlock[6];
-                Tile wallTopMid = (Tile)wallBlock[7];
-                Tile wallTopRight = (Tile)wallBlock[8];
-
-                if (currentWallTile != null)
+                if (paintWalls && currentWallTile != null)
                 {
-                    if (wallBlock.Where(tile => tile != null).Count() <= 1)
-                    {
-                        walls.SetTile(new Vector3Int(x, y, 0), null);
-                        continue;
-                    }
-
-                    if (wallMiddleLeft == null && wallBottomLeft == null && wallBottomMid == null
-                        && wallMiddleRight != null && wallTopMid != null)
-                    {
-                        if (floorBottomMid == null)
-                        {
-                            result = tileContainer.BottomLeft;
-                            walls.SetTile(new Vector3Int(x, y, 0), result);
-                            continue;
-                        }
-                        else
-                        {
-                            result = tileContainer.BottomRightOuter;
-                            walls.SetTile(new Vector3Int(x, y, 0), result);
-                            continue;
-                        }
-                    }
-
-                    if (wallMiddleLeft != null && wallBottomMid == null && wallBottomRight == null
-                        && wallMiddleRight == null && wallTopMid != null)
-                    {
-                        if (floorBottomMid == null)
-                        {
-                            result = tileContainer.BottomRight;
-                            walls.SetTile(new Vector3Int(x, y, 0), result);
-                            continue;
-                        }
-                        else
-                        {
-                            if (wallMiddleLeft == tileContainer.TopLeftOuter)
-                            {
-                                result = tileContainer.BottomRight;
-                                walls.SetTile(new Vector3Int(x, y, 0), result);
-                                continue;
-                            }
-                            else
-                            {
-                                result = tileContainer.BottomLeftOuter;
-                                walls.SetTile(new Vector3Int(x, y, 0), result);
-                                continue;
-                            }
-                        }
-                    }
-
-                    if (wallMiddleLeft == null && wallBottomMid != null && wallMiddleRight != null && wallTopMid == null)
-                    {
-                        if (floorTopMid == null)
-                        {
-                            result = tileContainer.TopLeft;
-                            walls.SetTile(new Vector3Int(x, y, 0), result);
-                            continue;
-                        }
-                        else
-                        {
-                            result = tileContainer.TopLeftOuter;
-                            walls.SetTile(new Vector3Int(x, y, 0), result);
-                            continue;
-                        }
-                    }
-
-                    if (wallMiddleLeft != null && wallBottomMid != null && wallMiddleRight == null)
-                    {
-                        if (wallTopMid == null)
-                        {
-                            if (floorTopMid == null)
-                            {
-                                result = tileContainer.TopRight;
-                                walls.SetTile(new Vector3Int(x, y, 0), result);
-                                continue;
-                            }
-                            else
-                            {
-                                result = tileContainer.TopRightOuter;
-                                walls.SetTile(new Vector3Int(x, y, 0), result);
-                                continue;
-                            }
-                        }
-                        else
-                        {
-                            if (wallBottomMid == tileContainer.MiddleRight || wallBottomMid == tileContainer.BottomRightOuter)
-                            {
-                                result = tileContainer.TopRight;
-                                walls.SetTile(new Vector3Int(x, y, 0), result);
-                                continue;
-                            }
-                            else if ((wallMiddleLeft == tileContainer.BottomMiddle || wallMiddleLeft == tileContainer.TopLeftOuter)
-                                && (wallTopMid == tileContainer.MiddleRight || wallTopMid == tileContainer.TopLeftOuter))
-                            {
-                                result = tileContainer.BottomRight;
-                                walls.SetTile(new Vector3Int(x, y, 0), result);
-                                continue;
-                            }
-                        }
-
-                    }
-
-                    if (wallMiddleLeft != null && wallBottomMid != null && wallMiddleRight != null)
-                    {
-                        if (floorTopMid == null && wallMiddleLeft == tileContainer.TopMiddle)
-                        {
-                            result = tileContainer.TopRight;
-                            walls.SetTile(new Vector3Int(x, y, 0), result);
-                            continue;
-                        }
-                        else if (floorTopMid == null && wallMiddleLeft == tileContainer.MiddleRight)
-                        {
-                            result = tileContainer.TopLeft;
-                            walls.SetTile(new Vector3Int(x, y, 0), result);
-                            continue;
-                        }
-                    }
-
-                    if (wallMiddleLeft != null && wallBottomMid == null && wallMiddleRight != null)
-                    {
-                        if (floorTopMid != null && floorTopRight == null && floorBottomMid == null)
-                        {
-                            result = tileContainer.BottomRight;
-                            walls.SetTile(new Vector3Int(x, y, 0), result);
-                            continue;
-                        }
-                    }
-
-                    if (currentWallTile != tileContainer.MiddleLeft && currentWallTile != tileContainer.MiddleRight
-                        && currentWallTile != tileContainer.TopMiddle && currentWallTile != tileContainer.BottomMiddle)
-                    {
-                        if (wallBottomMid != null && floorMiddleRight != null && floorMiddleLeft == null && wallMiddleRight == null)
-                        {
-                            result = tileContainer.MiddleLeft;
-                            walls.SetTile(new Vector3Int(x, y, 0), result);
-                            continue;
-                        }
-                        else if (wallMiddleLeft != null && floorBottomMid != null && wallBottomMid == null)
-                        {
-                            result = tileContainer.TopMiddle;
-                            walls.SetTile(new Vector3Int(x, y, 0), result);
-                            continue;
-                        }
-                        else if (wallMiddleLeft != null && floorTopMid != null && wallTopMid == null)
-                        {
-                            result = tileContainer.BottomMiddle;
-                            walls.SetTile(new Vector3Int(x, y, 0), result);
-                            continue;
-                        }
-                        else if (wallBottomMid != null && floorMiddleLeft != null && floorMiddleRight == null)
-                        {
-                            result = tileContainer.MiddleRight;
-                            walls.SetTile(new Vector3Int(x, y, 0), result);
-                            continue;
-                        }
-                    }
+                    TileBase[] wallBlock = _walls.GetTilesBlock(blockBounds);
+                    PostProcessTile(x, y, _walls, _wallContainer, currentWallTile, wallBlock, floorBottomMid, 
+                        floorMiddleLeft, floorMiddleRight, floorTopMid, floorTopRight);
+                }
+                
+                if (currentPitTile != null)
+                {
+                    PostProcessPits(x, y, blockBounds);
                 }
             }
         }
     }
+
+    private void PostProcessPits(int x, int y, BoundsInt blockBounds)
+    {
+        TileBase[] pitBlock = _pits.GetTilesBlock(blockBounds);
+
+        Tile bottomLeft = (Tile)pitBlock[0];
+        Tile bottomMid = (Tile)pitBlock[1];
+        Tile bottomRight = (Tile)pitBlock[2];
+        Tile middleLeft = (Tile)pitBlock[3];
+        Tile middleRight = (Tile)pitBlock[5];
+        Tile topLeft = (Tile)pitBlock[6];
+        Tile topMid = (Tile)pitBlock[7];
+        Tile topRight = (Tile)pitBlock[8];
+
+        if (topMid == null && middleRight != null && bottomMid != null && middleLeft == null)
+        {
+            _pits.SetTile(new Vector3Int(x, y, 0), _pitContainer.TopLeft);
+            return;
+        }
+
+        if (topMid == null && middleRight == null && bottomMid != null && middleLeft != null)
+        {
+            _pits.SetTile(new Vector3Int(x, y, 0), _pitContainer.TopRight);
+            return;
+        }
+
+        if (middleLeft == null && bottomMid == null && topMid != null && middleRight != null)
+        {
+            _pits.SetTile(new Vector3Int(x, y, 0), _pitContainer.BottomLeft);
+            return;
+        }
+
+        if (middleLeft != null && bottomMid == null && topMid != null && middleRight == null)
+        {
+            _pits.SetTile(new Vector3Int(x, y, 0), _pitContainer.BottomRight);
+            return;
+        }
+
+        if (middleLeft != null && middleRight != null && topMid == null && bottomMid != null)
+        {
+            _pits.SetTile(new Vector3Int(x, y, 0), _pitContainer.TopMiddle);
+            return;
+        }
+
+        if (middleLeft != null && middleRight != null && topMid != null && bottomMid == null)
+        {
+            _pits.SetTile(new Vector3Int(x, y, 0), _pitContainer.BottomMiddle);
+            return;
+        }
+
+        if (middleLeft != null && middleRight == null && topMid != null && bottomMid != null)
+        {
+            _pits.SetTile(new Vector3Int(x, y, 0), _pitContainer.MiddleRight);
+            return;
+        }
+
+        if (middleLeft == null && middleRight != null && topMid != null && bottomMid != null)
+        {
+            _pits.SetTile(new Vector3Int(x, y, 0), _pitContainer.MiddleLeft);
+            return;
+        }
+
+        if (bottomLeft == null && middleLeft != null && bottomMid != null)
+        {
+            _pits.SetTile(new Vector3Int(x, y, 0), _pitContainer.BottomLeftOuter);
+            return;
+        }
+
+        if (bottomRight == null && middleRight != null && bottomMid != null)
+        {
+            _pits.SetTile(new Vector3Int(x, y, 0), _pitContainer.BottomRightOuter);
+            return;
+        }
+
+        if (topLeft == null && middleLeft != null && topMid != null)
+        {
+            _pits.SetTile(new Vector3Int(x, y, 0), _pitContainer.TopLeftOuter);
+            return;
+        }
+
+        if (topRight == null && middleRight != null && topMid != null)
+        {
+            _pits.SetTile(new Vector3Int(x, y, 0), _pitContainer.TopRightOuter);
+            return;
+        }
+    }
+
+    private void PostProcessTile(int x, int y, Tilemap target, TileContainer tileContainer, Tile currentTile, TileBase[] tileBlock, 
+        Tile floorBottomMid, Tile floorMiddleLeft, Tile floorMiddleRight, Tile floorTopMid, Tile floorTopRight)
+    {
+        Tile result = null;
+
+        Tile bottomLeft = (Tile)tileBlock[0];
+        Tile bottomMid = (Tile)tileBlock[1];
+        Tile bottomRight = (Tile)tileBlock[2];
+        Tile middleLeft = (Tile)tileBlock[3];
+        Tile middleRight = (Tile)tileBlock[5];
+        Tile topLeft = (Tile)tileBlock[6];
+        Tile topMid = (Tile)tileBlock[7];
+        Tile topRight = (Tile)tileBlock[8];
+
+        if (tileBlock.Where(tile => tile != null).Count() <= 1)
+        {
+            target.SetTile(new Vector3Int(x, y, 0), null);
+            return;
+        }
+
+        if (middleLeft == null && bottomLeft == null && bottomMid == null
+            && middleRight != null && topMid != null)
+        {
+            if (floorBottomMid == null)
+            {
+                result = tileContainer.BottomLeft;
+                target.SetTile(new Vector3Int(x, y, 0), result);
+                return;
+            }
+            else
+            {
+                result = tileContainer.BottomRightOuter;
+                target.SetTile(new Vector3Int(x, y, 0), result);
+                return;
+            }
+        }
+
+        if (middleLeft != null && bottomMid == null && bottomRight == null
+            && middleRight == null && topMid != null)
+        {
+            if (floorBottomMid == null)
+            {
+                result = tileContainer.BottomRight;
+                target.SetTile(new Vector3Int(x, y, 0), result);
+                return;
+            }
+            else
+            {
+                if (middleLeft == tileContainer.TopLeftOuter)
+                {
+                    result = tileContainer.BottomRight;
+                    target.SetTile(new Vector3Int(x, y, 0), result);
+                    return;
+                }
+                else
+                {
+                    result = tileContainer.BottomLeftOuter;
+                    target.SetTile(new Vector3Int(x, y, 0), result);
+                    return;
+                }
+            }
+        }
+
+        if (middleLeft == null && bottomMid != null && middleRight != null && topMid == null)
+        {
+            if (floorTopMid == null)
+            {
+                result = tileContainer.TopLeft;
+                target.SetTile(new Vector3Int(x, y, 0), result);
+                return;
+            }
+            else
+            {
+                result = tileContainer.TopLeftOuter;
+                target.SetTile(new Vector3Int(x, y, 0), result);
+                return;
+            }
+        }
+
+        if (middleLeft != null && bottomMid != null && middleRight == null)
+        {
+            if (topMid == null)
+            {
+                if (floorTopMid == null)
+                {
+                    result = tileContainer.TopRight;
+                    target.SetTile(new Vector3Int(x, y, 0), result);
+                    return;
+                }
+                else
+                {
+                    result = tileContainer.TopRightOuter;
+                    target.SetTile(new Vector3Int(x, y, 0), result);
+                    return;
+                }
+            }
+            else
+            {
+                if (bottomMid == tileContainer.MiddleRight || bottomMid == tileContainer.BottomRightOuter)
+                {
+                    result = tileContainer.TopRight;
+                    target.SetTile(new Vector3Int(x, y, 0), result);
+                    return;
+                }
+                else if ((middleLeft == tileContainer.BottomMiddle || middleLeft == tileContainer.TopLeftOuter)
+                    && (topMid == tileContainer.MiddleRight || topMid == tileContainer.TopLeftOuter))
+                {
+                    result = tileContainer.BottomRight;
+                    target.SetTile(new Vector3Int(x, y, 0), result);
+                    return;
+                }
+            }
+
+        }
+
+        if (middleLeft != null && bottomMid != null && middleRight != null)
+        {
+            if (floorTopMid == null && middleLeft == tileContainer.TopMiddle)
+            {
+                result = tileContainer.TopRight;
+                target.SetTile(new Vector3Int(x, y, 0), result);
+                return;
+            }
+            else if (floorTopMid == null && middleLeft == tileContainer.MiddleRight)
+            {
+                result = tileContainer.TopLeft;
+                target.SetTile(new Vector3Int(x, y, 0), result);
+                return;
+            }
+        }
+
+        if (middleLeft != null && bottomMid == null && middleRight != null)
+        {
+            if (floorTopMid != null && floorTopRight == null && floorBottomMid == null)
+            {
+                result = tileContainer.BottomRight;
+                target.SetTile(new Vector3Int(x, y, 0), result);
+                return;
+            }
+        }
+
+        if (currentTile != tileContainer.MiddleLeft && currentTile != tileContainer.MiddleRight
+            && currentTile != tileContainer.TopMiddle && currentTile != tileContainer.BottomMiddle)
+        {
+            if (bottomMid != null && floorMiddleRight != null && floorMiddleLeft == null && middleRight == null)
+            {
+                result = tileContainer.MiddleLeft;
+                target.SetTile(new Vector3Int(x, y, 0), result);
+                return;
+            }
+            else if (middleLeft != null && floorBottomMid != null && bottomMid == null)
+            {
+                result = tileContainer.TopMiddle;
+                target.SetTile(new Vector3Int(x, y, 0), result);
+                return;
+            }
+            else if (middleLeft != null && floorTopMid != null && topMid == null)
+            {
+                result = tileContainer.BottomMiddle;
+                target.SetTile(new Vector3Int(x, y, 0), result);
+                return;
+            }
+            else if (bottomMid != null && floorMiddleLeft != null && floorMiddleRight == null)
+            {
+                result = tileContainer.MiddleRight;
+                target.SetTile(new Vector3Int(x, y, 0), result);
+                return;
+            }
+        }
+    }
+
 
     public void BuildVerticalDoorWalls(Map map, MapNode target, BoundsInt chokepoint)
     {
@@ -534,7 +704,7 @@ public class MapPainter
             BoundsInt limit = bounds;
             limit.x -= 2;
 
-            if (floors.GetTilesBlock(limit).Any(x => x != null) && !walls.GetTilesBlock(limit).Any(x => x != null))
+            if (_floors.GetTilesBlock(limit).Any(x => x != null) && !_walls.GetTilesBlock(limit).Any(x => x != null))
             {
                 drawArea.xMin -= 1;
                 PaintBox(drawArea.ToRectInt());
@@ -553,7 +723,7 @@ public class MapPainter
             BoundsInt limit = bounds;
             limit.x += 2;
 
-            if (floors.GetTilesBlock(limit).Any(x => x != null) && !walls.GetTilesBlock(limit).Any(x => x != null))
+            if (_floors.GetTilesBlock(limit).Any(x => x != null) && !_walls.GetTilesBlock(limit).Any(x => x != null))
             {
                 drawArea.xMax += 1;
                 PaintBox(drawArea.ToRectInt());
@@ -585,7 +755,7 @@ public class MapPainter
             BoundsInt limit = bounds;
             limit.y -= 2;
 
-            if (floors.GetTilesBlock(limit).Any(x => x != null) && !walls.GetTilesBlock(limit).Any(x => x != null))
+            if (_floors.GetTilesBlock(limit).Any(x => x != null) && !_walls.GetTilesBlock(limit).Any(x => x != null))
             {
                 drawArea.yMin -= 1;
                 PaintBox(drawArea.ToRectInt());
@@ -604,7 +774,7 @@ public class MapPainter
             BoundsInt limit = bounds;
             limit.y += 2;
 
-            if (floors.GetTilesBlock(limit).Any(x => x != null) && !walls.GetTilesBlock(limit).Any(x => x != null))
+            if (_floors.GetTilesBlock(limit).Any(x => x != null) && !_walls.GetTilesBlock(limit).Any(x => x != null))
             {
                 drawArea.yMax += 1;
                 PaintBox(drawArea.ToRectInt());
@@ -630,7 +800,7 @@ public class MapPainter
             tiles[i] = null;// tileContainer.FloorTiles[0];
         }
 
-        floors.SetTilesBlock(new BoundsInt(pos, size), tiles);
+        _floors.SetTilesBlock(new BoundsInt(pos, size), tiles);
 
         for (int i = 0; i < size.x * size.y; i++)
         {
@@ -641,38 +811,38 @@ public class MapPainter
 
             if (x == pos.x && y == pos.y)
             {
-                tiles[i] = tileContainer.BottomRightOuter;
+                tiles[i] = _wallContainer.BottomRightOuter;
             }
             else if (x == pos.x && y == cell.yMax - 1)
             {
-                tiles[i] = tileContainer.TopLeftOuter;
+                tiles[i] = _wallContainer.TopLeftOuter;
             }
             else if (x == cell.xMax - 1 && y == pos.y)
             {
-                tiles[i] = tileContainer.BottomLeftOuter;
+                tiles[i] = _wallContainer.BottomLeftOuter;
             }
             else if (x == cell.xMax - 1 && y == cell.yMax - 1)
             {
-                tiles[i] = tileContainer.TopRightOuter;
+                tiles[i] = _wallContainer.TopRightOuter;
             }
             else if (y == cell.yMax - 1)
             {
-                tiles[i] = tileContainer.BottomMiddle;
+                tiles[i] = _wallContainer.BottomMiddle;
             }
             else if (y == pos.y)
             {
-                tiles[i] = tileContainer.TopMiddle;
+                tiles[i] = _wallContainer.TopMiddle;
             }
             else if (x == cell.xMax - 1)
             {
-                tiles[i] = tileContainer.MiddleLeft;
+                tiles[i] = _wallContainer.MiddleLeft;
             }
             else if (x == pos.x)
             {
-                tiles[i] = tileContainer.MiddleRight;
+                tiles[i] = _wallContainer.MiddleRight;
             }
         }
 
-        walls.SetTilesBlock(new BoundsInt(pos, size), tiles);
+        _walls.SetTilesBlock(new BoundsInt(pos, size), tiles);
     }
 }

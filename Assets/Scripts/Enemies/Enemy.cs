@@ -178,13 +178,18 @@ public class Enemy : MonoBehaviour, IBuffable
 
     public virtual bool PlayerIsVisible(float viewDistance)
     {
+        int layerMask = 0;
         if (_hasAggro)
         {
+            layerMask = Layers.CombinedLayerMask(Layers.Map, Layers.Pits, Layers.Player);
             viewDistance *= 3.0f;
         }
+        else
+        {
+            layerMask = Layers.CombinedLayerMask(Layers.Map, Layers.Player);
+        }
 
-        return IsVisible(viewDistance, _player.transform.position.ToVector2(), Layers.CombinedLayerMask(Layers.Map, Layers.Player),
-            new List<int>() { Layers.Player });
+        return IsVisible(viewDistance, _player.transform.position.ToVector2(), layerMask, new List<int>() { Layers.Player });
     }
 
     protected virtual bool PlayAttackAnimation()

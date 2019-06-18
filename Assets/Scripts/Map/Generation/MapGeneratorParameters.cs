@@ -23,4 +23,5 @@ public class MapGeneratorParameters
 
     public int MinRoomDistance { get; set; }
     public float LockFactor { get; set; }
+    public float PitFrequency { get; set; }
 }

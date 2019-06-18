@@ -7,13 +7,15 @@ using UnityEngine.Tilemaps;
 
 public class MapGenerator : MonoBehaviour
 {
-    public TileContainer tileContainer;
+    public TileContainer wallContainer;
+    public TileContainer pitContainer;
     public InteractiveDungeonObject interactiveObjectContainer;
     public TrapContainer trapContainer;
     public SpawnableContainer spawnKeyframes;
 
     public Tilemap floors;
     public Tilemap walls;
+    public Tilemap pits;
 
     private MillerParkLCG _random;
     private Timer _timer;
@@ -50,11 +52,12 @@ public class MapGenerator : MonoBehaviour
     {
         floors = GameObject.Find("Floor")?.GetComponent<Tilemap>();
         walls = GameObject.Find("Walls")?.GetComponent<Tilemap>();
+        pits = GameObject.Find("Pits")?.GetComponent<Tilemap>();
 
         _random = new MillerParkLCG();
         _timer = new Timer();
         _mapPainter = new MapPainter();
-        _mapPainter.Initialize(tileContainer, floors, walls);
+        _mapPainter.Initialize(wallContainer, pitContainer, floors, walls, pits);
 
         _mapPopulator = new MapPopulator();
         _mapPopulator.Initialize(_random, interactiveObjectContainer, spawnKeyframes, trapContainer, _mapPainter);
@@ -80,10 +83,10 @@ public class MapGenerator : MonoBehaviour
         Debug.Log(seed);
 
         _timer.Start();
-        Map result = new Map(floors, walls, _random);
+        Map result = new Map(floors, walls, pits, _random);
 
         _random.SetSeed(seed);
-
+                                                                                                                                                                                                             
         GenerateCells(ref result, parameters);
         SeparateCells(ref result, parameters);
 
@@ -105,7 +108,9 @@ public class MapGenerator : MonoBehaviour
         {
             seed += 1;
             return GenerateMap(seed, parameters, level);
-        }      
+        }
+
+        GeneratePools(ref result, parameters);
 
         _timer.Stop();
         _timer.Print("MapGenerator.GenerateMap");
@@ -190,7 +195,7 @@ public class MapGenerator : MonoBehaviour
                         overSizeNode.height += parameters.MinRoomDistance * 2;
                     }
 
-                    if (!overSizeNode.Overlaps(map.Cells[j].Cell))
+                    if (!overSizeNode.Intersects(map.Cells[j].Cell, out RectInt area))
                     {
                         continue;
                     }
@@ -245,8 +250,13 @@ public class MapGenerator : MonoBehaviour
                     continue;
                 }
 
-                for(int j = i + 1; j < map.Cells.Count; j++)
+                for(int j = 0; j < map.Cells.Count; j++)
                 {
+                    if (i == j)
+                    {
+                        continue;
+                    }
+
                     if (map.Cells[j].Type == MapNodeType.None)
                     {
                         continue;
@@ -541,7 +551,7 @@ public class MapGenerator : MonoBehaviour
             TileBase[] wallTiles = new TileBase[size.x * size.y];
             for (int tileIndex = 0; tileIndex < size.x * size.y; tileIndex++)
             {
-                tiles[tileIndex] = tileContainer.FloorTiles[0];
+                tiles[tileIndex] = wallContainer.FloorTiles[0];
                 wallTiles[tileIndex] = null;
             }
 
@@ -720,6 +730,136 @@ public class MapGenerator : MonoBehaviour
         }
 
         return result;
+    }
+
+    private void GeneratePools(ref Map map, in MapGeneratorParameters parameters)
+    {
+        pits.SetTile(walls.cellBounds.min, null);
+        pits.SetTile(walls.cellBounds.max - new Vector3Int(1, 1, 1), null);
+
+        List<BoundsInt> chokepoints = new List<BoundsInt>(map.ChokePoints);
+
+        for (int i = 0; i < map.ChokePoints.Count; i++)
+        {
+            chokepoints[i] = new BoundsInt(map.ChokePoints[i].position - new Vector3Int(1, 1, 0), map.ChokePoints[i].size + new Vector3Int(2, 2, 0));
+        }
+
+        for(int i = 0; i < map.Cells.Count; i++)
+        {
+            if (map.Cells[i].Cell.width < 6 || map.Cells[i].Cell.height < 6)
+            {
+                continue;
+            }
+
+            //roll if pool should be generated
+            if (_random.Range(0.0f, 1.0f) < parameters.PitFrequency)
+            {
+                continue;
+            }
+
+            //get position of initial rectangle
+            Vector2 originPos = map.Cells[i].Cell.min + new Vector2Int(_random.Range(2, map.Cells[i].Cell.width - 4), _random.Range(2, map.Cells[i].Cell.height - 4));
+
+            //save rectangle to list
+            List<BoundsInt> rectangles = new List<BoundsInt>();
+            rectangles.Add(new BoundsInt(originPos.ToVector3().ToVector3Int(), new Vector3Int(2, 2, 1)));
+
+            int left = 0;
+            int down = 1;
+            int up = 2;
+            int right = 3;
+
+            List<Tuple<Vector2Int, int>> edges = new List<Tuple<Vector2Int, int>>();
+            if (rectangles[rectangles.Count - 1].xMin - 3 > map.Cells[i].Cell.xMin)
+            {
+                edges.Add(new Tuple<Vector2Int, int>(new Vector2Int(rectangles[rectangles.Count - 1].xMin, rectangles[rectangles.Count - 1].yMin), left));
+            }
+
+            if (rectangles[rectangles.Count - 1].yMin - 3 > map.Cells[i].Cell.yMin)
+            {
+                edges.Add(new Tuple<Vector2Int, int>(new Vector2Int(rectangles[rectangles.Count - 1].xMin, rectangles[rectangles.Count - 1].yMin), down));
+            }
+
+            if (rectangles[rectangles.Count - 1].xMax + 3 < map.Cells[i].Cell.xMax)
+            {
+                edges.Add(new Tuple<Vector2Int, int>(new Vector2Int(rectangles[rectangles.Count - 1].xMax, rectangles[rectangles.Count - 1].yMin), right));
+            }
+
+            if (rectangles[rectangles.Count - 1].yMax + 3 > map.Cells[i].Cell.yMax)
+            {
+                edges.Add(new Tuple<Vector2Int, int>(new Vector2Int(rectangles[rectangles.Count - 1].xMin, rectangles[rectangles.Count - 1].yMax), up));
+            }
+
+            float sizeFactor = map.Cells[i].Type == MapNodeType.Room ? 0.95f : 0.5f;
+
+            int minSize = 4;
+            while (_random.Range(0.0f, 1.0f) < sizeFactor || rectangles.Count < minSize)
+            {
+                if (edges.Count == 0)
+                {
+                    break;
+                }
+
+                Tuple<Vector2Int, int> edge = edges[_random.Range(0, edges.Count)];
+                BoundsInt newRect = new BoundsInt();
+                if (edge.Item2 == left)
+                {
+                    newRect = new BoundsInt(edge.Item1.x - 2, edge.Item1.y, 0, 2, 2, 1);
+                }
+                else if (edge.Item2 == down)
+                {
+                    newRect = new BoundsInt(edge.Item1.x, edge.Item1.y - 2, 0, 2, 2, 1);
+                }
+                else if(edge.Item2 == up)
+                {
+                    newRect = new BoundsInt(edge.Item1.x, edge.Item1.y, 0, 2, 2, 1);
+                }
+                else if(edge.Item2 == right)
+                {
+                    newRect = new BoundsInt(edge.Item1.x, edge.Item1.y, 0, 2, 2, 1);
+                }
+              
+                edges.Remove(edge);
+
+                if (rectangles.Any(x => x.Overlaps(newRect)) || chokepoints.Any(x => x.Overlaps(newRect)))
+                {
+                    continue;
+                }
+
+                if (walls.GetTilesBlock(newRect).Any(x => x != null))
+                {
+                    continue;
+                }
+
+                rectangles.Add(newRect);
+
+                if (rectangles[rectangles.Count - 1].xMin - 3 > map.Cells[i].Cell.xMin)
+                {
+                    edges.Add(new Tuple<Vector2Int, int>(new Vector2Int(rectangles[rectangles.Count - 1].xMin, rectangles[rectangles.Count - 1].yMin), left));
+                }
+
+                if (rectangles[rectangles.Count - 1].yMin - 3 > map.Cells[i].Cell.yMin)
+                {
+                    edges.Add(new Tuple<Vector2Int, int>(new Vector2Int(rectangles[rectangles.Count - 1].xMin, rectangles[rectangles.Count - 1].yMin), down));
+                }
+
+                if (rectangles[rectangles.Count - 1].xMax + 3 < map.Cells[i].Cell.xMax)
+                {
+                    edges.Add(new Tuple<Vector2Int, int>(new Vector2Int(rectangles[rectangles.Count - 1].xMax, rectangles[rectangles.Count - 1].yMin), right));
+                }
+
+                if (rectangles[rectangles.Count - 1].yMax + 3 > map.Cells[i].Cell.yMax)
+                {
+                    edges.Add(new Tuple<Vector2Int, int>(new Vector2Int(rectangles[rectangles.Count - 1].xMin, rectangles[rectangles.Count - 1].yMax), up));
+                }
+            }
+
+            foreach(BoundsInt bounds in rectangles)
+            {
+                _mapPainter.PaintPit(bounds.ToRectInt(), false);
+                map.UpdateCollisionMap(bounds.ToRectInt(), 2, false);
+            }
+        }
     }
   
     private Vector2Int GenerateRandomSize(in MapGeneratorParameters parameters)

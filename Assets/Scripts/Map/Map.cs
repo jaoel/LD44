@@ -31,9 +31,10 @@ public class Map
 
     private readonly Tilemap _floors;
     private readonly Tilemap _walls;
+    private readonly Tilemap _pits;
     private readonly LCG _random;
 
-    public Map(Tilemap floors, Tilemap walls, LCG random)
+    public Map(Tilemap floors, Tilemap walls, Tilemap pits, LCG random)
     {
         _drawCells = true;
         _drawDelaunay = false;
@@ -45,6 +46,7 @@ public class Map
 
         _floors = floors;
         _walls = walls;
+        _pits = pits;
         _random = random;
 
         InteractiveObjects = new List<GameObject>();
@@ -67,6 +69,7 @@ public class Map
     {
         _floors.ClearAllTiles();
         _walls.ClearAllTiles();
+        _pits.ClearAllTiles();
         GameObject.Find("CollisionMap").GetComponent<Tilemap>().ClearAllTiles();
 
         DestroyAllInteractiveObjects();
@@ -316,9 +319,10 @@ public class Map
         });
     }
 
-    public void UpdateCollisionMapDebug()
+    public void UpdateCollisionMapDebug(bool walls)
     {
-        Tilemap debug = GameObject.Find("CollisionMap").GetComponent<Tilemap>();
+        Tilemap debug = walls ? GameObject.Find("CollisionMap").GetComponent<Tilemap>() : GameObject.Find("PitCollisionMap").GetComponent<Tilemap>();
+        //Tilemap debug = GameObject.Find("CollisionMap").GetComponent<Tilemap>();
         debug.ClearAllTiles();
 
         for(int i = 0; i < CollisionMap.GetLength(0); i++)
@@ -327,9 +331,9 @@ public class Map
             {
                 int collisionIndex = CollisionMap[i, j];
 
-                if (collisionIndex > 0)
+                if (walls && collisionIndex == 1 || !walls && collisionIndex == 2)
                 {
-                    debug.SetTile(new Vector3Int(Bounds.xMin + i, Bounds.yMin + j, 0), MapGenerator.Instance.tileContainer.FloorTiles[0]);
+                    debug.SetTile(new Vector3Int(Bounds.xMin + i, Bounds.yMin + j, 0), MapGenerator.Instance.wallContainer.FloorTiles[0]);
                 }
             }
         }
@@ -346,7 +350,7 @@ public class Map
             {
                 for (int y = room.Cell.yMin; y < room.Cell.yMax; y++)
                 {
-                    debug.SetTile(new Vector3Int(x, y, 0), MapGenerator.Instance.tileContainer.FloorTiles[0]);
+                    debug.SetTile(new Vector3Int(x, y, 0), MapGenerator.Instance.wallContainer.FloorTiles[0]);
                     debug.SetTileFlags(new Vector3Int(x, y, 0), TileFlags.None);
                     debug.SetColor(new Vector3Int(x, y, 0), Utility.RGBAColor(207, 0, 15, 
                         Utility.ConvertRange(0.0f, 1.0f, 0.0f, 0.75f, room.SeclusionFactor)));
@@ -355,7 +359,7 @@ public class Map
         });
     }
 
-    public void UpdateCollisionMap(RectInt bounds, int value)
+    public void UpdateCollisionMap(RectInt bounds, int value, bool walls = true)
     {
         for(int i = 0; i < bounds.size.x; i++)
         {
@@ -365,7 +369,7 @@ public class Map
             }
         }
 
-        UpdateCollisionMapDebug();
+        UpdateCollisionMapDebug(walls);
     }
 
     public int GetCollisionIndex(int x, int y)

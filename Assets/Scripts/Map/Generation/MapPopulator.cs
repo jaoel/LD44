@@ -68,7 +68,7 @@ public class MapPopulator
 
         _timer.Start();
 
-        PlaceTraps(map, startAndGoal.Item1, player);
+        //PlaceTraps(map, startAndGoal.Item1, player);
 
         _timer.Stop();
         _timer.Print("MapPopulator.PlaceTraps");

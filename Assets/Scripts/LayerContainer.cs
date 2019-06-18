@@ -3,6 +3,7 @@
 public static class Layers
 {
     public static int Map = LayerMask.NameToLayer("Map");
+    public static int Pits = LayerMask.NameToLayer("Pits");
     public static int Player = LayerMask.NameToLayer("Player");
     public static int FriendlyBullet = LayerMask.NameToLayer("FriendlyBullet");
     public static int Enemy = LayerMask.NameToLayer("Enemy");
