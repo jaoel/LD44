@@ -37,5 +37,22 @@ public static class VectorExtension
         return new Vector2Int(Mathf.RoundToInt(a.x), Mathf.RoundToInt(a.y));
     }
 
+    public static Vector2 Rotate(this Vector2 v, float degrees)
+    {
+        float radians = degrees * Mathf.Deg2Rad;
+        float sin = Mathf.Sin(radians);
+        float cos = Mathf.Cos(radians);
+
+        float tx = v.x;
+        float ty = v.y;
+
+        return new Vector2(cos * tx - sin * ty, sin * tx + cos * ty);
+    }
+
+    public static float Cross(this Vector2 a, Vector2 b)
+    {
+        return a.x * b.y - a.y * b.x;
+    }
+
 }
 

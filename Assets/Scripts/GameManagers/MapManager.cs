@@ -10,6 +10,7 @@ public class MapManager : MonoBehaviour
     public Map CurrentMap => _currentMap;
 
     public int CurrentLevel;
+    public bool drawDebug = false;
 
     [SerializeField]
     private RestArea _restAreaPrefab;
@@ -95,10 +96,10 @@ public class MapManager : MonoBehaviour
         _currentMap = null;
         Destroy(_restAreaInstance);
     }
-
+    
     private void OnDrawGizmos()
     {
-        if (_currentMap != null)
+        if (drawDebug && _currentMap != null)
         {
             _currentMap.DrawDebug();
         }
@@ -138,7 +139,7 @@ public class MapManager : MonoBehaviour
             FogOfWar fogOfWar = GetComponent<FogOfWar>();
             if (fogOfWar)
             {
-                fogOfWar.GenerateTexture();
+                fogOfWar.GenerateFogOfWar();
             }
         }
     }
