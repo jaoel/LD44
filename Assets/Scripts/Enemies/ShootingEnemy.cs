@@ -99,7 +99,7 @@ public class ShootingEnemy : Enemy, IWeaponOwner
 
     Vector2 IWeaponOwner.GetBulletOrigin()
     {
-        return transform.position.ToVector2();
+        return transform.position.ToVector2() + new Vector2(AimVector.normalized.x / 2.0f, 0.35f);
     }
 
     void IWeaponOwner.Knockback(Vector2 direction, float force)

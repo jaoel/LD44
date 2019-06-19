@@ -406,7 +406,7 @@ public class Player : MonoBehaviour, IWeaponOwner, IBuffable
 
     Vector2 IWeaponOwner.GetBulletOrigin()
     {
-        return transform.position;
+        return transform.position.ToVector2() + new Vector2(aimVector.normalized.x / 2.0f, 0.35f);
     }
 
     void IWeaponOwner.Knockback(Vector2 direction, float force)
