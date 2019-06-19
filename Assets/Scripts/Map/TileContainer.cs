@@ -7,10 +7,16 @@ using UnityEngine;
 using UnityEngine.Tilemaps;
 
 
+[Serializable]
+public class TileProbabilityList : ProbabilityList<Tile>
+{
+
+}
+
 [CreateAssetMenu]
 public class TileContainer : ScriptableObject
 {
-    public List<Tile> FloorTiles;
+    public TileProbabilityList FloorTiles;
     public Tile TopRight;
     public Tile TopMiddle;
     public Tile TopLeft;

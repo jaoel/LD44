@@ -365,7 +365,7 @@ public class Map
 
                 if (walls && collisionIndex == 1 || !walls && collisionIndex == 2)
                 {
-                    debug.SetTile(new Vector3Int(Bounds.xMin + i, Bounds.yMin + j, 0), MapGenerator.Instance.wallContainer.FloorTiles[0]);
+                    debug.SetTile(new Vector3Int(Bounds.xMin + i, Bounds.yMin + j, 0), MapGenerator.Instance.wallContainer.FloorTiles.ElementAt(0).value); //FloorTiles[0]);
                 }
             }
         }
@@ -382,7 +382,7 @@ public class Map
             {
                 for (int y = room.Cell.yMin; y < room.Cell.yMax; y++)
                 {
-                    debug.SetTile(new Vector3Int(x, y, 0), MapGenerator.Instance.wallContainer.FloorTiles[0]);
+                    debug.SetTile(new Vector3Int(x, y, 0), MapGenerator.Instance.wallContainer.FloorTiles.ElementAt(0).value);//FloorTiles[0]);
                     debug.SetTileFlags(new Vector3Int(x, y, 0), TileFlags.None);
                     debug.SetColor(new Vector3Int(x, y, 0), Utility.RGBAColor(207, 0, 15, 
                         Utility.ConvertRange(0.0f, 1.0f, 0.0f, 0.75f, room.SeclusionFactor)));

@@ -13,10 +13,10 @@ MonoBehaviour:
   m_Name: IndustrialPitTileContainer
   m_EditorClassIdentifier: 
   FloorTiles:
-  - {fileID: 11400000, guid: 280aa227d27cd06479251f588373ce1d, type: 2}
-  - {fileID: 11400000, guid: 270826cd9313f6f46afd0db17e2d58ab, type: 2}
-  - {fileID: 11400000, guid: cd84d5b614540f044a5298b1cae292a6, type: 2}
-  - {fileID: 11400000, guid: 315e52e1aa2c7994d9bde18f85423430, type: 2}
+    _values:
+    - {fileID: 11400000, guid: 280aa227d27cd06479251f588373ce1d, type: 2}
+    _priorities: 01000000
+    _totalPriority: 1
   TopRight: {fileID: 11400000, guid: 85de7bec310bc0f4a8d5529de13dab26, type: 2}
   TopMiddle: {fileID: 11400000, guid: 0346d8e6171f6b44a9be94c0198e5bbf, type: 2}
   TopLeft: {fileID: 11400000, guid: c5ce50b2c0503144d88ca2f6a6a25980, type: 2}

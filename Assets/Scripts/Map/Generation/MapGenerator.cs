@@ -549,7 +549,7 @@ public class MapGenerator : MonoBehaviour
             TileBase[] wallTiles = new TileBase[size.x * size.y];
             for (int tileIndex = 0; tileIndex < size.x * size.y; tileIndex++)
             {
-                tiles[tileIndex] = wallContainer.FloorTiles[0];
+                tiles[tileIndex] = wallContainer.FloorTiles.GetRandom();// FloorTiles[0];
                 wallTiles[tileIndex] = null;
             }
 

@@ -31,7 +31,7 @@ public class MapPainter
         TileBase[] tiles = new TileBase[size.x * size.y];
         for (int i = 0; i < size.x * size.y; i++)
         {
-            tiles[i] = _wallContainer.FloorTiles[0];
+            tiles[i] = _wallContainer.FloorTiles.GetRandom();// FloorTiles[0];
         }
 
         _floors.SetTilesBlock(new BoundsInt(pos, size), tiles);
@@ -101,7 +101,7 @@ public class MapPainter
         TileBase[] tiles = new TileBase[size.x * size.y];
         for (int i = 0; i < size.x * size.y; i++)
         {
-            tiles[i] = _pitContainer.FloorTiles[0];
+            tiles[i] = _pitContainer.FloorTiles.GetRandom(); //FloorTiles[0];
         }
 
         _pits.SetTilesBlock(new BoundsInt(pos, size), tiles);
@@ -288,11 +288,11 @@ public class MapPainter
                 return _wallContainer.TopRight;
             }
 
-            if (floorTopLeft == null && floorTopMiddle == null && floorTopRight == null && floorMiddleRight == null
-                && floorBottomMiddle != null && wallBottomLeft == null)
-            {
-                return _wallContainer.FloorTiles[3];
-            }
+            //if (floorTopLeft == null && floorTopMiddle == null && floorTopRight == null && floorMiddleRight == null
+            //    && floorBottomMiddle != null && wallBottomLeft == null)
+            //{
+            //    return _wallContainer.FloorTiles[3];
+            //}
 
             if (floorBottomLeft == null && wallTopMiddle == null && wallTopRight == null && wallBottomMiddle != null)
             {

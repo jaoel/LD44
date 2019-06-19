@@ -13,10 +13,13 @@ MonoBehaviour:
   m_Name: IndustrialTileContainer
   m_EditorClassIdentifier: 
   FloorTiles:
-  - {fileID: 11400000, guid: 53746de86a0ad184b8718cf7cedceaca, type: 2}
-  - {fileID: 11400000, guid: 6c7e84cdf486f3e41b12c3058351f952, type: 2}
-  - {fileID: 11400000, guid: 5658f3288bd70ca4d87ab2df404d9ea9, type: 2}
-  - {fileID: 11400000, guid: 280aa227d27cd06479251f588373ce1d, type: 2}
+    _values:
+    - {fileID: 11400000, guid: 53746de86a0ad184b8718cf7cedceaca, type: 2}
+    - {fileID: 11400000, guid: 6c7e84cdf486f3e41b12c3058351f952, type: 2}
+    - {fileID: 11400000, guid: 5658f3288bd70ca4d87ab2df404d9ea9, type: 2}
+    - {fileID: 11400000, guid: 3aed9c90ead2bbd429cc26711143023c, type: 2}
+    _priorities: 5a000000030000000300000003000000
+    _totalPriority: 99
   TopRight: {fileID: 11400000, guid: efa6e8372986fa643b2735217318c770, type: 2}
   TopMiddle: {fileID: 11400000, guid: 874470d55e65dd64d8c5801a7a562553, type: 2}
   TopLeft: {fileID: 11400000, guid: 1d3620d3de9aba1459ee3c3027d579a6, type: 2}
