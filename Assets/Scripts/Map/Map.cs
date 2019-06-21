@@ -225,8 +225,8 @@ public class Map
                 }
 
                 float dist = (new Vector2(spawnX, spawnY) - new Vector2(startingPosX, startingPosY)).sqrMagnitude;
-                float range = widthInTiles - 0.5f;
-                if (dist < range * range)
+                float range = widthInTiles - 0.1f;
+                if (dist <= range * range)
                 {
                     return Vector2.zero;
                 }

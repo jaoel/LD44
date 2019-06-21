@@ -61,7 +61,7 @@ public class MapPopulator
 
         _timer.Start();
 
-        SpawnSpawnables(map, level, startAndGoal);
+        SpawnSpawnables(map, level, player, startAndGoal);
 
         _timer.Stop();
         _timer.Print("MapPopulator.SpawnSpawnables");
@@ -493,7 +493,7 @@ public class MapPopulator
         }
     }
 
-    private void SpawnSpawnables(Map map, int level, Tuple<MapNode, MapNode> startAndGoal)
+    private void SpawnSpawnables(Map map, int level, Player player, Tuple<MapNode, MapNode> startAndGoal)
     {
         SpawnableKeyframe lowestAbove = _spawnKeyframes.keyframes.Where(x => x.keyframeIndex >= level).FirstOrDefault();
         SpawnableKeyframe highestBelow = _spawnKeyframes.keyframes.OrderByDescending(x => x.keyframeIndex).Where(x => x.keyframeIndex < level).FirstOrDefault();
@@ -521,18 +521,29 @@ public class MapPopulator
 
                 for (int j = 0; j < spawnableCount; j++)
                 {
-                    Spawn(map, lowestAbove.spawnableObjects[i].spawnablePrefab, room);
+                    Spawn(map, player, lowestAbove.spawnableObjects[i].spawnablePrefab, room);
                 }
             }
         }
     }
 
-    private void Spawn(Map map, GameObject prefab, MapNode room)
+    private void Spawn(Map map, Player player, GameObject prefab, MapNode room)
     {
-        Vector2 spawnPos = map.GetRandomPositionInRoom(1, 1, room).ToVector3();
-        if (spawnPos == Vector2.zero)
+        int attempts = 5;
+        Vector2 spawnPos = Vector2.zero;
+        while (attempts > 0)
         {
-            return;
+            attempts--; 
+            spawnPos = map.GetRandomPositionInRoom(1, 1, room).ToVector3();
+            if (spawnPos == Vector2.zero)
+            {
+                return;
+            }
+
+            if (Vector2.Distance(spawnPos, player.transform.position.ToVector2()) > 10.0f)
+            {
+                break;
+            }
         }
 
         GameObject enemy = GameObject.Instantiate(prefab, spawnPos, Quaternion.identity);

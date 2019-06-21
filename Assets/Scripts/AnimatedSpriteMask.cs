@@ -18,7 +18,6 @@ public class AnimatedSpriteMask : MonoBehaviour
         if(_spriteMask.sprite != _spriteRenderer.sprite)
         {
             _spriteMask.sprite = _spriteRenderer.sprite;
-            Debug.Log("HURR");
         }
     }
 }

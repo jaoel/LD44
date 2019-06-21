@@ -58,7 +58,7 @@ BoxCollider2D:
     adaptiveTiling: 0
   m_AutoTiling: 0
   serializedVersion: 2
-  m_Size: {x: 1.5, y: 1.5}
+  m_Size: {x: 1, y: 1}
   m_EdgeRadius: 0
 --- !u!212 &1652132710952191853
 SpriteRenderer:
@@ -124,7 +124,6 @@ MonoBehaviour:
   description: {fileID: 11400000, guid: 173a35778156a5f48a3f033778b39daf, type: 2}
   audioSource: {fileID: -33544997069253084}
   spriteRenderer: {fileID: 1652132710952191853}
-  minimapIcon: {fileID: 0}
 --- !u!82 &-33544997069253084
 AudioSource:
   m_ObjectHideFlags: 0
