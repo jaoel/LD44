@@ -2,6 +2,7 @@
 using UnityEngine;
 using DG.Tweening;
 using System.Linq;
+using System.Collections;
 
 public class Enemy : MonoBehaviour, IBuffable 
 {
@@ -55,8 +56,12 @@ public class Enemy : MonoBehaviour, IBuffable
 
     protected List<StatusEffect> _statusEffects;
 
+    private float _corpseCollisionTimer;
+
     protected virtual void Awake()
     {
+        _corpseCollisionTimer = 0.0f;
+
         _currentHealth = _maxHealth;
         _hasAggro = false;
         _player = GameObject.Find("Player").GetComponent<Player>();
@@ -76,7 +81,7 @@ public class Enemy : MonoBehaviour, IBuffable
 
         if (!_player.IsAlive || !IsAlive)
         {
-            _navigation.Stop();
+            _navigation.Stop();     
             return;
         }
 
@@ -249,6 +254,8 @@ public class Enemy : MonoBehaviour, IBuffable
             ((CircleCollider2D)_collider).radius *= 0.5f;
         }
 
+        gameObject.layer = Layers.Corpse;
+
         DropItem();
     }
 
@@ -271,13 +278,44 @@ public class Enemy : MonoBehaviour, IBuffable
 
     protected virtual void OnCollisionStay2D(Collision2D collision)
     {
-        if (IsAlive && collision.gameObject.layer == Layers.Player)
+        if (collision.gameObject.layer == Layers.Player)
         {
-            if(_player.ReceiveDamage((int)_meleeDamage, -collision.contacts[0].normal))
+            if (IsAlive)
             {
-                _rigidbody.velocity = Vector2.zero;
+                if (_player.ReceiveDamage((int)_meleeDamage, -collision.contacts[0].normal))
+                {
+                    _rigidbody.velocity = Vector2.zero;
+                }
+            }
+            else
+            {
+                _corpseCollisionTimer += Time.deltaTime;
+
+                if (_corpseCollisionTimer >= 0.5f)
+                {
+                    Physics2D.IgnoreLayerCollision(Layers.Player, Layers.Corpse);
+                }
             }
         }
+    }
+
+    protected virtual void OnCollisionExit2D(Collision2D collision)
+    {
+        if (!IsAlive && collision.gameObject.layer == Layers.Player)
+        {
+            if (_corpseCollisionTimer > 0.5f)
+            {
+                StartCoroutine(UnignoreCorpseCollision());
+            }
+            _corpseCollisionTimer = 0.0f;
+        }
+    }
+
+    private IEnumerator UnignoreCorpseCollision()
+    {
+        yield return new WaitForSeconds(1.0f);
+        Physics2D.IgnoreLayerCollision(Layers.Player, Layers.Corpse, false);
+        yield return null;
     }
 
     public bool ReceiveDamage(int damage, Vector2 velocity, bool maxHealth = false, bool spawnBloodSpray = true)
