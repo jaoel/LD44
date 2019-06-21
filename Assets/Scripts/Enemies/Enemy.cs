@@ -299,6 +299,25 @@ public class Enemy : MonoBehaviour, IBuffable
         }
     }
 
+    protected virtual void OnCollisionEnter2D(Collision2D collision)
+    {
+        if (!IsAlive && collision.gameObject.layer == Layers.Pits)
+        {
+            gameObject.layer = Layers.Pits;
+
+            Vector3 hitPosition = Vector3.zero;
+            hitPosition.x = collision.contacts[0].point.x - 0.01f * collision.contacts[0].normal.x;
+            hitPosition.y = collision.contacts[0].point.y - 0.01f * collision.contacts[0].normal.y;
+
+            Vector3 offset = new Vector3(0.5f, 0.5f, 0.0f);
+            transform.DOMove(MapManager.Instance.CurrentMap.WorldToCell(hitPosition).ToVector3() + offset, 0.5f);
+            transform.DOScale(0.0f, 1.0f);
+
+
+            _visual.color = Color.green;
+        }
+    }
+
     protected virtual void OnCollisionExit2D(Collision2D collision)
     {
         if (!IsAlive && collision.gameObject.layer == Layers.Player)
