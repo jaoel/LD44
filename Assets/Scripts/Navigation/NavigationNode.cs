@@ -5,7 +5,22 @@ public class NavNodeComparar : IComparer<NavNode>
 {
     int IComparer<NavNode>.Compare(NavNode x, NavNode y)
     {
-        return x.FScore.CompareTo(y.FScore);
+        if (x.Data == y.Data)
+        {
+            return 0;
+        }
+        else
+        {
+            int comparison = x.FScore.CompareTo(y.FScore);
+            if (comparison == 0)
+            {
+                return -1;
+            }
+            else
+            {
+                return comparison;
+            }
+        }
     }
 }
 
@@ -43,7 +58,7 @@ public class NavNode
 
         NavNode other = (NavNode)obj;
 
-        return Data.Equals(other.Data);
+        return Data == other.Data;
     }
 
     public override int GetHashCode()

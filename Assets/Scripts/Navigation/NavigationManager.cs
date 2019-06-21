@@ -117,7 +117,7 @@ public class NavigationManager : MonoBehaviour
         List<Vector2Int> result = new List<Vector2Int>();
 
         HashSet<NavNode> closedSet = new HashSet<NavNode>();
-        SortedSet<NavNode> openSet = new SortedSet<NavNode>(new NavNodeComparar()) { new NavNode(Utility.ManhattanDistance(start, target) * 2, 1, start) };
+        SortedSet<NavNode> openSet = new SortedSet<NavNode>(new NavNodeComparar()) { new NavNode(Utility.ManhattanDistance(target, start), 1, start) };
 
         while (openSet.Count > 0)
         {
@@ -147,11 +147,12 @@ public class NavigationManager : MonoBehaviour
                 }
 
                 neighbours[i].Parent = current;
-                neighbours[i].HScore = Utility.ManhattanDistance(neighbours[i].Data, target) * 2;
+                neighbours[i].HScore = Utility.ManhattanDistance(target, neighbours[i].Data);
                 neighbours[i].GScore = current.GScore + 1;
                 openSet.Add(neighbours[i]);
             }
         }
+
         return result;
     }
 
@@ -191,22 +192,22 @@ public class NavigationManager : MonoBehaviour
         }
         else
         {
-            if (MapManager.Instance.CurrentMap.GetCollisionIndex(node.Data.x - 1, node.Data.y) == 0)
+            if (MapManager.Instance.CurrentMap.GetCollisionIndex(node.Data.x - 1, node.Data.y) <= 0)
             {
                 result.Add(new NavNode(0, 0, new Vector2Int(node.Data.x - 1, node.Data.y)));
             }
 
-            if (MapManager.Instance.CurrentMap.GetCollisionIndex(node.Data.x + 1, node.Data.y) == 0)
+            if (MapManager.Instance.CurrentMap.GetCollisionIndex(node.Data.x + 1, node.Data.y) <= 0)
             {
                 result.Add(new NavNode(0, 0, new Vector2Int(node.Data.x + 1, node.Data.y)));
             }
 
-            if (MapManager.Instance.CurrentMap.GetCollisionIndex(node.Data.x, node.Data.y - 1) == 0)
+            if (MapManager.Instance.CurrentMap.GetCollisionIndex(node.Data.x, node.Data.y - 1) <= 0)
             {
                 result.Add(new NavNode(0, 0, new Vector2Int(node.Data.x, node.Data.y - 1)));
             }
 
-            if (MapManager.Instance.CurrentMap.GetCollisionIndex(node.Data.x, node.Data.y + 1) == 0)
+            if (MapManager.Instance.CurrentMap.GetCollisionIndex(node.Data.x, node.Data.y + 1) <= 0)
             {
                 result.Add(new NavNode(0, 0, new Vector2Int(node.Data.x, node.Data.y + 1)));
             }
