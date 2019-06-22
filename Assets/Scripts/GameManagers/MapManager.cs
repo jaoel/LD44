@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
+using UnityEngine.Tilemaps;
 
 public class MapManager : MonoBehaviour 
 {
@@ -61,8 +62,15 @@ public class MapManager : MonoBehaviour
         }
         else
         {
+            Tilemap walls = GameObject.Find("Walls").GetComponent<Tilemap>();
+            _currentMap = new Map(GameObject.Find("Floor").GetComponent<Tilemap>(),
+                GameObject.Find("Walls").GetComponent<Tilemap>(), GameObject.Find("Pits").GetComponent<Tilemap>(),
+                new MillerParkLCG());
+
+            _currentMap.CollisionMap = new int[Mathf.CeilToInt(walls.localBounds.size.x), Mathf.CeilToInt(walls.localBounds.size.y)];
+
             GenerateFogOfWar();
-            ToggleFogOfWarEnabled(false);
+            ToggleFogOfWarEnabled(true);
         }
     }
 
