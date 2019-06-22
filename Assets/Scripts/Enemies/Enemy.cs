@@ -311,10 +311,10 @@ public class Enemy : MonoBehaviour, IBuffable
 
             Vector3 offset = new Vector3(0.5f, 0.5f, 0.0f);
             transform.DOMove(MapManager.Instance.CurrentMap.WorldToCell(hitPosition).ToVector3() + offset, 0.5f);
-            transform.DOScale(0.0f, 1.0f);
-
-
+            transform.DOScale(0.5f, 1.0f);
             _visual.color = Color.green;
+            _visual.DOColor(Utility.RGBAColor(0, 255, 0, 0.5f), 0.5f);
+
         }
     }
 
