@@ -209,6 +209,9 @@ public class MapPopulator
 
             if (door != null)
             {
+                door.locked = true;
+                door.closed = true;
+
                 doors.Add(door);
                 map.UpdateCollisionMap(chokepoint.ToRectInt(), 1);
                 map.UpdateCollisionMap(door.Bounds, 1);

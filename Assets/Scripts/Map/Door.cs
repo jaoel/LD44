@@ -11,42 +11,52 @@ public class Door : MonoBehaviour
     public AudioSource opening;
     public AudioSource accessDenied;
 
+    public bool locked;
+    public bool closed;
+    public bool closeOnExit;
+
     public RectInt Bounds { get; set; }
     public bool IsGoalDoor { get; set; }
-    public List<Door> Siblings { get; set; }
-    private bool _locked;
-    private bool _closed;
+    public List<Door> Siblings = new List<Door>();
+
 
     private void Awake()
     {
-        Siblings = new List<Door>();
-        _locked = true;
-        _closed = true;
+        if (!closed)
+        {
+            ToggleClosed(false);
+        }
     }
 
     public void Open(bool unlock)
     {
         collider.enabled = false;
-        MapManager.Instance.CurrentMap.UpdateCollisionMap(Bounds, 0);
+        if (MapManager.Instance.CurrentMap != null)
+        {
+            MapManager.Instance.CurrentMap.UpdateCollisionMap(Bounds, 0);
+        }
 
         if (unlock)
         {
-            _locked = false;
+            locked = false;
         }
-        _closed = false;
+        closed = false;
     }
 
     public void Close(bool lockDoor)
     {
         collider.enabled = true;
-        MapManager.Instance.CurrentMap.UpdateCollisionMap(Bounds, 1);
+        if (MapManager.Instance.CurrentMap != null)
+        {
+            MapManager.Instance.CurrentMap.UpdateCollisionMap(Bounds, 1);
+        }
 
         if (lockDoor)
         {
-            _locked = true;
+            locked = true;
         }
 
-        _closed = true;
+        closed = true;
     }
 
     public void ToggleClosed(bool closed)
@@ -63,14 +73,14 @@ public class Door : MonoBehaviour
         opening.volume = SettingsManager.Instance.SFXVolume;
         opening.Play();
 
-        _closed = closed;
+        this.closed = closed;
     }
 
     private void OnTriggerEnter2D(Collider2D collision)
     {
         if (collision.gameObject)
         {
-            if (!_locked && _closed)
+            if (!locked && closed)
             {
                 ToggleClosed(false);
 
@@ -79,7 +89,7 @@ public class Door : MonoBehaviour
                     x.ToggleClosed(false);
                 });
             }
-            else if (_locked && _closed)
+            else if (locked && closed)
             {
                 Player player = collision.gameObject.GetComponent<Player>();
                 if (player != null)
@@ -99,6 +109,14 @@ public class Door : MonoBehaviour
                     }
                 }
             }
+        }
+    }
+
+    private void OnTriggerExit2D(Collider2D collision)
+    {
+        if (!closed && closeOnExit)
+        {
+            ToggleClosed(true);
         }
     }
 }
