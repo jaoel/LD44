@@ -942,6 +942,11 @@ PrefabInstance:
       value: 
       objectReference: {fileID: 5074516897226881580, guid: fe8980b87054e1e4794848ff451c8fc9,
         type: 3}
+    - target: {fileID: 997353019, guid: fb3c90fd7da4a7e42b329cb2e0d69797, type: 3}
+      propertyPath: sessionData.slingshotPrefab
+      value: 
+      objectReference: {fileID: 8826916283942404870, guid: 7a421b80653e3ce4eb98ddd612e82f66,
+        type: 3}
     - target: {fileID: 515992213878927342, guid: fb3c90fd7da4a7e42b329cb2e0d69797,
         type: 3}
       propertyPath: playerUI

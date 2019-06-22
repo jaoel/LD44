@@ -22,7 +22,7 @@ public abstract class Item : MonoBehaviour
             if (player.Health > 0)
             {
                 ApplyEffect(owner);
-                Main.Instance.sessionData.UpdateSessionData(player);
+                Main.Instance.sessionData.UpdatePlayerData(player);
             }
 
             if (player.Health <= 0)

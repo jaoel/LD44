@@ -62,15 +62,15 @@ public class MapManager : MonoBehaviour
         }
         else
         {
-            Tilemap walls = GameObject.Find("Walls").GetComponent<Tilemap>();
-            _currentMap = new Map(GameObject.Find("Floor").GetComponent<Tilemap>(),
-                GameObject.Find("Walls").GetComponent<Tilemap>(), GameObject.Find("Pits").GetComponent<Tilemap>(),
-                new MillerParkLCG());
-
-            _currentMap.CollisionMap = new int[Mathf.CeilToInt(walls.localBounds.size.x), Mathf.CeilToInt(walls.localBounds.size.y)];
-
             if (Main.Instance.gameState == GameState.Hubworld)
             {
+                Tilemap walls = GameObject.Find("Walls").GetComponent<Tilemap>();
+                _currentMap = new Map(GameObject.Find("Floor").GetComponent<Tilemap>(),
+                GameObject.Find("Walls").GetComponent<Tilemap>(), GameObject.Find("Pits").GetComponent<Tilemap>(),
+                    new MillerParkLCG());
+
+                _currentMap.CollisionMap = new int[Mathf.CeilToInt(walls.localBounds.size.x), Mathf.CeilToInt(walls.localBounds.size.y)];
+
                 _player.transform.position = GameObject.Find("PlayerSpawn").transform.position;
                 CameraManager.Instance.SetCameraPosition(_player.transform.position);
             }

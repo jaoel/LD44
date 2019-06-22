@@ -10,7 +10,7 @@ public class Stairs : MonoBehaviour
         {
             if (isShop)
             {
-                Main.Instance.sessionData.UpdateSessionData(collision.gameObject.GetComponent<Player>());
+                Main.Instance.sessionData.UpdatePlayerData(collision.gameObject.GetComponent<Player>());
                 MapManager.Instance.GenerateShop();
             }
             else

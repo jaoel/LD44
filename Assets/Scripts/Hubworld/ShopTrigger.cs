@@ -22,7 +22,6 @@ public class ShopTrigger : InteractiveObject
 
         _activated = true;
         item.transform.position = Main.Instance.player.transform.position;
-        
 
         base.OnActivate();
     }
