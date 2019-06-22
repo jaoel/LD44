@@ -20,7 +20,7 @@ public class Door : MonoBehaviour
     public List<Door> Siblings = new List<Door>();
 
 
-    private void Awake()
+    private void Start()
     {
         if (!closed)
         {

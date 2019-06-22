@@ -93,8 +93,8 @@ SpriteRenderer:
   m_AutoUVMaxDistance: 0.5
   m_AutoUVMaxAngle: 89
   m_LightmapParameters: {fileID: 0}
-  m_SortingLayerID: -1470884651
-  m_SortingLayer: 2
+  m_SortingLayerID: 0
+  m_SortingLayer: 0
   m_SortingOrder: 1
   m_Sprite: {fileID: -1318383466778419210, guid: 42bd3ffc034dd23409edab32966f490e,
     type: 3}
@@ -120,6 +120,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3117fb7634d90be478900b5f981f50c1, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  Description: {fileID: 11400000, guid: 07e877227b6619240a2cccb59f4a5df7, type: 2}
+  shopkeeperDescription: []
+  healthCost: 0
   isShopItem: 0
   health: 2
