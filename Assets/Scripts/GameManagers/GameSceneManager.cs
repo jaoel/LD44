@@ -99,7 +99,7 @@ public class GameSceneManager : MonoBehaviour
         Main.Instance.gameState = GameState.Hubworld;
         Main.Instance.player.transform.position = Vector3.zero;
         Main.Instance.player.ResetPlayer();
-        MapManager.Instance.ToggleFogOfWarEnabled(false);
+        MapManager.Instance.ToggleFogOfWarEnabled(true);
         SceneManager.LoadScene("HubworldScene", LoadSceneMode.Single);
     } 
 

@@ -916,6 +916,12 @@ PrefabInstance:
       propertyPath: _player
       value: 
       objectReference: {fileID: 777865162567221072}
+    - target: {fileID: 1831573080867822107, guid: fb3c90fd7da4a7e42b329cb2e0d69797,
+        type: 3}
+      propertyPath: _restAreaPrefab
+      value: 
+      objectReference: {fileID: 1157765099317050428, guid: 16d2a58a56d13fc4bb7115311c46e865,
+        type: 3}
     - target: {fileID: 131159647817452541, guid: fb3c90fd7da4a7e42b329cb2e0d69797,
         type: 3}
       propertyPath: _mainCamera

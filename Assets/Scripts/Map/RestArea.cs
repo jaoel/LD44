@@ -3,14 +3,14 @@ using System.Collections.Generic;
 using TMPro;
 using System.Linq;
 
-public class ShopRoom : MonoBehaviour
+public class RestArea : MonoBehaviour
 {
     public Transform spawnPoint;
-    public ShopItem[] shopItems;
+    //public ShopItem[] shopItems;
 
-    public GameObject shopUI;
-    public GameObject itemsParent;
-    public float healthGlobeDroprate;
+    //public GameObject shopUI;
+    //public GameObject itemsParent;
+    //public float healthGlobeDroprate;
 
     public void MovePlayerToSpawn(Player player)
     {
@@ -18,6 +18,11 @@ public class ShopRoom : MonoBehaviour
         CameraManager.Instance.SetCameraPosition(player.transform.position);
     }
 
+    public void LoadHub()
+    {
+        GameSceneManager.Instance.LoadHubScene();
+    }
+    /*
     public void GenerateRandomItems(int currentLevel, Player player)
     {
         bool healthGlobeAdded = false;
@@ -59,30 +64,31 @@ public class ShopRoom : MonoBehaviour
             GameObject.Find("Item" + i).GetComponent<TextMeshProUGUI>().text = shopItems[i].itemPrefab.healthCost.ToString();
         }
     }
+    */
 
-    public void ClearItems()
-    {
-        foreach (Transform child in itemsParent.transform)
-        {
-            Destroy(child.gameObject);
-        }
-    }
+    //public void ClearItems()
+    //{
+    //    foreach (Transform child in itemsParent.transform)
+    //    {
+    //        Destroy(child.gameObject);
+    //    }
+    //}
 
     private void Update()
     {
-        if (Input.GetKeyDown(KeyCode.X))
-        {
-            ClearItems();
-            MapManager.Instance.GenerateShop();
-        }
+        //if (Input.GetKeyDown(KeyCode.X))
+        //{
+        //    ClearItems();
+        //    MapManager.Instance.GenerateShop();
+        //}
     }
 
     public void ResetItem1()
     {
-        ShopItem healthShopItem = shopItems[0];
-        if (healthShopItem != null && healthShopItem.PickedUp)
-        {
-            healthShopItem.InstantiateItem(itemsParent.transform);
-        }
+        //ShopItem healthShopItem = shopItems[0];
+        //if (healthShopItem != null && healthShopItem.PickedUp)
+        //{
+        //    healthShopItem.InstantiateItem(itemsParent.transform);
+        //}
     }
 }

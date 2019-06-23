@@ -11,12 +11,12 @@ public class MapManager : MonoBehaviour
     public int CurrentLevel;
 
     [SerializeField]
-    private ShopRoom _shopRoomPrefab;
+    private RestArea _restAreaPrefab;
 
     [SerializeField]
     private Player _player;
 
-    private ShopRoom _shopInstance;
+    private RestArea _restAreaInstance;
     private Map _currentMap;
     private bool _fogOfWarVisible = true;
     private bool _fogOfWarEnabled = true;
@@ -56,7 +56,7 @@ public class MapManager : MonoBehaviour
 
         if (Main.Instance.gameState == GameState.Gameplay)
         {
-            _shopInstance = Instantiate(_shopRoomPrefab);
+            _restAreaInstance = Instantiate(_restAreaPrefab);
             LoadLevel();
             ToggleFogOfWarEnabled(true);
         }
@@ -75,8 +75,15 @@ public class MapManager : MonoBehaviour
                 CameraManager.Instance.SetCameraPosition(_player.transform.position);
             }
 
-            GenerateFogOfWar();
-            ToggleFogOfWarEnabled(true);
+            if (Main.Instance.gameState != GameState.MainMenu)
+            {
+                GenerateFogOfWar();
+                ToggleFogOfWarEnabled(true);
+            }
+            else
+            {
+                ToggleFogOfWarEnabled(false);
+            }
         }
     }
 
@@ -174,8 +181,8 @@ public class MapManager : MonoBehaviour
         }
 
         CurrentLevel++;
-        _shopInstance.ClearItems();
-        _shopInstance.gameObject.SetActive(false);
+        //_shopInstance.ClearItems();
+        _restAreaInstance.gameObject.SetActive(false);
 
         MapGeneratorParameters parameters = new MapGeneratorParameters();
         parameters.GenerationRadius = 20;
@@ -220,9 +227,9 @@ public class MapManager : MonoBehaviour
         _fogOfWarVisible = false;
         ShowFogOfWar(false);
 
-        _shopInstance.gameObject.SetActive(true);
-        _shopInstance.GenerateRandomItems(CurrentLevel, _player);
-        _shopInstance.MovePlayerToSpawn(_player);
+        _restAreaInstance.gameObject.SetActive(true);
+        //_shopInstance.GenerateRandomItems(CurrentLevel, _player);
+        _restAreaInstance.MovePlayerToSpawn(_player);
     }
 
     public void AddInteractiveObject(GameObject interactiveObject)
