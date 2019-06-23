@@ -78,6 +78,7 @@ public class MapManager : MonoBehaviour
             if (Main.Instance.gameState != GameState.MainMenu)
             {
                 GenerateFogOfWar();
+                _fogOfWarVisible = true;
                 ToggleFogOfWarEnabled(true);
             }
             else
@@ -91,6 +92,7 @@ public class MapManager : MonoBehaviour
     {
         CurrentLevel = 0;
         _currentMap = null;
+        Destroy(_restAreaInstance);
     }
 
     private void OnDrawGizmos()
