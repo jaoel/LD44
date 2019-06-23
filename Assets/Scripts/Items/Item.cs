@@ -3,10 +3,13 @@ using UnityEngine;
 
 public abstract class Item : MonoBehaviour
 {
+    public AudioSource pickupSound;
+
     public List<string> shopkeeperDescription = new List<string>(); 
     public int healthCost;
 
     public bool isShopItem = false;
+    public bool destroyOnPickup = true;
     protected bool _triggered = false;
 
     public virtual void Apply(GameObject owner)
@@ -31,8 +34,20 @@ public abstract class Item : MonoBehaviour
                 SoundManager.Instance.PlayPlayerDeath(UnityEngine.Random.Range(0.0f, 1.0f) < 0.1f);
             }
 
-            SoundManager.Instance.PlayItemPickup();
-            Destroy(gameObject);
+            if (pickupSound == null)
+            {
+                SoundManager.Instance.PlayItemPickup();
+            }
+            else
+            {
+                pickupSound.volume = SettingsManager.Instance.SFXVolume;
+                pickupSound.Play();
+            }
+
+            if (destroyOnPickup)
+            {
+                Destroy(gameObject);
+            }
         }
     }
 

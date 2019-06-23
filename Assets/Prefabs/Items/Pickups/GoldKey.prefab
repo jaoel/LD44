@@ -178,6 +178,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8342ed25f6fb6b0438b22594ac3e5449, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  shopkeeperDescription: []
+  healthCost: 0
+  isShopItem: 0
+  destroyOnPickup: 0
   trigger: {fileID: 4248982427413073848}
   rigidBody: {fileID: 1972391316901367867}
   visual: {fileID: 4630298518009239181}
