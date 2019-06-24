@@ -27,6 +27,8 @@ public class LaserBullet : Bullet
     private Vector2 _reflectionNormal;
     private int _startSplitCount;
     private int _startPierceCount;
+    private bool _canSplit;
+    private Coroutine _wallCollisionHandler;
     protected override void Awake()
     {
         _startSplitCount = splitCount;
@@ -44,6 +46,7 @@ public class LaserBullet : Bullet
     {
         base.Initialize(charge, direction, owner);
 
+        _canSplit = true;
         _charge = Mathf.Max(_charge, 0.3f);
         _currentLifetime *= _charge;
         _currentDamage *= _charge;
@@ -51,15 +54,21 @@ public class LaserBullet : Bullet
 
     public void WallCollisionHandling()
     {
-        _capsule.enabled = false;
-        StartCoroutine(EnableCollider());
+        _canSplit = false;
+
+        if (_wallCollisionHandler != null)
+        {
+            StopCoroutine(_wallCollisionHandler);
+        }
+
+        _wallCollisionHandler = StartCoroutine(EnableCollider());
     }
 
     private IEnumerator EnableCollider()
     {
-        yield return new WaitForSeconds(0.1f);
+        yield return new WaitForSeconds(0.2f);
 
-        _capsule.enabled = true;
+        _canSplit = true;
 
         yield return null;
     }
@@ -104,6 +113,7 @@ public class LaserBullet : Bullet
 
             _reflectionNormal = hit.normal;
             _direction = Vector2.Reflect(_direction.normalized, _reflectionNormal);
+            transform.position += _reflectionNormal.ToVector3() * 0.2f;
 
             SplitBullet(hit.point);
         }
@@ -121,6 +131,7 @@ public class LaserBullet : Bullet
                 }
 
                 pierceCount--;
+                _currentDamage -= _currentDamage * 0.33f;
             }
         }
 
@@ -152,7 +163,7 @@ public class LaserBullet : Bullet
     private bool SplitBullet(Vector2 hitPosition)
     {
         bool performedSplit = false;
-        if (splitCount > 0)
+        if (splitCount > 0 && _canSplit)
         {
             splitCount--;
 
@@ -161,10 +172,10 @@ public class LaserBullet : Bullet
                 float angle = UnityEngine.Random.Range(-45.0f, 45.0f);
                 Vector2 direction = Quaternion.Euler(0.0f, 0.0f, angle) * _reflectionNormal;
                 LaserBullet newBullet = (LaserBullet)BulletManager.Instance.SpawnBullet(_laserBulletPrefab, 
-                    hitPosition + direction.normalized * 0.2f, direction, _charge, _owner);
+                    hitPosition + _reflectionNormal * 0.2f, direction, _charge, _owner);
                 newBullet.splitCount = splitCount;
                 newBullet.SetOwner(null);
-                newBullet._currentDamage = _currentDamage * 0.2f;
+                newBullet._currentDamage = _currentDamage * 0.75f;
                 newBullet.pierceCount = pierceCount - 1;
                 newBullet.WallCollisionHandling();
             }

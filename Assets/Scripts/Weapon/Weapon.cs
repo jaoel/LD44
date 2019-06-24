@@ -10,79 +10,82 @@ public class Weapon : MonoBehaviour
 
     //how long before weapon can shoot again
     [SerializeField]
-    private float _cooldown;
+    protected float _cooldown;
 
     //how long you need to hold fire button before shooting
     //only starts counting after cooldown has passed
     [SerializeField]
-    private float _chargeTime;
+    protected float _chargeTime;
 
     //determines if we should reset charge meter when a shot has been fired or 
     //if it should be more like a windup
     [SerializeField]
-    private bool _resetChargeOnShot;
+    protected bool _resetChargeOnShot;
 
     //how many bullets to be fired before you have to reload
     [SerializeField]
-    private int _magazineSize;
+    protected int _magazineSize;
 
     //how long it takes to reload
     [SerializeField]
-    private float _reloadTime;
+    protected float _reloadTime;
 
     //for burst fire guns if > 1
     [SerializeField]
-    private int _bulletsPerShot;
+    protected int _bulletsPerShot;
 
     //how long between bullets in burst
     [SerializeField]
-    private float _burstInterval;
+    protected float _burstInterval;
 
     //how much the one firing should be knocked back when firing
     [SerializeField]
-    private float _knockback;
+    protected float _knockback;
 
     //defines the arc in which the gun shoots
     [SerializeField]
-    private float _firingArc;
+    protected float _firingArc;
 
     //defines if bullet pattern should be random or regular within arc
     [SerializeField]
-    private bool _randomizePattern;
+    protected bool _randomizePattern;
 
     //all bullet related information
     [SerializeField]
-    private Bullet _bulletPrefab;
+    protected Bullet _bulletPrefab;
 
     //Sound that should be played when shooting
     [SerializeField]
-    private AudioSource _shotSound;
+    protected AudioSource _shotSound;
 
     //Sound that should be played when shooting
     [SerializeField]
-    private AudioSource _reloadSound;
+    protected AudioSource _reloadSound;
 
     [SerializeField]
-    private AudioSource _chargeSound;
+    protected AudioSource _chargeSound;
+
+    [SerializeField]
+    protected AudioSource _maxChargeSound;
 
     //Who is shooting
-    private IWeaponOwner _owner;
-    private bool _isPlayerOwned;
+    protected IWeaponOwner _owner;
+    protected bool _isPlayerOwned;
 
-    private float _adjustedCooldown;
-    private float _currentCooldown;
-    private float _currentChargeTime;
-    private int _bulletsLeft;
-    private float _halfAngle;
-    private float _degPerBullet;
-    private bool _reloading;
-    private bool _charging;
-    private Coroutine _firingSequence;
-    private Coroutine _reloadSequence;
+    protected float _adjustedCooldown;
+    protected float _currentCooldown;
+    protected float _currentChargeTime;
+    protected int _bulletsLeft;
+    protected float _halfAngle;
+    protected float _degPerBullet;
+    protected bool _reloading;
+    protected bool _charging;
+    protected Coroutine _firingSequence;
+    protected Coroutine _reloadSequence;
 
-    private Color _reloadGoalColor = Color.green;
-    private Color _chargeGoalColor = Color.cyan;
-    private Color _clearColor = Utility.RGBAColor(0, 0, 0, 1.0f);
+    protected Color _reloadGoalColor = Color.green;
+    protected Color _chargeGoalColor = Color.cyan;
+    protected Color _clearColor = Utility.RGBAColor(0, 0, 0, 1.0f);
 
     protected virtual void Awake()
     {
@@ -217,6 +220,12 @@ public class Weapon : MonoBehaviour
                 _chargeSound.Play();
             }
 
+            if (_maxChargeSound != null && !_maxChargeSound.isPlaying && _currentChargeTime >= _chargeTime)
+            {
+                _maxChargeSound.volume = SettingsManager.Instance.SFXVolume;
+                _maxChargeSound.Play();
+            }
+
             _currentChargeTime += Time.deltaTime;
 
             if (_isPlayerOwned && _chargeTime > 0.0f)
@@ -251,6 +260,16 @@ public class Weapon : MonoBehaviour
 
     private void Fire()
     {
+        if (_chargeSound != null)
+        {
+            _chargeSound.Stop();
+        }
+
+        if (_maxChargeSound != null)
+        {
+            _maxChargeSound.Stop();
+        }
+
         if (_firingSequence != null)
         {
             StopCoroutine(_firingSequence);
@@ -327,6 +346,8 @@ public class Weapon : MonoBehaviour
         if (!_charging && _currentChargeTime > 0.0f && _chargeTime > 0.0f)
         {
             _chargeSound?.Stop();
+            _maxChargeSound?.Stop();
+
             _currentChargeTime -= Time.deltaTime;
             _currentChargeTime = Mathf.Max(0.0f, _currentChargeTime);
 
