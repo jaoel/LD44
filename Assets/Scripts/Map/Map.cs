@@ -16,6 +16,7 @@ public class Map
     public List<LineSegment2D> StartToGoalPath { get; set; }
     public List<BoundsInt> ChokePoints { get; set; }
     public int[,] CollisionMap { get; set; }
+    public TilemapCollider2D CollisionMapCollider { get; set; }
     public BoundsInt Bounds { get; set; }
 
     public List<GameObject> InteractiveObjects { get; }
@@ -53,6 +54,8 @@ public class Map
         Enemies = new List<GameObject>();
         ChokePoints = new List<BoundsInt>();
         StartToGoalPath = new List<LineSegment2D>();
+
+        CollisionMapCollider = GameObject.Find("CollisionMap").GetComponent<TilemapCollider2D>();
     }
 
     public void AddInteractiveObject(GameObject interactiveObject)

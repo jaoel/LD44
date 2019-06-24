@@ -21,9 +21,13 @@ public class Bullet : MonoBehaviour
     [SerializeField]
     protected SpriteRenderer _spriteRenderer;
 
+    [SerializeField]
+    protected Collider2D _collider;
+
     protected GameObject _owner;
     protected Vector2 _direction;
     protected float _currentLifetime;
+    protected float _currentDamage;
     protected float _charge;
 
     protected virtual void Awake()
@@ -39,7 +43,9 @@ public class Bullet : MonoBehaviour
     public virtual void Initialize(float charge, Vector2 direction, GameObject owner)
     {
         _currentLifetime = _lifetime;
+        _currentDamage = _damage;
         _charge = charge;
+
         SetTint(_tint);
         SetSize(_size);
         SetDirection(direction);
@@ -48,12 +54,18 @@ public class Bullet : MonoBehaviour
 
     public void SetTint(Color color)
     {
-        _spriteRenderer.color = color;
+        if (_spriteRenderer != null)
+        {
+            _spriteRenderer.color = color;
+        }
     }
 
     public void SetSize(Vector2 size)
     {
-        _spriteRenderer.transform.localScale = new Vector3(size.x, size.y, 1f);
+        if (_spriteRenderer != null)
+        {
+            _spriteRenderer.transform.localScale = new Vector3(size.x, size.y, 1f);
+        }
     }
 
     public void SetOwner(GameObject owner)
@@ -99,7 +111,7 @@ public class Bullet : MonoBehaviour
             Enemy enemy = collision.gameObject.GetComponent<Enemy>();
             if (enemy.IsAlive)
             {
-                collision.gameObject.GetComponent<Enemy>().ReceiveDamage((int)_damage, _direction);
+                collision.gameObject.GetComponent<Enemy>().ReceiveDamage((int)_currentDamage, _direction);
                 BeforeDestroyed(collision.gameObject);
                 CameraManager.Instance.ShakeCamera(0.15f, 0.1f, 0.1f, 30);
             }
@@ -110,7 +122,7 @@ public class Bullet : MonoBehaviour
         }
         else if (collision.gameObject.layer == Layers.Player)
         {
-            collision.gameObject.GetComponent<Player>().ReceiveDamage((int)_damage, _direction);
+            collision.gameObject.GetComponent<Player>().ReceiveDamage((int)_currentDamage, _direction);
             BeforeDestroyed(collision.gameObject);
         }
 

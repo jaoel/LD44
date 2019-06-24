@@ -62,6 +62,9 @@ public class Weapon : MonoBehaviour
     [SerializeField]
     private AudioSource _reloadSound;
 
+    [SerializeField]
+    private AudioSource _chargeSound;
+
     //Who is shooting
     private IWeaponOwner _owner;
     private bool _isPlayerOwned;
@@ -206,6 +209,14 @@ public class Weapon : MonoBehaviour
         if (_currentCooldown >= _adjustedCooldown)
         {
             _charging = true;
+
+            if (_chargeSound != null && !_chargeSound.isPlaying && _currentChargeTime < _chargeTime)
+            {
+                _chargeSound.time = _currentChargeTime;
+                _chargeSound.volume = SettingsManager.Instance.SFXVolume;
+                _chargeSound.Play();
+            }
+
             _currentChargeTime += Time.deltaTime;
 
             if (_isPlayerOwned && _chargeTime > 0.0f)
@@ -315,6 +326,7 @@ public class Weapon : MonoBehaviour
 
         if (!_charging && _currentChargeTime > 0.0f && _chargeTime > 0.0f)
         {
+            _chargeSound?.Stop();
             _currentChargeTime -= Time.deltaTime;
             _currentChargeTime = Mathf.Max(0.0f, _currentChargeTime);
 
