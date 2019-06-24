@@ -301,7 +301,7 @@ public class Enemy : MonoBehaviour, IBuffable
 
     protected virtual void OnCollisionEnter2D(Collision2D collision)
     {
-        if (!IsAlive && collision.gameObject.layer == Layers.Pits)
+        if (!IsAlive && collision.gameObject.layer == Layers.Pits && gameObject.layer == Layers.Corpse)
         {
             gameObject.layer = Layers.Pits;
 
