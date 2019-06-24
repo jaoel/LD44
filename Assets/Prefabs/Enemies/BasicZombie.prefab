@@ -164,7 +164,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _maxHealth: 200
-  _maxSpeed: 8.5
+  _maxSpeed: 7
   _acceleration: 50
   _aggroDistance: 10
   _meleeDamage: 5
@@ -175,7 +175,6 @@ MonoBehaviour:
   _characterAnimation: {fileID: 9194530984371537756}
   _particleSystemContainer: {fileID: 11400000, guid: 16ab9ed0ce6842c4b9a9e52558b0b55d,
     type: 2}
-  _minimapIcon: {fileID: 0}
 --- !u!114 &-4954869916265498941
 MonoBehaviour:
   m_ObjectHideFlags: 0
