@@ -69,7 +69,7 @@ TrailRenderer:
   m_SortingLayerID: -1470884651
   m_SortingLayer: 2
   m_SortingOrder: 2
-  m_Time: 0.1
+  m_Time: 0.075
   m_Parameters:
     serializedVersion: 3
     widthMultiplier: 1
@@ -241,7 +241,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _lifetime: 1
-  _speed: 10
+  _speed: 15
   _size: {x: 1, y: 1}
   _damage: 300
   _tint: {r: 1, g: 1, b: 1, a: 0}
