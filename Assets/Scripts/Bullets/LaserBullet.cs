@@ -18,6 +18,7 @@ public class LaserBullet : Bullet
     private CapsuleCollider2D _capsule;
 
     private Vector2 _reflectionNormal;
+    private Vector2 _lastPosition;
     private int _startPierceCount;
     protected override void Awake()
     {
@@ -37,6 +38,8 @@ public class LaserBullet : Bullet
 
     public override void UpdateBullet()
     {
+        _lastPosition = transform.position;
+
         if (_currentLifetime <= _trail.time)
         {
             _trail.emitting = false;
@@ -69,12 +72,12 @@ public class LaserBullet : Bullet
 
         if (collision.gameObject.layer == Layers.Map)
         {
-            RaycastHit2D hit = Physics2D.Raycast(transform.position.ToVector2(), _direction, 1.0f,
+            RaycastHit2D hit = Physics2D.Raycast(_lastPosition, _direction, 1.0f,
                 Layers.CombinedLayerMask(Layers.Map));
-
+            
             _reflectionNormal = hit.normal;
             _direction = Vector2.Reflect(_direction.normalized, _reflectionNormal);
-            transform.position += _reflectionNormal.ToVector3() * 0.2f;
+            transform.position = _lastPosition;
             _owner = null;
         }
         else if (collision.gameObject.layer == Layers.Enemy || collision.gameObject.layer == Layers.FlyingEnemy)
@@ -115,13 +118,14 @@ public class LaserBullet : Bullet
     {
         if (collision.gameObject.layer == Layers.Map)
         {
-            RaycastHit2D hit = Physics2D.Raycast(transform.position.ToVector2(), _direction, 1.0f,
+            RaycastHit2D hit = Physics2D.Raycast(_lastPosition, _direction, 1.0f,
                 Layers.CombinedLayerMask(Layers.Map));
-
+            
             if (_reflectionNormal != hit.normal)
             {
                 _reflectionNormal = hit.normal;
                 _direction = Vector2.Reflect(_direction.normalized, _reflectionNormal);
+                transform.position = _lastPosition;
             }
         }
     }
