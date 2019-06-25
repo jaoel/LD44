@@ -21,9 +21,6 @@ public class Bullet : MonoBehaviour
     [SerializeField]
     protected SpriteRenderer _spriteRenderer;
 
-    [SerializeField]
-    protected Collider2D _collider;
-
     protected GameObject _owner;
     protected Vector2 _direction;
     protected float _currentLifetime;

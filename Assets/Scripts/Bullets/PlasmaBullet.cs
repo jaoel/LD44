@@ -7,9 +7,16 @@ using System.Threading.Tasks;
 using UnityEngine;
 using DG.Tweening;
 
-public class LaserBullet : Bullet
+public class PlasmaBullet : Bullet
 {
+    public int splitCount;
     public int pierceCount;
+
+    [SerializeField]
+    private int _bulletsPerSplit;
+
+    [SerializeField]
+    private Bullet _laserBulletPrefab;
 
     [SerializeField]
     private TrailRenderer _trail;
@@ -18,10 +25,15 @@ public class LaserBullet : Bullet
     private CapsuleCollider2D _capsule;
 
     private Vector2 _reflectionNormal;
+    private int _startSplitCount;
     private int _startPierceCount;
+    private bool _canSplit;
+    private Coroutine _wallCollisionHandler;
     protected override void Awake()
     {
+        _startSplitCount = splitCount;
         _startPierceCount = pierceCount;
+
         base.Awake();
     }
 
@@ -34,9 +46,31 @@ public class LaserBullet : Bullet
     {
         base.Initialize(charge, direction, owner);
 
+        _canSplit = true;
         _charge = Mathf.Max(_charge, 0.3f);
         _currentLifetime *= _charge;
         _currentDamage *= _charge;
+    }
+
+    public void WallCollisionHandling()
+    {
+        _canSplit = false;
+
+        if (_wallCollisionHandler != null)
+        {
+            StopCoroutine(_wallCollisionHandler);
+        }
+
+        _wallCollisionHandler = StartCoroutine(EnableCollider());
+    }
+
+    private IEnumerator EnableCollider()
+    {
+        yield return new WaitForSeconds(0.2f);
+
+        _canSplit = true;
+
+        yield return null;
     }
 
     public override void UpdateBullet()
@@ -57,6 +91,7 @@ public class LaserBullet : Bullet
         _capsule.enabled = true;
         _trail.Clear();
         _trail.emitting = true;
+        splitCount = _startSplitCount;
         pierceCount = _startPierceCount;
 
         base.BeforeDestroyed(hitTarget);
@@ -73,13 +108,14 @@ public class LaserBullet : Bullet
 
         if (collision.gameObject.layer == Layers.Map)
         {
-            RaycastHit2D hit = Physics2D.Raycast(transform.position.ToVector2(), _direction, 1.0f,
+            RaycastHit2D hit = Physics2D.Raycast(transform.position.ToVector2(), _direction, 1.0f, 
                 Layers.CombinedLayerMask(Layers.Map));
 
             _reflectionNormal = hit.normal;
             _direction = Vector2.Reflect(_direction.normalized, _reflectionNormal);
             transform.position += _reflectionNormal.ToVector3() * 0.2f;
-            _owner = null;
+
+            SplitBullet(hit.point);
         }
         else if (collision.gameObject.layer == Layers.Enemy || collision.gameObject.layer == Layers.FlyingEnemy)
         {
@@ -98,19 +134,6 @@ public class LaserBullet : Bullet
                 _currentDamage -= _currentDamage * 0.33f;
             }
         }
-        else if (collision.gameObject.layer == Layers.Player)
-        {
-            Main.Instance.player.ReceiveDamage((int)(_currentDamage * 0.1f), _direction);
-
-            if (pierceCount <= 0)
-            {
-                BeforeDestroyed(collision.gameObject);
-                active = false;
-            }
-
-            pierceCount--;
-            _currentDamage -= _currentDamage * 0.33f;
-        }
 
         gameObject.SetActive(active);
     }
@@ -126,6 +149,8 @@ public class LaserBullet : Bullet
             {
                 _reflectionNormal = hit.normal;
                 _direction = Vector2.Reflect(_direction.normalized, _reflectionNormal);
+
+                SplitBullet(hit.point);
             }
         }
     }
@@ -133,5 +158,31 @@ public class LaserBullet : Bullet
     private void OnTriggerExit2D(Collider2D collision)
     {
         _reflectionNormal = Vector2.zero;
+    }
+
+    private bool SplitBullet(Vector2 hitPosition)
+    {
+        bool performedSplit = false;
+        if (splitCount > 0 && _canSplit)
+        {
+            splitCount--;
+
+            for(int i = 0; i < _bulletsPerSplit; i++)
+            {
+                float angle = UnityEngine.Random.Range(-45.0f, 45.0f);
+                Vector2 direction = Quaternion.Euler(0.0f, 0.0f, angle) * _reflectionNormal;
+                PlasmaBullet newBullet = (PlasmaBullet)BulletManager.Instance.SpawnBullet(_laserBulletPrefab, 
+                    hitPosition + _reflectionNormal * 0.2f, direction, _charge, _owner);
+                newBullet.splitCount = splitCount;
+                newBullet.SetOwner(null);
+                newBullet._currentDamage = _currentDamage * 0.75f;
+                newBullet.pierceCount = pierceCount - 1;
+                newBullet.WallCollisionHandling();
+            }
+            performedSplit = true;
+        }
+
+        WallCollisionHandling();
+        return performedSplit;
     }
 }

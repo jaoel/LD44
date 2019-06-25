@@ -155,8 +155,7 @@ GameObject:
   - component: {fileID: 4442970135488669101}
   - component: {fileID: 4442970135488669102}
   - component: {fileID: 8021901535426122452}
-  - component: {fileID: 751836391291725735}
-  - component: {fileID: 8685009133954129414}
+  - component: {fileID: -421185980189427726}
   m_Layer: 10
   m_Name: LaserBullet
   m_TagString: Untagged
@@ -212,23 +211,7 @@ Rigidbody2D:
   m_SleepingMode: 1
   m_CollisionDetection: 1
   m_Constraints: 0
---- !u!58 &751836391291725735
-CircleCollider2D:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 4442970135488669103}
-  m_Enabled: 0
-  m_Density: 1
-  m_Material: {fileID: 0}
-  m_IsTrigger: 1
-  m_UsedByEffector: 0
-  m_UsedByComposite: 0
-  m_Offset: {x: 0, y: 0}
-  serializedVersion: 2
-  m_Radius: 0.1
---- !u!114 &8685009133954129414
+--- !u!114 &-421185980189427726
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -237,20 +220,16 @@ MonoBehaviour:
   m_GameObject: {fileID: 4442970135488669103}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: b4102f9ce37015342b20cb5235df8d53, type: 3}
+  m_Script: {fileID: 11500000, guid: 214eb097894f69d4ead15e2db6d6f154, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _lifetime: 1
+  _lifetime: 1.5
   _speed: 15
   _size: {x: 1, y: 1}
   _damage: 300
-  _tint: {r: 1, g: 1, b: 1, a: 0}
+  _tint: {r: 0, g: 0, b: 0, a: 0}
   _spriteRenderer: {fileID: 0}
-  _collider: {fileID: 751836391291725735}
-  splitCount: 2
   pierceCount: 2
-  _bulletsPerSplit: 5
-  _laserBulletPrefab: {fileID: 8685009133954129414}
   _trail: {fileID: 4442970134725570482}
   _capsule: {fileID: 373279478012607057}
 --- !u!1 &5581972923418211609
