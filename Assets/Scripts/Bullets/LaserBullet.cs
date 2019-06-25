@@ -33,10 +33,6 @@ public class LaserBullet : Bullet
     public override void Initialize(float charge, Vector2 direction, GameObject owner)
     {
         base.Initialize(charge, direction, owner);
-
-        _charge = Mathf.Max(_charge, 0.3f);
-        _currentLifetime *= _charge;
-        _currentDamage *= _charge;
     }
 
     public override void UpdateBullet()
