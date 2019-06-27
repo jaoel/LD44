@@ -9,7 +9,17 @@ public static class RectIntExtension
 
     public static bool Overlaps(this RectInt a, RectInt b)
     {
-        return (Mathf.Abs(a.x - b.x) * 2 < (a.width + b.width)) && (Mathf.Abs(a.y - b.y) * 2 < (a.height + b.height));
+        if (a.yMax <= b.y || a.y >= b.yMax)
+        {
+            return false;
+        }
+
+        if (a.xMax <= b.x || a.x >= b.xMax)
+        {
+            return false;
+        }
+
+        return true;
     }
 
     public static bool Intersects(this RectInt a, RectInt b, out RectInt area)
