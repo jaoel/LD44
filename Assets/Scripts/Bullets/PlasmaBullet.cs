@@ -49,10 +49,6 @@ public class PlasmaBullet : Bullet
         _speed = Utility.ConvertRange(0.0f, 1.0f, minSpeed, _speed, 1.0f - _charge);
         _currentDamage = Utility.ConvertRange(0.0f, 1.0f, 0.0f, _damage, _charge);
         _currentLifetime = Utility.ConvertRange(0.0f, 1.0f, 0.0f, _lifetime, _charge);
-
-        //_charge = Mathf.Max(_charge, 0.3f);
-        //_currentLifetime *= _charge;
-        //_currentDamage *= _charge;
     }
 
     public override void UpdateBullet()
