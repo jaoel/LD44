@@ -11,6 +11,7 @@ public class LaserBullet : Bullet
 {
     public int pierceCount;
 
+
     [SerializeField]
     private TrailRenderer _trail;
 
