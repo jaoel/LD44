@@ -87,6 +87,28 @@ public class Weapon : MonoBehaviour
     protected Color _chargeGoalColor = Color.cyan;
     protected Color _clearColor = Utility.RGBAColor(0, 0, 0, 1.0f);
 
+    public override bool Equals(object obj)
+    {
+        if (obj == null)
+        {
+            return false;
+        }
+
+        if (this.GetType() != obj.GetType())
+        {
+            return false;
+        }
+
+        //Temporary comparison
+        Weapon other = (Weapon)obj;
+        if (other.uiImage == uiImage)
+        {
+            return true;
+        }
+
+        return false;
+    }
+
     protected virtual void Awake()
     {
         _currentCooldown = _cooldown;

@@ -422,6 +422,13 @@ public class Player : MonoBehaviour, IWeaponOwner, IBuffable
         }
 
         Weapon newWeapon = GameObject.Instantiate(weaponPrefab, transform).GetComponent<Weapon>();
+
+        if (_weapons.Contains(newWeapon))
+        {
+            Destroy(newWeapon);
+            return;
+        }
+
         newWeapon.SetOwner(this, true);
 
         CurrentWeapon?.StopShooting();
