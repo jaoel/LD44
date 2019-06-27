@@ -43,6 +43,8 @@ public class PlayerUI : MonoBehaviour
     private float minimapExpandedAmount = 0f;
     private float minimapExpandDuration = 0.25f;
 
+    public Image test => _chargeMeterFill;
+
     private void Awake()
     {
         _scaler = GetComponent<CanvasScaler>();
@@ -196,6 +198,11 @@ public class PlayerUI : MonoBehaviour
     public void SetChargeMeterColor(Color startColor, Color endColor, float value)
     {
         _chargeMeterFill.color = Color.Lerp(startColor, endColor, value);
+    }
+
+    public Tween FlashChargeMeter(Color flashColor, Color endColor, float time, int flashes)
+    {
+        return _chargeMeterFill.DOColor(flashColor, time / flashes).SetLoops(flashes, LoopType.Yoyo);
     }
 
     public void AddSkeletonKey(int count)

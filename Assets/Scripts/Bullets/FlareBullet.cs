@@ -19,12 +19,12 @@ public class FlareBullet : Bullet
     [SerializeField]
     private AudioSource _trailSound;
 
-    public override void Initialize(float charge, Vector2 direction, GameObject owner)
+    public override void Initialize(float charge, Vector2 direction, GameObject owner, bool superCharged)
     {
         _trailSound.volume = SettingsManager.Instance.SFXVolume;
         _trailSound.Play();
 
-        base.Initialize(charge, direction, owner);
+        base.Initialize(charge, direction, owner, superCharged);
     }
 
     public override void UpdateBullet()

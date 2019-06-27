@@ -17,9 +17,9 @@ public class SlingshotBullet : Bullet
         base.Start();
     }
 
-    public override void Initialize(float charge, Vector2 direction, GameObject owner)
+    public override void Initialize(float charge, Vector2 direction, GameObject owner, bool superCharged)
     {
-        base.Initialize(charge, direction, owner);
+        base.Initialize(charge, direction, owner, superCharged);
 
         _charge = Mathf.Max(_charge, 0.5f);
         _currentLifetime *= _charge;

@@ -38,9 +38,9 @@ public class PlasmaBullet : Bullet
         base.Start();
     }
 
-    public override void Initialize(float charge, Vector2 direction, GameObject owner)
+    public override void Initialize(float charge, Vector2 direction, GameObject owner, bool superCharged)
     {
-        base.Initialize(charge, direction, owner);
+        base.Initialize(charge, direction, owner, superCharged);
 
         _collider.radius = Utility.ConvertRange(0.0f, 1.0f, 0.075f, 0.3f, _charge);
         float size = Utility.ConvertRange(0.0f, 1.0f, minSize, maxSize, _charge);
@@ -135,7 +135,7 @@ public class PlasmaBullet : Bullet
                 }
                 
                 PlasmaBullet newBullet = (PlasmaBullet)BulletManager.Instance.SpawnBullet(_plasmaBulletPrefab, _lastPosition, 
-                    direction.normalized, _charge * 0.66f, _owner);
+                    direction.normalized, _charge * 0.66f, _owner, _superCharged);
                 newBullet.splitCount = splitCount;
                 newBullet.SetOwner(null);
             }

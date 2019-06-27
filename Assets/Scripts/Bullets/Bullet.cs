@@ -26,6 +26,7 @@ public class Bullet : MonoBehaviour
     protected float _currentLifetime;
     protected float _currentDamage;
     protected float _charge;
+    protected bool _superCharged;
 
     protected virtual void Awake()
     {
@@ -37,11 +38,12 @@ public class Bullet : MonoBehaviour
 
     }
 
-    public virtual void Initialize(float charge, Vector2 direction, GameObject owner)
+    public virtual void Initialize(float charge, Vector2 direction, GameObject owner, bool superCharged)
     {
         _currentLifetime = _lifetime;
         _currentDamage = _damage;
         _charge = charge;
+        _superCharged = superCharged;
 
         SetTint(_tint);
         SetSize(_size);

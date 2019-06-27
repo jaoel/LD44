@@ -87,6 +87,9 @@ public class Weapon : MonoBehaviour
     protected Color _chargeGoalColor = Color.cyan;
     protected Color _clearColor = Utility.RGBAColor(0, 0, 0, 1.0f);
 
+    protected Tween _chargeFlash;
+    protected bool _superCharged;
+
     public override bool Equals(object obj)
     {
         if (obj == null)
@@ -119,6 +122,8 @@ public class Weapon : MonoBehaviour
         _reloading = false;
         _halfAngle = _firingArc / 2.0f;
         _degPerBullet = _firingArc / _bulletsPerShot;
+        _chargeFlash = null;
+        _superCharged = false;
 
         UpdatePlayerUI();
     }
@@ -137,6 +142,7 @@ public class Weapon : MonoBehaviour
         _shotSound.Play();
 
         float halfAngle = _firingArc / 2.0f;
+        bool isSuperCharged = _superCharged;
 
         for(int i = 0; i < _bulletsPerShot; i++)
         {
@@ -152,7 +158,8 @@ public class Weapon : MonoBehaviour
 
             _currentChargeTime = Mathf.Min(_currentChargeTime, _chargeTime);
             float charge = _chargeTime > 0.0f ? _currentChargeTime / _chargeTime : 1.0f;
-            BulletManager.Instance.SpawnBullet(_bulletPrefab, _owner.GetBulletOrigin(), rotation * _owner.GetAimVector(), charge, _owner.GetGameObject());
+            BulletManager.Instance.SpawnBullet(_bulletPrefab, _owner.GetBulletOrigin(), rotation * _owner.GetAimVector(), 
+                charge, _owner.GetGameObject(), isSuperCharged);
 
             if (_burstInterval > 0)
             {
@@ -224,6 +231,17 @@ public class Weapon : MonoBehaviour
         yield return null;
     }
 
+    private void DestroyChargeFlash()
+    {
+        if (_chargeFlash != null)
+        {
+            _chargeFlash.Kill();
+            _chargeFlash = null;
+        }
+
+        _superCharged = false;
+    }
+
     public virtual void Shoot()
     {
         if ((_bulletsLeft <= 0 || _reloading) && _magazineSize > 0)
@@ -242,17 +260,34 @@ public class Weapon : MonoBehaviour
                 _chargeSound.Play();
             }
 
-            if (_maxChargeSound != null && !_maxChargeSound.isPlaying && _currentChargeTime >= _chargeTime)
+            if (_currentChargeTime >= _chargeTime)
             {
-                _maxChargeSound.volume = SettingsManager.Instance.SFXVolume;
-                _maxChargeSound.Play();
+                if (_currentChargeTime < _chargeTime + 0.5f && _chargeFlash == null)
+                {
+                    _chargeFlash = UIManager.Instance.playerUI.FlashChargeMeter(Color.red, _chargeGoalColor, 0.5f, 10);
+                    _superCharged = true;
+                }
+
+                if (_currentChargeTime >= _chargeTime + 0.5f)
+                {
+                    DestroyChargeFlash();
+                }
+
+                if (_maxChargeSound != null && !_maxChargeSound.isPlaying)
+                {
+                    _maxChargeSound.volume = SettingsManager.Instance.SFXVolume;
+                    _maxChargeSound.Play();
+                }
             }
 
             _currentChargeTime += Time.deltaTime;
 
             if (_isPlayerOwned && _chargeTime > 0.0f)
             {
-                UIManager.Instance.playerUI.SetChargeMeterColor(_clearColor, _chargeGoalColor, _currentChargeTime / _chargeTime);
+                if (_chargeFlash == null)
+                {
+                    UIManager.Instance.playerUI.SetChargeMeterColor(_clearColor, _chargeGoalColor, _currentChargeTime / _chargeTime);
+                }
                 UIManager.Instance.playerUI.chargeMeter.value = _currentChargeTime / _chargeTime;
             }
 
@@ -329,6 +364,7 @@ public class Weapon : MonoBehaviour
             }
         }
         _currentCooldown = 0.0f;
+        DestroyChargeFlash();
     }
 
     public void UpdatePlayerUI()
@@ -367,6 +403,8 @@ public class Weapon : MonoBehaviour
 
         if (!_charging && _currentChargeTime > 0.0f && _chargeTime > 0.0f)
         {
+            DestroyChargeFlash();
+
             _chargeSound?.Stop();
             _maxChargeSound?.Stop();
 

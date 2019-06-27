@@ -67,7 +67,7 @@ public class BulletManager : MonoBehaviour
         _instance = null;
     }
 
-    public Bullet SpawnBullet(Bullet prefab, Vector2 position, Vector2 direction, float charge, GameObject owner)
+    public Bullet SpawnBullet(Bullet prefab, Vector2 position, Vector2 direction, float charge, GameObject owner, bool superCharged)
     {
         PreAllocateBullets(prefab);
         BulletInstance availableBullet = FindAvailableBulletInstance(prefab);
@@ -76,7 +76,7 @@ public class BulletManager : MonoBehaviour
         Bullet bullet = availableBullet.instance;
         bullet.gameObject.SetActive(true);
         bullet.transform.position = new Vector3(position.x, position.y, 0.0f);
-        bullet.Initialize(charge, direction, owner);
+        bullet.Initialize(charge, direction, owner, superCharged);
 
         return bullet;
     }

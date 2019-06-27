@@ -32,9 +32,9 @@ public class LaserBullet : Bullet
         base.Start();
     }
 
-    public override void Initialize(float charge, Vector2 direction, GameObject owner)
+    public override void Initialize(float charge, Vector2 direction, GameObject owner, bool superCharged)
     {
-        base.Initialize(charge, direction, owner);
+        base.Initialize(charge, direction, owner, superCharged);
     }
 
     public override void UpdateBullet()
