@@ -49,6 +49,11 @@ public class PlasmaBullet : Bullet
         _speed = Utility.ConvertRange(0.0f, 1.0f, minSpeed, _speed, 1.0f - _charge);
         _currentDamage = Utility.ConvertRange(0.0f, 1.0f, 0.0f, _damage, _charge);
         _currentLifetime = Utility.ConvertRange(0.0f, 1.0f, 0.0f, _lifetime, _charge);
+
+        if (_superCharged)
+        {
+            SetTint(Color.red);
+        }
     }
 
     public override void UpdateBullet()

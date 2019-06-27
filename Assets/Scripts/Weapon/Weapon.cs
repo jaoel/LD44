@@ -87,6 +87,7 @@ public class Weapon : MonoBehaviour
     protected Color _chargeGoalColor = Color.cyan;
     protected Color _clearColor = Utility.RGBAColor(0, 0, 0, 1.0f);
 
+    protected float _superChargeTimeWindow;
     protected Tween _chargeFlash;
     protected bool _superCharged;
 
@@ -114,6 +115,7 @@ public class Weapon : MonoBehaviour
 
     protected virtual void Awake()
     {
+        _superChargeTimeWindow = 0.25f;
         _currentCooldown = _cooldown;
         _adjustedCooldown = _cooldown;
         _currentChargeTime = 0.0f;
@@ -262,13 +264,13 @@ public class Weapon : MonoBehaviour
 
             if (_currentChargeTime >= _chargeTime)
             {
-                if (_currentChargeTime < _chargeTime + 0.5f && _chargeFlash == null)
+                if (_currentChargeTime < _chargeTime + _superChargeTimeWindow && _chargeFlash == null)
                 {
-                    _chargeFlash = UIManager.Instance.playerUI.FlashChargeMeter(Color.red, _chargeGoalColor, 0.5f, 10);
+                    _chargeFlash = UIManager.Instance.playerUI.FlashChargeMeter(Color.red, _chargeGoalColor, _superChargeTimeWindow, 5);
                     _superCharged = true;
                 }
 
-                if (_currentChargeTime >= _chargeTime + 0.5f)
+                if (_currentChargeTime >= _chargeTime + _superChargeTimeWindow)
                 {
                     DestroyChargeFlash();
                 }
