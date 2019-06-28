@@ -33,7 +33,7 @@ public class BulletManager : MonoBehaviour
 
     void FixedUpdate()
     {
-        foreach (var keyValue in _bulletList)
+        foreach (KeyValuePair<Bullet, List<BulletInstance>> keyValue in _bulletList)
         {
             List<BulletInstance> bullets = keyValue.Value;
             foreach (BulletInstance bullet in bullets)

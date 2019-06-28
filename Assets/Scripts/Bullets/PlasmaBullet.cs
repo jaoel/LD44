@@ -26,9 +26,14 @@ public class PlasmaBullet : Bullet
     private Vector2 _reflectionNormal;
     private Vector2 _lastPosition;
     private int _startSplitCount;
+
+    private float _splitInterval;
+    private float _splitTimer;
+
     protected override void Awake()
     {
         _startSplitCount = splitCount;
+        _splitInterval = 0.5f;
 
         base.Awake();
     }
@@ -63,6 +68,25 @@ public class PlasmaBullet : Bullet
         _direction.Normalize();
 
         base.UpdateBullet();
+
+
+        if (_superCharged)
+        {
+            _splitTimer += Time.deltaTime;
+        }
+    }
+
+    private void LateUpdate()
+    {
+        if (_superCharged)
+        {
+            if (_splitTimer >= _splitInterval)
+            {
+                _splitTimer = 0.0f;
+                SplitBullet(transform.position, true);
+                splitCount++;
+            }
+        }
     }
 
     public override void BeforeDestroyed(GameObject hitTarget)
@@ -140,7 +164,7 @@ public class PlasmaBullet : Bullet
                 }
                 
                 PlasmaBullet newBullet = (PlasmaBullet)BulletManager.Instance.SpawnBullet(_plasmaBulletPrefab, _lastPosition, 
-                    direction.normalized, _charge * 0.66f, _owner, _superCharged);
+                    direction.normalized, _charge * 0.66f, _owner, false);
                 newBullet.splitCount = splitCount;
                 newBullet.SetOwner(null);
             }
