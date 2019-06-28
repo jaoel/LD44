@@ -10,7 +10,11 @@ public class SlingshotBullet : Bullet
     [SerializeField]
     private Transform _shadowTransform;
 
+    [SerializeField]
+    private float _directionOffsetDeg;
+
     private float _rotation = 0f;
+    private float _halfAngle;
 
     protected override void Start()
     {
@@ -24,11 +28,17 @@ public class SlingshotBullet : Bullet
         _charge = Mathf.Max(_charge, 0.5f);
         _currentLifetime *= _charge;
         _rotation = UnityEngine.Random.Range(0.0f, 360.0f);
-        //_visualTransform.localPosition = new Vector3(_visualTransform.localPosition.x, 0.0f, _visualTransform.localPosition.z);
-        //_shadowTransform.localScale = new Vector3(1.0f, 1.0f, 1.0f);
-        //_visualTransform.DOLocalMoveY(-0.5f, _currentLifetime).SetEase(Ease.OutBounce);
-        //_visualTransform.DOScale(new Vector3(0.0f, 0.0f, 0.0f), _currentLifetime).SetEase(Ease.InCirc);
-        //_shadowTransform.DOScale(new Vector3(0.0f, 0.0f, 0.0f), _currentLifetime).SetEase(Ease.InCirc);
+        _halfAngle = _directionOffsetDeg / 2.0f;
+
+        if (!_superCharged)
+        {
+            _direction = Quaternion.Euler(0.0f, 0.0f, UnityEngine.Random.Range(-_halfAngle, _halfAngle)) * _direction;
+        }
+        else
+        {
+            _currentDamage *= 1.4f;
+            _currentSpeed *= 1.2f;
+        }
     }
 
     public override void UpdateBullet()
@@ -36,7 +46,7 @@ public class SlingshotBullet : Bullet
         _rotation += 300.0f * Time.deltaTime;
         _visualTransform.rotation = Quaternion.Euler(0.0f, 0.0f, _rotation);
 
-        transform.position += _direction.ToVector3() * _speed * Time.deltaTime * _charge;
+        transform.position += _direction.ToVector3() * _currentSpeed * Time.deltaTime * _charge;
     }
 
     protected override void OnTriggerEnter2D(Collider2D collision)

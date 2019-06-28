@@ -54,12 +54,14 @@ MonoBehaviour:
   _bulletsPerShot: 1
   _burstInterval: 0
   _knockback: 0
-  _firingArc: 15
+  _firingArc: 0
   _randomizePattern: 1
   _bulletPrefab: {fileID: 1322879831930639400, guid: 01d33d4390ba07c458cec9d95579c344,
     type: 3}
   _shotSound: {fileID: 7246573145497593685}
   _reloadSound: {fileID: -5912559479772928181}
+  _chargeSound: {fileID: 0}
+  _maxChargeSound: {fileID: 0}
 --- !u!82 &7246573145497593685
 AudioSource:
   m_ObjectHideFlags: 0

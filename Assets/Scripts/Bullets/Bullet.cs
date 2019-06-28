@@ -25,6 +25,7 @@ public class Bullet : MonoBehaviour
     protected Vector2 _direction;
     protected float _currentLifetime;
     protected float _currentDamage;
+    protected float _currentSpeed;
     protected float _charge;
     protected bool _superCharged;
 
@@ -42,6 +43,7 @@ public class Bullet : MonoBehaviour
     {
         _currentLifetime = _lifetime;
         _currentDamage = _damage;
+        _currentSpeed = _speed;
         _charge = charge;
         _superCharged = superCharged;
 
@@ -85,7 +87,7 @@ public class Bullet : MonoBehaviour
 
     public virtual void UpdateBullet()
     {
-        transform.position += _direction.ToVector3() * _speed * Time.deltaTime;
+        transform.position += _direction.ToVector3() * _currentSpeed * Time.deltaTime;
     }
 
     public virtual void BeforeDestroyed(GameObject hitTarget)

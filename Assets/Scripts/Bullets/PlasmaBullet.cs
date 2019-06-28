@@ -46,7 +46,7 @@ public class PlasmaBullet : Bullet
         float size = Utility.ConvertRange(0.0f, 1.0f, minSize, maxSize, _charge);
         SetSize(new Vector2(size, size));
 
-        _speed = Utility.ConvertRange(0.0f, 1.0f, minSpeed, _speed, 1.0f - _charge);
+        _currentSpeed = Utility.ConvertRange(0.0f, 1.0f, minSpeed, _currentSpeed, 1.0f - _charge);
         _currentDamage = Utility.ConvertRange(0.0f, 1.0f, 0.0f, _damage, _charge);
         _currentLifetime = Utility.ConvertRange(0.0f, 1.0f, 0.0f, _lifetime, _charge);
 

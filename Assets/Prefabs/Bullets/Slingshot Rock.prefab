@@ -217,6 +217,7 @@ MonoBehaviour:
   _spriteRenderer: {fileID: 9148656470891143727}
   _visualTransform: {fileID: 7480851900034803971}
   _shadowTransform: {fileID: 300911882282728784}
+  _directionOffsetDeg: 30
 --- !u!210 &6043077982881474119
 SortingGroup:
   m_ObjectHideFlags: 0
