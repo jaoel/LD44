@@ -11,6 +11,9 @@ public class GrenadeBullet : Bullet
     private Bullet _grenadePrefab;
 
     [SerializeField]
+    private GameObject _attractorDebuff;
+
+    [SerializeField]
     private GameObject _explosionPrefab;
 
     [SerializeField]
@@ -21,6 +24,8 @@ public class GrenadeBullet : Bullet
 
     private float _rotation;
     private Vector3 _lastPosition;
+
+    private List<AttractorDebuff> _attractorDebuffs;
 
     protected override void Start()
     {
@@ -42,6 +47,20 @@ public class GrenadeBullet : Bullet
         transform.rotation = Quaternion.Euler(0.0f, 0.0f, _rotation);
 
         _lastPosition = transform.position;
+
+        if (_superCharged)
+        {
+            List<Enemy> enemies = MapManager.Instance.CurrentMap.GetEnemiesInCircle(_lastPosition, _explosionRadius * 4.0f);
+            _attractorDebuffs = new List<AttractorDebuff>();
+            enemies.ForEach(x =>
+            {
+                AttractorDebuff debuff = Instantiate(_attractorDebuff.gameObject, x.transform).GetComponent<AttractorDebuff>();
+                debuff.target = gameObject;
+                x.AddStatusEffect(debuff);
+
+                _attractorDebuffs.Add(debuff);
+            });
+        }
     }
 
     public override void BeforeDestroyed(GameObject hitTarget)
@@ -53,17 +72,10 @@ public class GrenadeBullet : Bullet
 
         if (_superCharged)
         {
-            for(int i = 0; i < 6; i++)
+            _attractorDebuffs.ForEach(x =>
             {
-                float angle = i * (360.0f / 6.0f);
-                Vector2 direction = Quaternion.Euler(0.0f, 0.0f, angle) * Vector2.up;
-                GrenadeBullet newBullet = (GrenadeBullet)BulletManager.Instance.SpawnBullet(_grenadePrefab, _lastPosition.ToVector2() + direction.normalized * 0.2f,
-                    direction.normalized, 0.4f, null, false);
-
-                newBullet._explosionRadius = _explosionRadius / 2.0f;
-                newBullet._explosionDamage = _explosionDamage / 2.0f;
-                newBullet._currentLifetime = 0.5f;
-            }
+                Destroy(x);
+            });
         }
     }
 }

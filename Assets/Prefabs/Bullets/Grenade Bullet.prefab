@@ -91,6 +91,8 @@ MonoBehaviour:
   _tint: {r: 0.19607843, g: 0.24705882, b: 0, a: 1}
   _spriteRenderer: {fileID: 9148656470891143727}
   _grenadePrefab: {fileID: -3827084654663179403}
+  _attractorDebuff: {fileID: 8144615506866930052, guid: 14f7d66f5e11d9847812be69a5fdd977,
+    type: 3}
   _explosionPrefab: {fileID: 895976179499023227, guid: 0c721c7fa8181604ba893146488470a2,
     type: 3}
   _explosionRadius: 2

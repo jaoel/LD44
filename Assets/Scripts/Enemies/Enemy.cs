@@ -54,7 +54,7 @@ public class Enemy : MonoBehaviour, IBuffable
 
     protected List<Item> _itemDrops;
 
-    protected List<StatusEffect> _statusEffects;
+    protected HashSet<StatusEffect> _statusEffects;
 
     private float _corpseCollisionTimer;
 
@@ -69,7 +69,7 @@ public class Enemy : MonoBehaviour, IBuffable
         _spawnPosition = transform.position.ToVector2();
         _colorController = GetComponent<HurtBlink>();
         _itemDrops = new List<Item>();
-        _statusEffects = new List<StatusEffect>();
+        _statusEffects = new HashSet<StatusEffect>();
 
         _navigation.MoveTo(transform.position.ToVector2() + Utility.RandomPointOnCircleEdge(1.0f), true);
     }
@@ -87,10 +87,10 @@ public class Enemy : MonoBehaviour, IBuffable
 
         if (_statusEffects.Any(x => x.OverrideNavigation))
         {
-            _statusEffects.ForEach(x =>
+            foreach(StatusEffect x in _statusEffects)
             {
                 x.Navigation();
-            });
+            }
         }
         else
         {
@@ -384,6 +384,6 @@ public class Enemy : MonoBehaviour, IBuffable
 
     public virtual void HandleStatusEffects()
     {
-        _statusEffects.RemoveAll(x => x == null);
+        _statusEffects.RemoveWhere(x => x == null);
     }
 }

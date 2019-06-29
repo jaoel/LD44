@@ -32,10 +32,10 @@ public class ShootingEnemy : Enemy, IWeaponOwner
 
         if (_statusEffects.Any(x => x.OverrideNavigation))
         {
-            _statusEffects.ForEach(x =>
+            foreach (StatusEffect x in _statusEffects)
             {
                 x.Navigation();
-            });
+            }
         }
         else
         {
