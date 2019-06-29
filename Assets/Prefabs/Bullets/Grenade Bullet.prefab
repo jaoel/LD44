@@ -90,6 +90,7 @@ MonoBehaviour:
   _damage: 10
   _tint: {r: 0.19607843, g: 0.24705882, b: 0, a: 1}
   _spriteRenderer: {fileID: 9148656470891143727}
+  _grenadePrefab: {fileID: -3827084654663179403}
   _explosionPrefab: {fileID: 895976179499023227, guid: 0c721c7fa8181604ba893146488470a2,
     type: 3}
   _explosionRadius: 2
