@@ -441,6 +441,8 @@ public class MapPainter
                 }
             }
         }
+
+        map.UpdateCollisionMapDebug(false);
     }
 
     private void PostProcessPits(int x, int y, BoundsInt blockBounds)

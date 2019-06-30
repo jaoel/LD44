@@ -366,9 +366,15 @@ public class Map
             {
                 int collisionIndex = CollisionMap[i, j];
 
-                if (walls && collisionIndex == 1 || !walls && collisionIndex == 2)
+                if (walls && collisionIndex == 1)
                 {
                     debug.SetTile(new Vector3Int(Bounds.xMin + i, Bounds.yMin + j, 0), MapGenerator.Instance.wallContainer.FloorTiles.ElementAt(0).value); //FloorTiles[0]);
+                }
+                else if (!walls && collisionIndex == 2)
+                {
+                    Vector3Int pos = new Vector3Int(Bounds.xMin + i, Bounds.yMin + j, 0);
+
+                    debug.SetTile(pos, _pits.GetTile(pos)); //FloorTiles[0]);
                 }
             }
         }
@@ -421,6 +427,20 @@ public class Map
         }
 
         return false;
+    }
+
+    public List<int> GetCollisionIndices(BoundsInt bounds)
+    {
+        List<int> result = new List<int>();
+        for (int i = 0; i < bounds.size.x; i++)
+        {
+            for (int j = 0; j < bounds.size.y; j++)
+            {
+                result.Add(CollisionMap[bounds.xMin - Bounds.xMin + i, bounds.yMin - Bounds.yMin + j]);
+            }
+        }
+
+        return result;
     }
 
     public int GetCollisionIndex(int x, int y)

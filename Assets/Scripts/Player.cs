@@ -1,9 +1,13 @@
 ﻿using UnityEngine;
 using DG.Tweening;
 using System.Collections.Generic;
+using System.Collections;
 
 public class Player : MonoBehaviour, IWeaponOwner, IBuffable
 {
+    [SerializeField]
+    private BoxCollider2D _pitCollider;
+
     private Key _goldKey;
     private Queue<Key> _skeletonKeys;
 
@@ -32,11 +36,12 @@ public class Player : MonoBehaviour, IWeaponOwner, IBuffable
 
     private float _invulnTimer = float.MaxValue;
 
-    public float firingRateModifier = 1.0f;
     private float _slowTimer = float.MinValue;
     private float _slowFactor = float.MaxValue;
 
     private List<StatusEffect> _statusEffects;
+    private bool _disabled;
+    private Vector3 _lastPosition;
 
     public bool GodMode { get; set; } = false;
     public bool IsInvulnerable => _invulnTimer < invulnTime;
@@ -90,6 +95,7 @@ public class Player : MonoBehaviour, IWeaponOwner, IBuffable
         inputVector = Vector3.zero;
         _skeletonKeys = new Queue<Key>();
         _statusEffects = new List<StatusEffect>();
+        _disabled = false;
 
         UIManager.Instance.playerUI.SetGoldKey(false);
         UIManager.Instance.playerUI.RemoveSkeletonKey(_skeletonKeys.Count);
@@ -172,7 +178,7 @@ public class Player : MonoBehaviour, IWeaponOwner, IBuffable
         UIManager.Instance.playerUI.SetHealthbar(currentHealth, maxHealth);
         UIManager.Instance.playerUI.SetChargeMeterPosition(transform.position);
 
-        if (!IsAlive || Main.Instance.Paused)
+        if (!IsAlive || Main.Instance.Paused || _disabled)
         {
             CurrentWeapon?.StoppedShooting();
             return;
@@ -199,7 +205,9 @@ public class Player : MonoBehaviour, IWeaponOwner, IBuffable
 
     void FixedUpdate()
     {
-        if (Main.Instance.Paused)
+        _lastPosition = transform.position;
+
+        if (Main.Instance.Paused || _disabled)
         {
             return;
         }
@@ -397,6 +405,44 @@ public class Player : MonoBehaviour, IWeaponOwner, IBuffable
         }
 
         return false;
+    }
+
+    private IEnumerator HandlePit(Vector3 lastPosition)
+    {
+        _disabled = true;
+        _pitCollider.enabled = false;
+        rigidbody.velocity = Vector3.zero;
+        velocity = Vector3.zero;
+        inputVector = Vector3.zero;
+        ReceiveDamage(5, Vector2.zero, false, false);
+
+        if (!IsAlive)
+        {
+            _disabled = false;
+            _pitCollider.enabled = true;
+
+            yield break;
+        }
+
+        visual.enabled = false;
+        yield return new WaitForSeconds(1.0f);
+        visual.enabled = true;
+
+        Vector3 direction = transform.position - lastPosition;
+        transform.DOMove(lastPosition - direction.normalized, 0.5f);
+        yield return new WaitForSeconds(0.5f);
+
+        _disabled = false;
+        _pitCollider.enabled = true;
+        yield break;
+    }
+
+    private void OnTriggerEnter2D(Collider2D collision)
+    {
+        if (collision.gameObject.layer == Layers.Pits && !_disabled)
+        {
+            StartCoroutine(HandlePit(_lastPosition));
+        }
     }
 
     Vector2 IWeaponOwner.GetAimVector()
