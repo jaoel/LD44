@@ -128,12 +128,6 @@ public class PlasmaBullet : Bullet
                 active = false;
             }
         }
-        else if (collision.gameObject.layer == Layers.Player)
-        {
-            collision.gameObject.GetComponent<Player>().ReceiveDamage((int)(_currentDamage * 0.1f), _direction);
-            BeforeDestroyed(collision.gameObject);
-            active = false;
-        }
 
         gameObject.SetActive(active);
     }
@@ -166,7 +160,6 @@ public class PlasmaBullet : Bullet
                 PlasmaBullet newBullet = (PlasmaBullet)BulletManager.Instance.SpawnBullet(_plasmaBulletPrefab, _lastPosition, 
                     direction.normalized, _charge * 0.66f, _owner, false);
                 newBullet.splitCount = splitCount;
-                newBullet.SetOwner(null);
             }
             performedSplit = true;
         }

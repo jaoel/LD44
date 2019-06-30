@@ -79,7 +79,6 @@ public class LaserBullet : Bullet
             _reflectionNormal = hit.normal;
             _direction = Vector2.Reflect(_direction.normalized, _reflectionNormal);
             transform.position = _lastPosition;
-            _owner = null;
         }
         else if (collision.gameObject.layer == Layers.Enemy || collision.gameObject.layer == Layers.FlyingEnemy)
         {
@@ -97,19 +96,6 @@ public class LaserBullet : Bullet
                 pierceCount--;
                 _currentDamage -= _currentDamage * 0.33f;
             }
-        }
-        else if (collision.gameObject.layer == Layers.Player)
-        {
-            Main.Instance.player.ReceiveDamage((int)(_currentDamage * 0.1f), _direction);
-
-            if (pierceCount <= 0)
-            {
-                BeforeDestroyed(collision.gameObject);
-                active = false;
-            }
-
-            pierceCount--;
-            _currentDamage -= _currentDamage * 0.33f;
         }
 
         gameObject.SetActive(active);

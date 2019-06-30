@@ -41,12 +41,11 @@ public class SignalFlare : MonoBehaviour
             });
         }
 
-
-        if ((transform.position - Main.Instance.player.transform.position).magnitude <= _explosionRadius)
-        {
-            Main.Instance.player.AddStatusEffect(Instantiate(_burningDebuff.gameObject, Main.Instance.player.transform)
-                .GetComponent<BurningDebuff>());
-        }
+        //if ((transform.position - Main.Instance.player.transform.position).magnitude <= _explosionRadius)
+        //{
+        //    Main.Instance.player.AddStatusEffect(Instantiate(_burningDebuff.gameObject, Main.Instance.player.transform)
+        //        .GetComponent<BurningDebuff>());
+        //}
 
         MapManager.Instance.DamageAllEnemiesInCircle(transform.position.ToVector2(), _explosionRadius, _explosionDamage, true);
         CameraManager.Instance.ShakeCamera(0.6f, 0.25f, 1.25f);
