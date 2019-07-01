@@ -84,12 +84,16 @@ public class Player : MonoBehaviour, IWeaponOwner, IBuffable
         ResetPlayer();
     }
 
-    public void ResetPlayer()
+    public void ResetPlayer(bool healPlayer = true)
     {
         MaxHealth = Main.Instance.sessionData.playerMaxHealth;
         Main.Instance.sessionData.AddWeapons(this);
 
-        Health = MaxHealth;
+        if (healPlayer)
+        {
+            Health = MaxHealth;
+        }
+
         _invulnTimer = float.MaxValue;
         velocity = Vector3.zero;
         inputVector = Vector3.zero;

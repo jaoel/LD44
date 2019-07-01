@@ -113,4 +113,14 @@ public class GameSceneManager : MonoBehaviour
         MenuManager.Instance.PushMenu<MainMenu>();
         SceneManager.LoadScene("MainMenuScene", LoadSceneMode.Single);
     }
+
+    public void LoadBossScene()
+    {
+        GameSceneManager.Instance.TogglePlayerContainer(true);
+        Main.Instance.gameState = GameState.Boss;
+        Main.Instance.player.transform.position = Vector3.zero;
+        Main.Instance.player.ResetPlayer(false);
+        MapManager.Instance.ToggleFogOfWarEnabled(true);
+        SceneManager.LoadScene(MapManager.Instance.selectedDungeonData.bossScene, LoadSceneMode.Single);
+    }
 }

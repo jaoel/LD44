@@ -13,7 +13,9 @@ public class DungeonSelector : InteractiveObject
 
     public override void OnActivate()
     {
-        MapGenerator.Instance.selectedDungeonData = dungeonData;
+        MapManager.Instance.SetDungeonData(dungeonData);
+        GameSceneManager.Instance.LoadGameplayScene();
+
         onActivate?.Invoke();
     }
 }

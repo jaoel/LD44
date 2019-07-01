@@ -12,6 +12,7 @@ public enum GameState
     Shop,
     Graveyard,
     Gameplay,
+    Boss,
     Count
 }
 
@@ -23,6 +24,7 @@ public class Main : MonoBehaviour
     
     public bool gameOver;
     public GameObject blackOverlay;
+    public List<int> bossTiers;
 
     public bool Paused { get; private set; } = false;
 
@@ -53,12 +55,24 @@ public class Main : MonoBehaviour
 
     private void Start()
     {
+        bossTiers = new List<int>();
     }
 
     public void Initialize()
     {
         gameOver = false;
         Time.timeScale = 1.0f;
+
+        if (gameState != GameState.Boss)
+        {
+            bossTiers = new List<int>();
+        }
+    }
+
+    public void PayBossTribute(int tier)
+    {
+        bossTiers.Add(tier);
+        GameObject.Find("BossTeleport").GetComponent<BossTeleport>().active = true;
     }
 
     void Update()

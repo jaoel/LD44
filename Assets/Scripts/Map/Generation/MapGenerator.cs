@@ -73,7 +73,7 @@ public class MapGenerator : MonoBehaviour
         return _random.GetStartingSeed();
     }
 
-    public Map GenerateMap(long seed, in MapGeneratorParameters parameters, int level)
+    public Map GenerateMap(long seed, int level)
     {
         Debug.Log("Generating new map");
         Debug.Log(seed);
@@ -89,7 +89,7 @@ public class MapGenerator : MonoBehaviour
         if (IdentifyRooms(ref result, selectedDungeonData.parameters) < 3)
         {
             seed += 1;
-            return GenerateMap(seed, selectedDungeonData.parameters, level);
+            return GenerateMap(seed, level);
         }
 
         Triangulate(ref result, selectedDungeonData.parameters);
@@ -103,7 +103,7 @@ public class MapGenerator : MonoBehaviour
         if(FindChokepoints(ref result, selectedDungeonData.parameters) < 2)
         {
             seed += 1;
-            return GenerateMap(seed, selectedDungeonData.parameters, level);
+            return GenerateMap(seed, level);
         }
 
         GeneratePools(ref result, selectedDungeonData.parameters);
@@ -545,7 +545,7 @@ public class MapGenerator : MonoBehaviour
             TileBase[] wallTiles = new TileBase[size.x * size.y];
             for (int tileIndex = 0; tileIndex < size.x * size.y; tileIndex++)
             {
-                tiles[tileIndex] = selectedDungeonData.tileSet.FloorTiles.GetRandom();// FloorTiles[0];
+                tiles[tileIndex] = selectedDungeonData.tileSet.FloorTiles.GetRandom();
                 wallTiles[tileIndex] = null;
             }
 

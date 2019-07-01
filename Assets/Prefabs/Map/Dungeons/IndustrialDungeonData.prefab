@@ -43,6 +43,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3d3c9817bfbd0ec4dae0b22812a66ecd, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  bossHealthCosts: 3200000064000000c8000000
   parameters:
     GenerationRadius: 20
     MaxCellCount: 150
@@ -63,3 +64,4 @@ MonoBehaviour:
   spawnables: {fileID: 74418008763189589, guid: 80a701ded236f464a8ea58c11d72400b,
     type: 3}
   interactiveObjects: {fileID: 11400000, guid: 19d0704cc28aabb4c9d5c482d9c8b89d, type: 2}
+  bossScene: IndustrialBossScene

@@ -922,6 +922,12 @@ PrefabInstance:
       value: 
       objectReference: {fileID: 1157765099317050428, guid: 16d2a58a56d13fc4bb7115311c46e865,
         type: 3}
+    - target: {fileID: 1831573080867822107, guid: fb3c90fd7da4a7e42b329cb2e0d69797,
+        type: 3}
+      propertyPath: selectedDungeonData
+      value: 
+      objectReference: {fileID: 7417170711644959738, guid: 61c06cb5a5e800e4d8159acb7845a180,
+        type: 3}
     - target: {fileID: 131159647817452541, guid: fb3c90fd7da4a7e42b329cb2e0d69797,
         type: 3}
       propertyPath: _mainCamera

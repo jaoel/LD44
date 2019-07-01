@@ -6,6 +6,7 @@ using UnityEngine.Tilemaps;
 
 public class MapManager : MonoBehaviour 
 {
+    public DungeonData selectedDungeonData;
     public Map CurrentMap => _currentMap;
 
     public int CurrentLevel;
@@ -52,7 +53,7 @@ public class MapManager : MonoBehaviour
 
     public void Initialize()
     {
-        _player.ResetPlayer();
+        _player.ResetPlayer(Main.Instance.gameState != GameState.Boss);
 
         if (Main.Instance.gameState == GameState.Gameplay)
         {
@@ -62,7 +63,7 @@ public class MapManager : MonoBehaviour
         }
         else
         {
-            if (Main.Instance.gameState == GameState.Hubworld)
+            if (Main.Instance.gameState == GameState.Hubworld || Main.Instance.gameState == GameState.Boss)
             {
                 Tilemap walls = GameObject.Find("Walls").GetComponent<Tilemap>();
                 _currentMap = new Map(GameObject.Find("Floor").GetComponent<Tilemap>(),
@@ -186,29 +187,9 @@ public class MapManager : MonoBehaviour
         //_shopInstance.ClearItems();
         _restAreaInstance.gameObject.SetActive(false);
 
-        MapGeneratorParameters parameters = new MapGeneratorParameters();
-        parameters.GenerationRadius = 20;
+        _currentMap = MapGenerator.Instance.GenerateMap(seed, CurrentLevel);
+        MapGenerator.Instance.PopulateMap(ref _currentMap, ref _player, selectedDungeonData.parameters, CurrentLevel);
 
-        parameters.MinCellSize = 4;
-        parameters.MaxCellSize = 20;
-
-        parameters.MinCellCount = 75;
-        parameters.MaxCellCount = 150;
-
-        parameters.RoomThresholdMultiplier = 1.25f;
-        parameters.CorridorRoomConnectionFactor = 0.5f;
-        parameters.MazeFactor = 0.15f;
-
-        parameters.MinCorridorWidth = 5;
-        parameters.MaxCorridorWidth = 7;
-
-        parameters.MinRoomDistance = 0;
-        parameters.LockFactor = 0.2f;
-        parameters.PitFrequency = 0.33f;
-
-        _currentMap = MapGenerator.Instance.GenerateMap(seed, parameters, CurrentLevel);
-
-        MapGenerator.Instance.PopulateMap(ref _currentMap, ref _player, parameters, CurrentLevel);
         _currentMap.ActivateObjects();
 
         GenerateFogOfWar();
@@ -230,8 +211,13 @@ public class MapManager : MonoBehaviour
         ShowFogOfWar(false);
 
         _restAreaInstance.gameObject.SetActive(true);
-        //_shopInstance.GenerateRandomItems(CurrentLevel, _player);
         _restAreaInstance.MovePlayerToSpawn(_player);
+    }
+
+    public void SetDungeonData(DungeonData dungeonData)
+    {
+        selectedDungeonData = dungeonData;
+        MapGenerator.Instance.selectedDungeonData = selectedDungeonData;
     }
 
     public void AddInteractiveObject(GameObject interactiveObject)

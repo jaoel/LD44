@@ -9,6 +9,9 @@ using UnityEngine;
 public class DungeonData :   MonoBehaviour
 {
     [SerializeField]
+    public List<int> bossHealthCosts = new List<int>();
+
+    [SerializeField]
     public MapGeneratorParameters parameters;
 
     [SerializeField]
@@ -25,4 +28,7 @@ public class DungeonData :   MonoBehaviour
 
     [SerializeField]
     public InteractiveDungeonObject interactiveObjects;
+
+    [SerializeField]
+    public string bossScene;
 }

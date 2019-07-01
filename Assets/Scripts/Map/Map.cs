@@ -73,9 +73,18 @@ public class Map
         _floors.ClearAllTiles();
         _walls.ClearAllTiles();
         _pits.ClearAllTiles();
-        GameObject.Find("CollisionMap").GetComponent<Tilemap>().ClearAllTiles();
+
+        ClearCollisionMaps();
 
         DestroyAllInteractiveObjects();
+    }
+
+    private void ClearCollisionMaps()
+    {
+        GameObject.Find("CollisionMap").GetComponent<Tilemap>().ClearAllTiles();
+        GameObject.Find("PitCollisionMap").GetComponent<Tilemap>().ClearAllTiles();
+
+        CollisionMap = new int[CollisionMap.GetLength(0),CollisionMap.GetLength(1)];
     }
 
     public void ActivateObjects()
@@ -368,7 +377,7 @@ public class Map
 
                 if (walls && collisionIndex == 1)
                 {
-                    debug.SetTile(new Vector3Int(Bounds.xMin + i, Bounds.yMin + j, 0), MapGenerator.Instance.selectedDungeonData.tileSet.FloorTiles.ElementAt(0).value);
+                    debug.SetTile(new Vector3Int(Bounds.xMin + i, Bounds.yMin + j, 0), MapManager.Instance.selectedDungeonData.tileSet.FloorTiles.ElementAt(0).value);
                 }
                 else if (!walls && collisionIndex == 2)
                 {
@@ -391,7 +400,7 @@ public class Map
             {
                 for (int y = room.Cell.yMin; y < room.Cell.yMax; y++)
                 {
-                    debug.SetTile(new Vector3Int(x, y, 0), MapGenerator.Instance.selectedDungeonData.tileSet.FloorTiles.ElementAt(0).value);
+                    debug.SetTile(new Vector3Int(x, y, 0), MapManager.Instance.selectedDungeonData.tileSet.FloorTiles.ElementAt(0).value);
                     debug.SetTileFlags(new Vector3Int(x, y, 0), TileFlags.None);
                     debug.SetColor(new Vector3Int(x, y, 0), Utility.RGBAColor(207, 0, 15, 
                         Utility.ConvertRange(0.0f, 1.0f, 0.0f, 0.75f, room.SeclusionFactor)));
