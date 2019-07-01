@@ -9,22 +9,11 @@ using UnityEngine.SceneManagement;
 public class DungeonSelector : InteractiveObject
 {
     [SerializeField]
-    private GameObject _hubContainer;
-
-    [SerializeField]
-    private GameObject _dungeonMap;
+    public DungeonData dungeonData;
 
     public override void OnActivate()
     {
-        Debug.Log("OMG I PRESSED THE USE BUTAN");
-
-        Cursor.visible = true;
-        
-        GameSceneManager.Instance.TogglePlayerContainer(false);
-
-        _hubContainer.SetActive(false);
-        _dungeonMap.SetActive(true);
-
-        base.OnActivate();
+        MapGenerator.Instance.selectedDungeonData = dungeonData;
+        onActivate?.Invoke();
     }
 }

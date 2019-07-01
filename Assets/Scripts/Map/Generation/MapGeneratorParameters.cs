@@ -5,23 +5,45 @@ using System.Text;
 using System.Threading.Tasks;
 using UnityEngine;
 
+[Serializable]
 public class MapGeneratorParameters
 {
-    public int GenerationRadius { get; set; }
+    [SerializeField]
+    public int GenerationRadius;
 
-    public int MaxCellCount { get; set; }
-    public int MinCellCount { get; set; }
+    [SerializeField]
+    public int MaxCellCount;
 
-    public int MaxCellSize { get; set; }
-    public int MinCellSize { get; set; }
+    [SerializeField]
+    public int MinCellCount;
 
-    public float RoomThresholdMultiplier { get; set; }
-    public float CorridorRoomConnectionFactor { get; set; }
-    public float MazeFactor { get; set; }
-    public int MinCorridorWidth { get; set; }
-    public int MaxCorridorWidth { get; set; }
+    [SerializeField]
+    public int MaxCellSize;
 
-    public int MinRoomDistance { get; set; }
-    public float LockFactor { get; set; }
-    public float PitFrequency { get; set; }
+    [SerializeField]
+    public int MinCellSize;
+
+    [SerializeField]
+    public float RoomThresholdMultiplier;
+
+    [SerializeField]
+    public float CorridorRoomConnectionFactor;
+
+    [SerializeField]
+    public float MazeFactor;
+
+    [SerializeField]
+    public int MinCorridorWidth;
+
+    [SerializeField]
+    public int MaxCorridorWidth;
+
+    [SerializeField]
+    public int MinRoomDistance;
+
+    [SerializeField]
+    public float LockFactor;
+
+    [SerializeField]
+    public float PitFrequency;
 }

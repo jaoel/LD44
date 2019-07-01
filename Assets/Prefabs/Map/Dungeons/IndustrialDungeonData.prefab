@@ -1,0 +1,65 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!1 &7688719130553283050
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1290164695959264232}
+  - component: {fileID: 7417170711644959738}
+  m_Layer: 0
+  m_Name: IndustrialDungeonData
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &1290164695959264232
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7688719130553283050}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_RootOrder: 0
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &7417170711644959738
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7688719130553283050}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 3d3c9817bfbd0ec4dae0b22812a66ecd, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  parameters:
+    GenerationRadius: 20
+    MaxCellCount: 150
+    MinCellCount: 75
+    MaxCellSize: 20
+    MinCellSize: 4
+    RoomThresholdMultiplier: 1.25
+    CorridorRoomConnectionFactor: 0.5
+    MazeFactor: 0.15
+    MinCorridorWidth: 5
+    MaxCorridorWidth: 7
+    MinRoomDistance: 0
+    LockFactor: 0.2
+    PitFrequency: 0.33
+  tileSet: {fileID: 11400000, guid: 122c88a6521bfa344ae44316c6d6a813, type: 2}
+  pitSet: {fileID: 11400000, guid: 0531a087d60dfbb41b742568900a8695, type: 2}
+  trapSet: {fileID: 11400000, guid: 7029a12395ce5594db25f5753c6cb57a, type: 2}
+  spawnables: {fileID: 74418008763189589, guid: 80a701ded236f464a8ea58c11d72400b,
+    type: 3}
+  interactiveObjects: {fileID: 11400000, guid: 19d0704cc28aabb4c9d5c482d9c8b89d, type: 2}

@@ -7,11 +7,7 @@ using UnityEngine.Tilemaps;
 
 public class MapGenerator : MonoBehaviour
 {
-    public TileContainer wallContainer;
-    public TileContainer pitContainer;
-    public InteractiveDungeonObject interactiveObjectContainer;
-    public TrapContainer trapContainer;
-    public SpawnableContainer spawnKeyframes;
+    public DungeonData selectedDungeonData;
 
     public Tilemap floors;
     public Tilemap walls;
@@ -57,10 +53,10 @@ public class MapGenerator : MonoBehaviour
         _random = new MillerParkLCG();
         _timer = new Timer();
         _mapPainter = new MapPainter();
-        _mapPainter.Initialize(wallContainer, pitContainer, floors, walls, pits);
+        _mapPainter.Initialize(selectedDungeonData.tileSet, selectedDungeonData.pitSet, floors, walls, pits);
 
         _mapPopulator = new MapPopulator();
-        _mapPopulator.Initialize(_random, interactiveObjectContainer, spawnKeyframes, trapContainer, _mapPainter);
+        _mapPopulator.Initialize(_random, selectedDungeonData.interactiveObjects, selectedDungeonData.spawnables, selectedDungeonData.trapSet, _mapPainter);
     }
 
     private void Update()
@@ -87,30 +83,30 @@ public class MapGenerator : MonoBehaviour
 
         _random.SetSeed(seed);
                                                                                                                                                                                                              
-        GenerateCells(ref result, parameters);
-        SeparateCells(ref result, parameters);
+        GenerateCells(ref result, selectedDungeonData.parameters);
+        SeparateCells(ref result, selectedDungeonData.parameters);
 
-        if (IdentifyRooms(ref result, parameters) < 3)
+        if (IdentifyRooms(ref result, selectedDungeonData.parameters) < 3)
         {
             seed += 1;
-            return GenerateMap(seed, parameters, level);
+            return GenerateMap(seed, selectedDungeonData.parameters, level);
         }
 
-        Triangulate(ref result, parameters);
-        GenerateLayoutGraph(ref result, parameters);
-        GenerateCorridorGraph(ref result, parameters);
-        PaintRooms(result, parameters);
-        PaintCorridors(ref result, parameters);
-        _mapPainter.PaintTiles(result, parameters);
-        RemoveDeadRooms(ref result, parameters);
+        Triangulate(ref result, selectedDungeonData.parameters);
+        GenerateLayoutGraph(ref result, selectedDungeonData.parameters);
+        GenerateCorridorGraph(ref result, selectedDungeonData.parameters);
+        PaintRooms(result, selectedDungeonData.parameters);
+        PaintCorridors(ref result, selectedDungeonData.parameters);
+        _mapPainter.PaintTiles(result, selectedDungeonData.parameters);
+        RemoveDeadRooms(ref result, selectedDungeonData.parameters);
 
-        if(FindChokepoints(ref result, parameters) < 2)
+        if(FindChokepoints(ref result, selectedDungeonData.parameters) < 2)
         {
             seed += 1;
-            return GenerateMap(seed, parameters, level);
+            return GenerateMap(seed, selectedDungeonData.parameters, level);
         }
 
-        GeneratePools(ref result, parameters);
+        GeneratePools(ref result, selectedDungeonData.parameters);
 
         _timer.Stop();
         _timer.Print("MapGenerator.GenerateMap");
@@ -549,7 +545,7 @@ public class MapGenerator : MonoBehaviour
             TileBase[] wallTiles = new TileBase[size.x * size.y];
             for (int tileIndex = 0; tileIndex < size.x * size.y; tileIndex++)
             {
-                tiles[tileIndex] = wallContainer.FloorTiles.GetRandom();// FloorTiles[0];
+                tiles[tileIndex] = selectedDungeonData.tileSet.FloorTiles.GetRandom();// FloorTiles[0];
                 wallTiles[tileIndex] = null;
             }
 
