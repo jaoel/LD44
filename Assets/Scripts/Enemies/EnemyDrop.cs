@@ -37,7 +37,7 @@ public class EnemyDrop : MonoBehaviour
         _movingToPlayer = false;
     }
 
-    public void SetType(DropType type)
+    public void SetType(DropType type, int score = 0)
     {
         switch (type)
         {
@@ -50,6 +50,7 @@ public class EnemyDrop : MonoBehaviour
                 _heal = 1;
                 break;
             case DropType.Score:
+                _score = score;
                 break;
             default:
                 break;

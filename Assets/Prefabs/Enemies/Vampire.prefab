@@ -451,7 +451,7 @@ MonoBehaviour:
     type: 3}
   _maxHPDrop: 5
   _healDrop: 0
-  _scoreValue: 0
+  _scoreValue: 5000
   _maxHealth: 200
   _maxSpeed: 5
   _acceleration: 35

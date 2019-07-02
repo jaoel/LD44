@@ -281,9 +281,12 @@ public class Enemy : MonoBehaviour, IBuffable
             drop.SetType(DropType.Heal);
         }
 
-        for(int i = 0; i < _scoreValue; i++)
-        {
+        int scoreSoulCount = Mathf.Min(_scoreValue / 500, 5);
 
+        for(int i = 0; i < scoreSoulCount; i++)
+        {
+            EnemyDrop drop = Instantiate(_dropPrefab, transform.position, Quaternion.identity);
+            drop.SetType(DropType.Score, _scoreValue / scoreSoulCount);
         }
     }
 
