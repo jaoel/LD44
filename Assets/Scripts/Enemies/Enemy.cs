@@ -8,7 +8,18 @@ public class Enemy : MonoBehaviour, IBuffable
 {
     public bool IsAlive => _currentHealth > 0;
     public bool HasAggro => _hasAggro;
-    public bool HasDrop => _itemDrops?.Count > 0;
+
+    [SerializeField]
+    protected EnemyDrop _dropPrefab;
+
+    [SerializeField]
+    protected int _maxHPDrop;
+
+    [SerializeField]
+    protected int _healDrop;
+
+    [SerializeField]
+    protected int _scoreValue;
 
     [SerializeField]
     protected float _maxHealth;
@@ -52,8 +63,6 @@ public class Enemy : MonoBehaviour, IBuffable
     protected Vector2 _dieDirection = Vector2.down;
     protected HurtBlink _colorController;
 
-    protected List<Item> _itemDrops;
-
     protected HashSet<StatusEffect> _statusEffects;
 
     private float _corpseCollisionTimer;
@@ -68,7 +77,6 @@ public class Enemy : MonoBehaviour, IBuffable
         _navigation.Initialize(_rigidbody, _maxSpeed, _acceleration);
         _spawnPosition = transform.position.ToVector2();
         _colorController = GetComponent<HurtBlink>();
-        _itemDrops = new List<Item>();
         _statusEffects = new HashSet<StatusEffect>();
 
         _navigation.MoveTo(transform.position.ToVector2() + Utility.RandomPointOnCircleEdge(1.0f), true);
@@ -259,21 +267,24 @@ public class Enemy : MonoBehaviour, IBuffable
         DropItem();
     }
 
-    public void AddDrop(Item item)
-    {
-        _itemDrops.Add(item);
-    }
-
     public virtual void DropItem()
     {
-        _itemDrops.ForEach(x =>
+        for(int i = 0; i < _maxHPDrop; i++)
         {
-            Item drop = Instantiate(x, transform.position, Quaternion.identity);
-            drop.transform.localScale = new Vector3(0.5f, 0.5f, 0.5f);
-            drop.gameObject.SetActive(true);
+            EnemyDrop drop = Instantiate(_dropPrefab, transform.position, Quaternion.identity);
+            drop.SetType(DropType.MaxHealth);
+        }
 
-            MapManager.Instance.AddInteractiveObject(drop.gameObject);
-        });
+        for (int i = 0; i < _healDrop; i++)
+        {
+            EnemyDrop drop = Instantiate(_dropPrefab, transform.position, Quaternion.identity);
+            drop.SetType(DropType.Heal);
+        }
+
+        for(int i = 0; i < _scoreValue; i++)
+        {
+
+        }
     }
 
     protected virtual void OnCollisionStay2D(Collision2D collision)

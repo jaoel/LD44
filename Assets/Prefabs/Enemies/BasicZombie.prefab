@@ -163,6 +163,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2b93318ac224793439849f1944fe9475, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  _dropPrefab: {fileID: 4284175279817549880, guid: d99909201be3ff74f929bcc85b97bf66,
+    type: 3}
+  _maxHPDrop: 1
+  _healDrop: 0
+  _scoreValue: 0
   _maxHealth: 200
   _maxSpeed: 7
   _acceleration: 50

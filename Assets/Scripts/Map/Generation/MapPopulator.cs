@@ -73,13 +73,6 @@ public class MapPopulator
         _timer.Stop();
         _timer.Print("MapPopulator.PlaceTraps");
 
-        _timer.Start();
-
-        SpawnDrops(map);
-
-        _timer.Stop();
-        _timer.Print("MapPopulator.SpawnDrops");
-
     }
 
     private void CalculateSeclusionFactor(Map map, Tuple<MapNode, MapNode> startAndGoal, List<MapNode> path)
@@ -553,44 +546,5 @@ public class MapPopulator
         map.AddEnemy(enemy);
         room.Enemies.Add(enemy);
         map.Enemies[map.Enemies.Count - 1].SetActive(false);
-    }
-
-    private void SpawnDrops(Map map)
-    {
-        if (map.Enemies.Count == 0)
-        {
-            return;
-        }
-
-        List<MapNode> rooms = map.Cells.Where(x => x.Enemies.Count > 0).OrderByDescending(x => x.SeclusionFactor).ToList();
-        _spawnKeyframes.drops.ForEach(x =>
-        {
-            int dropCount = Mathf.Min(Mathf.Max(x.minDropCount, Mathf.RoundToInt(x.droprate * map.Enemies.Count)), x.maxDropCount);
-
-            for (int i = 0; i < dropCount; i++)
-            {
-                int iterations = 3;
-
-                while (true)
-                {
-                    int roomIndex = 0;
-                    Enemy enemy = null;
-                    while(enemy == null)
-                    {
-                        roomIndex = x.useSeclusionFactor ? i % rooms.Count : _random.Range(0, rooms.Count);
-                        enemy = rooms[roomIndex].Enemies[_random.Range(0, rooms[roomIndex].Enemies.Count)].GetComponent<Enemy>();
-                    }
-
-                    if (enemy.HasDrop && iterations > 0)
-                    {
-                        iterations--;
-                        continue;
-                    }
-
-                    enemy.AddDrop(x.item);
-                    break;
-                }
-            }
-        });
     }
 }

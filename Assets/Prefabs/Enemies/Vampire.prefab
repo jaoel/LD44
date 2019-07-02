@@ -447,6 +447,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 669c044db2d35df4c95067aa544a950a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  _dropPrefab: {fileID: 4284175279817549880, guid: d99909201be3ff74f929bcc85b97bf66,
+    type: 3}
+  _maxHPDrop: 5
+  _healDrop: 0
+  _scoreValue: 0
   _maxHealth: 200
   _maxSpeed: 5
   _acceleration: 35
@@ -459,7 +464,6 @@ MonoBehaviour:
   _characterAnimation: {fileID: 9194530984371537756}
   _particleSystemContainer: {fileID: 11400000, guid: 16ab9ed0ce6842c4b9a9e52558b0b55d,
     type: 2}
-  _minimapIcon: {fileID: 0}
   _humanoidFormGameObject: {fileID: 4407426537756196130}
   _batFormGameObject: {fileID: 5022286688611378651}
   _batFormMaxSpeed: 12

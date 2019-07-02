@@ -2391,33 +2391,6 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
-    - target: {fileID: 6971597466667337741, guid: 96a42674104d36e45b322d7ec5de295e,
-        type: 3}
-      propertyPath: floors
-      value: 
-      objectReference: {fileID: 1889761723}
-    - target: {fileID: 6971597466667337741, guid: 96a42674104d36e45b322d7ec5de295e,
-        type: 3}
-      propertyPath: walls
-      value: 
-      objectReference: {fileID: 1140504649}
-    - target: {fileID: 6971597466667337741, guid: 96a42674104d36e45b322d7ec5de295e,
-        type: 3}
-      propertyPath: pitContainer
-      value: 
-      objectReference: {fileID: 11400000, guid: 0531a087d60dfbb41b742568900a8695,
-        type: 2}
-    - target: {fileID: 6971597466667337741, guid: 96a42674104d36e45b322d7ec5de295e,
-        type: 3}
-      propertyPath: wallContainer
-      value: 
-      objectReference: {fileID: 11400000, guid: 122c88a6521bfa344ae44316c6d6a813,
-        type: 2}
-    - target: {fileID: 6971597466667337741, guid: 96a42674104d36e45b322d7ec5de295e,
-        type: 3}
-      propertyPath: pits
-      value: 
-      objectReference: {fileID: 697366801}
     - target: {fileID: 735114034579533644, guid: 96a42674104d36e45b322d7ec5de295e,
         type: 3}
       propertyPath: m_AnchorMin.y
@@ -2603,6 +2576,11 @@ PrefabInstance:
       propertyPath: m_AnchorMax.y
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 7810900122008608197, guid: 96a42674104d36e45b322d7ec5de295e,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 4262441227352632454, guid: 96a42674104d36e45b322d7ec5de295e,
         type: 3}
       propertyPath: gameState
@@ -2613,11 +2591,33 @@ PrefabInstance:
       propertyPath: initialMenu
       value: 
       objectReference: {fileID: 0}
-    - target: {fileID: 7810900122008608197, guid: 96a42674104d36e45b322d7ec5de295e,
+    - target: {fileID: 6971597466667337741, guid: 96a42674104d36e45b322d7ec5de295e,
         type: 3}
-      propertyPath: m_IsActive
-      value: 1
-      objectReference: {fileID: 0}
+      propertyPath: floors
+      value: 
+      objectReference: {fileID: 1889761723}
+    - target: {fileID: 6971597466667337741, guid: 96a42674104d36e45b322d7ec5de295e,
+        type: 3}
+      propertyPath: walls
+      value: 
+      objectReference: {fileID: 1140504649}
+    - target: {fileID: 6971597466667337741, guid: 96a42674104d36e45b322d7ec5de295e,
+        type: 3}
+      propertyPath: pitContainer
+      value: 
+      objectReference: {fileID: 11400000, guid: 0531a087d60dfbb41b742568900a8695,
+        type: 2}
+    - target: {fileID: 6971597466667337741, guid: 96a42674104d36e45b322d7ec5de295e,
+        type: 3}
+      propertyPath: wallContainer
+      value: 
+      objectReference: {fileID: 11400000, guid: 122c88a6521bfa344ae44316c6d6a813,
+        type: 2}
+    - target: {fileID: 6971597466667337741, guid: 96a42674104d36e45b322d7ec5de295e,
+        type: 3}
+      propertyPath: pits
+      value: 
+      objectReference: {fileID: 697366801}
     - target: {fileID: 4262441228581856370, guid: 96a42674104d36e45b322d7ec5de295e,
         type: 3}
       propertyPath: m_CullingMask.m_Bits

@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using UnityEngine;
+using DG.Tweening;
 
 public class Navigation : MonoBehaviour
 {
@@ -114,6 +115,9 @@ public class Navigation : MonoBehaviour
         {
             _rigidbody.velocity = _rigidbody.velocity.normalized * _maxSpeed;
         }
+
+        float angleToDir = Vector2.SignedAngle(_rigidbody.velocity, direction);
+        _rigidbody.velocity = Quaternion.Euler(0.0f, 0.0f, angleToDir * 7.5f * Time.deltaTime) * _rigidbody.velocity;
     }
 
     private void SmoothStop()
