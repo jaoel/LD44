@@ -68,6 +68,7 @@ public class MapPopulator
 
         _timer.Start();
 
+        PlaceHealingWells(map, startAndGoal.Item1);
         PlaceTraps(map, startAndGoal.Item1, player);
 
         _timer.Stop();
@@ -417,6 +418,26 @@ public class MapPopulator
                 map.UpdateCollisionMap(y.ToRectInt(), 1);
             });
         });
+    }
+
+    private void PlaceHealingWells(Map map, MapNode spawnRoom)
+    {
+        int healingWellCount = Mathf.Max(2, map.Cells.Count / 10);
+        List<MapNode> excludedRooms = new List<MapNode>() { spawnRoom };
+        for(int i = 0; i < healingWellCount; i++)
+        {
+            MapNode room = map.GetRandomRoom(2, 2, true, excludedRooms);
+            Vector2 pos = map.GetRandomPositionInRoom(2, 2, room);
+
+            excludedRooms.Add(room);
+            if (pos == Vector2.zero)
+            {
+                i--;
+                continue;
+            }
+
+            map.InteractiveObjects.Add(GameObject.Instantiate(_interactiveObjectContainer.healingWell, pos, Quaternion.identity));
+        }
     }
 
     private void PlaceTraps(Map map, MapNode spawnRoom, Player player)

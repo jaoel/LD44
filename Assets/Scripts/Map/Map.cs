@@ -175,6 +175,8 @@ public class Map
     public MapNode GetRandomRoom(int tileWidth, int tileHeight, bool includeCorridorRooms, List<MapNode> excludedRooms = null)
     {
         MapNode room = null;
+        int cellCount = includeCorridorRooms ? Cells.Count() : Cells.Count(x => x.Type == MapNodeType.Room);
+
         while (room == null)
         {
             MapNode potential = Cells[_random.Range(0, Cells.Count)];
@@ -184,7 +186,7 @@ public class Map
                 continue;
             }
 
-            if (excludedRooms != null && excludedRooms.Contains(potential))
+            if (excludedRooms != null && excludedRooms.Contains(potential) && excludedRooms.Count < cellCount)
             {
                 continue;
             }

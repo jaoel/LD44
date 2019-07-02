@@ -5795,9 +5795,11 @@ MonoBehaviour:
       m_Calls: []
     m_TypeName: UnityEngine.Events.UnityEvent, UnityEngine.CoreModule, Version=0.0.0.0,
       Culture=neutral, PublicKeyToken=null
-  heal: 1
-  maxHealthDamage: 1
-  tickRate: 0.35
+  _useToActivate: 0
+  _healPerTick: 1
+  _heal: 0
+  _maxHealthDamage: 1
+  _tickRate: 0.35
 --- !u!1 &5118748734863381477
 GameObject:
   m_ObjectHideFlags: 0
