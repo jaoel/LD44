@@ -207,6 +207,7 @@ MonoBehaviour:
   _navigation: {fileID: 7123181420977852953}
   _rigidbody: {fileID: 7854476702438561396}
   _acceleration: 20
+  _trail: {fileID: 4731127439139017748}
 --- !u!114 &7123181420977852953
 MonoBehaviour:
   m_ObjectHideFlags: 0

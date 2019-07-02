@@ -28,6 +28,9 @@ public class EnemyDrop : MonoBehaviour
     [SerializeField]
     private float _acceleration;
 
+    [SerializeField]
+    private TrailRenderer _trail;
+
     private bool _movingToPlayer;
 
     private void Awake()
@@ -43,10 +46,12 @@ public class EnemyDrop : MonoBehaviour
         {
             case DropType.MaxHealth:
                 GetComponentInChildren<SpriteRenderer>().color = Utility.RGBAColor(100, 149, 237, 1);
+                _trail.startColor = Utility.RGBAColor(100, 149, 237, 1);
                 _maxHealth = 1;
                 break;
             case DropType.Heal:
                 GetComponentInChildren<SpriteRenderer>().color = Color.red;
+                _trail.startColor = Color.red;
                 _heal = 1;
                 break;
             case DropType.Score:
