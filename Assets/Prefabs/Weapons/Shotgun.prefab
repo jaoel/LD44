@@ -57,11 +57,15 @@ MonoBehaviour:
   _knockback: 1000
   _firingArc: 60
   _randomizePattern: 0
-  _bulletDescription: {fileID: 11400000, guid: b85b6f222e986484bb7ce58010cb1724, type: 2}
+  _screenShakeDuration: 0.25
+  _screenShakeAmount: 0.25
+  _screenShakeVibrato: 30
   _bulletPrefab: {fileID: 218029869677474905, guid: ec04619b4154c1f43b9d8ed7e1796bc9,
     type: 3}
   _shotSound: {fileID: 7246573145497593685}
   _reloadSound: {fileID: -5912559479772928181}
+  _chargeSound: {fileID: 0}
+  _maxChargeSound: {fileID: 0}
 --- !u!82 &7246573145497593685
 AudioSource:
   m_ObjectHideFlags: 0

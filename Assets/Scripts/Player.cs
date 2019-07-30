@@ -373,7 +373,7 @@ public class Player : MonoBehaviour, IWeaponOwner, IBuffable
     {
         if (_invulnTimer >= invulnTime && !GodMode)
         {
-            CameraManager.Instance.ShakeCamera(1.0f, 0.3f, 1.0f);
+            CameraManager.Instance.ShakeCamera(0.5f, 0.1f, 25);
 
             int loopCount = 10;
             Sequence colorFlashSequence = DOTween.Sequence();

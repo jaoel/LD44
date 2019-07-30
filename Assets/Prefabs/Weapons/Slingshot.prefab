@@ -56,6 +56,9 @@ MonoBehaviour:
   _knockback: 0
   _firingArc: 0
   _randomizePattern: 1
+  _screenShakeDuration: 0.1
+  _screenShakeAmount: 0.05
+  _screenShakeVibrato: 30
   _bulletPrefab: {fileID: 1322879831930639400, guid: 01d33d4390ba07c458cec9d95579c344,
     type: 3}
   _shotSound: {fileID: 7246573145497593685}

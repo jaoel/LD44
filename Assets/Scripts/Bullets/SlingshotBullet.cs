@@ -65,7 +65,10 @@ public class SlingshotBullet : Bullet
             {
                 collision.gameObject.GetComponent<Enemy>().ReceiveDamage((int)(_currentDamage * _charge), _direction);
                 BeforeDestroyed(collision.gameObject);
-                CameraManager.Instance.ShakeCamera(0.15f, 0.1f, 0.1f, 30);
+                if (_superCharged)
+                {
+                    CameraManager.Instance.ShakeCamera(0.15f, 0.15f, 30);
+                }
             }
             else
             {

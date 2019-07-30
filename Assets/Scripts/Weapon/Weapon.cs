@@ -50,6 +50,16 @@ public class Weapon : MonoBehaviour
     [SerializeField]
     protected bool _randomizePattern;
 
+    //Screen shake parameters
+    [SerializeField]
+    protected float _screenShakeDuration = 0.1f;
+
+    [SerializeField]
+    protected float _screenShakeAmount = 0.25f;
+
+    [SerializeField]
+    protected int _screenShakeVibrato = 20;
+
     //all bullet related information
     [SerializeField]
     protected Bullet _bulletPrefab;
@@ -142,6 +152,11 @@ public class Weapon : MonoBehaviour
     {
         _shotSound.volume = SettingsManager.Instance.SFXVolume;
         _shotSound.Play();
+
+        if (_isPlayerOwned)
+        {
+            CameraManager.Instance.ShakeCamera(_screenShakeDuration, _screenShakeAmount, _screenShakeVibrato);
+        }
 
         float halfAngle = _firingArc / 2.0f;
         bool isSuperCharged = _superCharged;

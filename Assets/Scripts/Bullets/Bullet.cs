@@ -114,7 +114,6 @@ public class Bullet : MonoBehaviour
             {
                 collision.gameObject.GetComponent<Enemy>().ReceiveDamage((int)_currentDamage, _direction);
                 BeforeDestroyed(collision.gameObject);
-                CameraManager.Instance.ShakeCamera(0.15f, 0.1f, 0.1f, 30);
             }
             else
             {

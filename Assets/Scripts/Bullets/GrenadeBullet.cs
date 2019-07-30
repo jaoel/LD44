@@ -66,7 +66,7 @@ public class GrenadeBullet : Bullet
     public override void BeforeDestroyed(GameObject hitTarget)
     {
         SoundManager.Instance.PlayExplosionSound();
-        CameraManager.Instance.ShakeCamera(0.6f, 0.25f, 1.25f);
+        CameraManager.Instance.ShakeCamera(0.3f, 0.25f, 40);
         MapManager.Instance.DamageAllEnemiesInCircle(_lastPosition, _explosionRadius, (int)_explosionDamage, false);
         Instantiate(_explosionPrefab, _lastPosition, Quaternion.Euler(0.0f, 0.0f, UnityEngine.Random.Range(0.0f, 360.0f)));
 
