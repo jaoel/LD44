@@ -9,6 +9,7 @@ public static class Layers
     public static int Enemy = LayerMask.NameToLayer("Enemy");
     public static int FlyingEnemy = LayerMask.NameToLayer("FlyingEnemy");
     public static int Corpse = LayerMask.NameToLayer("Corpse");
+    public static int PlayerGhost = LayerMask.NameToLayer("PlayerGhost");
 
     public static int CombinedLayerMask(params int[] layers)
     {

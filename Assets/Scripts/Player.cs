@@ -17,6 +17,9 @@ public class Player : MonoBehaviour, IWeaponOwner, IBuffable
     public float acceleration = 25f;
     public float deceleration = 15f;
     public float invulnTime = 1.0f;
+    public float dashDuration = 0.15f;
+    public float dashCooldown = 2f;
+    public float dashSpeed = 25f;
 
     public CharacterAnimation characterAnimation;
     public Weapon CurrentWeapon;
@@ -24,15 +27,19 @@ public class Player : MonoBehaviour, IWeaponOwner, IBuffable
     private List<Weapon> _weapons = new List<Weapon>();
     public SpriteRenderer visual;
 
-    private int currentHealth;
-    private int maxHealth;
+    private int _currentHealth;
+    private int _maxHealth;
 
-    private new Rigidbody2D rigidbody;
-    private new SpriteRenderer renderer;
-    private Vector3 velocity = Vector3.zero;
-    private Vector3 inputVector = Vector3.zero;
-    private Vector2 aimVector = Vector2.zero;
-    private Vector2 dieDirection = Vector2.down;
+    private new Rigidbody2D _rigidbody;
+    private new SpriteRenderer _renderer;
+    private Vector3 _velocity = Vector3.zero;
+    private Vector3 _inputVector = Vector3.zero;
+    private Vector2 _aimVector = Vector2.zero;
+    private Vector2 _dieDirection = Vector2.down;
+    private bool _shouldDash = false;
+    private float _dashTimer = 0f;
+    private float _dashCooldownTimer = 0f;
+    private Vector3 _dashDirection = Vector2.zero;
 
     private float _invulnTimer = float.MaxValue;
 
@@ -50,11 +57,11 @@ public class Player : MonoBehaviour, IWeaponOwner, IBuffable
     {
         get
         {
-            return currentHealth;
+            return _currentHealth;
         }
         set
         {
-            currentHealth = Mathf.Clamp(value, 0, maxHealth);
+            _currentHealth = Mathf.Clamp(value, 0, _maxHealth);
         }
     }
 
@@ -62,24 +69,24 @@ public class Player : MonoBehaviour, IWeaponOwner, IBuffable
     {
         get
         {
-            return maxHealth;
+            return _maxHealth;
         }
         set
         {
-            maxHealth = Mathf.Max(0, value);
-            if (maxHealth < currentHealth)
+            _maxHealth = Mathf.Max(0, value);
+            if (_maxHealth < _currentHealth)
             {
-                Health = maxHealth;
+                Health = _maxHealth;
             }
         }
     }
 
-    public bool IsAlive => currentHealth > 0;
+    public bool IsAlive => _currentHealth > 0;
 
     void Start()
     {
-        rigidbody = GetComponent<Rigidbody2D>();
-        renderer = GetComponentInChildren<SpriteRenderer>();
+        _rigidbody = GetComponent<Rigidbody2D>();
+        _renderer = GetComponentInChildren<SpriteRenderer>();
 
         ResetPlayer();
     }
@@ -95,8 +102,8 @@ public class Player : MonoBehaviour, IWeaponOwner, IBuffable
         }
 
         _invulnTimer = float.MaxValue;
-        velocity = Vector3.zero;
-        inputVector = Vector3.zero;
+        _velocity = Vector3.zero;
+        _inputVector = Vector3.zero;
         _skeletonKeys = new Queue<Key>();
         _statusEffects = new List<StatusEffect>();
         _disabled = false;
@@ -179,7 +186,7 @@ public class Player : MonoBehaviour, IWeaponOwner, IBuffable
     {
         CalculateAnimation();
 
-        UIManager.Instance.playerUI.SetHealthbar(currentHealth, maxHealth);
+        UIManager.Instance.playerUI.SetHealthbar(_currentHealth, _maxHealth);
         UIManager.Instance.playerUI.SetChargeMeterPosition(transform.position);
 
         if (!IsAlive || Main.Instance.Paused || _disabled)
@@ -189,6 +196,12 @@ public class Player : MonoBehaviour, IWeaponOwner, IBuffable
         }
 
         CalculateInputVector();
+
+        if(Keybindings.Dash && !_shouldDash)
+        {
+            _dashDirection = _inputVector;
+            _shouldDash = true;
+        }
 
         if (Keybindings.Attack)
         {
@@ -220,18 +233,18 @@ public class Player : MonoBehaviour, IWeaponOwner, IBuffable
 
         if (!IsAlive)
         {
-            if (velocity.magnitude > 0.001f)
+            if (_velocity.magnitude > 0.001f)
             {
-                velocity -= velocity * 2.0f * Time.deltaTime;
+                _velocity -= _velocity * 2.0f * Time.deltaTime;
             }
             else
             {
-                velocity = Vector2.zero;
+                _velocity = Vector2.zero;
             }
-            rigidbody.velocity = velocity;
+            _rigidbody.velocity = _velocity;
             return;
         }
-        dieDirection = rigidbody.velocity;
+        _dieDirection = _rigidbody.velocity;
 
         CalculateDeceleration();
         CalculateVelocity();
@@ -240,21 +253,51 @@ public class Player : MonoBehaviour, IWeaponOwner, IBuffable
         {
             _invulnTimer += Time.deltaTime;
         }
+
+        CalculateDash();
+    }
+
+    private void CalculateDash()
+    {
+        if (_dashTimer <= 0f && _shouldDash)
+        {
+            if (_dashCooldownTimer <= 0f)
+            {
+                _dashTimer = dashDuration;
+                gameObject.layer = Layers.PlayerGhost;
+            }
+            _shouldDash = false;
+        }
+        if (_dashTimer > 0f)
+        {
+            _dashTimer -= Time.deltaTime;
+            if (_dashTimer < 0f)
+            {
+                _dashCooldownTimer = dashCooldown;
+                _dashTimer = 0f;
+                gameObject.layer = Layers.Player;
+            }
+        }
+        if (_dashCooldownTimer > 0f)
+        {
+            _dashCooldownTimer = Mathf.Max(_dashCooldownTimer - Time.deltaTime, 0f);
+        }
+        Debug.Log(_dashCooldownTimer);
     }
 
     private void CalculateInputVector()
     {
-        inputVector = Vector3.zero;
-        inputVector.x -= Keybindings.MoveLeft;
-        inputVector.x += Keybindings.MoveRight;
-        inputVector.y += Keybindings.MoveUp;
-        inputVector.y -= Keybindings.MoveDown;
+        _inputVector = Vector3.zero;
+        _inputVector.x -= Keybindings.MoveLeft;
+        _inputVector.x += Keybindings.MoveRight;
+        _inputVector.y += Keybindings.MoveUp;
+        _inputVector.y -= Keybindings.MoveDown;
 
         Vector3 mousePositionInWorldSpace = CameraManager.Instance.MainCamera.ScreenToWorldPoint(Keybindings.MousePosition);
         mousePositionInWorldSpace.z = 0f;
         Vector3 aimVector3 = mousePositionInWorldSpace - transform.position;
         aimVector3.z = 0f;
-        aimVector = aimVector3.normalized;
+        _aimVector = aimVector3.normalized;
     }
 
     private void CalculateAnimation()
@@ -265,16 +308,16 @@ public class Player : MonoBehaviour, IWeaponOwner, IBuffable
         if (!IsAlive)
         {
             type = CharacterAnimation.AnimationType.Die;
-            direction = dieDirection;
+            direction = _dieDirection;
         }
         else
         {
-            if (velocity.magnitude < 0.1f)
+            if (_velocity.magnitude < 0.1f)
             {
                 if (Keybindings.Attack)
                 {
                     type = CharacterAnimation.AnimationType.Attack;
-                    direction = aimVector;
+                    direction = _aimVector;
                 }
                 else
                 {
@@ -287,11 +330,11 @@ public class Player : MonoBehaviour, IWeaponOwner, IBuffable
                 type = CharacterAnimation.AnimationType.Run;
                 if (Keybindings.Attack)
                 {
-                    direction = aimVector;
+                    direction = _aimVector;
                 }
                 else
                 {
-                    direction = velocity;
+                    direction = _velocity;
                 }
             }
         }
@@ -301,61 +344,69 @@ public class Player : MonoBehaviour, IWeaponOwner, IBuffable
 
     private void CalculateDeceleration()
     {
-        if (inputVector.x <= 0f && velocity.x > 0f)
+        if (_inputVector.x <= 0f && _velocity.x > 0f)
         {
-            velocity.x -= deceleration * Time.deltaTime;
-            if (velocity.x < 0f)
+            _velocity.x -= deceleration * Time.deltaTime;
+            if (_velocity.x < 0f)
             {
-                velocity.x = 0f;
+                _velocity.x = 0f;
             }
         }
-        if (inputVector.x >= 0f && velocity.x < 0f)
+        if (_inputVector.x >= 0f && _velocity.x < 0f)
         {
-            velocity.x += deceleration * Time.deltaTime;
-            if (velocity.x > 0f)
+            _velocity.x += deceleration * Time.deltaTime;
+            if (_velocity.x > 0f)
             {
-                velocity.x = 0f;
+                _velocity.x = 0f;
             }
         }
 
-        if (inputVector.y <= 0f && velocity.y > 0f)
+        if (_inputVector.y <= 0f && _velocity.y > 0f)
         {
-            velocity.y -= deceleration * Time.deltaTime;
-            if (velocity.y < 0f)
+            _velocity.y -= deceleration * Time.deltaTime;
+            if (_velocity.y < 0f)
             {
-                velocity.y = 0f;
+                _velocity.y = 0f;
             }
         }
-        if (inputVector.y >= 0f && velocity.y < 0f)
+        if (_inputVector.y >= 0f && _velocity.y < 0f)
         {
-            velocity.y += deceleration * Time.deltaTime;
-            if (velocity.y > 0f)
+            _velocity.y += deceleration * Time.deltaTime;
+            if (_velocity.y > 0f)
             {
-                velocity.y = 0f;
+                _velocity.y = 0f;
             }
         }
     }
 
     private void CalculateVelocity()
     {
-        velocity += inputVector.normalized * acceleration * Time.deltaTime;
+        _velocity += _inputVector.normalized * acceleration * Time.deltaTime;
 
-        if (velocity.magnitude > maxSpeed)
+        if (_velocity.magnitude > maxSpeed)
         {
-            velocity = velocity.normalized * maxSpeed;
+            _velocity = _velocity.normalized * maxSpeed;
         }
 
         if (_slowTimer > 0)
         {
             _slowTimer -= Time.deltaTime;
-            velocity *= _slowFactor;
+            _velocity *= _slowFactor;
         }
         else
         {
             _slowFactor = float.MaxValue;
         }
 
-        rigidbody.velocity = velocity;
+
+        if (_dashTimer > 0f)
+        {
+            _rigidbody.velocity = _dashDirection.normalized * dashSpeed;
+        }
+        else
+        {
+            _rigidbody.velocity = _velocity;
+        }
     }
 
     public void SetSlow(float slowFactor, float slowTimer)
@@ -371,15 +422,15 @@ public class Player : MonoBehaviour, IWeaponOwner, IBuffable
 
     public bool ReceiveDamage(int damage, Vector2 velocity, bool maxHealth = false, bool spawnBloodSpray = true)
     {
-        if (_invulnTimer >= invulnTime && !GodMode)
+        if (_invulnTimer >= invulnTime && !GodMode && _dashTimer == 0f)
         {
             CameraManager.Instance.ShakeCamera(0.5f, 0.1f, 25);
 
             int loopCount = 10;
             Sequence colorFlashSequence = DOTween.Sequence();
-            colorFlashSequence.Append(renderer.material.DOColor(Color.red, invulnTime / loopCount)
+            colorFlashSequence.Append(_renderer.material.DOColor(Color.red, invulnTime / loopCount)
                 .SetLoops(loopCount, LoopType.Yoyo));
-            colorFlashSequence.Append(renderer.material.DOColor(Color.white, 0.0f));
+            colorFlashSequence.Append(_renderer.material.DOColor(Color.white, 0.0f));
             colorFlashSequence.Play();
 
             ParticleSystem bloodSpray = Instantiate(particleSystemContainer.bloodSpray, transform.position, Quaternion.identity);
@@ -415,9 +466,9 @@ public class Player : MonoBehaviour, IWeaponOwner, IBuffable
     {
         _disabled = true;
         _pitCollider.enabled = false;
-        rigidbody.velocity = Vector3.zero;
-        velocity = Vector3.zero;
-        inputVector = Vector3.zero;
+        _rigidbody.velocity = Vector3.zero;
+        _velocity = Vector3.zero;
+        _inputVector = Vector3.zero;
         ReceiveDamage(5, Vector2.zero, false, false);
 
         if (!IsAlive)
@@ -451,17 +502,17 @@ public class Player : MonoBehaviour, IWeaponOwner, IBuffable
 
     Vector2 IWeaponOwner.GetAimVector()
     {
-        return aimVector;
+        return _aimVector;
     }
 
     Vector2 IWeaponOwner.GetBulletOrigin()
     {
-        return transform.position.ToVector2() + new Vector2(aimVector.normalized.x / 2.0f, 0.35f);
+        return transform.position.ToVector2() + new Vector2(_aimVector.normalized.x / 2.0f, 0.35f);
     }
 
     void IWeaponOwner.Knockback(Vector2 direction, float force)
     {
-        rigidbody.AddForce(direction.normalized * force);
+        _rigidbody.AddForce(direction.normalized * force);
     }
 
     public void AddWeapon(GameObject weaponPrefab)

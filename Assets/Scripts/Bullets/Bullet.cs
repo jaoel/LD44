@@ -122,8 +122,14 @@ public class Bullet : MonoBehaviour
         }
         else if (collision.gameObject.layer == Layers.Player)
         {
-            collision.gameObject.GetComponent<Player>().ReceiveDamage((int)_currentDamage, _direction);
-            BeforeDestroyed(collision.gameObject);
+            if(collision.gameObject.GetComponent<Player>().ReceiveDamage((int)_currentDamage, _direction))
+            {
+                BeforeDestroyed(collision.gameObject);
+            }
+            else
+            {
+                active = true;
+            }
         }
 
         gameObject.SetActive(active);
