@@ -282,7 +282,6 @@ public class Player : MonoBehaviour, IWeaponOwner, IBuffable
         {
             _dashCooldownTimer = Mathf.Max(_dashCooldownTimer - Time.deltaTime, 0f);
         }
-        Debug.Log(_dashCooldownTimer);
     }
 
     private void CalculateInputVector()
