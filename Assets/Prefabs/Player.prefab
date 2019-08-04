@@ -76,6 +76,9 @@ MonoBehaviour:
   acceleration: 35
   deceleration: 25
   invulnTime: 1
+  dashDuration: 0.15
+  dashCooldown: 2
+  dashSpeed: 25
   characterAnimation: {fileID: 6271302632493112618}
   CurrentWeapon: {fileID: 0}
   MaxWeaponCount: 2
@@ -123,7 +126,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!4 &8957444590958572003
 Transform:
   m_ObjectHideFlags: 0
