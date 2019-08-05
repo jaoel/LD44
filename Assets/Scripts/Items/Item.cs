@@ -10,14 +10,20 @@ public abstract class Item : MonoBehaviour
 
     public bool isShopItem = false;
     public bool destroyOnPickup = true;
+    public bool requireUse = true;
     protected bool _triggered = false;
 
     public virtual void Apply(GameObject owner)
     {
         Player player = owner.GetComponent<Player>();
 
-        if (player != null && Keybindings.Use)
+        if (player != null)
         {
+            if (requireUse && !Keybindings.Use)
+            {
+                return;
+            }
+
             if (isShopItem && !player.GodMode)
             {
                 player.MaxHealth -= healthCost;

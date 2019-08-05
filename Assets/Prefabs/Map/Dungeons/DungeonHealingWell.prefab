@@ -204,7 +204,7 @@ MonoBehaviour:
       m_Calls: []
     m_TypeName: UnityEngine.Events.UnityEvent, UnityEngine.CoreModule, Version=0.0.0.0,
       Culture=neutral, PublicKeyToken=null
-  _useToActivate: 1
+  _dungeonWell: 1
   _healPerTick: 0
   _heal: 10
   _maxHealthDamage: 0

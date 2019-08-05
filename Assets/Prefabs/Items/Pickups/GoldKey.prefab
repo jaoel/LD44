@@ -178,15 +178,16 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8342ed25f6fb6b0438b22594ac3e5449, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  pickupSound: {fileID: 207703912123983929}
   shopkeeperDescription: []
   healthCost: 0
   isShopItem: 0
   destroyOnPickup: 0
+  requireUse: 0
   trigger: {fileID: 4248982427413073848}
   rigidBody: {fileID: 1972391316901367867}
   visual: {fileID: 4630298518009239181}
   minimapIcon: {fileID: 2483814056676362071}
-  pickupSound: {fileID: 207703912123983929}
   isGoldKey: 1
 --- !u!82 &207703912123983929
 AudioSource:

@@ -8,7 +8,7 @@ using UnityEngine;
 public class HealingWell : InteractiveObject
 {
     [SerializeField]
-    private bool _useToActivate;
+    private bool _dungeonWell;
 
     [SerializeField]
     private int _healPerTick;
@@ -38,7 +38,7 @@ public class HealingWell : InteractiveObject
 
     public override void OnActivate()
     {
-        if (_useToActivate && !_disabled)
+        if (_dungeonWell && !_disabled)
         {
             if (Main.Instance.player.Health == Main.Instance.player.MaxHealth)
             {
@@ -60,18 +60,22 @@ public class HealingWell : InteractiveObject
 
     protected override void OnTriggerEnter2D(Collider2D collision)
     {
-        if (!_useToActivate)
+        if (!_dungeonWell)
         {
             _adjustedHeal = _healPerTick;
             _adjustedDamage = _maxHealthDamage;
+            _disabled = true;
         }
-
-        base.OnTriggerEnter2D(collision);
     }
 
     protected override void OnTriggerStay2D(Collider2D collision)
     {
-        if (!_useToActivate)
+        if (!_dungeonWell && Keybindings.Use)
+        {
+            _disabled = !_disabled;
+        }
+
+        if (!_dungeonWell && !_disabled)
         {
             Player player = collision.gameObject.GetComponent<Player>();
             if (player != null)
@@ -102,10 +106,11 @@ public class HealingWell : InteractiveObject
 
     protected override void OnTriggerExit2D(Collider2D collision)
     {
-        if(!_useToActivate)
+        if(!_dungeonWell)
         {
             _timer = 0.0f;
             _multiplierTimer = 0.0f;
+            _disabled = true;
         }
 
         base.OnTriggerExit2D(collision);
