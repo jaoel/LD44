@@ -219,6 +219,7 @@ public class MapPainter
             return currentWallTile;
         }
 
+
         BoundsInt blockBounds = new BoundsInt(x - 1, y - 1, 0, 3, 3, 1);
         TileBase[] wallBlock = _walls.GetTilesBlock(blockBounds);
         TileBase[] floorBlock = _floors.GetTilesBlock(blockBounds);
@@ -281,6 +282,12 @@ public class MapPainter
                 {
                     return _wallContainer.BottomRight;
                 }
+
+                if (floorMiddleRight == null && floorTopRight == null && floorBottomRight == null && floorBottomMiddle == null
+                    && floorBottomLeft == null)
+                {
+                    return _wallContainer.BottomRight;
+                }
             }
 
             if (wallBottomMiddle != null && floorTopMiddle == null && floorMiddleRight == null)
@@ -314,6 +321,11 @@ public class MapPainter
             {
                 return _wallContainer.TopLeftOuter;
             }
+
+            if (floorBottomRight == null && wallMiddleLeft == null && floorMiddleRight != null)
+            {
+                return _wallContainer.TopLeftOuter;
+            }
         }
 
         if (wallMiddleLeft == null)
@@ -325,7 +337,7 @@ public class MapPainter
                     return _wallContainer.BottomRightOuter;
                 }
 
-                if (wallBottomLeft == null && wallBottomRight == null && wallTopMiddle == null)
+                if (wallBottomLeft == null && wallBottomRight == null && (wallTopMiddle == null || floorBottomMiddle == null))
                 {
                     return _wallContainer.BottomRightOuter;
                 }
@@ -333,6 +345,12 @@ public class MapPainter
                 if (wallBottomLeft == null && wallBottomRight == null && wallTopMiddle != null)
                 {
                     return _wallContainer.BottomRightOuter;
+                }
+
+                if (floorMiddleRight == null && floorBottomRight == null && floorBottomMiddle == null
+                    && floorBottomLeft == null && floorMiddleLeft != null && floorTopLeft != null && floorTopMiddle != null)
+                {
+                    return _wallContainer.BottomRight;
                 }
             }
         }
