@@ -76,7 +76,7 @@ public class Door : MonoBehaviour
         this.closed = closed;
     }
 
-    private void OnTriggerEnter2D(Collider2D collision)
+    private void OnTriggerStay2D(Collider2D collision)
     {
         if (collision.gameObject)
         {
@@ -92,7 +92,7 @@ public class Door : MonoBehaviour
             else if (locked && closed)
             {
                 Player player = collision.gameObject.GetComponent<Player>();
-                if (player != null)
+                if (player != null && Keybindings.Use)
                 {
                     if(player.UseKey(this))
                     {
