@@ -16,7 +16,7 @@ public abstract class Item : MonoBehaviour
     {
         Player player = owner.GetComponent<Player>();
 
-        if (player != null)
+        if (player != null && Keybindings.Use)
         {
             if (isShopItem && !player.GodMode)
             {
@@ -57,7 +57,7 @@ public abstract class Item : MonoBehaviour
 
     public abstract void ApplyEffect(GameObject owner);
 
-    public void OnTriggerEnter2D(Collider2D collision)
+    public void OnTriggerStay2D(Collider2D collision)
     {
         if (collision.gameObject)
         {

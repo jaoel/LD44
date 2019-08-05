@@ -13,22 +13,27 @@ public class WeaponPickup : Item
 
     public override void ApplyEffect(GameObject owner)
     {
-        if (isShopItem)
+        Player player = owner.GetComponent<Player>();
+
+        if (player != null && Keybindings.Use)
         {
-            if (categoryIndex == -1)
+            if (isShopItem)
             {
-                Main.Instance.sessionData.shopTiers = new List<int>();
-                for(int i = 0; i < 3; i++)
+                if (categoryIndex == -1)
                 {
-                    Main.Instance.sessionData.shopTiers.Add(0);
+                    Main.Instance.sessionData.shopTiers = new List<int>();
+                    for (int i = 0; i < 3; i++)
+                    {
+                        Main.Instance.sessionData.shopTiers.Add(0);
+                    }
+                }
+                else
+                {
+                    Main.Instance.sessionData.shopTiers[categoryIndex] = tierIndex + 1;
                 }
             }
-            else
-            {
-                Main.Instance.sessionData.shopTiers[categoryIndex] = tierIndex + 1;
-            }
-        }
 
-        owner.GetComponent<Player>().AddWeapon(weaponPrefab);
+            owner.GetComponent<Player>().AddWeapon(weaponPrefab);
+        }
     }
 }
