@@ -60,12 +60,13 @@ public class LoadingScreen : MonoBehaviour
         }
     }
 
-    public void StartLoad(Func<AsyncOperation> onLoad, float fadeTime = 0.5f)
+    public void StartLoad(Func<AsyncOperation> onLoad, float fadeTime = 0.5f, float minLoadTime = 1.0f)
     {
+        _minLoadTimeSec = minLoadTime;
         StartCoroutine(Load(onLoad, fadeTime));
     }
 
-    public IEnumerator Load(Func<AsyncOperation> onLoad, float fadeTime)
+    private IEnumerator Load(Func<AsyncOperation> onLoad, float fadeTime)
     {
         while(!_loadingDone)
         {
