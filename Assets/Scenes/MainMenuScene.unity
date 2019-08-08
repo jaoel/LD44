@@ -130,7 +130,7 @@ PrefabInstance:
     - target: {fileID: 4262441229133873884, guid: 96a42674104d36e45b322d7ec5de295e,
         type: 3}
       propertyPath: m_Name
-      value: GameplayScene
+      value: GameContainer
       objectReference: {fileID: 0}
     - target: {fileID: 4262441229133873885, guid: 96a42674104d36e45b322d7ec5de295e,
         type: 3}
@@ -433,7 +433,18 @@ PrefabInstance:
       propertyPath: m_textInfo.pageCount
       value: 0
       objectReference: {fileID: 0}
-    m_RemovedComponents: []
+    - target: {fileID: 3688814560806296789, guid: 96a42674104d36e45b322d7ec5de295e,
+        type: 3}
+      propertyPath: m_Color.a
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3688814560806296789, guid: 96a42674104d36e45b322d7ec5de295e,
+        type: 3}
+      propertyPath: m_RaycastTarget
+      value: 0
+      objectReference: {fileID: 0}
+    m_RemovedComponents:
+    - {fileID: 5262300709392017178, guid: 96a42674104d36e45b322d7ec5de295e, type: 3}
   m_SourcePrefab: {fileID: 100100000, guid: 96a42674104d36e45b322d7ec5de295e, type: 3}
 --- !u!1 &576318113
 GameObject:

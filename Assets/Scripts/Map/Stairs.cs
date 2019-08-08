@@ -1,4 +1,5 @@
-﻿using UnityEngine;
+﻿using System;
+using UnityEngine;
 
 public class Stairs : MonoBehaviour
 {
@@ -8,15 +9,22 @@ public class Stairs : MonoBehaviour
     {
         if (collision.gameObject.layer == Layers.Player)
         {
-            if (isShop)
+            Func<AsyncOperation> onLoad = () =>
             {
-                Main.Instance.sessionData.UpdatePlayerData(collision.gameObject.GetComponent<Player>());
-                MapManager.Instance.GenerateShop();
-            }
-            else
-            {
-                MapManager.Instance.GenerateMap();
-            }
+                if (isShop)
+                {
+                    Main.Instance.sessionData.UpdatePlayerData(collision.gameObject.GetComponent<Player>());
+                    MapManager.Instance.GenerateShop();
+                }
+                else
+                {
+                    MapManager.Instance.GenerateMap();
+                }
+
+                return null;
+            };
+
+            GameSceneManager.Instance.FadeScreen(onLoad);
         }
     }
 }

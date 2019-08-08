@@ -31,8 +31,12 @@ public class SacrificeStatue : InteractiveObject
         }
 
         Main.Instance.player.MaxHealth -= MapManager.Instance.selectedDungeonData.bossHealthCosts[tier];
-        Main.Instance.PayBossTribute(tier);
-        Main.Instance.sessionData.UpdatePlayerData(Main.Instance.player);
+
+        if (Main.Instance.player.Health > 0)
+        {
+            Main.Instance.PayBossTribute(tier);
+            Main.Instance.sessionData.UpdatePlayerData(Main.Instance.player);
+        }
 
         base.OnActivate();
     }

@@ -8,11 +8,16 @@ using UnityEngine.SceneManagement;
 
 public class GameSceneManager : MonoBehaviour
 {
+    public LoadingState LoadingState => _loadingScreen.LoadingState;
+
     [SerializeField]
     private GameObject _managerContainer;
 
     [SerializeField]
     private GameObject _playerContainer;
+
+    [SerializeField]
+    private LoadingScreen _loadingScreen;
 
     private bool _instantiated = false;
     private static GameSceneManager _instance = null;
@@ -85,42 +90,67 @@ public class GameSceneManager : MonoBehaviour
         _playerContainer.SetActive(active);
     }
 
+    public void FadeScreen(Func<AsyncOperation> onLoad = null, float fadeTime = 1.0f)
+    {
+        _loadingScreen.StartLoad(onLoad, fadeTime);
+    }
+
     public void LoadGameplayScene()
     {
-        GameSceneManager.Instance.TogglePlayerContainer(true);
-        Main.Instance.player.ResetPlayer();
-        Main.Instance.gameState = GameState.Gameplay;
-        SceneManager.LoadScene("GameScene", LoadSceneMode.Single);
+        Func<AsyncOperation> onLoad = () =>
+        {
+            GameSceneManager.Instance.TogglePlayerContainer(true);
+            Main.Instance.player.ResetPlayer();
+            Main.Instance.gameState = GameState.Gameplay;
+            return SceneManager.LoadSceneAsync("GameScene", LoadSceneMode.Single);
+        };
+
+        _loadingScreen.StartLoad(onLoad);
     }
 
     public void LoadHubScene()
     {
-        GameSceneManager.Instance.TogglePlayerContainer(true);
-        Main.Instance.gameState = GameState.Hubworld;
-        Main.Instance.player.transform.position = Vector3.zero;
-        Main.Instance.player.ResetPlayer();
-        MapManager.Instance.ToggleFogOfWarEnabled(true);
-        SceneManager.LoadScene("HubworldScene", LoadSceneMode.Single);
+        Func<AsyncOperation> onLoad = () =>
+        {
+            GameSceneManager.Instance.TogglePlayerContainer(true);
+            Main.Instance.gameState = GameState.Hubworld;
+            Main.Instance.player.transform.position = Vector3.zero;
+            Main.Instance.player.ResetPlayer();
+            MapManager.Instance.ToggleFogOfWarEnabled(true);
+            return SceneManager.LoadSceneAsync("HubworldScene", LoadSceneMode.Single);
+        };
+
+        _loadingScreen.StartLoad(onLoad);
     } 
 
     public void LoadMainMenuScene()
     {
-        GameSceneManager.Instance.TogglePlayerContainer(false);
-        MapManager.Instance.ToggleFogOfWarEnabled(false);
-        Main.Instance.player.ResetPlayer();
-        Main.Instance.player.ClearWeapons();
-        Main.Instance.gameState = GameState.MainMenu;
-        MenuManager.Instance.PushMenu<MainMenu>();
-        SceneManager.LoadScene("MainMenuScene", LoadSceneMode.Single);
+        Func<AsyncOperation> onLoad = () =>
+        {
+            GameSceneManager.Instance.TogglePlayerContainer(false);
+            MapManager.Instance.ToggleFogOfWarEnabled(false);
+            Main.Instance.player.ResetPlayer();
+            Main.Instance.player.ClearWeapons();
+            Main.Instance.gameState = GameState.MainMenu;
+            MenuManager.Instance.PushMenu<MainMenu>();
+            return SceneManager.LoadSceneAsync("MainMenuScene", LoadSceneMode.Single);
+        };
+
+        _loadingScreen.StartLoad(onLoad);
     }
 
     public void LoadBossScene()
     {
-        GameSceneManager.Instance.TogglePlayerContainer(true);
-        Main.Instance.gameState = GameState.Boss;
-        Main.Instance.player.transform.position = Vector3.zero;
-        Main.Instance.player.ResetPlayer(false);
-        MapManager.Instance.ToggleFogOfWarEnabled(true);
-        SceneManager.LoadScene(MapManager.Instance.selectedDungeonData.bossScene, LoadSceneMode.Single);
+        Func<AsyncOperation> onLoad = () =>
+        {
+            GameSceneManager.Instance.TogglePlayerContainer(true);
+            Main.Instance.gameState = GameState.Boss;
+            Main.Instance.player.transform.position = Vector3.zero;
+            Main.Instance.player.ResetPlayer(false);
+            MapManager.Instance.ToggleFogOfWarEnabled(true);
+            return SceneManager.LoadSceneAsync(MapManager.Instance.selectedDungeonData.bossScene, LoadSceneMode.Single);
+        };
+
+        _loadingScreen.StartLoad(onLoad);
     }
 }

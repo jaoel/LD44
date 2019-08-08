@@ -83,7 +83,7 @@ public class Main : MonoBehaviour
             return;
         }
 
-        if (!player.IsAlive && gameState != GameState.MainMenu)
+        if (!player.IsAlive && gameState != GameState.MainMenu && GameSceneManager.Instance.LoadingState == LoadingState.NOT_LOADING)
         {
             MenuManager.Instance.PushMenu<GameOverMenu>();
         }
