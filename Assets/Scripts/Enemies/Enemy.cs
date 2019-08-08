@@ -67,7 +67,7 @@ public class Enemy : MonoBehaviour, IBuffable
 
     private float _corpseCollisionTimer;
 
-    protected virtual void Awake()
+    protected virtual void Start()
     {
         _corpseCollisionTimer = 0.0f;
 
@@ -84,6 +84,11 @@ public class Enemy : MonoBehaviour, IBuffable
 
     protected virtual void FixedUpdate()
     {
+        if (GameSceneManager.Instance.LoadingState != LoadingState.NOT_LOADING)
+        {
+            return;
+        }
+
         HandleStatusEffects();
         CalculateAnimation();
 

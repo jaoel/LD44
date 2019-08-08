@@ -13,11 +13,11 @@ public class ShootingEnemy : Enemy, IWeaponOwner
 
     private Vector2 AimVector => (_target.transform.position.ToVector2() - transform.position.ToVector2()).normalized;
 
-    protected override void Awake()
+    protected override void Start()
     {
         _weapon.SetOwner(this);
 
-        base.Awake();
+        base.Start();
     }
 
     protected override void FixedUpdate()

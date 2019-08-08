@@ -15,11 +15,11 @@ public class ResurrectingEnemy : Enemy
 
     protected int _livesLeft;
 
-    protected override void Awake()
+    protected override void Start()
     {
         _livesLeft = _lives;
 
-        base.Awake();
+        base.Start();
     }
 
     protected override void Die(Vector2 velocity)

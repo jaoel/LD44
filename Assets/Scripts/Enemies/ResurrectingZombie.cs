@@ -12,9 +12,9 @@ public class ResurrectingZombie : ResurrectingEnemy
     [SerializeField]
     protected int _resurrectedDamage;
 
-    protected override void Awake()
+    protected override void Start()
     {
-        base.Awake();
+        base.Start();
     }
 
     protected override void Resurrection()

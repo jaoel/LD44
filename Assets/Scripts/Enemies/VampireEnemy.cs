@@ -16,14 +16,12 @@ public class VampireEnemy : Enemy
         Bat
     }
 
-    protected override void Awake()
+    protected override void Start()
     {
-        base.Awake();
-    }
 
-    private void Start()
-    {
+        base.Start();
         SwitchForm(Form.Humanoid);
+
     }
 
     private void SwitchForm(Form toForm)

@@ -61,7 +61,7 @@ public class Main : MonoBehaviour
     public void Initialize()
     {
         gameOver = false;
-        Time.timeScale = 1.0f;
+        //Time.timeScale = 1.0f;
 
         if (gameState != GameState.Boss)
         {

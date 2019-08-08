@@ -443,6 +443,31 @@ PrefabInstance:
       propertyPath: m_RaycastTarget
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 3712798984413675427, guid: 96a42674104d36e45b322d7ec5de295e,
+        type: 3}
+      propertyPath: m_AnchoredPosition.x
+      value: 4.200012
+      objectReference: {fileID: 0}
+    - target: {fileID: 19471344292954867, guid: 96a42674104d36e45b322d7ec5de295e,
+        type: 3}
+      propertyPath: m_textInfo.characterCount
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 19471344292954867, guid: 96a42674104d36e45b322d7ec5de295e,
+        type: 3}
+      propertyPath: m_textInfo.wordCount
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 19471344292954867, guid: 96a42674104d36e45b322d7ec5de295e,
+        type: 3}
+      propertyPath: m_textInfo.lineCount
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 19471344292954867, guid: 96a42674104d36e45b322d7ec5de295e,
+        type: 3}
+      propertyPath: m_textInfo.pageCount
+      value: 0
+      objectReference: {fileID: 0}
     m_RemovedComponents:
     - {fileID: 5262300709392017178, guid: 96a42674104d36e45b322d7ec5de295e, type: 3}
   m_SourcePrefab: {fileID: 100100000, guid: 96a42674104d36e45b322d7ec5de295e, type: 3}
