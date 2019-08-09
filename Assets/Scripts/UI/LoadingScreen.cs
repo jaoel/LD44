@@ -86,7 +86,7 @@ public class LoadingScreen : MonoBehaviour
 
     private IEnumerator Load(Func<AsyncOperation> onLoad, float fadeTime)
     {
-        while(!_loadingDone)
+        while (!_loadingDone)
         {
             yield return new WaitForSeconds(0.1f);
         }
@@ -109,7 +109,7 @@ public class LoadingScreen : MonoBehaviour
             if (_asyncOp == null)
             {
                 _loadingState = LoadingState.DONE;
-                _startTime = float.MaxValue;
+                _startTime = Time.realtimeSinceStartup;
             }
         };
 
@@ -118,7 +118,7 @@ public class LoadingScreen : MonoBehaviour
 
     private IEnumerator AnimateLoadingText()
     {
-        while(_loadingState != LoadingState.NOT_LOADING)
+        while (_loadingState != LoadingState.NOT_LOADING)
         {
             _loadingTextFrame++;
             _loadingTextFrame = _loadingTextFrame % 4;
