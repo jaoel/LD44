@@ -37,7 +37,7 @@ public abstract class LCG
     public int Next()
     {
         _currentSeed = (_currentSeed * _multiplier) % _modulus;
-        return (int)_currentSeed;
+        return (int)_currentSeed & 0x7FFFFFFF;
     }
 
     public float NextFloat()
